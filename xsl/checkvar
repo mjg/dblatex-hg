@@ -1,7 +1,0 @@
-cat vars.mod.xsl | awk '
-  /xsl:variable/{ print $2 }
-  /xsl:param/{ print $2 }' |sed 's/.*"\([^"]*\)".*/grep \1 \*/' > jo
-
-cat param.xsl | awk '
-  /xsl:variable/{ print $2 }
-  /xsl:param/{ print $2 }' |sed 's/.*"\([^"]*\)".*/grep -v \1 \| \\/' > jo3
