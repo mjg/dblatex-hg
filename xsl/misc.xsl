@@ -307,6 +307,7 @@
 </xsl:template>
 
 <xsl:template match="book/title"/>
+<xsl:template match="article/title"/>
 <xsl:template match="book/bookinfo"/>
 <xsl:template match="article/articleinfo"/>
 
