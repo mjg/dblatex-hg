@@ -16,6 +16,7 @@ specs=""
 texinputs=""
 pdfinputs=""
 debug=0
+version=0
 texstyle=docbook
 xsl=$scriptpath/../xsl/latex_book_fast.xsl
 btexpath=$scriptpath/../latex/scripts
@@ -34,6 +35,7 @@ get_options() {
     -p) param=$2; shift ;;
     -I) xpath=$2; shift ;;
     -S) specs=$2; shift ;;
+    -v) version=1;;
     --style) texstyle=$2; shift ;;
     --texinputs) texinputs=$2; shift ;;
     --pdfinputs) pdfinputs=$2; shift ;;
@@ -45,7 +47,12 @@ get_options() {
   done
 
   if [ $# -ne 1 ]; then
-    usage
+    if [ $version -eq 0 ]; then
+      usage
+    else
+      print_version
+      exit 0
+    fi
   fi
   file=$1
 }
@@ -58,6 +65,7 @@ Options:
 -b {pdftex|dvips}      : driver to use
 -f {fig|eps}           : input figures format
 -d                     : debug mode (keep the temporary dir)
+-v                     : display the version number
 -o output              : output filename
 -p param_file          : XSL parameter file for customization
 -s                     : strict latex output (slower)
@@ -93,6 +101,12 @@ $param_import
 eof
 }
 
+print_version()
+{
+  ver=`cat $scriptpath/../xsl/version.xsl|grep variable|sed 's/<[^>]*>\([^<]*\)<.*$/\1/'`
+  echo "dblatex version $ver"
+}
+
 args="$*"
 
 get_options $args
@@ -102,6 +116,10 @@ if [ "$specs" != "" ]; then
   get_options $specs_opt $args
 fi
 
+# Should we print version number?
+if [ "$version" = "1" ]; then
+  print_version
+fi
 
 # Is there some extra path to add to TEXINPUTS?
 if [ "$texinputs" != "" ]; then
