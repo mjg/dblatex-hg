@@ -15,7 +15,7 @@ usage ()
   exit 1
 }
 
-# Répertoires par défaut
+# Default configuration
 prefix=/usr/local
 catalog=
 ENVCATS=
@@ -92,14 +92,17 @@ if [ "$notfound" != "" ]; then
   exit 1
 fi
 
+# Don't loose the configure options
+CONFCMD="$0 $args"
+
 echo "building $install_script"
 cat <<foe > $install_script
 $shel
 # This script was produced by the command:
-# $0 $args
+# $CONFCMD
 #
 #
-# On installe le paquet
+# Let's install the package
 #
 echo "install the package in $share..."
 mkdir -p $share
@@ -113,12 +116,13 @@ rm $share/$package/Makefile
 rm $share/$package/$scriptname
 
 #
-# On construit le script à lancer
+# Now make the script to launch
 #
 cat <<eof > $launch
 $shel
 #
-# This script is automatically created by \$0
+# This script is automatically created by
+# $CONFCMD
 #
 $ENVCATS
 $EXPCATS
@@ -129,7 +133,7 @@ $share/$package/scripts/dblatex \\\$*
 eof
 
 #
-# On le copie au bon endroit
+# Copy the script to the right place
 #
 echo "install dblatex in $bin"
 chmod +x $launch
