@@ -5,14 +5,18 @@ graphics_link()
   gtemp=""
   for i in $*; do
     # Copy locally the graphics
-    for i in $i/*.pdf ; do
-      gloc=`basename $i`
-      if [ ! -f $gloc ]; then
-        echo "Link to $gloc"
-        ln -s $i .
-        gtemp="$gtemp $gloc"
-      fi
-    done
+    if [ -d $i ]; then
+      for i in $i/*.pdf ; do
+        gloc=`basename $i`
+        if [ ! -f $gloc ]; then
+          echo "Link to $gloc"
+          ln -s $i .
+          gtemp="$gtemp $gloc"
+        fi
+      done
+    else
+      echo "Warning: invalid graphic path"
+    fi
   done
 }
 
