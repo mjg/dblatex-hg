@@ -49,12 +49,9 @@
 
 <xsl:template name="normalize-scape" >
   <xsl:param name="string"/>
-  <xsl:variable name="result">
-    <xsl:call-template name="scape">
-      <xsl:with-param name="string" select="$string"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:value-of select="normalize-space($result)"/>
+  <xsl:call-template name="scape">
+    <xsl:with-param name="string" select="normalize-space($string)"/>
+  </xsl:call-template>
 </xsl:template>
 
 
