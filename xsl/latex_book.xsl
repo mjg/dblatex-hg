@@ -4,7 +4,7 @@
                 version="1.0">
 
 <!--############################################################################
-    Feuille de style de transformation XML DocBook -> LaTeX
+    XSLT Stylesheet DocBook -> LaTeX
     ############################################################################ -->
 
 <xsl:import href="docbook.xsl"/>

@@ -4,7 +4,7 @@
                 version="1.0">
 
 <!--############################################################################
-    Feuille de style de transformation XML DocBook -> LaTeX
+    XSLT Stylesheet DocBook -> LaTeX
     ############################################################################ -->
 
 <xsl:output method="text" encoding="ISO-8859-1" indent="yes"/>

@@ -4,7 +4,7 @@
                 version='1.0'>
 
 <!--############################################################################
-    Feuille de style de transformation XML DocBook -> LaTeX 
+    XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
 <!-- Ces parties accelerent la conversion du texte, mais cela necessite un
