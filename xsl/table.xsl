@@ -296,29 +296,32 @@
 <xsl:apply-templates/><xsl:text> \tabularnewline &#10;</xsl:text> 
 </xsl:template>
 
-<!-- the function gives the number of a colspec by scanning the preceding
-     colspecs until the first whose number (@colnum)
-     is set, or if not the count of colspecs -->
+<!-- the function gives the colnum of a colspec by selecting the closest preceding
+     colspecs having a (@colnum) attribute set. If no preceding with @colnum,
+     colnum is the count of colspecs -->
 
 <xsl:template name="give.colspec.num">
   <xsl:param name="n"/>
-  <xsl:param name="num" select="0"/>
   <xsl:choose>
-  <xsl:when test="$n">
-    <xsl:choose>
-    <xsl:when test="$n/@colnum">
-      <xsl:value-of select="$n/@colnum + $num"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="give.colspec.num">
-        <xsl:with-param name="n" select="$n/preceding-sibling::colspec"/>
-        <xsl:with-param name="num" select="$num + 1"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-    </xsl:choose>
+  <!-- to be faster let's check the node first -->
+  <xsl:when test="$n/@colnum">
+    <xsl:value-of select="$n/@colnum"/>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:value-of select="$num"/>
+    <!-- $n/colnum = $np/@colmum + position($n) - position($np) -->
+    <xsl:variable name="prev" select="$n/preceding-sibling::colspec"/>
+    <xsl:variable name="p" select="count($prev)"/>
+    <xsl:variable name="np" select="(($prev[position()&lt;=$p])[@colnum])[last()]"/>
+    <xsl:choose>
+    <xsl:when test="$np">
+      <xsl:variable name="off" select="$p - count($np/preceding-sibling::colspec)"/>
+      <xsl:value-of select="$off + $np/@colnum"/>
+    </xsl:when>
+    <!-- no previous colspec with @colnum, then colnum = position -->
+    <xsl:otherwise>
+      <xsl:value-of select="$p+1"/>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -326,6 +329,7 @@
 <xsl:template name="build.colspan">
   <xsl:param name="n1" select="@namest"/>
   <xsl:param name="n2" select="@nameend"/>
+  <xsl:param name="nspec" select="."/>
   <xsl:variable name="c1" select="ancestor::*/colspec[@colname=$n1]"/>
   <xsl:variable name="c2" select="ancestor::*/colspec[@colname=$n2]"/>
   <xsl:variable name="p1">
@@ -344,14 +348,37 @@
   <xsl:text>}{</xsl:text>
   <!-- the 1st left colsep depends on @frame -->
   <xsl:if test="$p1 = 1">
-    <xsl:call-template name="build.colsep"/>
+    <xsl:call-template name="build.vframe"/>
   </xsl:if>
-  <!-- todo: align -->
-  <xsl:text>c</xsl:text>
+  <!-- cell alignment -->
+  <xsl:call-template name="build.align">
+    <xsl:with-param name="small" select="'1'"/>
+    <xsl:with-param name="align">
+      <xsl:choose>
+      <xsl:when test="@align">
+        <xsl:value-of select="@align"/>
+      </xsl:when>
+      <xsl:when test="$nspec/@align">
+        <xsl:value-of select="$nspec/@align"/>
+      </xsl:when>
+      <xsl:when test="$c1/@align">
+        <xsl:value-of select="$c1/@align"/>
+      </xsl:when>
+      <xsl:when test="ancestor::*[@align]">
+        <xsl:value-of select="((ancestor::*[@align])[last()])/@align"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'left'"/>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
   <!-- the right colsep depends on @frame if last or @colsep if not -->
   <xsl:choose>
   <xsl:when test="$p2 &lt; ancestor::tgroup/@cols">
-    <xsl:call-template name="build.colsep"/>
+    <xsl:call-template name="build.colsep">
+      <xsl:with-param name="nspec" select="$nspec"/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="build.vframe"/>
@@ -381,6 +408,7 @@
     <xsl:call-template name="build.colspan">
       <xsl:with-param name="n1" select="$span/@namest"/>
       <xsl:with-param name="n2" select="$span/@nameend"/>
+      <xsl:with-param name="nspec" select="$span"/>
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
@@ -487,14 +515,20 @@
 </xsl:template>
 
 
-<!-- The rigth column separator is defined by the closest @colsep
+<!-- The right column separator is defined by the closest @colsep
      value (i.e. the node attribute or the immediate ancestor).
      If not defined the default behaviour is to have a column
   -->
 
 <xsl:template name="build.colsep">
+  <xsl:param name="nspec" select="."/>
   <xsl:variable name="n" select="(ancestor-or-self::*[@colsep])[last()]"/>
   <xsl:choose>
+  <xsl:when test="$nspec/@colsep">
+    <xsl:if test="$nspec/@colsep='1'">
+      <xsl:text>|</xsl:text>
+    </xsl:if>
+  </xsl:when>
   <xsl:when test="$n">
     <xsl:if test="$n/@colsep='1'">
       <xsl:text>|</xsl:text>
