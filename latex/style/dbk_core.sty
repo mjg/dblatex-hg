@@ -23,28 +23,8 @@
 %
 \newcommand{\DBKrevhistory}{}
 
-%
-% If hyperlink, load the hyperref package and set the \hyperlabel command needed
-% by the DocBook stylesheets
-%
-\@ifundefined{DBKhyperlink}{ \def\DBKhyperlink{no} }{}
-
-\ifthenelse{\equal{\DBKhyperlink}{yes}}{
-  \@ifundefined{hyperparam}{
-    \def\hyperparam{linktocpage,colorlinks,citecolor=blue}
-  }{}
-  \@ifundefined{pdfoutput}{
-    \usepackage[dvips,\hyperparam]{hyperref}
-    \def\hyperlabel#1{\Hy@raisedlink{\hyper@anchorstart{#1}\hyper@anchorend}}
-  }{
-    \usepackage[pdftex,\hyperparam]{hyperref}
-    \def\hyperlabel#1{\hypertarget{#1}{}}
-  }
-}{
-  \usepackage{hyperref}
-  \def\hyperlabel#1{}
-}
-
+\usepackage{dbk_hyper}
 \usepackage{dbk_biblio}
 \usepackage{dbk_table}
+% Beware with changebar and AtEndDocument!
 \usepackage{dbk_changebar}
