@@ -46,11 +46,14 @@
   <xsl:if test="$preamble">
     <xsl:apply-templates select="$preamble"/>
   </xsl:if>
+  <xsl:if test="$entries">
+    <xsl:text>&#10;\noindent&#10;</xsl:text>
+    <xsl:text>\begin{description}&#10;</xsl:text>
+    <xsl:apply-templates select="$entries"/>
+    <xsl:text>&#10;\end{description}&#10;</xsl:text>
+  </xsl:if>
   <xsl:if test="$divs">
     <xsl:apply-templates select="$divs"/>
-  </xsl:if>
-  <xsl:if test="$entries">
-    <xsl:apply-templates select="$entries"/>
   </xsl:if>
 </xsl:template>
 
