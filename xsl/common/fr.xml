@@ -159,11 +159,13 @@
    <gentext key="index symbols" text="Symboles"/>
    <dingbat key="startquote" text="&#171;"/>
    <dingbat key="endquote" text="&#187;"/>
-   <dingbat key="singlestartquote" text="&#8249;"/>
-   <dingbat key="singleendquote" text="&#8250;"/>
-   <dingbat key="nestedstartquote" text="&#171;"/>
-   <dingbat key="nestedendquote" text="&#187;"/>
-   <dingbat key="bullet" text="&#8226;"/>
+   <dingbat key="nestedstartquote" text="{``}"/>
+	 <dingbat key="nestedendquote" text="{''}"/>
+   <dingbat key="singlestartquote" text="\guilsinglleft{}"/>
+   <dingbat key="singleendquote" text="\guilsinglright{}"/>
+   <dingbat key="urlstartquote" text="{\textless}"/>
+   <dingbat key="urlendquote" text="{\textgreater}"/>
+   <dingbat key="bullet" text="\textbullet{}"/>
 
    <context name="title">
       <template name="abstract" text="%t"/>
