@@ -7,8 +7,8 @@
     Stylesheet XML DocBook -> LaTeX 
     ############################################################################ -->
 
-<!-- Reprise des definitions communes, plus celles pour une production plus rapide
-     des corps de texte. -->
+<!-- Import common definitions, overloaded by fastests templates to produce body
+     text. -->
 
 <xsl:import href="latex_book.xsl"/>
 <xsl:import href="fasttext.xsl"/>
