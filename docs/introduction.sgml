@@ -82,9 +82,16 @@
   </para>
   </sect1>
   <sect1 id="sec-changes"><title>Changes</title>
-  <para>The changes between release &version; and release 0.1.3 are:
+  <sect2 id="sec-changes-0141"><title>Changes of version 0.1.4.1</title>
+  <para>The changes between release &version; and release 0.1.4 are:
+  &changes2;
+  </para>
+  </sect2>
+  <sect2 id="sec-changes-014"><title>Changes of version 0.1.4</title>
+  <para>The changes between release 0.1.4 and release 0.1.3 are:
   &changes;
   </para>
+  </sect2>
   </sect1>
   <sect1>
    <title>
@@ -132,8 +139,8 @@
    <para>
     Actually the XSL stylesheets doesn't produce valid LaTeX. The reason is that some
     DocBook processing is too complex or too time-consuming for XSL
-    transforming. Here are the main actions done to produce valid LaTeX from raw
-    LaTeX:
+    transforming. Besides, some extra actions need sometimes to be done such
+    like figure conversion. Here are the main actions done by Perl Post processing:
    </para>
    <itemizedlist>
     <listitem>
@@ -147,6 +154,10 @@
    implement some algorithms not so easy to do by XSL programming. The main
    difficulties are about the missing cells, or cells spanned on several columns
    and/or rows.</para>
+   </listitem>
+   <listitem>
+   <para>Convert the figures to be compatible with the backend driver. See <xref
+   linkend="sec-figinclude"> for more detail.</para>
    </listitem>
    </itemizedlist>
    </sect2>

@@ -12,7 +12,7 @@ clean:
 	-rm manual.pdf $(EQUATIONS) $(FIGURES)
 
 %.pdf: %.sgml $(TABLES) $(FIGURES) $(EQUATIONS) $(SPECS) $(CHANGES)
-	TEXINPUTS=:$(PWD)/../latex//:$(TEXIN) ../scripts/dblatex -S manual.specs -f fig -o $@ $<
+	TEXINPUTS=:$(PWD)/../latex//:$(TEXIN) ../scripts/dblatex -S manual.specs -o $@ $<
 
 $(SPECS): manual.specs
 	echo "<programlisting><![CDATA[" > $@

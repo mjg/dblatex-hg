@@ -63,12 +63,12 @@ done
 
 # Check the Latex dependencies
 deps_sty=`perl -e 'while(<>) {
-                           if (/^ *%.*/) {
-                             # skip a comment line
-                           } elsif (/\\\usepackage\\[*.*\\]*{(\\w+)}/) {
-                             print "$1\n";
-                           }
-                         }' latex/style/*.sty`
+                     if (/^ *%.*/) {
+                       # skip a comment line
+                     } elsif (/\\\usepackage\\[*.*\\]*{(\\w+)}/) {
+                       print "$1\n";
+                     }
+                   }' latex/style/*.sty`
 for sty_name in $deps_sty ;do
   sty_file=$sty_name.sty
   if [ -f latex/style/$sty_file ]; then

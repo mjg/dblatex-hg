@@ -14,6 +14,11 @@
 <entry align="center" valign="top">cf. <xref  linkend="sec-hyperparam"></entry>
 <entry align="center" valign="top">empty</entry>
 </row>
+<row>
+<entry align="center" valign="top">latex.figure.boxed</entry>
+<entry align="center" valign="top">If set to 1, put the images into a framed box.</entry>
+<entry align="center" valign="top">0</entry>
+</row>
 </tbody>
 </tgroup>
 </informaltable>

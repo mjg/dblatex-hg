@@ -17,6 +17,7 @@ texinputs=""
 pdfinputs=""
 debug=0
 version=0
+paritems=""
 texstyle=docbook
 xsl=$scriptpath/../xsl/latex_book_fast.xsl
 btexpath=$scriptpath/../latex/scripts
@@ -35,6 +36,7 @@ get_options() {
     -p) param=$2; shift ;;
     -I) xpath=$2; shift ;;
     -S) specs=$2; shift ;;
+    -P) paritems="$paritems $2"; shift ;;
     -v) version=1;;
     --style) texstyle=$2; shift ;;
     --texinputs) texinputs=$2; shift ;;
@@ -68,6 +70,7 @@ Options:
 -v                     : display the version number
 -o output              : output filename
 -p param_file          : XSL parameter file for customization
+-P param=value         : single XSL parameter
 -s                     : strict latex output (slower)
 -S spec_file           : specification file for behaviour customization
 -x option              : option passed to the XSLT
@@ -77,13 +80,13 @@ eof
 }
 
 build_param() {
-  param=$1
+  param="$1"
+  paritems="$2"
   if [ "$param" != "" ]; then
     # Absolute path expected
     if [ -f $upwd/$param ]; then
       param=$upwd/$param
     fi
-
     param_import="<xsl:import href=\"$param\"/>"
   else
     param_import=""
@@ -95,6 +98,13 @@ build_param() {
 
 <xsl:import href="$xsl"/>
 $param_import
+eof
+  for p in $paritems; do
+    v=`expr "x$p" : 'x[^=]*=\(.*\)'`
+    n=`expr "x$p" : 'x\([^=]*\)=.*'`
+    echo "<xsl:param name=\"$n\">$v</xsl:param>"
+  done
+  cat <<eof
 <xsl:param name="latex.style">$texstyle</xsl:param>
 
 </xsl:stylesheet>
@@ -146,9 +156,8 @@ pdftex) btexrun=$btexpath/runpdflatex ;
             pdfinputs=$upwd/$pdfinputs
           fi
           btexrun="$btexrun --graphpath $pdfinputs"
-        fi;
-        ofig=pdf ;;
-dvips)  btexrun=$btexpath/runlatex    ; ofig=eps ;;
+        fi;;
+dvips)  btexrun=$btexpath/runlatex ;;
 *)      echo "$btex: unknown TeX Backend Driver"; usage ;;
 esac
 
@@ -199,14 +208,14 @@ if [ "$ext" = "xml" ]; then
 fi
     
 # Parameter file building
-if [ "$param" != "" ] || [ "$texstyle" != "docbook" ]; then
-  build_param $param > custom.xsl
+if [ "$param" != "" ] || [ "$paritems" != "" ] || [ "$texstyle" != "docbook" ]; then
+  build_param "$param" "$paritems" > custom.xsl
   xsl="custom.xsl"
 fi
 
 # Figure conversion asked by the user
 if [ "$ifig" != "" ]; then
-  fig2dev=${ifig}2${ofig}
+  fig2dev=$ifig
 fi
 
 # PDF/DVI/Postscript production

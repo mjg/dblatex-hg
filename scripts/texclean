@@ -267,33 +267,83 @@ sub eps2xxx
   return $action;
 }
 
+sub scanformat
+{
+  my $f = $_[0];
+  my @formats = ();
+  my $ext = "";
+
+  # Is there a suffix?
+  ($file,$p,$ext) = fileparse($f, '\..*');
+
+  # The prefered format depends on the expected output
+  if ($figout eq "eps") {
+    @formats = (".eps", ".fig", ".pdf", ".png", "");
+  } else {
+    @formats = (".pdf", ".png", ".eps", ".fig", "");
+  }
+
+  if ($ext ne "") {
+    $fig = $f;
+    if (not(-f $fig))  {
+      $fig = "$path/$fig";
+    }
+  } else {
+    print "Fig format scanning... ";
+    # Look for the missing format
+    LOOKUP: {
+      foreach $e (@formats) {
+        $ext = $e;
+        if (-f "$f$ext") {
+          $fig = "$f$ext";
+          last LOOKUP;
+        } elsif (-f "$path/$f$ext") {
+          $fig = "$path/$f$ext";
+          last LOOKUP;
+        }
+      }
+    }
+    print "found $ext\n";
+  }
+  $ext =~ s/\.//;
+  return ($fig, $ext);
+}
+
 sub figconvert
 {
   local($line) = $_[0];
+  my $dofig = "";
 
   if (/\\includegraphics/) {
     ($f = $line) =~ s/.*\\includegraphics[^{]*{([^}]*)}.*\n/$1/;
-    # On enlève l'extension
-    $fig = dirname($f)."/".basename($f, ".$figin");
 
-    # On veut le chemin absolu
-    if (not(-f "$fig.$figin"))  {
-      $fig = "$path/$fig";
+    # Get the full filename and the suffix
+    ($fig, $ext) = scanformat($f);
+
+    # If no suffix, use the default one
+    if ($ext eq "") {
+      print "Use default figure format\n";
+      $ext = $figin;
     }
-    # On convertit la figure
-    if (-f "$fig.$figin") {
+
+    # Convert the figure
+    if (-f $fig) {
+      $fig2dev = $ext."2".$figout;
       $newfig = "fig".$figcount++.".$figout";
       for ($fig2dev) {
         /fig2eps/ && do{
-          $dofig = "fig2dev -L $figout $fig.fig > $newfig"; last;
+          $dofig = "fig2dev -L $figout $fig > $newfig"; last;
         };
         (/fig2pdf/ || /fig2png/) && do{
-          $dofig = "fig2dev -L eps $fig.fig > tmp_fig.eps";
+          $dofig = "fig2dev -L eps $fig > tmp_fig.eps";
           $dofig .= "; ".eps2xxx("tmp_fig.eps", $newfig, $figout);
           last;
-        }
+        };
+        /eps2pdf/ && do{
+          $dofig = eps2xxx($fig, $newfig, $figout); last;
+        };
       }
-      if ($dofig) {
+      if ($dofig ne "") {
         print "$dofig\n";
         system("$dofig");
         $line =~ s/$f/$newfig/;
@@ -356,10 +406,8 @@ sub parse_sgml
   while (<$RTEX>) {
     $line = $_;
 
-    # Conversion des figures si nécessaire
-    if ($fig2dev) {
-      $line = figconvert($line);
-    }
+    # Convert the figures if needed
+    $line = figconvert($line);
 
     if (/$keyon\n/) {
       $line =~ s/$keyon\n//;
@@ -383,19 +431,25 @@ sub parse_sgml
   close($CTEX);
 }
 
-getopts("f:p:");
+$backend = "dvips";
 
+getopts("f:p:b:");
+
+if ($opt_b) {
+  $backend = $opt_b;
+}
+# Default input figure format
 if ($opt_f) {
-  $fig2dev = $opt_f;
-  ($figin = $opt_f) =~ s/([^2]*).*/$1/;
-  ($figout = $opt_f) =~ s/[^2]*2(.*)/$1/;
-  # Pas de conversion si les formats sont identiques !
-  if ($figin eq $figout) {
-    $fig2dev = "";
-  }
+  $figin = $opt_f;
 }
 if ($opt_p) {
   $path = $opt_p;
+}
+
+# The expected output figure format depends on the backend driver
+for ($backend) {
+  /dvips/ && do{ $figout = "eps"; last; };
+  /pdftex/ && do{ $figout = "pdf"; last; };
 }
 
 $rawtex = $ARGV[0];

@@ -37,7 +37,7 @@ endif
 endif
 
 %.tex: %.rtex FORCE
-	@$(TEXCLEAN) -p $(SRCDIR) -f "$(FIG2DEV)" $< $@
+	@$(TEXCLEAN) -b $(TEXDRV) -p $(SRCDIR) -f "$(FIG2DEV)" $< $@
 
 %.rtex: %.xml FORCE
 ifeq ($(XSLT),xt)

@@ -28,6 +28,7 @@
 <!ENTITY version SYSTEM "version.sgml">
 <!ENTITY custom SYSTEM "custom.sgml">
 <!ENTITY changes SYSTEM "changes-0.1.4.sgml">
+<!ENTITY changes2 SYSTEM "changes-0.1.4.1.sgml">
  
 ]>
 
@@ -136,7 +137,15 @@
 <revnumber>5</revnumber><date>03/05/04</date>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes">
+  Changes: see <xref linkend="sec-changes-014">
+ </para>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+<revision>
+<revnumber>6</revnumber><date>15/06/04</date>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes-0141">
  </para>
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
@@ -350,7 +359,7 @@
   <title>
   Using dblatex
  </title>
-  <sect1>
+  <sect1 id="sec-figinclude">
    <title>
    Figure Inclusion
   </title>
@@ -372,13 +381,13 @@
     <varlistentry>
     <term>
     pdftex:
-</term><listitem><para>PDF format is required.
+</term><listitem><para>PDF or PNG format is required.
     </para>
    </listitem>
    </varlistentry>
    </variablelist>
    <para>
-    In order to be able to use both backends, do not write the suffix of the file that references the figure. The suffix will be deduced from the backend used.
+    In order to be able to use both backends, it is wise to not write the suffix of the file that references the figure. The suffix will be deduced from the backend used.
    </para>
    <para>
     The figures must either already exists in the expected format, or must be able to be converted on the fly.
@@ -400,8 +409,16 @@
     <title>
     Converting on the fly
    </title>
+   <para>When it is needed dblatex tries to automatically convert the figures to
+   the expected format (i.e. EPS or PDF). The principle is to detect the original
+   figure format from the suffix of the fileref attribute. If no suffix is given,
+   the tool checks if a file whose basename is conformant with the
+   fileref attribute and with one of the predefined suffixes exists (that is, ".eps",
+   ".fig", ".pdf", or ".png"). If such a file exists, conversion is done from the
+   original format found.
+   </para>
    <para>
-    The option <option>-f <replaceable>fig_format</replaceable></option> allows to specify the included figures format (<replaceable>fig_format</replaceable>). Then, the tool converts the figures from the specified format to the expected one (eps or pdf).
+    The option <option>-f <replaceable>fig_format</replaceable></option> allows to specify the default included figures format (<replaceable>fig_format</replaceable>), that will be used when automatic format scanning gives no result. Then, the tool converts the figures from the specified format to the expected one.
    </para>
    <para>
     If the specified format is unknown, no conversion is done. The supported formats are:
@@ -436,7 +453,7 @@
     Paths Lookup
    </title>
    <para>
-    You can use the option <option>-I "<replaceable>chemin1</replaceable> <replaceable>chemin2</replaceable> ..."</option> to specify where the figures are. The given paths must be absolute. The paths are added to the doculent root path.
+    You can use the option <option>-I "<replaceable>path1</replaceable> <replaceable>path2</replaceable> ..."</option> to specify where the figures are. The given paths must be absolute. The paths are added to the doculent root path.
    </para>
 <example><title>Figures lookup</title>
    <para>
@@ -977,6 +994,14 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
     <term>
     -p:
 </term><listitem><para>specify a configuration file. See <xref linkend="sec-param">.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -P:
+</term><listitem><para>set an XSL parameter value from command line.
+See <xref linkend="sec-param-value">.
     </para>
    </listitem>
    </varlistentry>

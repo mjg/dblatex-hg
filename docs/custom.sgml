@@ -32,10 +32,10 @@
  </para>
   <sect1 id="sec-param">
    <title>
-   Configuration stylesheet
+   Configuration Parameter Stylesheet
   </title>
   <para>
-   The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p</option>. The available configuration parameters are the following:
+   The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p <replaceable>custom.xsl</replaceable></option>. The available configuration parameters are the following:
   </para>
 &param;
    <sect2 id="sec-hyperparam">
@@ -61,6 +61,16 @@
 ]]>   </programlisting>
 </example>
    </sect2>
+  </sect1>
+  <sect1 id="sec-param-value"><title>Setting Parameter values</title>
+  <para>It is possible to set some XSL parameter values directly from the command
+  line without creating a configuration parameter stylesheet, by using the
+  <option>-P <replaceable>parameter=value</replaceable></option> option.</para>
+  <para>The following example set the latex.hyperparam parameter value:
+   <programlisting>
+<![CDATA[  dblatex -P latex.hyperparam=colorlinks,lincolor=blue myfile.xml
+]]></programlisting>
+  </para>
   </sect1>
   <sect1>
    <title>

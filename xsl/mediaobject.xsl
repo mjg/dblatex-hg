@@ -19,7 +19,11 @@
 </xsl:template>
 
 <xsl:template match="mediaobject|inlinemediaobject">
-  <xsl:if test="self::mediaobject">
+<!--
+  within a figure don't put each mediaobject into a separate paragraph, 
+  to let the subfigures correctly displayed.
+  -->
+  <xsl:if test="self::mediaobject and not(parent::figure)">
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
   <xsl:choose>
@@ -30,15 +34,31 @@
       <xsl:apply-templates select="textobject[1]"/>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:if test="self::mediaobject">
+  <xsl:if test="self::mediaobject and not(parent::figure)">
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
 <xsl:template match="imageobject">
-  <xsl:text>\fbox{</xsl:text>
+  <xsl:variable name="figcount"
+                select="count(ancestor::figure/mediaobject[imageobject])"/>
+  <xsl:if test="$figcount &gt; 1">
+    <!-- space before subfigure to prevent from strange behaviour with other
+         subfigures -->
+    <xsl:text> \subfigure[</xsl:text>
+    <xsl:value-of select="../caption"/>
+    <xsl:text>]{</xsl:text>
+  </xsl:if>
+  <xsl:if test="$latex.figure.boxed = '1'">
+    <xsl:text>\fbox{</xsl:text>
+  </xsl:if>
   <xsl:apply-templates select="imagedata"/>
-  <xsl:text>}</xsl:text>
+  <xsl:if test="$latex.figure.boxed = '1'">
+    <xsl:text>}</xsl:text>
+  </xsl:if>
+  <xsl:if test="$figcount &gt; 1">
+    <xsl:text>}</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="unit.eval">
@@ -105,11 +125,6 @@
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:if test="count(ancestor::figure/mediaobject[imageobject]) &gt; 1">
-    <xsl:text>\subfigure[</xsl:text>
-    <xsl:value-of select="../../caption"/>
-    <xsl:text>]</xsl:text>
-  </xsl:if>
   <xsl:text>{</xsl:text>
   <xsl:if test="$viewport=1">
     <xsl:text>\begin{minipage}[c]</xsl:text>
