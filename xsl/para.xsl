@@ -6,8 +6,6 @@
     ############################################################################ -->
 
 
-<xsl:strip-space elements="para"/>
-
 <xsl:template match="para">
   <xsl:text>&#10;</xsl:text>
   <xsl:apply-templates/>
