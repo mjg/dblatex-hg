@@ -36,6 +36,7 @@ sub prepare_table
       ($aligs[$i] = $_) =~ s/.*{(.[^}]*)}$/$1/;
     }
   }
+  $nbcols = $i;
 }
 
 sub hline2cline
@@ -68,6 +69,7 @@ sub hline2cline
 
   # dump_mrows($ncols);
   for($i = 0; $i < $ncols; $i++) {
+    # print $to "mr($i)=".$mrows[$i];
     if ($mrows[$i] <= 0) {
       # on mémorise la ligne à tracer
       $bord = 1;
@@ -132,7 +134,7 @@ sub table_parse
   # pour la ligne précédente, on trace la bordure selon les cellules qui
   # chevauchent plusieurs lignes.
   #
-  ($brow, $row, $erow) = hline2cline($row, $nbcols+1);
+  ($brow, $row, $erow) = hline2cline($row, $nbcols);
   @columns = split('&', $row);
   $nbcols = ($#columns > $nbcols) ? $#columns : $nbcols;
 
@@ -145,8 +147,10 @@ sub table_parse
   # - mise en forme des cellules "multirow"
   #
   print $to $brow;
-  for ($i=0, $pos=0; $pos<=$nbcols; $pos++) {
+
+  for ($i=0, $pos=0; $pos<$nbcols; $pos++) {
     $c = $columns[$i];
+
     if ($mrows[$pos] > 0) {
       #
       # insertion d'une cellule vide, et on la décompte des cellules couvertes
@@ -154,8 +158,27 @@ sub table_parse
       #
       print $to " & ";
       $mrows[$pos] --;
+    } elsif ($i > $#columns) {
+      # print the missing ending cells
+      print $to " & ";
     } else {
+      # shift to the real position
+      if ($c =~ /%<num=/) {
+        $rpos = $c;
+        $rpos =~ s/.*%<num=([^>]*).*\n/$1/;
+        $rpos -= 1;
+        # skip the info
+        $c =~ s/%<num=.*>%\n//;
+        while ($rpos > $pos) {
+          print $to " & ";
+          $pos++;
+          if ($mrows[$pos] > 0) {
+            $mrows[$pos] --;
+          }
+        }
+      }
       if ($c =~ /multirow/) {
+        # get the rows count
         $mrows[$pos] = $c;
         $mrows[$pos] =~ s/\n//g;
         $mrows[$pos] =~ s/.*multirow{([^}]*)}.*/$1/;
@@ -171,10 +194,17 @@ sub table_parse
         # macro à utiliser au lieu de multirow, pour que ça marche avec tsize
         $c =~ s/multirow/mrow/;
       }
+      # shift the multicolums
+      if ($c =~ /multicolumn/) {
+        $mcols = $c;
+        $mcols =~ s/\n//g;
+        $mcols =~ s/.*multicolumn{([^}]*)}.*/$1/g;
+        $pos += ($mcols - 1);
+      }
       print $to $c;
       if ($i < $#columns) {
         # on écrit le séparateur
-        print $to "&";
+        print $to " & ";
       }
       $i ++;
     }
@@ -332,7 +362,7 @@ sub parse_sgml
     }
 
     if (/$keyon\n/) {
-      $line =~ s/$keyon//;
+      $line =~ s/$keyon\n//;
       $mode = 1;
       chomp $line;
     } elsif ($mode == 1) {
@@ -344,7 +374,7 @@ sub parse_sgml
       $mode = 0;
       chomp $line;
     } elsif (/$keyon /) {
-      # Cas plus complexe, 'xt' est dans le ligne
+      # Cas plus complexe, 'xt' est dans la ligne
       $line = parse_inlined($line);
     }
     table_parse($line, $CTEX);
