@@ -57,6 +57,8 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="table/title"/>
+
 <xsl:template match="informaltable">
   <xsl:call-template name="resizetable">
     <xsl:with-param name="pos" select="'1'"/>
@@ -120,11 +122,13 @@
   <xsl:call-template name="build.vframe"/>
   <xsl:text>}&#10;</xsl:text>
 
-  <xsl:if test="$frame!='sides' and $frame!='none' and $frame!='bottom'">
+  <xsl:if test="not($frame) or
+                ($frame!='sides' and $frame!='none' and $frame!='bottom')">
     <xsl:text>\hline &#10;</xsl:text>
   </xsl:if>
   <xsl:apply-templates/>
-  <xsl:if test="$frame!='sides' and $frame!='none' and $frame!='top'">
+  <xsl:if test="not($frame) or
+                ($frame!='sides' and $frame!='none' and $frame!='top')">
     <xsl:text>\hline &#10;</xsl:text>
   </xsl:if>
 
@@ -263,7 +267,8 @@
 <xsl:template match="thead/row[position()=last()]">
   <xsl:text>\rowcolor[gray]{.9} &#10;</xsl:text>
   <xsl:apply-templates/>
-  <xsl:if test="../../../tgroup[@rowsep='1'] and @rowsep!='0'">
+  <xsl:if test="not(ancestor::*[@rowsep]) or
+                ((ancestor::*[@rowsep])[last()])[@rowsep='1']">
     <xsl:text>\hline &#10;</xsl:text>
     <xsl:text>\hline &#10;</xsl:text>
   </xsl:if>
@@ -272,13 +277,15 @@
 <xsl:template match="informaltable/tgroup/thead/row[position()=last()]">
   <xsl:text>\rowcolor[gray]{.9} &#10;</xsl:text>
   <xsl:apply-templates/>
-  <xsl:if test="../../../tgroup[@rowsep='1'] and @rowsep!='0'">
-    <xsl:text>\hline &#10;</xsl:text>
-  </xsl:if>
+  <xsl:variable name="hline">
+    <xsl:if test="not(ancestor::*[@rowsep]) or
+                  ((ancestor::*[@rowsep])[last()])[@rowsep='1']">
+      <xsl:text>\hline &#10;</xsl:text>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:value-of select="$hline"/>
   <xsl:text>\endhead &#10;</xsl:text> 
-  <xsl:if test="../../../tgroup[@rowsep='1'] and @rowsep!='0'">
-    <xsl:text>\hline &#10;</xsl:text>
-  </xsl:if>
+  <xsl:value-of select="$hline"/>
 </xsl:template>
 
 <xsl:template match="thead/row/entry">
