@@ -5,57 +5,6 @@
     Feuille de style de transformation XML DocBook -> LaTeX 
     ############################################################################ -->
 
-
-<!-- ##################
-     # biblio section #
-     ################## -->
-
-<xsl:template name="biblioentry.process">
-  <xsl:param name="level"/>
-
-  <xsl:text>\begin{btSect}{}&#10;</xsl:text>
-
-  <!-- display the heading -->
-  <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="level" select="$level"/>
-  </xsl:call-template>
-  <xsl:value-of select="title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
-  <xsl:if test="$level='0'">
-    <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
-  </xsl:if>
-
-  <xsl:text>\begin{bibgroup}&#10;</xsl:text>
-  <xsl:text>\begin{thebibliography}{</xsl:text>
-  <xsl:value-of select="$latex.bibwidelabel"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:choose>
-  <xsl:when test="$latex.biblio.output ='cited'">
-    <xsl:apply-templates select="biblioentry" mode="bibliography.cited">
-      <xsl:sort select="./abbrev"/>
-      <xsl:sort select="./@xreflabel"/>
-      <xsl:sort select="./@id"/>
-    </xsl:apply-templates>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:apply-templates select="biblioentry">
-      <xsl:sort select="./abbrev"/>
-      <xsl:sort select="./@xreflabel"/>
-      <xsl:sort select="./@id"/>
-    </xsl:apply-templates>
-  </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>&#10;\end{thebibliography}&#10;</xsl:text>
-  <xsl:text>\end{bibgroup}&#10;</xsl:text>
-  <xsl:text>\end{btSect}&#10;</xsl:text>
-</xsl:template>
-
-
-<!-- ################
-     # bibliography #
-     ################ -->
-
 <xsl:template match="bibliography">
   <xsl:message>Processing Bibliography</xsl:message>
   <xsl:message>Output Mode:  <xsl:value-of select="$latex.biblio.output"/></xsl:message>
@@ -65,60 +14,94 @@
   <xsl:text>\bibliography{</xsl:text>
   <xsl:value-of select="$latex.bibfiles"/>
   <xsl:text>}&#10;</xsl:text>
-
-  <!-- get the section level -->
-  <xsl:variable name="level">
-    <xsl:call-template name="get.sect.level"/>
-  </xsl:variable>
-
+  <xsl:if test="biblioentry">
+    <xsl:text>\begin{btSect}{}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:text>\chapter{</xsl:text>
+  <xsl:if test="title">
+    <xsl:value-of select="title"/>
+  </xsl:if>
+  <xsl:text>}&#10;</xsl:text>
   <xsl:choose>
   <xsl:when test="biblioentry">
-    <!-- process the entries -->
-    <xsl:call-template name="biblioentry.process">
-      <xsl:with-param name="level" select="$level"/>
-    </xsl:call-template>
+    <xsl:text>\begin{bibgroup}&#10;</xsl:text>
+    <xsl:text>\begin{thebibliography}{</xsl:text>
+    <xsl:value-of select="$latex.bibwidelabel"/>
+    <xsl:text>}&#10;</xsl:text>
+    <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
+    <xsl:choose>
+    <xsl:when test="$latex.biblio.output ='cited'">
+      <xsl:apply-templates select="biblioentry" mode="bibliography.cited">
+        <xsl:sort select="./abbrev"/>
+        <xsl:sort select="./@xreflabel"/>
+        <xsl:sort select="./@id"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:when test="$latex.biblio.output ='all'">
+      <xsl:apply-templates select="biblioentry" mode="bibliography.all">
+        <xsl:sort select="./abbrev"/>
+        <xsl:sort select="./@xreflabel"/>
+        <xsl:sort select="./@id"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="biblioentry">
+        <xsl:sort select="./abbrev"/>
+        <xsl:sort select="./@xreflabel"/>
+        <xsl:sort select="./@id"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>&#10;\end{thebibliography}&#10;</xsl:text>
+    <xsl:text>\end{bibgroup}&#10;</xsl:text>
+    <xsl:text>\end{btSect}&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>
-    <!-- no entries here, only a section block -->
-    <xsl:call-template name="map.sect.level">
-      <xsl:with-param name="level" select="$level"/>
-    </xsl:call-template>
-    <xsl:value-of select="title"/>
-    <xsl:text>}&#10;</xsl:text>
-    <xsl:call-template name="label.id"/>
-    <xsl:if test="$level='0'">
-      <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
-    </xsl:if>
+    <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
   <xsl:apply-templates select="bibliodiv"/> 
+</xsl:template>
+
+
+<xsl:template match="bibliodiv">
+<xsl:message>Processing Bibliography - Bibliodiv</xsl:message>
+<xsl:text>\begin{btSect}{}
+\section{</xsl:text>
+<xsl:if test="title">
+  <xsl:value-of select="title"/>
+</xsl:if>
+<xsl:text>}
+\begin{bibgroup}
+\begin{thebibliography}{WIDELA}
+</xsl:text>
+<xsl:choose>
+  <xsl:when test="$latex.biblio.output ='cited'">
+    <xsl:apply-templates select="biblioentry" mode="bibliography.cited">
+      <xsl:sort select="./abbrev"/>
+      <xsl:sort select="./@xreflabel"/>
+      <xsl:sort select="./@id"/>
+    </xsl:apply-templates>
+  </xsl:when>
+  <xsl:when test="$latex.biblio.output ='all'">
+    <xsl:apply-templates select="biblioentry">
+      <xsl:sort select="./abbrev"/>
+      <xsl:sort select="./@xreflabel"/>
+      <xsl:sort select="./@id"/>
+    </xsl:apply-templates>
+  </xsl:when>
+</xsl:choose>
+<xsl:text>\end{thebibliography}
+\end{bibgroup}
+\end{btSect}
+</xsl:text>
 </xsl:template>
 
 <xsl:template match="bibliography/title"/>
 <xsl:template match="bibliography/subtitle"/>
 <xsl:template match="bibliography/titleabbrev"/>
 
-<!-- ###############
-     #  bibliodiv  #
-     ############### -->
-
-<xsl:template match="bibliodiv">
-  <xsl:message>Processing Bibliography - Bibliodiv</xsl:message>
-  <xsl:variable name="level">
-    <xsl:call-template name="get.sect.level">
-      <xsl:with-param name="n" select="parent::bibliography"/>
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:call-template name="biblioentry.process">
-    <xsl:with-param name="level" select="$level+1"/>
-  </xsl:call-template>
-</xsl:template>
-
 <xsl:template match="bibliodiv/title"/>
-
-<!-- ###############
-     # biblioentry #
-     ############### -->
 
 <xsl:template match="biblioentry" mode="bibliography.cited">
   <xsl:param name="bibid" select="@id"/>
@@ -287,6 +270,7 @@
 </xsl:template>
 
 <!-- suppressed things -->
+
 <xsl:template match="printhistory" mode="bibliography.mode"/>
 <xsl:template match="abstract" mode="bibliography.mode"/>
 <xsl:template match="authorblurb" mode="bibliography.mode"/>

@@ -21,6 +21,9 @@
 <xsl:template match="text()">
   <xsl:text>\xt&#10;</xsl:text>
   <xsl:value-of select="."/>
+  <!--
+  <xsl:value-of select="normalize-space(.)"/>
+  -->
   <xsl:text>/xt&#10;</xsl:text>
 </xsl:template>
 

@@ -6,8 +6,8 @@
     ############################################################################ -->
 
 <xsl:template match="footnote">
-<xsl:call-template name="label.id"/>
 <xsl:text>\footnote{</xsl:text>
+<xsl:call-template name="label.id"/>
 <xsl:apply-templates/>
 <xsl:text>}</xsl:text>
 </xsl:template>

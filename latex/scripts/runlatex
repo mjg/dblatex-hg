@@ -99,17 +99,17 @@ done
 
 # Make the index if needed
 if [ -f $basefile.idx ]; then
-  makeindex -s $scriptpath/doc.ist $basefile
+  makeindex -s $scriptpath/doc.ist $basefile.idx
   $xtex -interaction=batchmode $file
 fi
 
 # Execute post-action if needed
 if [ "$execpost" != "" ]; then
   $execpost $file
-fi
 
-# Run latex again for the final output
-$xtex -interaction=batchmode $file
+  # Run latex again for the final output
+  $xtex -interaction=batchmode $file
+fi
 
 # Remove the temporary files
 clean

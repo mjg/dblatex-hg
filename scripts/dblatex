@@ -211,6 +211,8 @@ cd $upwd
 if [ $debug -eq 0 ]; then
   rm -r $tmpdir
 else
+  # For easy debug
+  echo "TEXINPUTS=$TEXINPUTS" > $tmpdir/env_tex
   echo "$tmpdir is not removed"
 fi
 exit $rc

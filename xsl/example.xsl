@@ -27,7 +27,8 @@
 </xsl:template>
 
 <xsl:template match="informalexample">
-  <xsl:call-template name="informal.object"/>
+  <xsl:call-template name="label.id"/>
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="example/title"/>

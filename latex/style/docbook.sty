@@ -17,7 +17,7 @@
 % If defined, process the options
 \ProcessOptions\relax
 
-% Parametrage par défaut
+% Default Parameters
 \newcommand{\DBKprojet}{}
 \newcommand{\DBKreference}{}
 \newcommand{\DBKtitle}{Main Title}
@@ -70,7 +70,7 @@
 
 
 % ##############################################################################
-% ### Parametres de la page
+% ### Page Parameters
 % ##############################################################################
 \setlength{\paperwidth}{21cm}
 \setlength{\paperheight}{29.7cm}
@@ -88,10 +88,10 @@
 
 
 % ##############################################################################
-% ### Packages utilises
+% ### Used Packages
 % ##############################################################################
 \makeatletter
-% Graphiques Postscript
+% Postscript Graphics
 \usepackage[dvips]{graphicx}
 \usepackage{epsfig}
 
@@ -117,14 +117,15 @@
 % du PDF avec ps2pdf.
 % Cela peut etre utile si la conversion des figures .eps en .pdf (via
 % epstopdf) apparait trop fastidieuse...
-\usepackage{pslatex}
+  \usepackage{pslatex}
   \ifthenelse{\equal{\DBKhyperlink}{yes}}{
     %% Hyper-liens en couleur pour fichier PDF
-     \usepackage[dvips,
-      \hyperparam,
-      pdftitle={\DBKtitle},
-      pdfsubject={\DBKsubject},
-      pdfauthor={\DBKredacteur}]{hyperref}
+    \usepackage[dvips,
+                \hyperparam,
+                pdftitle={\DBKtitle},
+                pdfsubject={\DBKsubject},
+                pdfauthor={\DBKredacteur}]{hyperref}
+    \def\hyperlabel#1{\Hy@raisedlink{\hyper@anchorstart{#1}\hyper@anchorend}}
   }{
     %% Hyper-liens en Noir&Blanc pour fichier PS
     %\usepackage[dvips,linktocpage,
@@ -133,22 +134,21 @@
       %pdfauthor={\DBKredacteur}]{hyperref}
   }
 }{
-\usepackage{pslatex}
-\usepackage[pdftex,\hyperparam]{hyperref}
+  \usepackage{pslatex}
+  \usepackage[pdftex,\hyperparam]{hyperref}
+  \def\hyperlabel#1{\hypertarget{#1}{}}
 }
 
-% \usepackage{times}
-
-% adaptation au francais
-%\usepackage[francais]{babel}
-%\usepackage{french}
 \usepackage{fancyhdr}
+
+% To have fancy <programlisting>
+\usepackage{fancyvrb}
 
 % ##############################################################################
 % ### Redéfinition/Ajout de commandes pour cette trame
 % ##############################################################################
 
-%% Inclusion du package float après hyperref pour avoir ses definitions!
+%% Inclusion of float package after hyperref to have its definitions!
 \usepackage{float}
 
 \ifthenelse{\equal{\DBKisarticle}{yes}}{
@@ -237,7 +237,7 @@
 
 
 % ##############################################################################
-% ### Commandes et environnements
+% ### Commands and environments
 % ##############################################################################
 
 \newcounter{totalminutes}
@@ -246,14 +246,9 @@
 
 % Macro-commandes
 \newcommand{\linefeed}{\vspace{4ex}}
-\newcommand{\preuve}{\noindent \textbf{preuve}\\}
-\newcommand{\cad}{\mbox{c.-\`a-d.} }
 \newcommand{\cqfd}{\mbox{\emph{C.Q.F.D.}} }
 
 % Variables globales du document
-\newcommand{\chaine}{cha\^{\i}ne }
-\newcommand{\mydeg}{\ensuremath{^\circ}}
-
 \newcommand{\timecompile}{\setcounter{totalminutes}{\time}%
     \setcounter{hours}{\value{totalminutes}/60}%
     \setcounter{minutes}{\value{totalminutes}-\value{hours}*60}%

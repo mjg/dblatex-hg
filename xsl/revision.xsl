@@ -52,4 +52,29 @@
   <xsl:text>\hline&#10;</xsl:text>
 </xsl:template>
 
+<xsl:template match="revision/revnumber">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="revision/date">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="revision/authorinitials">
+  <xsl:text>, </xsl:text>
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="revision/authorinitials[1]">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="revision/revremark">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="revision/revdescription">
+  <xsl:apply-templates/>
+</xsl:template>
+
 </xsl:stylesheet>

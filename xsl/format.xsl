@@ -54,4 +54,19 @@
   </xsl:choose>
 </xsl:template>
 
+
+<!-- map section to latex -->
+
+<xsl:template name="sec-map">
+  <xsl:param name="keyword"/>
+  <xsl:param name="name" select="local-name(.)"/>
+  <xsl:variable name="mapfile" select="document('secmap.xml')"/>
+  <xsl:variable name="to" select="($mapfile/mapping/map[@key=$keyword])[1]/@text"/>
+  <xsl:if test="$to=''">
+    <xsl:message>*** No mapping for <xsl:value-of select="$keyword"/></xsl:message>
+  </xsl:if>
+  <xsl:value-of select="$to"/>
+</xsl:template>
+
+
 </xsl:stylesheet>

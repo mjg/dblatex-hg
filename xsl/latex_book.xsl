@@ -9,7 +9,11 @@
 
 <xsl:import href="latex-0.5.1/docbook.xsl"/>
 
+<xsl:import href="common/l10n.xsl"/>
+<xsl:import href="common/common.xsl"/>
 <xsl:import href="common.xsl"/>
+<xsl:import href="chapter.xsl"/>
+<xsl:import href="bridgehead.xsl"/>
 <xsl:import href="table.xsl"/>
 <xsl:import href="admon.xsl"/>
 <xsl:import href="revision.xsl"/>
@@ -20,16 +24,44 @@
 <xsl:import href="refentry.xsl"/>
 <xsl:import href="biblio.xsl"/>
 <xsl:import href="index.xsl"/>
-<xsl:import href="equation.xsl"/>
 <xsl:import href="footnote.xsl"/>
 <xsl:import href="procedure.xsl"/>
+<xsl:import href="lists.xsl"/>
 <xsl:import href="xref.xsl"/>
 <xsl:import href="misc.xsl"/>
 <xsl:import href="main.xsl"/>
 <xsl:import href="version.xsl"/>
 <xsl:import href="param.xsl"/>
 <xsl:import href="citation.xsl"/>
+<xsl:import href="graphic.xsl"/>
+<xsl:import href="equation.xsl"/>
+<xsl:import href="figure.xsl"/>
+<xsl:import href="mediaobject.xsl"/>
+<xsl:import href="callout.xsl"/>
+<xsl:import href="sections.xsl"/>
+<xsl:import href="labelid.xsl"/>
+<xsl:import href="sgmltag.xsl"/>
+<xsl:import href="msgset.xsl"/>
+<xsl:import href="part.xsl"/>
+<xsl:import href="appendix.xsl"/>
+<xsl:import href="abstract.xsl"/>
+<xsl:import href="email.xsl"/>
+<xsl:import href="toc_lot.xsl"/>
+<xsl:import href="dingbat.xsl"/>
+<xsl:import href="component.xsl"/>
+<xsl:import href="keyword.xsl"/>
+<xsl:import href="glossary.xsl"/>
+<xsl:import href="synopsis.xsl"/>
+<xsl:import href="classsynopsis.xsl"/>
+<xsl:import href="qandaset.xsl"/>
+<xsl:import href="quote.xsl"/>
+<xsl:import href="sidebar.xsl"/>
+<xsl:import href="para.xsl"/>
+<xsl:import href="scape.xsl"/>
+<xsl:import href="pi.xsl"/>
 <xsl:import href="mathml2/mathml.xsl"/>
+
+<xsl:strip-space elements="book article chapter title para"/>
 
 <xsl:template match="*[@revisionflag]">
   <xsl:choose>
@@ -49,7 +81,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:message>
-        <xsl:text>Revisionflag on unexpected element: </xsl:text>
+        <xsl:text>*** Revisionflag on unexpected element: </xsl:text>
         <xsl:value-of select="local-name(.)"/>
         <xsl:text>(Assuming block)</xsl:text>
       </xsl:message>

@@ -29,14 +29,10 @@
 </xsl:template>
 
 
-<xsl:template match="inlineequation/graphic">
-</xsl:template>
-
-<xsl:template match="informalequation/graphic">
-</xsl:template>
-
-<xsl:template match="equation/graphic">
-</xsl:template>
+<xsl:template match="inlineequation/graphic"/>
+<xsl:template match="informalequation/graphic"/>
+<xsl:template match="equation/graphic"/>
+<xsl:template match="equation/title"/>
 
 <!-- Direct copy of the content -->
 
