@@ -380,6 +380,24 @@
     <xsl:apply-templates/>
   </xsl:otherwise>
   </xsl:choose>
+  <!-- for Perl post-processing -->
+  <xsl:if test="@namest or @colname">
+    <xsl:text>%&lt;num=</xsl:text>
+    <xsl:variable name="name">
+      <xsl:choose>
+      <xsl:when test="@colname">
+        <xsl:value-of select="@colname"/>
+      </xsl:when>
+      <xsl:when test="@namest">
+        <xsl:value-of select="@namest"/>
+      </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="give.colspec.num">
+      <xsl:with-param name="n" select="ancestor::*/colspec[@colname=$name]"/>
+    </xsl:call-template>
+    <xsl:text>&gt;%&#10;</xsl:text>
+  </xsl:if>
   <xsl:choose>
   <xsl:when test="position()=last()">
     <xsl:text> \tabularnewline &#10;</xsl:text>
