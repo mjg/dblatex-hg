@@ -24,6 +24,7 @@
 <!ENTITY specparam SYSTEM "specparam.sgml">
 <!ENTITY specmanual SYSTEM "specmanual.sgml">
 <!ENTITY version SYSTEM "version.sgml">
+<!ENTITY changes SYSTEM "changes-0.1.4.sgml">
  
 ]>
 
@@ -38,7 +39,7 @@
   <firstname>Benoît</firstname><surname>Guillon</surname>
  </author>
  <date>
-  03 july 2003
+  03 may 2004
  </date>
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
@@ -64,7 +65,7 @@
 <revision>
 <revnumber>2</revnumber><date>30/04/03</date><revdescription>
  <para>
-  Changes :
+  Changes:
  </para>
  <itemizedlist>
   <listitem>
@@ -83,7 +84,7 @@
 <revision>
 <revnumber>3</revnumber><date>11/06/03</date><revdescription>
  <para>
-  Changes :
+  Changes:
  </para>
  <itemizedlist>
   <listitem>
@@ -102,7 +103,7 @@
 <revision>
 <revnumber>4</revnumber><date>03/07/03</date><revdescription>
  <para>
-  Changes :
+  Changes:
  </para>
  <itemizedlist>
   <listitem>
@@ -127,7 +128,16 @@
  </listitem>
  </itemizedlist>
 </revdescription><authorinitials>B. Guillon</authorinitials>
-</revision></revhistory>
+</revision>
+<revision>
+<revnumber>5</revnumber><date>03/05/04</date>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes">
+ </para>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+</revhistory>
 </bookinfo>
 <bibliography><title>Documentation</title>
 <bibliodiv><title>Reference</title>
@@ -153,6 +163,11 @@
   </title>
   <para>
    This manual is for dblatex version &version;.
+  </para>
+  </sect1>
+  <sect1 id="sec-changes"><title>Changes</title>
+  <para>The changes between this release and release 0.1.3 are:
+  &changes;
   </para>
   </sect1>
   <sect1>
@@ -252,7 +267,7 @@
 <figure id="fig-processus">
 <title>Transforming Process</title>
 <mediaobject><imageobject> 
-<imagedata fileref="processus" align="center" scale="70">
+<imagedata fileref="processus" align="center" width="40%">
 </imageobject></mediaobject></figure>
    </sect2>
    <sect2 id="sec-stylesheets">
@@ -643,7 +658,22 @@
   </listitem>
    <listitem>
    <para>
+   The <sgmltag>namest</sgmltag> and <sgmltag>nameend</sgmltag> attributes of a table entry (<sgmltag>entry</sgmltag> element) are supported. It is possible to have a cell spanned on several columns.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Mixing column and row spanning is not supported.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
    The <sgmltag>orient</sgmltag> table attribute is supported (portrait and landscape). 
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   It is possible to have missing cell entries in a table. 
    </para>
   </listitem>
   </itemizedlist>
@@ -944,7 +974,7 @@
    Creating an Index
   </title>
   <para>
-   An index is automatically generated if some index entries (<sgmltag>indexterm</sgmltag>), telling the terms to put in the index, are written in the document.
+   An index is automatically generated if some index entries (<sgmltag>indexterm</sgmltag>), telling the terms to put in the index, are written in the document. The <sgmltag>keyword</sgmltag> elements are not printed but are also added to the index.
   </para>
 <example><title>Index Entry</title>
   <programlisting>
@@ -962,7 +992,7 @@
    Writing a Bibliography
   </title>
   <para>
-   A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections.
+   A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter or a section and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections or subsections.
   </para>
   <para>
    The writer selects information that describes each bibliography entry (<sgmltag>biblioentry</sgmltag>), and chooses the presentation order. The titles and authors are displayed first.
@@ -1017,7 +1047,7 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
     Synopsis
    </title>
    <programlisting>
-<![CDATA[dblatex [-t {html|tex|dvi|ps|pdf}] [-b {dvips|pdftex}] [-o output] [other options] file.{xml|sgml}
+<![CDATA[dblatex [-t {tex|dvi|ps|pdf}] [-b {dvips|pdftex}] [-o output] [other options] file.{xml|sgml}
 ]]>   </programlisting>
    </sect2>
    <sect2>
