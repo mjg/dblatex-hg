@@ -1,0 +1,9 @@
+#
+# Specification file example
+#
+TexInputs: ../latex//
+PdfInputs: ../latex/graphics
+TexStyle:  docbook
+TexPost:   ../latex/example/postlatex
+XslParam:  myparam.xsl
+Options:   -b pdftex

@@ -1,0 +1,7 @@
+<!ELEMENT latexmapping 	(mapping+)>
+<!ELEMENT mapping EMPTY>
+<!ATTLIST mapping 
+	key		CDATA	#REQUIRED
+	text		CDATA	#REQUIRED
+>
+

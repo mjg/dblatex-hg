@@ -1,0 +1,25 @@
+<informaltable>
+<tgroup cols="2" colsep="1" rowsep="1" align="left">
+<colspec colname="c1">
+<thead>
+<row>
+<entry>Package</entry>
+<entry>Description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="center" valign="top">dbk_core</entry>
+<entry align="center" valign="top">Core LaTeX definitions and macros needed for
+DocBook</entry>
+</row>
+<row>
+<entry align="center" valign="top">hyperref</entry>
+<entry align="center" valign="top">The package must be used since references are
+translated to \href. It is not included by default by the dbk_core package because the
+user can be interrested in customizing its call (specific options).</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+

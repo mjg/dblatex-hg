@@ -1,0 +1,37 @@
+<!-- Exemple de table avec des tailles relatives + fixes + par défaut -->
+
+<informaltable>
+<tgroup cols="5" colsep="1" rowsep="1" align="left">
+<colspec colname="c1" colwidth="*">
+<colspec align="left" colwidth="2*">
+<colspec align="right" colwidth="3*">
+<colspec align="center">
+<colspec align="center" colwidth="3cm">
+<thead>
+<row>
+<entry>Column 1</entry>
+<entry>Column 2</entry>
+<entry>Column 3</entry>
+<entry>Column 4</entry>
+<entry>Column 5</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="center" valign="top">left aligned (tgroup level)
+</entry><entry align="center" valign="top">left aligned
+</entry><entry align="center" valign="top">right aligned
+</entry><entry align="center" valign="top">centered cell
+</entry><entry align="center" valign="top">in the centre
+</entry></row>
+<row>
+<entry align="center" valign="top">proportional column (*)
+</entry><entry align="center" valign="top">proportional column (2*)
+</entry><entry align="center" valign="top">proportional column (3*)
+</entry><entry align="center" valign="top">no specified width
+</entry><entry align="center" valign="top">3 cm column width
+</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+

@@ -1,0 +1,64 @@
+#!/usr/bin/env perl
+    eval 'exec /usr/bin/env perl -S $0 ${1+"$@"}'
+        if $running_under_some_shell;
+
+use File::Basename;
+use Getopt::Std;
+
+#
+# Basically, the script translate the parameters from the spec file to options
+# passed to the dblatex script
+#
+
+BEGIN {
+%specs_mapping = (
+  'TexInputs' => '--texinputs' ,
+  'PdfInputs' => '--pdfinputs' ,
+  'TexStyle'  => '--style'     ,
+  'TexPost'   => '--texpost'   ,
+  'XslParam'  => '-p'          ,
+  'Options'   => ''            ,
+  'FigInputs' => '-I'
+);
+}
+
+sub specs2option
+{
+  local($specs) = $_[0];
+  my @a = ();
+  my $opt = "";
+  my $dirspecs = dirname($specs);
+
+  open(SPECS, "<$specs") || die "Cannot open $specs\n";
+
+  while (<SPECS>) {
+    $line = $_;
+
+    # first, remove the comments
+    @a = split('#', $line, 2);
+
+    # let's get the parameter key
+    ($key = $a[0]) =~ s/^\s*([^:]*).*/$1/;
+    chomp $key;
+
+    if (exists $specs_mapping{"$key"}) {
+      ($p = $a[0]) =~ s/^\s*$key:\s*//;
+      chomp $p;
+      if (($key =~ /TexInputs/) ||
+          ($key =~ /PdfInputs/) ||
+          ($key =~ /TexPost/)){
+        if (not($p =~ /^\//)) {
+          $p = "$dirspecs/$p";
+        }
+      }
+      $opt .= "$specs_mapping{$key} $p ";
+    }
+  }
+  return $opt;
+}
+
+$file =  $ARGV[0];
+$opt = specs2option($file);
+
+print "$opt\n";
+

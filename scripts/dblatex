@@ -1,0 +1,208 @@
+#!/bin/sh
+
+scriptpath=`dirname $0`
+upwd=`pwd`
+
+# Absolute script path
+if [ -d $upwd/$scriptpath ]; then
+  scriptpath=$upwd/$scriptpath
+fi
+
+# Default Options
+ext=pdf
+btex=dvips
+xopt=""
+specs=""
+texinputs=""
+pdfinputs=""
+debug=0
+texstyle=docbook
+xsl=$scriptpath/../xsl/latex_book_fast.xsl
+btexpath=$scriptpath/../latex/scripts
+
+get_options() {
+  while true
+  do
+    case "$1" in
+    -o) dst=$2; shift ;;
+    -f) ifig=$2; shift ;;
+    -t) ext=$2; shift ;;
+    -b) btex=$2; shift ;;
+    -x) xopt=$2; shift ;;
+    -d) debug=1;;
+    -s) xsl=$scriptpath/../xsl/latex_book.xsl;;
+    -p) param=$2; shift ;;
+    -I) xpath=$2; shift ;;
+    -S) specs=$2; shift ;;
+    --style) texstyle=$2; shift ;;
+    --texinputs) texinputs=$2; shift ;;
+    --pdfinputs) pdfinputs=$2; shift ;;
+    --texpost) texpost=$2; shift ;;
+    -*) echo "$1: unknown option"; usage;;
+    *) break ;;
+    esac
+    shift
+  done
+
+  if [ $# -ne 1 ]; then
+    usage
+  fi
+  file=$1
+}
+
+usage() {
+  cat <<eof
+`basename $0` [options] file.{sgml|xml}
+Options:
+-t {pdf|ps|dvi|tex|xml}: output format
+-b {pdftex|dvips}      : driver to use
+-f {fig|eps}           : input figures format
+-d                     : debug mode (keep the temporary dir)
+-o output              : output filename
+-p param_file          : XSL parameter file for customization
+-s                     : strict latex output (slower)
+-S spec_file           : specification file for behaviour customization
+-x option              : option passed to the XSLT
+-I "path1 path2 ..."   : extra files paths
+eof
+  exit 1
+}
+
+build_param() {
+  param=$1
+  if [ "$param" != "" ]; then
+    # Absolute path expected
+    if [ -f $upwd/$param ]; then
+      param=$upwd/$param
+    fi
+
+    param_import="<xsl:import href=\"$param\"/>"
+  else
+    param_import=""
+  fi
+  cat <<eof
+<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
+
+<xsl:import href="$xsl"/>
+$param_import
+<xsl:param name="latex.style">$texstyle</xsl:param>
+
+</xsl:stylesheet>
+eof
+}
+
+args="$*"
+
+get_options $args
+
+if [ "$specs" != "" ]; then
+  specs_opt=`$scriptpath/specsread $specs`;
+  get_options $specs_opt $args
+fi
+
+
+# Is there some extra path to add to TEXINPUTS?
+if [ "$texinputs" != "" ]; then
+  if [ -d $upwd/$texinputs ]; then
+    texinputs=$upwd/$texinputs
+  fi
+  TEXINPUTS=":$texinputs:$TEXINPUTS"
+  export TEXINPUTS
+fi
+
+# Let's check the backend driver and do the appropriate actions
+case "$btex" in
+pdftex) btexrun=$btexpath/runpdflatex ;
+        if [ "$pdfinputs" != "" ]; then
+          if [ -d $upwd/$pdfinputs ]; then
+            pdfinputs=$upwd/$pdfinputs
+          fi
+          btexrun="$btexrun --graphpath $pdfinputs"
+        fi;
+        ofig=pdf ;;
+dvips)  btexrun=$btexpath/runlatex    ; ofig=eps ;;
+*)      echo "$btex: unknown TeX Backend Driver"; usage ;;
+esac
+
+# Extra TeX handler to use
+if [ "$texpost" != "" ]; then
+  if [ -f $upwd/$texpost ]; then
+    texpost=$upwd/$texpost
+  fi
+  btexrun="$btexrun --texpost $texpost"
+fi;
+
+basefile=`basename $file`
+sgmlfile=`basename $file .sgml`
+where=`dirname $file`
+
+# Work in a temporary directory
+tmpdir=/tmp/tpub-$LOGNAME-$$
+mkdir $tmpdir
+cd $tmpdir
+
+# We want the absolute path
+if [ -f $upwd/$file ]; then
+  where=$upwd/$where
+  file=$upwd/$file
+fi
+
+# Let's convert to XML first if needed
+if [ "$basefile" != "$sgmlfile" ]; then
+  $scriptpath/sgml2xml.pl - $file $sgmlfile.xml
+  file=${sgmlfile}.xml
+fi
+
+# No path specified, because it's given to gmake via -C
+out="`basename $file .xml`.${ext}"
+
+# Where to put the output file
+if [ "$dst" = "" ]; then
+  dst=$where/$out
+elif [ -d `dirname $upwd/$dst` ]; then
+  dst=$upwd/$dst
+fi
+
+# XML production only
+if [ "$ext" = "xml" ]; then
+  if [ "$file" != "$dst" ]; then
+    cp $file $dst
+  fi
+fi
+    
+# Parameter file building
+if [ "$param" != "" ] || [ "$texstyle" != "docbook" ]; then
+  build_param $param > custom.xsl
+  xsl="custom.xsl"
+fi
+
+# Figure conversion asked by the user
+if [ "$ifig" != "" ]; then
+  fig2dev=${ifig}2${ofig}
+fi
+
+# PDF/DVI/Postscript production
+gmake -s -C $tmpdir -f $scriptpath/make.build \
+        SRCDIR=$where \
+        XPATH="$xpath" \
+        XSL=$xsl \
+        XOPT=$xopt \
+        TEXCLEAN=$scriptpath/texclean \
+        FIG2DEV=$fig2dev \
+        TEXRUN="$btexrun" TEXDRV=$btex $out
+
+rc=$?
+
+if [ $rc -eq 0 ] && [ "$dst" != "$out" ]; then
+  mv $out $dst
+fi
+
+cd $upwd
+if [ $debug -eq 0 ]; then
+  rm -r $tmpdir
+else
+  echo "$tmpdir is not removed"
+fi
+exit $rc

@@ -1,0 +1,2317 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass docbook-book
+\begin_preamble
+<!ENTITY table.eg00 SYSTEM "table-eg00.sgml">
+<!ENTITY table.eg01 SYSTEM "table-eg01.sgml">
+<!ENTITY table.eg02 SYSTEM "table-eg02.sgml">
+<!ENTITY table.eg1  SYSTEM "table-eg1.sgml">
+<!ENTITY table.eg2  SYSTEM "table-eg2.sgml">
+<!ENTITY table.eg3  SYSTEM "table-eg3.sgml">
+<!ENTITY table.eg4  SYSTEM "table-eg4.sgml">
+<!ENTITY table.land SYSTEM "table-land.sgml">
+<!ENTITY table.small1 SYSTEM "table-small1.sgml">
+<!ENTITY table.small2 SYSTEM "table-small2.sgml">
+<!ENTITY table.small3 SYSTEM "table-small3.sgml">
+<!ENTITY table.small4 SYSTEM "table-small4.sgml">
+<!ENTITY equation.eg1 SYSTEM "equation-eg1.sgml">
+<!ENTITY equation.eg2 SYSTEM "equation-eg2.sgml">
+<!ENTITY equation.eg3 SYSTEM "equation-eg3.sgml">
+<!ENTITY lst.equation.eg1 SYSTEM "lst.equation-eg1.sgml">
+<!ENTITY lst.equation.eg2 SYSTEM "lst.equation-eg2.sgml">
+<!ENTITY lst.equation.eg3 SYSTEM "lst.equation-eg3.sgml">
+<!ENTITY param SYSTEM "param.sgml">
+<!ENTITY stycommand SYSTEM "stycommand.sgml">
+<!ENTITY styoption SYSTEM "styoption.sgml">
+<!ENTITY stypackage SYSTEM "stypackage.sgml">
+<!ENTITY specparam SYSTEM "specparam.sgml">
+<!ENTITY specmanual SYSTEM "specmanual.sgml">
+<!ENTITY version SYSTEM "version.sgml">
+\end_preamble
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+DocBook to LaTeX Publishing 
+\layout Author
+
+
+\latex latex 
+<firstname>Benoît</firstname><surname>
+\latex default 
+Guillon
+\latex latex 
+</surname>
+\layout Date
+
+03 july 2003
+\layout SGML
+
+<subtitle>User Manual</subtitle>
+\layout SGML
+
+<pubsnumber>Ref A0</pubsnumber>
+\layout SGML
+
+<address>Pessac</address>
+\layout SGML
+
+<edition>4</edition>
+\layout SGML
+
+<releaseinfo>Working Paper</releaseinfo>
+\layout SGML
+
+<othercredit>
+\layout SGML
+
+<firstname>Jean-Yves</firstname><surname>Le Ruyet</surname>
+\layout SGML
+
+<contrib>REVIEWED BY</contrib>
+\layout SGML
+
+</othercredit>
+\layout SGML
+
+<othercredit>
+\layout SGML
+
+<firstname></firstname><surname></surname>
+\layout SGML
+
+<contrib>APPROVED BY</contrib>
+\layout SGML
+
+</othercredit>
+\layout SGML
+
+<revhistory>
+\layout SGML
+
+<revision>
+\layout SGML
+
+<revnumber>1</revnumber><date>20/01/03</date><revdescription>
+\layout Standard
+
+First release of the package.
+\layout SGML
+
+</revdescription><authorinitials>B.
+ Guillon</authorinitials>
+\layout SGML
+
+</revision>
+\layout SGML
+
+<revision>
+\layout SGML
+
+<revnumber>2</revnumber><date>30/04/03</date><revdescription>
+\layout Standard
+
+Changes :
+\layout Itemize
+
+The script 
+\latex latex 
+<filename>configure</filename>
+\latex default 
+ now checks the latex package dependencies, i.e.
+ it checks that the packages used by the default DocBook latex style are
+ available.
+\layout Itemize
+
+The tool can be heavily customized thanks to a specification file and/or
+ new extra options (cf.
+ 
+\latex latex 
+<xref linkend="sec-custom">
+\latex default 
+).
+\layout SGML
+
+</revdescription><authorinitials>B.
+ Guillon</authorinitials>
+\layout SGML
+
+</revision>
+\layout SGML
+
+<revision>
+\layout SGML
+
+<revnumber>3</revnumber><date>11/06/03</date><revdescription>
+\layout Standard
+
+Changes :
+\layout Itemize
+
+The 
+\begin_inset LatexCommand \url[xsltml]{http://xsltml.sourceforge.net}
+
+\end_inset 
+
+ library is included in the package to have a strong and consistent support
+ of the MathML 2.0 specification.
+\layout Itemize
+
+A large excerpt fo the MathML Test Suite 2.0 is now available to validate
+ the MathML stylesheets.
+\layout SGML
+
+</revdescription><authorinitials>B.
+ Guillon</authorinitials>
+\layout SGML
+
+</revision> 
+\layout SGML
+
+<revision>
+\layout SGML
+
+<revnumber>4</revnumber><date>03/07/03</date><revdescription>
+\layout Standard
+
+Changes :
+\layout Itemize
+
+Dutch language is supported by the default latex stylesheets.
+\layout Itemize
+
+The 
+\latex latex 
+<sgmltag>subtitle</sgmltag>
+\latex default 
+ element is displayed on the cover page.
+\layout Itemize
+
+Tables can be displayed in landscape, through the 
+\latex latex 
+<sgmltag>orient</sgmltag>
+\latex default 
+ attribute.
+ In addition, the table text size can be specified to be smaller by using
+ the 
+\latex latex 
+<sgmltag>role</sgmltag>
+\latex default 
+ attribute.
+\layout Itemize
+
+Hyphenation is forced in tables, so that no words can cover several cells.
+\layout SGML
+
+</revdescription><authorinitials>B.
+ Guillon</authorinitials>
+\layout SGML
+
+</revision></revhistory>
+\layout SGML
+
+</bookinfo>
+\layout SGML
+
+<bibliography><title>Documentation</title>
+\layout SGML
+
+<bibliodiv><title>Reference</title>
+\layout SGML
+
+<biblioentry> 
+\layout SGML
+
+<abbrev>TDG</abbrev> 
+\layout SGML
+
+<title>DocBook: The Definitive Guide</title> 
+\layout SGML
+
+<authorgroup><author><firstname>Norman</firstname><surname>Walsh</surname></auth
+or>
+\layout SGML
+
+<author><firstname>Leonard</firstname><surname>Muellner</surname></author></auth
+orgroup> 
+\layout SGML
+
+<copyright><year>1999, 2000, 2001</year> <holder>O'Reilly &amp; Associates,
+ Inc.</holder></copyright> 
+\layout SGML
+
+<isbn>156592-580-7</isbn> 
+\layout SGML
+
+<publisher><publishername>O'Reilly</publishername> </publisher> 
+\layout SGML
+
+</biblioentry>
+\layout SGML
+
+</bibliodiv>
+\layout SGML
+
+</bibliography><!--
+\layout Chapter
+
+
+\latex latex 
+--><chapter><title>Introduction
+\layout Section
+
+Version
+\layout Standard
+
+This manual is for dblatex version
+\latex latex 
+ &version;
+\latex default 
+.
+\layout Section
+
+Features
+\layout Standard
+
+With dblatex you can: 
+\layout Itemize
+
+transform a DocBook XML/SGML book or article to pure LaTeX,
+\layout Itemize
+
+compile the temporary LaTeX file with latex or pdflatex, to produce DVI,
+ PostScript and PDF files,
+\layout Itemize
+
+convert on the fly the figures included in the document,
+\layout Itemize
+
+write complex tables,
+\layout Itemize
+
+write several bibliographies,
+\layout Itemize
+
+create an index,
+\layout Itemize
+
+write mathematical equations in LaTeX,
+\layout Itemize
+
+write mathematical equation in MathML,
+\layout Itemize
+
+have revision bars,
+\layout Itemize
+
+customise the output rendering with an XSL configuration file,
+\layout Itemize
+
+use your own LaTeX style package.
+\layout Section
+
+Publishing Principles
+\layout Standard
+
+Dblatex transforms a DocBook XML/SGML document to LaTeX.
+ Once transformed into LaTeX, standard LaTeX tools are used to produce DVI,
+ Postcript or PDF files.
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{sec-process}
+
+\end_inset 
+
+Transforming Process
+\layout Standard
+
+
+\latex latex 
+<xref linkend="fig-processus">
+\latex default 
+ explains the process applied.
+ It shows the tools used and the steps.
+ The emphasized tools are provided by the package.
+\layout Standard
+
+The main script allows to use two LaTeX backend drivers:
+\layout Itemize
+
+The 
+\begin_inset Quotes eld
+\end_inset 
+
+dvips
+\begin_inset Quotes erd
+\end_inset 
+
+ driver calls latex, and produces DVI, Postscript and at the end PDF files.
+ The drawback is that converting to PDF can take a while.
+ 
+\layout Itemize
+
+The 
+\begin_inset Quotes eld
+\end_inset 
+
+pdftex
+\begin_inset Quotes erd
+\end_inset 
+
+ driver calls pdflatex, to produce directly PDF files.
+ The conversion is fast, the file size is smaller, but only PDF graphics
+ are accepted.
+\layout SGML
+
+<figure id="fig-processus">
+\layout SGML
+
+<title>Transforming Process</title>
+\layout SGML
+
+<mediaobject><imageobject> 
+\layout SGML
+
+<imagedata fileref="processus" align="center" scale="70">
+\layout SGML
+
+</imageobject></mediaobject></figure>
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{sec-stylesheets}
+
+\end_inset 
+
+Stylesheets
+\layout Standard
+
+Two stylesheets are applied:
+\layout Itemize
+
+The XSL stylesheets located under
+\latex latex 
+ <filename>
+\latex default 
+xsl/
+\latex latex 
+</filename>
+\latex default 
+ are used to transform from XML to LaTeX.
+ The main file is
+\latex latex 
+ <filename>
+\latex default 
+latex_book_fast.xsl
+\latex latex 
+</filename>
+\latex default 
+, that includes the DB2LaTeX stylesheets and the other files of the directory.
+\layout Itemize
+
+The LaTeX style package (docbook.sty) under 
+\latex latex 
+<filename>
+\latex default 
+latex/style/
+\latex latex 
+</filename>
+\latex default 
+ is used to customize the output rendering.
+ It includes the other files of the directory.
+ You can also provide your own LaTeX style (cf.
+ 
+\latex latex 
+<xref linkend="sec-custom">
+\latex default 
+).
+\layout Chapter
+
+Installing the package
+\layout Section
+
+Content
+\layout Standard
+
+The package contains the following:
+\layout Description
+
+docs/ Contains the files of this document.
+\layout Description
+
+latex/ Contains all the latex stuff: LaTeX style files, logos, and scripts
+ to compile the LaTeX output.
+\layout Description
+
+scripts/ Several scripts, including the main script of the package.
+\layout Description
+
+xsl/ XSL stylesheets, that overload or enrich the original DB2LaTeX stylesheets.
+\layout Description
+
+tests/ Test files.
+\layout Section
+
+Dependencies
+\layout Standard
+
+To work, the following items must be available:
+\layout Itemize
+
+An XSLT.
+ 
+\latex latex 
+<filename>
+\latex default 
+xsltproc
+\latex latex 
+</filename>
+\latex default 
+ is the default XSLT used.
+\layout Itemize
+
+The XML DocBook DTD.
+\layout Itemize
+
+A recent LaTeX distribution.
+ The configure script checks that the needed latex packages are available.
+\layout Itemize
+
+Perl 5.x.
+\layout Itemize
+
+GNU make.
+\layout Section
+
+Installation
+\layout Subsection
+
+Installing the dependencies
+\layout Standard
+
+To use the package, install properly the dependencies:
+\layout Enumerate
+
+Install Perl 5.x and GNU make if necessary.
+\layout Enumerate
+
+Install LaTeX.
+\layout Enumerate
+
+Install the XSLT.
+ By default 
+\latex latex 
+<filename>
+\latex default 
+xsltproc
+\latex latex 
+</filename>
+\latex default 
+ is used.
+\layout Enumerate
+
+Install the XML DocBook DTD.
+\layout Enumerate
+
+Create a catalog file, that defines where to find the DTD.
+ Here is an example:
+\begin_deeper 
+\layout Code
+
+PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+\layout Code
+
+    "file:///usr/local/share/xml/docbook/dtd/4.1.2/docbookx.dtd"
+\layout Standard
+
+If the XML Gnome tools are available, it's a good idea to create an XML
+ catalog by using 
+\latex latex 
+<filename>
+\latex default 
+xmlcatalog
+\latex latex 
+</filename>
+\latex default 
+ such like this:
+\layout Code
+
+% xmlcatalog --noout --create mycatalog
+\layout Code
+
+% xmlcatalog --noout --add 'public' '-//OASIS//DTD DocBook XML V4.1.2//EN'
+ 
+\backslash 
+
+\layout Code
+
+                           'file://path/to/4.1.2/docbookx.dtd' mycatalog
+\end_deeper 
+\layout Enumerate
+
+Add the catalog path to the SGML_CATALOG_FILES variable:
+\begin_deeper 
+\layout SGML
+
+<programlisting><![CDATA[export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:/path/to/
+mycatalog
+\layout SGML
+
+]]></programlisting>
+\layout Standard
+
+You can skip this step if you configure the installation with the 
+\latex latex 
+<option>--catalogs</option>
+\latex default 
+ option.
+\end_deeper 
+\layout Subsection
+
+Installing the tool
+\layout Standard
+
+The steps to follow are the following:
+\layout Enumerate
+
+Untar the ball.
+ For a bzipped release, do as follow:
+\begin_deeper 
+\layout SGML
+
+<programlisting><![CDATA[% bzip2 -dc dblatex-x.x.x.tar.bz2 | tar xvf -]]></programli
+sting>
+\layout Standard
+
+For a gzipped release, do as follow:
+\layout Code
+
+% gunzip -c dblatex-x.x.x.tar.gz | tar xvf -
+\end_deeper 
+\layout Enumerate
+
+Call the 
+\latex latex 
+<filename>
+\latex default 
+configure
+\latex latex 
+</filename>
+\latex default 
+ script, that checks the dependencies and prepares the installation.
+ In the example, 
+\latex latex 
+the <filename>
+\latex default 
+db
+\latex latex 
+latex</filename>
+\latex default 
+ script is installed under 
+\latex latex 
+<filename>
+\latex default 
+/usr/local/bin
+\latex latex 
+</filename>
+\latex default 
+ and the other files are installed under 
+\latex latex 
+<filename>
+\latex default 
+/usr/local/share
+\latex latex 
+/dblatex</filename>
+\latex default 
+.
+ Besides, the 
+\latex latex 
+<option>
+\latex default 
+--catalogs
+\latex latex 
+</option>
+\latex default 
+ option tells where to find the catalog.
+\begin_deeper 
+\layout Code
+
+% cd dblatex-x.x.x
+\layout Code
+
+% ./configure --prefix=/usr/local --catalogs=/path/to/mycatalog
+\end_deeper 
+\layout Enumerate
+
+Install:
+\begin_deeper 
+\layout Code
+
+% gmake install
+\end_deeper 
+\layout Chapter
+
+Using dblatex
+\layout Section
+
+Figure Inclusion
+\layout Subsection
+
+Presentation
+\layout Standard
+
+The expected format of the included figures depends on the backend driver
+ used:
+\layout Description
+
+dvips: EPS format is required.
+\layout Description
+
+pdftex: PDF format is required.
+\layout Standard
+
+In order to be able to use both backends, do not write the suffix of the
+ file that references the figure.
+ The suffix will be deduced from the backend used.
+\layout Standard
+
+The figures must either already exists in the expected format, or must be
+ able to be converted on the fly.
+\layout SGML
+
+<example><title>Figure inclusion</title>
+\layout Code
+
+<figure id="fig-exemple1"> 
+\layout Code
+
+  <title>Components</title> 
+\layout Code
+
+  <mediaobject>
+\layout Code
+
+    <imageobject> 
+\layout Code
+
+      <imagedata fileref="path/figure1" align="center" scale="70"> 
+\layout Code
+
+    </imageobject> 
+\layout Code
+
+  </mediaobject>
+\layout Code
+
+</figure>
+\layout SGML
+
+</example>
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{sec-figconv}
+
+\end_inset 
+
+Converting on the fly
+\layout Standard
+
+The option 
+\latex latex 
+<option>-f <replaceable>fig_format</replaceable></option>
+\latex default 
+ allows to specify the included figures format (
+\latex latex 
+<replaceable>fig_format</replaceable>
+\latex default 
+).
+ Then, the tool converts the figures from the specified format to the expected
+ one (eps or pdf).
+\layout Standard
+
+If the specified format is unknown, no conversion is done.
+ The supported formats are:
+\layout Description
+
+fig: native format of the figures produced by XFig.
+\layout Description
+
+eps: Encapsulated PostScript format.
+ This format shall be specified only when using the pdftex backend.
+\layout SGML
+
+<example><title>Figure conversion</title>
+\layout Standard
+
+The following command compiles a document that contains figures produced
+ with XFig.
+\layout Code
+
+% dblatex -f fig mydoc.sgml
+\layout SGML
+
+</example>
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{sec-lookup}
+
+\end_inset 
+
+Paths Lookup
+\layout Standard
+
+You can use the option 
+\latex latex 
+<option>-I "<replaceable>chemin1</replaceable> <replaceable>chemin2</replaceable
+> ..."</option>
+\latex default 
+ to specify where the figures are.
+ The given paths must be absolute.
+ The paths are added to the doculent root path.
+\layout SGML
+
+<example><title>Figures lookup</title>
+\layout Standard
+
+This example shows how figure lookup is done.
+ Let's consider this document source:
+\layout Code
+
+<figure id="fig-example1"> 
+\layout Code
+
+  <title>Composants</title> 
+\layout Code
+
+  <mediaobject>
+\layout Code
+
+    <imageobject> 
+\layout Code
+
+      <imagedata fileref="rep1/rep2/figure1" align="center" scale="70">
+ 
+\layout Code
+
+    </imageobject> 
+\layout Code
+
+  </mediaobject>
+\layout Code
+
+</figure>
+\layout Standard
+
+And the document is compiled like this:
+\layout Code
+
+% dblatex -I "/another/path /last/case" /initial/path/document.sgml
+\layout Standard
+
+The figure1 lookup is done in the following directories, in respect of the
+ order:
+\layout Itemize
+
+
+\latex latex 
+<filename>/initial/path/rep1/rep2</filename> ;
+\layout Itemize
+
+
+\latex latex 
+<filename>/another/path/rep1/rep2</filename> ;
+\layout Itemize
+
+
+\latex latex 
+<filename>/last/case/rep1/rep2</filename>.
+\layout SGML
+
+</example>
+\layout Section
+
+Creating Tables
+\layout Standard
+
+DocBook tables can be quite complex.
+ This is why the tool doesn't support all the possibilities.
+ Here is what is supported:
+\layout Itemize
+
+Columns without specified widths (
+\latex latex 
+<sgmltag>
+\latex default 
+colspec
+\latex latex 
+</sgmltag>
+\latex default 
+ without 
+\latex latex 
+<sgmltag>
+\latex default 
+colwidth
+\latex latex 
+</sgmltag>
+\latex default 
+ attribute) have the same size.
+\layout Itemize
+
+A table width is always equal to the page width, if at least one column
+ doesn't contain a fixed width attribute (e.g.
+ colwidth=
+\begin_inset Quotes eld
+\end_inset 
+
+12cm
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Itemize
+
+Fixed column widths are supported (e.g.
+ colwidth=
+\begin_inset Quotes eld
+\end_inset 
+
+10cm
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Itemize
+
+Fixed column widths must be declared in centimeters (
+\begin_inset Quotes eld
+\end_inset 
+
+cm
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Itemize
+
+Proportional column widths are supported (e.g.
+ colwidth= 
+\begin_inset Quotes eld
+\end_inset 
+
+5*
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Itemize
+
+Proportional and fixed colum width together is not supported (e.g.
+ colwidth=
+\begin_inset Quotes eld
+\end_inset 
+
+5*+10cm
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Itemize
+
+The 
+\latex latex 
+<sgmltag>morerows</sgmltag>
+\latex default 
+ attribute of a table entry (
+\latex latex 
+<sgmltag>
+\latex default 
+entry
+\latex latex 
+</sgmltag>
+\latex default 
+ element) is supported.
+\layout Itemize
+
+The 
+\latex latex 
+<sgmltag>orient</sgmltag>
+\latex default 
+ table attribute is supported (portrait and landscape).
+ 
+\layout Subsection
+
+Tables without colwidth
+\layout Standard
+
+When none of the 
+\latex latex 
+<sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag>
+\latex default 
+ attribute, all the columns have the same size, and the table width is fixed
+ to the maximum available size.
+ Several examples of these tables are given.
+\layout SGML
+
+&table.eg00;
+\layout SGML
+
+&table.eg01;
+\layout SGML
+
+&table.eg02;
+\layout Subsection
+
+Tables with mixed colspec
+\layout Standard
+
+
+\latex latex 
+A table can have <sgmltag>colspec</sgmltag>
+\latex default 
+ elements containing 
+\latex latex 
+<sgmltag>colwidth</sgmltag>
+\latex default 
+ attribute mixed with 
+\latex latex 
+<sgmltag>colspec</sgmltag>
+\latex default 
+ elements without 
+\latex latex 
+<sgmltag>colwidth</sgmltag>.
+
+\latex default 
+ The following XML source: 
+\layout Code
+
+<informaltable>
+\layout Code
+
+  <tgroup cols="5" colsep="1" rowsep="1" align="left">
+\layout Code
+
+    <colspec colname="c1"/>
+\layout Code
+
+    <colspec align="left" colwidth="4cm"/>
+\layout Code
+
+    <colspec align="right" colwidth="5cm"/>
+\layout Code
+
+    <colspec align="center"/>
+\layout Code
+
+    <colspec align="center" colwidth="3cm"/>
+\layout Code
+
+    <tbody>
+\layout Code
+
+    ...
+\layout Code
+
+    </tbody>
+\layout Code
+
+  </tgroup>
+\layout Code
+
+</informaltable>
+\layout Standard
+
+is rendered like this:
+\layout SGML
+
+&table.eg1;
+\layout Subsection
+
+Tables with proportional and fixed colwidth
+\layout Standard
+
+Proportional column widths are supported.
+ The following XML source:
+\layout Code
+
+<informaltable>
+\layout Code
+
+  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+\layout Code
+
+    <colspec colname="c1" colwidth="*"/> 
+\layout Code
+
+    <colspec align="left" colwidth="2*"/> 
+\layout Code
+
+    <colspec align="right" colwidth="3*"/> 
+\layout Code
+
+    <colspec align="center"/>
+\layout Code
+
+    <colspec align="center" colwidth="3cm"/>
+\layout Code
+
+    <tbody>
+\layout Code
+
+    ...
+\layout Code
+
+    </tbody>
+\layout Code
+
+  </tgroup>
+\layout Code
+
+</informaltable>
+\layout Standard
+
+gives this table:
+\layout SGML
+
+&table.eg2;
+\layout Subsection
+
+Tables with fixed colwidths
+\layout Standard
+
+All the columns can have fixed size, like this: 
+\layout Code
+
+<informaltable>
+\layout Code
+
+  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+\layout Code
+
+    <colspec colname="c1" colwidth="2cm"/> 
+\layout Code
+
+    <colspec align="left" colwidth="2.5cm"/> 
+\layout Code
+
+    <colspec align="right" colwidth="5cm"/> 
+\layout Code
+
+    <colspec align="center" colwidth="3cm"/>
+\layout Code
+
+    <tbody>
+\layout Code
+
+    ...
+\layout Code
+
+    </tbody>
+\layout Code
+
+  </tgroup>
+\layout Code
+
+</informaltable>
+\layout Standard
+
+It gives the following table:
+\layout SGML
+
+&table.eg3;
+\layout Subsection
+
+Tables with morerows
+\layout Standard
+
+A table can contain entries that cover several lines.
+ The following XML source contains an entry covering 4 lines: 
+\layout Code
+
+<informaltable>
+\layout Code
+
+  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+\layout Code
+
+    <colspec colname="c1" colwidth="*"/>
+\layout Code
+
+    ...
+\layout Code
+
+    <tbody>
+\layout Code
+
+    <entry morerows="3">it covers 4 lines</entry>
+\layout Code
+
+    ...
+\layout Code
+
+    </tbody>
+\layout Code
+
+  </tgroup>
+\layout Code
+
+</informaltable>
+\layout Standard
+
+Here is an example of table containing several entries with morerows attribute:
+\layout SGML
+
+&table.eg4;
+\layout Subsection
+
+Landscape tables
+\layout Standard
+
+A table can be displayed in a lanscape format by using the 
+\latex latex 
+<sgmltag>orient</sgmltag>
+\latex default 
+ attribute.
+ The following XML source is an example.
+ 
+\layout Code
+
+<informaltable orient="land">
+\layout Code
+
+  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+\layout Code
+
+    <colspec colname="c1" colwidth="*"/>
+\layout Code
+
+    ...
+\layout Code
+
+    <tbody>
+\layout Code
+
+    ...
+\layout Code
+
+    </tbody>
+\layout Code
+
+  </tgroup>
+\layout Code
+
+</informaltable>
+\layout Standard
+
+Here is how it is displayed.
+\layout SGML
+
+&table.land;
+\layout Subsection
+
+Smaller tables
+\layout Standard
+
+For big tables it can be usefull to have smaller text, so that the table
+ is not too large or too long and it can be displayed within a page.
+ It is possible to specify smaller table text by using the 
+\latex latex 
+<sgmltag>role</sgmltag>
+\latex default 
+ attribute of the elements 
+\latex latex 
+<sgmltag>
+\latex default 
+table
+\latex latex 
+</sgmltag>
+\latex default 
+ or 
+\latex latex 
+<sgmltag>
+\latex default 
+informaltable
+\latex latex 
+</sgmltag>
+\latex default 
+.
+\layout Standard
+
+The values and the 
+\begin_inset Quotes eld
+\end_inset 
+
+role
+\begin_inset Quotes erd
+\end_inset 
+
+ dedicated to this attribute are specific to dblatex, but it is compliant
+ with the DocBook specification because in general the 
+\latex latex 
+<sgmltag>role</sgmltag>
+\latex default 
+ attribute purpose is never defined.
+\layout Standard
+
+The available text size definitions supported by 
+\latex latex 
+<sgmltag>role</sgmltag>
+\latex default 
+ are directly taken from LaTeX:
+\layout Itemize
+
+small,
+\layout Itemize
+
+footnotesize,
+\layout Itemize
+
+scriptsize,
+\layout Itemize
+
+tiny.
+\layout Standard
+
+Here are examples for each size.
+\layout SGML
+
+&table.small1;
+\layout SGML
+
+&table.small2;
+\layout SGML
+
+&table.small3;
+\layout SGML
+
+&table.small4;
+\layout Section
+
+Writing LaTeX mathematical equations
+\layout Subsection
+
+Presentation
+\layout Standard
+
+DocBook doesn't define elements for writing mathematical equations.
+ Only few elements exist that tell how equation should be displayed (inlined,
+ block):
+\layout Itemize
+
+
+\latex latex 
+<sgmltag>
+\latex default 
+inlineequation
+\latex latex 
+</sgmltag>
+\latex default 
+ tells that the equation is inlined,
+\layout Itemize
+
+
+\latex latex 
+<sgmltag>
+\latex default 
+informalequation
+\latex latex 
+</sgmltag>
+\latex default 
+ tells that the equation is displayed as a block, without a title.
+\layout Itemize
+
+
+\latex latex 
+<sgmltag>
+\latex default 
+equation
+\latex latex 
+</sgmltag>
+\latex default 
+ tells that the equation is displayed as a block, with or without a title.
+\layout Standard
+
+These tags include a graphic (
+\latex latex 
+<sgmltag>
+\latex default 
+graphic
+\latex latex 
+</sgmltag>
+\latex default 
+ or 
+\latex latex 
+<sgmltag>
+\latex default 
+mediaobject
+\latex latex 
+</sgmltag>
+\latex default 
+) or an alternative text equation, as shown by the example.
+\layout SGML
+
+<example><title>Equation taken from TDG</title>
+\layout Code
+
+<equation><title>Last Theorem of Fermat</title> 
+\layout Code
+
+  <alt>x^n + y^n &ne; z^n &forall; n &ne; 2</alt>
+\layout Code
+
+  <graphic fileref="figures/fermat"></graphic>
+\layout Code
+
+</equation>
+\layout SGML
+
+</example>
+\layout Subsection
+
+Implementation choice
+\layout Standard
+
+The principle is to use only the 
+\latex latex 
+<sgmltag>
+\latex default 
+alt
+\latex latex 
+</sgmltag>
+\latex default 
+ element.
+ If initially 
+\latex latex 
+<sgmltag>
+\latex default 
+alt
+\latex latex 
+</sgmltag>
+\latex default 
+ contains actually the text to print, it is chosen to use this element to
+ embed LaTeX mathematical equations.
+ This choice has the following advantages:
+\layout Itemize
+
+The translation done by dblatex is really easy, since the equation is already
+ written in LaTeX.
+\layout Itemize
+
+LaTeX is one of the best word processor to render mathematical formulas.
+\layout Itemize
+
+One doesn't need to write the equations in MathML.
+\layout Itemize
+
+This method isn't specific to this tool (see the following section).
+\layout Standard
+
+Besides, the implementation is as light as possible.
+ This is why it is up to the writer to properly use the mathematical delimiters
+ ($, 
+\backslash 
+(, 
+\backslash 
+), 
+\backslash 
+[, 
+\backslash 
+]).
+ By this way the writer fully controls how he writes equations.
+\layout Subsection
+
+Compatibility
+\layout Standard
+
+This implementation is not contradictory nor specific.
+ In partticular, the 
+\begin_inset LatexCommand \url[DBTeXMath]{http://ricardo.ecn.wfu.edu/~cottrell/dbtexmath/}
+
+\end_inset 
+
+ proposal to extend the DSSSL stylesheets used by jade follows the same
+ approach, and is integrated in the Norman Walsh XSL stylesheets.
+\layout Subsection
+
+Examples
+\layout Standard
+
+The following examples show how to write the equations.
+\layout SGML
+
+<example><title>Inlined Equation</title>
+\layout SGML
+
+&equation.eg1; 
+\layout SGML
+
+&lst.equation.eg1;
+\layout SGML
+
+</example>
+\layout SGML
+
+<example><title>Equation in a block</title>
+\layout SGML
+
+&equation.eg2;
+\layout SGML
+
+&lst.equation.eg2;
+\layout SGML
+
+</example>
+\layout SGML
+
+<example><title>Equation in a float</title>
+\layout SGML
+
+&equation.eg3;
+\layout SGML
+
+&lst.equation.eg3;
+\layout SGML
+
+</example>
+\layout Section
+
+Writing MathML equations
+\layout Standard
+
+You can write MathML equations in a DocBook based document, by using the
+ 
+\begin_inset LatexCommand \url[MathML Module for DocBook XML]{http://www.oasis-open.org/committees/docbook/xml/mathml/1.0/index.shtml}
+
+\end_inset 
+
+ instead of the DocBook DTD.
+\layout Standard
+
+dblatex now translates the MathML equations to latex by using the excellent
+ stylesheets of the 
+\begin_inset LatexCommand \url[XSLT MathML Library]{http://xsltml.sourceforge.net}
+
+\end_inset 
+
+ by Vasil Yaroshevich.
+ A large amount of tests from the 
+\begin_inset LatexCommand \url[W3C MathML Test Suite 2.0]{http://www.w3.org/Math/testsuite/}
+
+\end_inset 
+
+ is supported (657 of 712 tests).
+ The test file used to validate the MathML stylesheets is provided in the
+ package.
+ 
+\layout Section
+
+Creating an Index
+\layout Standard
+
+An index is automatically generated if some index entries (
+\latex latex 
+<sgmltag>
+\latex default 
+indexterm
+\latex latex 
+</sgmltag>
+\latex default 
+), telling the terms to put in the index, are written in the document.
+\layout SGML
+
+<example><title>Index Entry</title>
+\layout Code
+
+<para>In this paragraph is described the function 
+\layout Code
+
+<function>strcpy</function><indexterm><primary>strcpy</primary></indexterm>.
+\layout Code
+
+</para>
+\layout SGML
+
+</example>
+\layout Standard
+
+The index is put at the end of the document.
+ It is not possible to put it somewhere else.
+\layout Section
+
+Writing a Bibliography
+\layout Standard
+
+A bibliography (
+\latex latex 
+<sgmltag>bibliography</sgmltag>
+\latex default 
+) can be written and put anywhere in the document.
+ It appears as a chapter and is composed by several divisions (
+\latex latex 
+<sgmltag>bibliodiv</sgmltag>
+\latex default 
+) displayed as sections.
+\layout Standard
+
+The writer selects information that describes each bibliography entry (
+\latex latex 
+<sgmltag>biblioentry</sgmltag>
+\latex default 
+), and chooses the presentation order.
+ The titles and authors are displayed first.
+\layout SGML
+
+<example><title>A Bibliography</title>
+\layout Code
+
+<bibliography><title>Bibliography Example</title> 
+\layout Code
+
+  <bibliodiv><title>References</title>
+\layout Code
+
+    <biblioentry>
+\layout Code
+
+      <title>Document title</title>
+\layout Code
+
+      <author><firstname>J.</firstname><surname>Duval</surname></author>
+\layout Code
+
+      <pubsnumber>DEX000567325</pubsnumber>
+\layout Code
+
+    </biblioentry>
+\layout Code
+
+  </bibliodiv>
+\layout Code
+
+  <bibliodiv><title>White papers</title>
+\layout Code
+
+    <biblioentry>
+\layout Code
+
+      <title>Technical notes</title>
+\layout Code
+
+      <authorgroup>
+\layout Code
+
+        <author><firstname>J.</firstname><surname>Duval</surname></author>
+\layout Code
+
+        <author><firstname>R.</firstname><surname>Marion</surname></author>
+\layout Code
+
+      </authorgroup>
+\layout Code
+
+      <pubsnumber>DEX000704520</pubsnumber>
+\layout Code
+
+    </biblioentry>
+\layout Code
+
+  </bibliodiv>
+\layout Code
+
+</bibliography>
+\layout SGML
+
+</example>
+\layout Section
+
+Document Revisions
+\layout Standard
+
+The attribute 
+\latex latex 
+<sgmltag>
+\latex default 
+revisionflag
+\latex latex 
+</sgmltag>
+\latex default 
+ is usefull to identify the changes between two revisions of a document.
+ This information is managed by dblatex, that adds revision bars in the
+ margin of the paragraphs changed, such like in this 
+\latex latex 
+<phrase revisionflag="changed">
+\latex default 
+paragraph
+\latex latex 
+</phrase>
+\latex default 
+.
+\layout Standard
+
+Adding the revision flags can be manual, but its is tedious and error prone.
+ The perl script 
+\begin_inset LatexCommand \url[diffmk]{http://www.sun.com/xml/developers/diffmk/}
+
+\end_inset 
+
+ by Norman Walsh can do the work for you.
+ It works fine, but it depends on several Perl modules.
+\layout SGML
+
+<note>
+\layout SGML
+
+The revision bars only appear when using the "dvips" driver.
+ It seems to be a limitation of the LaTeX macros defined by the changebar
+ package.
+\layout SGML
+
+</note>
+\layout Section
+
+Publishing with dblatex
+\layout Standard
+
+To publish your document, you just need to use the script
+\latex latex 
+ <filename>
+\latex default 
+db
+\latex latex 
+latex</filename>
+\latex default 
+.
+ 
+\layout Subsection
+
+Synopsis
+\layout Code
+
+dblatex [-t {html|tex|dvi|ps|pdf}] [-b {dvips|pdftex}] [-o output] [other
+ options] file.{xml|sgml}
+\layout Subsection
+
+Description
+\layout Standard
+
+The script works on an XML or SGML file and can produce LaTeX, DVI, Postscript
+ and PDF output.
+ By default (i.e.
+ without option) a PDF file is produced in the same directory where the
+ input file is, with the same base name.
+\layout Subsection
+
+Options
+\layout Description
+
+-t: output format.
+ By default the format is PDF.
+\layout Description
+
+-b: backend driver to use.
+ The available drivers are 
+\begin_inset Quotes eld
+\end_inset 
+
+dvips
+\begin_inset Quotes erd
+\end_inset 
+
+ (latex) and 
+\begin_inset Quotes eld
+\end_inset 
+
+pdftex
+\begin_inset Quotes erd
+\end_inset 
+
+ (pdflatex).
+ By default the 
+\begin_inset Quotes eld
+\end_inset 
+
+dvips
+\begin_inset Quotes erd
+\end_inset 
+
+ driver is selected.
+ See also
+\latex latex 
+ <xref linkend="sec-process">
+\latex default 
+.
+\layout Description
+
+-f: input figures format, specified to have on the fly conversion..
+ See also 
+\latex latex 
+<xref linkend="sec-figconv">
+\latex default 
+.
+\layout Description
+
+-I: additional lookup paths of the figures.
+ See 
+\latex latex 
+<xref linkend="sec-lookup">
+\latex default 
+.
+\layout Description
+
+-o: output filename.
+ When not used, the input file name is used, with a suffix related to the
+ output format.
+\layout Description
+
+-d: debug mode.
+ It only keeps the temporary directory in which dblatex actually works.
+\layout Description
+
+-p: specify a configuration file.
+ See 
+\latex latex 
+<xref linkend="sec-param">
+\latex default 
+.
+\layout Description
+
+-S: specification file.
+ A specification file can be used to group all the options and customizations
+ to apply.
+ See 
+\latex latex 
+<xref linkend="sec-specs">
+\latex default 
+.
+\layout Description
+
+-x: options to pass to the XSLT.
+ The example below passes the options 
+\begin_inset Quotes eld
+\end_inset 
+
+--timing
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+--profile
+\begin_inset Quotes erd
+\end_inset 
+
+ to the XSLT.
+ Using this option supposes that you know the supported XSLT options.
+ 
+\begin_deeper 
+\layout Code
+
+dblatex -x "--timing --profile" file.sgml
+\end_deeper 
+\layout Subsection
+
+Other options
+\layout Standard
+
+Other options are defined to customize the tool, but they should be used
+ in exceptional cases, for test or debug purpose.
+ These options are defined in section 
+\latex latex 
+<xref linkend="sec-specs">
+\latex default 
+ and should normaly be set through a specification file.
+\layout Chapter
+
+
+\begin_inset LatexCommand \label{sec-custom}
+
+\end_inset 
+
+Customization
+\layout Standard
+
+The transformation process (and thus the output rendering) can be heavily
+ customized by:
+\layout Itemize
+
+using a configuration stylesheet,
+\layout Itemize
+
+using customized stylesheets,
+\layout Itemize
+
+using a customized LaTeX style package.
+\layout Itemize
+
+using a LaTeX post process script.
+\layout Standard
+
+All these customization methods can be used independently and in exceptional
+ cases, but it can also be combined and registered in a master configuration
+ file, called a specification file (cf.
+ 
+\latex latex 
+<xref linkend="sec-specs">
+\latex default 
+) to create a new tool dedicated to your needs.
+\layout Section
+
+
+\begin_inset LatexCommand \label{sec-param}
+
+\end_inset 
+
+Configuration stylesheet
+\layout Standard
+
+The PDF rendering can be customised by using an XSL configuration stylesheet.
+ The configuration file is specified by using the option 
+\latex latex 
+<option>-p</option>
+\latex default 
+.
+ The available configuration parameters are the following:
+\layout SGML
+
+&param;
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{sec-hyperparam}
+
+\end_inset 
+
+latex.hyperparam
+\layout Standard
+
+This parameter gives the options to pass to the LaTeX hyperref package.
+ No validity check is done.
+ 
+\layout Standard
+
+For instance, the Table of Content rendering (link color, etc.) can be changed.
+ Look at the hyperref.sty documentation to know all the hyperref options
+ available.
+ 
+\layout SGML
+
+<example><title>Configuring with latex.hyperparam</title>
+\layout Code
+
+<?xml version='1.0' encoding="iso-8859-1"?>
+\layout Code
+
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+\layout Code
+
+ 
+\layout Code
+
+<!-- We want TOC links in the titles (not in the page numbers), and blue.
+ 
+\layout Code
+
+ -->
+\layout Code
+
+<xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue</xsl:param>
+\layout Code
+
+\layout Code
+
+</xsl:stylesheet>
+\layout SGML
+
+</example>
+\layout Section
+
+Customized stylesheets
+\layout Standard
+
+If one needs to change some of the translations done by the XSL stylesheets,
+ it is possible to provide user stylesheets to override the templates.
+ To do this, write the stylesheets (e.g.
+ mystyle.xsl) and include them in the configuration file such as shown by
+ the following example.
+\layout SGML
+
+<example><title>Using a customized stylesheet in a configuration file</title>
+\layout Code
+
+<?xml version='1.0' encoding="iso-8859-1"?>
+\layout Code
+
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+\layout Code
+
+ 
+\layout Code
+
+<!-- Let's import our own XSL to override the default behaviour.
+ 
+\layout Code
+
+ -->
+\layout Code
+
+<xsl:import href="mystyle.xsl"/>
+\layout Code
+
+\layout Code
+
+</xsl:stylesheet>
+\layout SGML
+
+</example>
+\layout Section
+
+Customized LaTeX style
+\layout Standard
+
+The actual output rendering is done by the latex style package used, and
+ not by the XSL stylesheets whose role is only to translate to latex.
+ Users can provide their own LaTeX style file, in respect of some rules:
+\layout Itemize
+
+The LaTeX style package preamble must support all the options that the XSL
+ stylesheets can pass to the package.
+\layout Itemize
+
+Some packages must be used to make all the thing work.
+\layout Itemize
+
+The docbook interface must be defined: the XSL stylesheets register some
+ elements information in LaTeX commands.
+ These commands or macro are the only ones specific to DocBook that are
+ explicitely used by the XSL stylesheets.
+ Other specific macros are used but are not intended to be changed by the
+ user.
+ These hidden macros are defined in the dbk_core latex package.
+\layout Standard
+
+The latex style file to use is specified by using the option 
+\latex latex 
+<option>--style <replaceable>latex_style</replaceable></option>
+\latex default 
+.
+ An example of a simple LaTeX DocBook style is provided in the package.
+\layout Subsection
+
+Package options
+\layout SGML
+
+&styoption;
+\layout Subsection
+
+Needed packages
+\layout SGML
+
+&stypackage;
+\layout Subsection
+
+DocBook interface
+\layout Standard
+
+All the latex commands beginning with DBK are related to elements under
+ 
+\latex latex 
+<sgmltag>bookinfo</sgmltag>
+\latex default 
+ or 
+\latex latex 
+<sgmltag>articleinfo</sgmltag>
+\latex default 
+.
+\layout SGML
+
+&stycommand;
+\layout Section
+
+Latex post process script
+\layout Standard
+
+Extra user actions can be processed on the latex file produced by the XSL
+ stylesheets or on its temporary working files produced by the latex compilation.
+ 
+\layout Standard
+
+For instance, in the documents I write the cover page must display the number
+ of pages of the document, but written in full letters (e.g.
+ 23 is written 
+\begin_inset Quotes eld
+\end_inset 
+
+twenty three
+\begin_inset Quotes erd
+\end_inset 
+
+).
+ The latex post process script is then helpfull, and in this particular
+ case it patches the .aux file.
+\layout Standard
+
+The post process script is called just before the last latex compilation,
+ and takes one parameter, the latex file compiled by the tool.
+\layout Section
+
+
+\begin_inset LatexCommand \label{sec-specs}
+
+\end_inset 
+
+Specification file
+\layout Standard
+
+A master configuration file, also called a specification file, can be defined
+ to list all the customizations and options to apply.
+ Such a file is passed by using the option 
+\latex latex 
+<option>-S <replaceable>specs</replaceable></option>
+\latex default 
+.
+\layout Standard
+
+The format of the file is the following:
+\layout Itemize
+
+Every comment starts with a 
+\begin_inset Quotes eld
+\end_inset 
+
+#
+\begin_inset Quotes erd
+\end_inset 
+
+, and is ignored.
+\layout Itemize
+
+The file must contain one parameter by line.
+\layout Itemize
+
+The format of a parameter is the following:
+\begin_deeper 
+\layout Code
+
+<keyword>: <value>
+\end_deeper 
+\layout Itemize
+
+Every parameter is mapped to an option that can be passed to 
+\latex latex 
+<command>dblatex</command>
+\latex default 
+.
+\layout Itemize
+
+An unknown parameter is silently ignored (the whole line is dropped).
+\layout Itemize
+
+The parameters defining a path (a file or a directory) can take absolute
+ or relative paths.
+ A relative path must be defined from the specification file itself.
+ For instance, a specification file under 
+\latex latex 
+<filename>/the/spec/directory/</filename>
+\latex default 
+ with a parameter describing the file 
+\latex latex 
+<filename>../where/this/file/is/myfile</filename>
+\latex default 
+ points to 
+\latex latex 
+<filename>
+\latex default 
+/the/spec/where/this/file/is/myfile
+\latex latex 
+</filename>
+\latex default 
+.
+\layout Standard
+
+The following table lists the supported parameters and the corresponding
+ command line option.
+\layout SGML
+
+&specparam;
+\layout Standard
+
+Here is the specification file used for this manual.
+\layout SGML
+
+<example><title>Specification file example</title>
+\layout SGML
+
+&specmanual;
+\layout SGML
+
+</example>
+\layout Section
+
+Customization order
+\layout Standard
+
+All the customization queries are translated to the corresponding command
+ line options.
+ Thus, using several customization methods can be unconsistent because each
+ of them override the same option with another value.
+ 
+\layout Standard
+
+For instance, you can specify the use of a specification file in which it
+ is said to use a latex style (parameter TexStyle) and explicitely use the
+ 
+\latex latex 
+<option>--style</option>
+\latex default 
+ command line option.
+ So, what is the behaviour?
+\layout Standard
+
+The options order is the following:
+\layout Itemize
+
+If a specification file is used (
+\latex latex 
+<option>-S</option>
+\latex default 
+ option), the options are set to the specification file parameters.
+\layout Itemize
+
+The options explicitely passed override the specification file setting,
+ whatever is the position of the options (i.e.
+ before or after the 
+\latex latex 
+<option>-S</option>
+\latex default 
+ option).
+\layout Itemize
+
+If an option is passed several times, this is the last occurence that is
+ used.
+\layout SGML
+
+<example><title>Customization order</title>
+\layout Standard
+
+Let's consider the specification file containing the following parameters:
+\layout Code
+
+XslParam: file3.xsl
+\layout Code
+
+Options: -b pdftex 
+\layout Code
+
+TexStyle: mystyle1
+\layout Standard
+
+And now the command line:
+\layout Code
+
+dblatex -b dvips -p file1.xsl -p file2.xsl -S file.specs --style mystyle2 mydoc.sgml
+\layout Standard
+
+The setting used is the following:
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+-b dvips
+\begin_inset Quotes erd
+\end_inset 
+
+ overrides 
+\begin_inset Quotes eld
+\end_inset 
+
+-b pdftex
+\begin_inset Quotes erd
+\end_inset 
+
+ set by the spec file.
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+-p file2.xsl
+\begin_inset Quotes erd
+\end_inset 
+
+ overrides 
+\begin_inset Quotes eld
+\end_inset 
+
+-p file1.xsl
+\begin_inset Quotes erd
+\end_inset 
+
+ since it is defined after, and overrides 
+\begin_inset Quotes eld
+\end_inset 
+
+file3.xsl
+\begin_inset Quotes erd
+\end_inset 
+
+ set by the spec file.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+--style mystyle2
+\begin_inset Quotes erd
+\end_inset 
+
+ override 
+\begin_inset Quotes eld
+\end_inset 
+
+mystyle1
+\begin_inset Quotes erd
+\end_inset 
+
+ set by the spec file.
+\layout SGML
+
+</example>
+\layout Chapter
+
+Thanks
+\layout Standard
+
+Thanks to the people who contribute to the project: Jean-Yves Le Ruyet,
+ precursory and hard-working user, Julien Ducourthial for his precious help,
+ and all the users for their remarks to improve the product, like Vincent
+ Hottier who asked for the embedded LaTeX equations support.
+ 
+\the_end

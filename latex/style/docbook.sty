@@ -1,0 +1,283 @@
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{docbook}[2001/05/11 DocBook Style]
+
+% The defined options
+\DeclareOption{hyperlink}{ \def\DBKhyperlink{yes} }
+\DeclareOption{nohyperlink}{ \def\DBKhyperlink{no} }
+\DeclareOption{article}{ \def\DBKisarticle{yes} }
+\DeclareOption{report}{ \def\DBKisarticle{no} }
+\DeclareOption{fr}{ \def\DBKlocale{fr} }
+\DeclareOption{en}{ \def\DBKlocale{en} }
+\DeclareOption{nl}{ \def\DBKlocale{nl} }
+
+% Default values
+\ExecuteOptions{nohyperlink,report,en}
+
+% If defined, process the options
+\ProcessOptions\relax
+
+% Parametrage par défaut
+\newcommand{\DBKprojet}{}
+\newcommand{\DBKreference}{DEXXXXXX}
+\newcommand{\DBKtitle}{Main Title}
+\newcommand{\DBKsubtitle}{}
+\newcommand{\DBKsubject}{}
+\newcommand{\DBKdate}{\today}
+\newcommand{\DBKredacteur}{Auteur}
+\newcommand{\DBKapprouveur}{Approuveur}
+\newcommand{\DBKrevisionIndice}{}
+\newcommand{\DBKrevisionDate}{}
+\newcommand{\DBKrevisionNom}{}
+\newcommand{\DBKrevisionTexte}{}
+\newcommand{\DBKpagetotal}{
+  \getpagerefnumber{LastPage}~(\getpagerefnumber{LastPageLetter})}
+\newcommand{\DBKpagedocument}{\DBKpagetotal}
+\newcommand{\DBKpageannexe}{0~(zéro)}
+\newcommand{\DBKsite}{Elancourt}
+\newcommand{\DBKedition}{}
+\newcommand{\DBKreleaseinfo}{Document de Travail}
+\newcommand{\DBKtoclof}{true}
+
+% Adaptation...
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% On veut des paragraphes + sousparagraphes avec le texte en dessous
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+
+% Inclusion ici pour qu'il modifie la représentation des titres
+\usepackage[sf,bf]{titlesec}
+
+% pour la date, mais définition réduite
+\def\ier{\textsuperscript{\lowercase{er}}}
+
+\def\today{\number\day
+     \ifnum1=\day \ier\fi
+     \space \ifcase\month
+     \or janvier\or f\'evrier\or mars\or avril\or mai\or juin\or
+     juillet\or ao\^ut\or septembre\or octobre\or novembre\or
+     d\'ecembre\fi
+     \space \number\year}
+
+
+% ##############################################################################
+% ### Parametres de la page
+% ##############################################################################
+\setlength{\paperwidth}{21cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\hoffset}{-1in}
+\setlength{\voffset}{-1in}
+\setlength{\oddsidemargin}{2cm}
+\setlength{\marginparsep}{0cm}
+\setlength{\marginparwidth}{0cm}
+\setlength{\textwidth}{18cm}
+\setlength{\topmargin}{0.5cm}
+\setlength{\headsep}{2cm}
+
+\setlength{\textheight}{24cm}
+\setlength{\footskip}{1.5cm}
+
+
+% ##############################################################################
+% ### Packages utilises
+% ##############################################################################
+\makeatletter
+% Graphiques Postscript
+\usepackage[dvips]{graphicx}
+\usepackage{epsfig}
+
+% Equations
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Pour faire des calculs sur les compteurs
+\usepackage{calc}
+\usepackage{multirow}
+\usepackage{subfigure}
+\usepackage{ifthen}
+\usepackage{tabularx}
+\usepackage{colortbl}
+
+\@ifundefined{hyperparam}{
+  \def\hyperparam{linktocpage,colorlinks,citecolor=blue}
+}
+ 
+\@ifundefined{pdfoutput}{
+% Ce qui suit est a definir uniquement si on veut pouvoir aussi generer
+% du PDF avec ps2pdf.
+% Cela peut etre utile si la conversion des figures .eps en .pdf (via
+% epstopdf) apparait trop fastidieuse...
+\usepackage{pslatex}
+  \ifthenelse{\equal{\DBKhyperlink}{yes}}{
+    %% Hyper-liens en couleur pour fichier PDF
+     \usepackage[dvips,
+      \hyperparam,
+      pdftitle={\DBKtitle},
+      pdfsubject={\DBKsubject},
+      pdfauthor={\DBKredacteur}]{hyperref}
+  }{
+    %% Hyper-liens en Noir&Blanc pour fichier PS
+    %\usepackage[dvips,linktocpage,
+      %pdftitle={\DBKtitle},
+      %pdfsubject={\DBKsubject},
+      %pdfauthor={\DBKredacteur}]{hyperref}
+  }
+}{
+\usepackage{pslatex}
+\usepackage[pdftex,\hyperparam]{hyperref}
+}
+
+% \usepackage{times}
+
+% adaptation au francais
+%\usepackage[francais]{babel}
+%\usepackage{french}
+\usepackage{fancyhdr}
+
+% ##############################################################################
+% ### Redéfinition/Ajout de commandes pour cette trame
+% ##############################################################################
+
+%% Inclusion du package float après hyperref pour avoir ses definitions!
+\usepackage{float}
+
+\ifthenelse{\equal{\DBKisarticle}{yes}}{
+
+\floatstyle{ruled}
+\newfloat{example}{ht}{loe}[section]
+\floatname{example}{Exemple}
+
+\floatstyle{plain}
+\newfloat{dbequation}{ht}{loe}[section]
+\floatname{dbequation}{{\scshape Equation }}
+
+% Redefinition de tableofcontent, pour l'avoir sur des pages séparées
+\let\stdtoc=\tableofcontents
+\def\tableofcontents{ \newpage \stdtoc{} \newpage} 
+
+}{
+
+\floatstyle{ruled}
+\newfloat{example}{ht}{loe}[chapter]
+\floatname{example}{\examplename}
+
+\floatstyle{plain}
+\newfloat{dbequation}{ht}{loe}[chapter]
+\floatname{dbequation}{{\scshape Equation }}
+
+% Redéfinition de la table des matières, pour avoir une page fancy
+\addtocontents{toc}{\protect\thispagestyle{fancy}}
+
+% Redefinition de listoffigures, pour avoir les bas de page
+\let\stdlistoffigures=\listoffigures
+\def\listoffigures{ \stdlistoffigures{} \thispagestyle{fancy}} 
+
+% Redefinition de listoftables, pour avoir les bas de page
+\let\stdlistoftables=\listoftables
+\def\listoftables{ \stdlistoftables{} \thispagestyle{fancy}} 
+
+}
+
+% Redefinitions pour affecter les variables du style
+\def\title#1{\renewcommand{\DBKtitle}{#1}}
+
+% Redefinition de la création de titre pour avoir la page de garde+domitete
+\def\maketitle{\DBKcover \DBKdomitete}
+
+% Redéfinition de author pour affecter une variable du style
+\def\author#1{\renewcommand{\DBKredacteur}{#1}}
+
+% Redéfinition de index, pour avoir l'entete+pied de page et le nombre total
+% de pages
+\renewenvironment{theindex}
+               {\if@twocolumn
+                  \@restonecolfalse
+                \else
+                  \@restonecoltrue
+                \fi
+                \columnseprule \z@
+                \columnsep 35\p@
+                \pagebreak
+                \refstepcounter{chapter}
+                % Pour ne pas avoir le numéro, remplacer makechapterhead par
+                % makeschapterhead
+                \twocolumn[\@makechapterhead{\indexname}]%
+                % \chapter{\indexname}{%
+                % \@mkboth{\MakeUppercase\indexname}%
+                %        {\MakeUppercase\indexname}
+                % }%
+                \thispagestyle{plain}\parindent\z@
+                \parskip\z@ \@plus .3\p@\relax
+                \let\item\@idxitem}
+               {\if@restonecol\onecolumn\else\clearpage\fi}
+
+\let\stdindex=\theindex
+\let\endstdindex=\endtheindex
+\renewenvironment{theindex}{
+  \begin{stdindex}
+  % Pour ne pas avoir le numéro, remplacer par:
+  %  \addcontentsline{toc}{chapter}{\numberline{}\indexname}
+  \addcontentsline{toc}{chapter}{\numberline{\thechapter}\indexname}
+  \thispagestyle{fancy}
+}{
+  \label{LastPage}
+  \label{LastPageLetter}
+  \end{stdindex}
+}
+
+
+% ##############################################################################
+% ### Commandes et environnements
+% ##############################################################################
+
+\newcounter{totalminutes}
+\newcounter{hours}
+\newcounter{minutes}
+
+% Macro-commandes
+\newcommand{\linefeed}{\vspace{4ex}}
+\newcommand{\preuve}{\noindent \textbf{preuve}\\}
+\newcommand{\cad}{\mbox{c.-\`a-d.} }
+\newcommand{\cqfd}{\mbox{\emph{C.Q.F.D.}} }
+
+% Variables globales du document
+\newcommand{\chaine}{cha\^{\i}ne }
+\newcommand{\mydeg}{\ensuremath{^\circ}}
+
+\newcommand{\timecompile}{\setcounter{totalminutes}{\time}%
+    \setcounter{hours}{\value{totalminutes}/60}%
+    \setcounter{minutes}{\value{totalminutes}-\value{hours}*60}%
+    \framebox{Version \today \, \thehours:\theminutes}}
+
+\newcommand{\draft}{\special{!userdict begin /bop-hook{gsave 200 30 translate %
+         65 rotate /Times-Roman findfont 216 scalefont setfont %
+         0 0 moveto 0.8 setgray (DRAFT) show grestore}def end}}
+
+\AtEndDocument{%
+  \label{LastPage}
+  \label{LastPageLetter}
+}
+\usepackage{refcount}
+
+\usepackage{dbk_locale}
+\usepackage{dbk_title}
+\usepackage{dbk_headfoot}
+\usepackage{dbk_revision}
+\usepackage{dbk_admonition}
+\usepackage{dbk_changebar}
+\usepackage{dbk_biblio}
+\usepackage{dbk_table}
+\usepackage{dbk_item}
+
+\makeatother
+

@@ -1,0 +1,69 @@
+#!/bin/sh
+
+where=`dirname $0`
+
+mkstriplist()
+{
+  strip="$1"
+  shift
+  for i in $*; do
+    strip="$strip\\|$i"
+  done
+}
+
+split=0
+only_count=0
+
+while true
+do
+  case "$1" in
+  --no) exclude="$2"; shift ;;
+  --exclude) exclfile="$2"; shift ;;
+  --split) split=1 ;;
+  --count) only_count=1 ;;
+  *) break ;;
+  esac
+  shift
+done
+
+if [ $# -lt 1 ]; then
+  echo "$0 [options] testsuite [> outfile]"
+  echo "Options:"
+  echo "--no \"id1 id2...\""
+  echo "--split"
+  exit 1
+fi
+
+testsuite=$1
+opt=
+
+if [ "$exclfile" != "" ]; then
+  l=`cat $exclfile|xargs`
+  exclude="$exclude $l"
+  opt="-e $exclfile"
+fi
+
+if [ "$exclude" != "" ]; then
+  mkstriplist $exclude
+fi
+
+if [ $only_count -eq 1 ]; then
+  todo=`find "$testsuite" -name "*.mml"|grep -v "$strip"|wc -l`
+  all=`find "$testsuite" -name "*.mml"|wc -l`
+  echo "$todo / $all tests extracted"
+  exit 0
+fi
+
+if [ "$strip" != "" ]; then
+  list=`find "$testsuite" -name "*.mml"|grep -v "$strip"|sort`
+else
+  list=`find "$testsuite" -name "*.mml"|sort`
+fi
+
+if [ $split -eq 1 ]; then
+  for i in $list; do
+    $where/build_testmml.pl $opt $i > `basename $i .mml`.xml
+  done
+else
+  $where/build_testmml.pl $opt $list
+fi

@@ -1,0 +1,41 @@
+% ##############################################################################
+% ### En-tete et pied de page
+% ##############################################################################
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\setcounter{page}{1}
+
+% Entete et pied de page de la premiere page
+
+\chead[]{%
+	\begin{tabular}{
+    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
+		\multirow{3}{5.6cm}{\DBKtitle}
+    & & \tabularnewline%
+		& \framebox{\textsc{\textsf{\DBKreleaseinfo}}}
+    & \textsf{\arabic{page} / \getpagerefnumber{LastPage}} \tabularnewline %
+		& & \tabularnewline%
+	\end{tabular}%
+} %
+
+% Entete et pied de page du corps du doc
+
+\def\DBKcheadbody{%
+	\begin{tabular}{
+    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
+		\multirow{3}{5.6cm}{\DBKtitle}
+    & & \textsf{\DBKreference{} Ed. \DBKedition} \tabularnewline%
+		& \framebox{\textsc{\textsf{\DBKreleaseinfo}}} &  \tabularnewline %
+		& & \textsf{\arabic{page} / \getpagerefnumber{LastPage}}
+  \tabularnewline%
+	\end{tabular}%
+}
+
+\lhead[]{}
+\rhead[]{}
+\lfoot[]{}
+\rfoot[]{}
+\cfoot[]{}
+

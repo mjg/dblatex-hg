@@ -1,0 +1,27 @@
+<!--############################################################################# 
+ |	$Id$
+ |- #############################################################################
+ |	$Author$
+ |														
+ |   PURPOSE:
+ + ############################################################################## -->
+
+
+
+\begin{figure}[t]
+\setlength{\unitlength}{1cm}
+\noindent
+\begin{picture}(0.0,5.0)(0.0,1.5)
+\put(0.0,0.0){\special{psfile="fig.PS"}}
+\put(7.5,2.0){\makebox(0,0){ \em         x}}
+\put(0.0,8.0){\makebox(0,0){\small  $M$}}
+\end{picture}
+\caption[This is the caption for the table of contents]{This is the caption}
+\end{figure}
+
+How Do I Get LaTeX to Double-Space?
+Simple, just type:
+
+\renewcommand{\baselinestretch}{2}
+
+

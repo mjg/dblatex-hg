@@ -1,0 +1,26 @@
+%
+% Basic core definitions used for DocBook
+%
+\usepackage[dvips]{graphicx}
+
+%
+% These <bookinfo|articleinfo> parameters must be defined
+%
+\newcommand{\DBKreference}{A Reference}     % mapped to <pubsnumber>
+\newcommand{\DBKsite}{Anywhere}             % mapped to <bookinfo/address>
+\newcommand{\DBKdate}{\today}               % mapped to <bookinfo/date>
+\newcommand{\DBKreleaseinfo}{Working Paper} % mapped to <releaseinfo>
+\newcommand{\DBKedition}{1}                 % mapped to <edition>
+\newcommand{\DBKsubtitle}{}                 % mapped to <subtitle>
+
+% Main latex <othercredit> command. It will be redefined by the XSL stylesheets.
+\newcommand{\DBKindexation}{}
+
+%
+% Main latex <revhistory> command. It will be redefined by the XSL stylesheets.
+%
+\newcommand{\DBKrevhistory}{}
+
+\usepackage{dbk_biblio}
+\usepackage{dbk_table}
+\usepackage{dbk_changebar}

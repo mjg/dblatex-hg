@@ -1,0 +1,52 @@
+XSLT = xsltproc
+XOPT = 
+XSL = ../xsl/latex_book.xsl
+TEXRUN = ../../latex/scripts/runlatex
+TEXDRV = dvips
+XPATH = 
+FIG2DEV = 
+
+vpath %.xml $(SRCDIR)
+
+ifeq ($(TEXDRV),dvips)
+
+%.pdf: %.ps FORCE
+	ps2pdf -sPAPERSIZE=a4 $<
+
+%.ps: %.dvi FORCE
+	dvips -o $@ $<
+
+%.dvi: %.tex FORCE
+	@echo "Compiling $< ..."
+	@$(TEXRUN) $< "$(SRCDIR) $(XPATH)"
+
+else
+ifeq ($(TEXDRV),pdftex)
+
+%.ps: FORCE
+	@echo "$(TEXDRV): Invalid Driver"
+
+%.dvi: FORCE
+	@echo "$(TEXDRV): Invalid Driver"
+
+%.pdf: %.tex FORCE
+	@echo "Compiling $< ..."
+	@$(TEXRUN) $< "$(SRCDIR) $(XPATH)"
+
+endif
+endif
+
+%.tex: %.rtex FORCE
+	@$(TEXCLEAN) -p $(SRCDIR) -f "$(FIG2DEV)" $< $@
+
+%.rtex: %.xml FORCE
+ifeq ($(XSLT),xt)
+	java com.jclark.xsl.sax.Driver $< $(XSL) > $@
+else
+ifeq ($(XSLT),xsltproc)
+	xsltproc --catalogs $(XOPT) $(XSL) $< > $@
+#	xsltproc --catalogs --novalid --timing --profile $(XSL) $< > $@
+endif
+endif
+
+FORCE:

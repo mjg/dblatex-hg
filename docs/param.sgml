@@ -1,0 +1,20 @@
+<informaltable>
+<tgroup cols="3" colsep="1" rowsep="1" align="left">
+<colspec colname="c1">
+<thead>
+<row>
+<entry>Parameter</entry>
+<entry>Role</entry>
+<entry>Default value</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="center" valign="top">latex.hyperparam</entry>
+<entry align="center" valign="top">cf. <xref  linkend="sec-hyperparam"></entry>
+<entry align="center" valign="top">empty</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+

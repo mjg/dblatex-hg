@@ -1,0 +1,25 @@
+<!-- Exemple de table avec deux colonnes sans largeur spécifiée -->
+
+<informaltable>
+<tgroup cols="2" colsep="1" rowsep="1" align="left">
+<colspec colname="c1">
+<colspec align="center">
+<thead>
+<row>
+<entry>Column 1</entry>
+<entry>Column 2</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="center" valign="top">left aligned
+</entry><entry align="center" valign="top">centered cell
+</entry></row>
+<row>
+<entry align="center" valign="top">no specified width
+</entry><entry align="center" valign="top">idem
+</entry></row>
+</tbody>
+</tgroup>
+</informaltable>
+

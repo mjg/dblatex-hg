@@ -1,0 +1,8 @@
+<programlisting><![CDATA[
+<para>The following formula:
+  <informalequation>
+    <alt>\[C = \alpha + \beta Y^{\gamma} + \epsilon\]</alt>
+    <graphic fileref="figures/eq2"/>
+  </informalequation>
+is displayed in a separate block. The SGML source is:</para>
+]]></programlisting>

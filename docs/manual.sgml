@@ -1,0 +1,1395 @@
+<!doctype book public "-//OASIS//DTD DocBook V3.1//EN"
+ [ <!ENTITY table.eg00 SYSTEM "table-eg00.sgml">
+<!ENTITY table.eg01 SYSTEM "table-eg01.sgml">
+<!ENTITY table.eg02 SYSTEM "table-eg02.sgml">
+<!ENTITY table.eg1  SYSTEM "table-eg1.sgml">
+<!ENTITY table.eg2  SYSTEM "table-eg2.sgml">
+<!ENTITY table.eg3  SYSTEM "table-eg3.sgml">
+<!ENTITY table.eg4  SYSTEM "table-eg4.sgml">
+<!ENTITY table.land SYSTEM "table-land.sgml">
+<!ENTITY table.small1 SYSTEM "table-small1.sgml">
+<!ENTITY table.small2 SYSTEM "table-small2.sgml">
+<!ENTITY table.small3 SYSTEM "table-small3.sgml">
+<!ENTITY table.small4 SYSTEM "table-small4.sgml">
+<!ENTITY equation.eg1 SYSTEM "equation-eg1.sgml">
+<!ENTITY equation.eg2 SYSTEM "equation-eg2.sgml">
+<!ENTITY equation.eg3 SYSTEM "equation-eg3.sgml">
+<!ENTITY lst.equation.eg1 SYSTEM "lst.equation-eg1.sgml">
+<!ENTITY lst.equation.eg2 SYSTEM "lst.equation-eg2.sgml">
+<!ENTITY lst.equation.eg3 SYSTEM "lst.equation-eg3.sgml">
+<!ENTITY param SYSTEM "param.sgml">
+<!ENTITY stycommand SYSTEM "stycommand.sgml">
+<!ENTITY styoption SYSTEM "styoption.sgml">
+<!ENTITY stypackage SYSTEM "stypackage.sgml">
+<!ENTITY specparam SYSTEM "specparam.sgml">
+<!ENTITY specmanual SYSTEM "specmanual.sgml">
+<!ENTITY version SYSTEM "version.sgml">
+ 
+]>
+
+<book lang="en">
+<!-- DocBook file was created by LyX 1.1
+  See http://www.lyx.org/ for more information -->
+ <bookinfo>
+  <title>
+  DocBook to LaTeX Publishing 
+ </title>
+ <author>
+  <firstname>Benoît</firstname><surname>Guillon</surname>
+ </author>
+ <date>
+  03 july 2003
+ </date>
+<subtitle>User Manual</subtitle>
+<pubsnumber>Ref A0</pubsnumber>
+<address>Pessac</address>
+<edition>4</edition>
+<releaseinfo>Working Paper</releaseinfo>
+<othercredit>
+<firstname>Jean-Yves</firstname><surname>Le Ruyet</surname>
+<contrib>REVIEWED BY</contrib>
+</othercredit>
+<othercredit>
+<firstname></firstname><surname></surname>
+<contrib>APPROVED BY</contrib>
+</othercredit>
+<revhistory>
+<revision>
+<revnumber>1</revnumber><date>20/01/03</date><revdescription>
+ <para>
+  First release of the package.
+ </para>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+<revision>
+<revnumber>2</revnumber><date>30/04/03</date><revdescription>
+ <para>
+  Changes :
+ </para>
+ <itemizedlist>
+  <listitem>
+  <para>
+  The script <filename>configure</filename> now checks the latex package dependencies, i.e. it checks that the packages used by the default DocBook latex style are available.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  The tool can be heavily customized thanks to a specification file and/or new extra options (cf. <xref linkend="sec-custom">).
+  </para>
+ </listitem>
+ </itemizedlist>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+<revision>
+<revnumber>3</revnumber><date>11/06/03</date><revdescription>
+ <para>
+  Changes :
+ </para>
+ <itemizedlist>
+  <listitem>
+  <para>
+  The <ulink url="http://xsltml.sourceforge.net">xsltml</ulink> library is included in the package to have a strong and consistent support of the MathML 2.0 specification.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  A large excerpt fo the MathML Test Suite 2.0 is now available to validate the MathML stylesheets.
+  </para>
+ </listitem>
+ </itemizedlist>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision> 
+<revision>
+<revnumber>4</revnumber><date>03/07/03</date><revdescription>
+ <para>
+  Changes :
+ </para>
+ <itemizedlist>
+  <listitem>
+  <para>
+  Dutch language is supported by the default latex stylesheets.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  The <sgmltag>subtitle</sgmltag> element is displayed on the cover page.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  Tables can be displayed in landscape, through the <sgmltag>orient</sgmltag> attribute. In addition, the table text size can be specified to be smaller by using the <sgmltag>role</sgmltag> attribute.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  Hyphenation is forced in tables, so that no words can cover several cells.
+  </para>
+ </listitem>
+ </itemizedlist>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision></revhistory>
+</bookinfo>
+<bibliography><title>Documentation</title>
+<bibliodiv><title>Reference</title>
+<biblioentry> 
+<abbrev>TDG</abbrev> 
+<title>DocBook: The Definitive Guide</title> 
+<authorgroup><author><firstname>Norman</firstname><surname>Walsh</surname></author>
+<author><firstname>Leonard</firstname><surname>Muellner</surname></author></authorgroup> 
+<copyright><year>1999, 2000, 2001</year> <holder>O'Reilly &amp; Associates, Inc.</holder></copyright> 
+<isbn>156592-580-7</isbn> 
+<publisher><publishername>O'Reilly</publishername> </publisher> 
+</biblioentry>
+</bibliodiv>
+</bibliography><!--
+ </bookinfo>
+ <chapter>
+  <title>
+  --><chapter><title>Introduction
+ </title>
+  <sect1>
+   <title>
+   Version
+  </title>
+  <para>
+   This manual is for dblatex version &version;.
+  </para>
+  </sect1>
+  <sect1>
+   <title>
+   Features
+  </title>
+  <para>
+   With dblatex you can: 
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   transform a DocBook XML/SGML book or article to pure LaTeX,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   compile the temporary LaTeX file with latex or pdflatex, to produce DVI, PostScript and PDF files,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   convert on the fly the figures included in the document,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write complex tables,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write several bibliographies,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   create an index,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write mathematical equations in LaTeX,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write mathematical equation in MathML,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   have revision bars,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   customise the output rendering with an XSL configuration file,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   use your own LaTeX style package.
+   </para>
+  </listitem>
+  </itemizedlist>
+  </sect1>
+  <sect1>
+   <title>
+   Publishing Principles
+  </title>
+  <para>
+   Dblatex transforms a DocBook XML/SGML document to LaTeX. Once transformed into LaTeX, standard LaTeX tools are used to produce DVI, Postcript or PDF files.
+  </para>
+   <sect2 id="sec-process">
+    <title>
+    Transforming Process
+   </title>
+   <para>
+    <xref linkend="fig-processus"> explains the process applied. It shows the tools used and the steps. The emphasized tools are provided by the package.
+   </para>
+   <para>
+    The main script allows to use two LaTeX backend drivers:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    The &ldquo;dvips&rdquo; driver calls latex, and produces DVI, Postscript and at the end PDF files. The drawback is that converting to PDF can take a while. 
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    The &ldquo;pdftex&rdquo; driver calls pdflatex, to produce directly PDF files. The conversion is fast, the file size is smaller, but only PDF graphics are accepted.
+    </para>
+   </listitem>
+   </itemizedlist>
+<figure id="fig-processus">
+<title>Transforming Process</title>
+<mediaobject><imageobject> 
+<imagedata fileref="processus" align="center" scale="70">
+</imageobject></mediaobject></figure>
+   </sect2>
+   <sect2 id="sec-stylesheets">
+    <title>
+    Stylesheets
+   </title>
+   <para>
+    Two stylesheets are applied:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    The XSL stylesheets located under <filename>xsl/</filename> are used to transform from XML to LaTeX. The main file is <filename>latex_book_fast.xsl</filename>, that includes the DB2LaTeX stylesheets and the other files of the directory.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    The LaTeX style package (docbook.sty) under <filename>latex/style/</filename> is used to customize the output rendering. It includes the other files of the directory. You can also provide your own LaTeX style (cf. <xref linkend="sec-custom">).
+    </para>
+   </listitem>
+   </itemizedlist>
+   </sect2>
+  </sect1>
+ </chapter>
+ <chapter>
+  <title>
+  Installing the package
+ </title>
+  <sect1>
+   <title>
+   Content
+  </title>
+  <para>
+   The package contains the following:
+  </para>
+  <variablelist>
+   <varlistentry>
+   <term>
+   docs/
+</term><listitem><para>Contains the files of this document.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   latex/
+</term><listitem><para>Contains all the latex stuff: LaTeX style files, logos, and scripts to compile the LaTeX output.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   scripts/
+</term><listitem><para>Several scripts, including the main script of the package.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   xsl/
+</term><listitem><para>XSL stylesheets, that overload or enrich the original DB2LaTeX stylesheets.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   tests/
+</term><listitem><para>Test files.
+   </para>
+  </listitem>
+  </varlistentry>
+  </variablelist>
+  </sect1>
+  <sect1>
+   <title>
+   Dependencies
+  </title>
+  <para>
+   To work, the following items must be available:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   An XSLT. <filename>xsltproc</filename> is the default XSLT used.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The XML DocBook DTD.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   A recent LaTeX distribution. The configure script checks that the needed latex packages are available.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Perl 5.x.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   GNU make.
+   </para>
+  </listitem>
+  </itemizedlist>
+  </sect1>
+  <sect1>
+   <title>
+   Installation
+  </title>
+   <sect2>
+    <title>
+    Installing the dependencies
+   </title>
+   <para>
+    To use the package, install properly the dependencies:
+   </para>
+   <orderedlist>
+    <listitem>
+    <para>
+    Install Perl 5.x and GNU make if necessary.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Install LaTeX.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Install the XSLT. By default <filename>xsltproc</filename> is used.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Install the XML DocBook DTD.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Create a catalog file, that defines where to find the DTD. Here is an example:
+    </para>
+    <programlisting>
+<![CDATA[PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+]]><![CDATA[    "file:///usr/local/share/xml/docbook/dtd/4.1.2/docbookx.dtd"
+]]>    </programlisting>
+    <para>
+     If the XML Gnome tools are available, it's a good idea to create an XML catalog by using <filename>xmlcatalog</filename> such like this:
+    </para>
+    <programlisting>
+<![CDATA[% xmlcatalog --noout --create mycatalog
+]]><![CDATA[% xmlcatalog --noout --add 'public' '-//OASIS//DTD DocBook XML V4.1.2//EN' \
+]]><![CDATA[                           'file://path/to/4.1.2/docbookx.dtd' mycatalog
+]]>    </programlisting>
+   </listitem>
+    <listitem>
+    <para>
+    Add the catalog path to the SGML_CATALOG_FILES variable:
+    </para>
+<programlisting><![CDATA[export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:/path/to/mycatalog
+]]></programlisting>
+   <para>
+    You can skip this step if you configure the installation with the <option>--catalogs</option> option.
+   </para>
+   </listitem>
+   </orderedlist>
+   </sect2>
+   <sect2>
+    <title>
+    Installing the tool
+   </title>
+   <para>
+    The steps to follow are the following:
+   </para>
+   <orderedlist>
+    <listitem>
+    <para>
+    Untar the ball. For a bzipped release, do as follow:
+    </para>
+<programlisting><![CDATA[% bzip2 -dc dblatex-x.x.x.tar.bz2 | tar xvf -]]></programlisting>
+   <para>
+    For a gzipped release, do as follow:
+   </para>
+    <programlisting>
+<![CDATA[% gunzip -c dblatex-x.x.x.tar.gz | tar xvf -
+]]>    </programlisting>
+   </listitem>
+    <listitem>
+    <para>
+    Call the <filename>configure</filename> script, that checks the dependencies and prepares the installation. In the example, the <filename>dblatex</filename> script is installed under <filename>/usr/local/bin</filename> and the other files are installed under <filename>/usr/local/share/dblatex</filename>. Besides, the <option>--catalogs</option> option tells where to find the catalog.
+    </para>
+    <programlisting>
+<![CDATA[% cd dblatex-x.x.x
+]]><![CDATA[% ./configure --prefix=/usr/local --catalogs=/path/to/mycatalog
+]]>    </programlisting>
+   </listitem>
+    <listitem>
+    <para>
+    Install:
+    </para>
+    <programlisting>
+<![CDATA[% gmake install
+]]>    </programlisting>
+   </listitem>
+   </orderedlist>
+   </sect2>
+  </sect1>
+ </chapter>
+ <chapter>
+  <title>
+  Using dblatex
+ </title>
+  <sect1>
+   <title>
+   Figure Inclusion
+  </title>
+   <sect2>
+    <title>
+    Presentation
+   </title>
+   <para>
+    The expected format of the included figures depends on the backend driver used:
+   </para>
+   <variablelist>
+    <varlistentry>
+    <term>
+    dvips:
+</term><listitem><para>EPS format is required.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    pdftex:
+</term><listitem><para>PDF format is required.
+    </para>
+   </listitem>
+   </varlistentry>
+   </variablelist>
+   <para>
+    In order to be able to use both backends, do not write the suffix of the file that references the figure. The suffix will be deduced from the backend used.
+   </para>
+   <para>
+    The figures must either already exists in the expected format, or must be able to be converted on the fly.
+   </para>
+<example><title>Figure inclusion</title>
+   <programlisting>
+<![CDATA[<figure id="fig-exemple1"> 
+]]><![CDATA[  <title>Components</title> 
+]]><![CDATA[  <mediaobject>
+]]><![CDATA[    <imageobject> 
+]]><![CDATA[      <imagedata fileref="path/figure1" align="center" scale="70"> 
+]]><![CDATA[    </imageobject> 
+]]><![CDATA[  </mediaobject>
+]]><![CDATA[</figure>
+]]>   </programlisting>
+</example>
+   </sect2>
+   <sect2 id="sec-figconv">
+    <title>
+    Converting on the fly
+   </title>
+   <para>
+    The option <option>-f <replaceable>fig_format</replaceable></option> allows to specify the included figures format (<replaceable>fig_format</replaceable>). Then, the tool converts the figures from the specified format to the expected one (eps or pdf).
+   </para>
+   <para>
+    If the specified format is unknown, no conversion is done. The supported formats are:
+   </para>
+   <variablelist>
+    <varlistentry>
+    <term>
+    fig:
+</term><listitem><para>native format of the figures produced by XFig.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    eps:
+</term><listitem><para>Encapsulated PostScript format. This format shall be specified only when using the pdftex backend.
+    </para>
+   </listitem>
+   </varlistentry>
+   </variablelist>
+<example><title>Figure conversion</title>
+   <para>
+    The following command compiles a document that contains figures produced with XFig.
+   </para>
+   <programlisting>
+<![CDATA[% dblatex -f fig mydoc.sgml
+]]>   </programlisting>
+</example>
+   </sect2>
+   <sect2 id="sec-lookup">
+    <title>
+    Paths Lookup
+   </title>
+   <para>
+    You can use the option <option>-I "<replaceable>chemin1</replaceable> <replaceable>chemin2</replaceable> ..."</option> to specify where the figures are. The given paths must be absolute. The paths are added to the doculent root path.
+   </para>
+<example><title>Figures lookup</title>
+   <para>
+    This example shows how figure lookup is done. Let's consider this document source:
+   </para>
+   <programlisting>
+<![CDATA[<figure id="fig-example1"> 
+]]><![CDATA[  <title>Composants</title> 
+]]><![CDATA[  <mediaobject>
+]]><![CDATA[    <imageobject> 
+]]><![CDATA[      <imagedata fileref="rep1/rep2/figure1" align="center" scale="70"> 
+]]><![CDATA[    </imageobject> 
+]]><![CDATA[  </mediaobject>
+]]><![CDATA[</figure>
+]]>   </programlisting>
+   <para>
+    And the document is compiled like this:
+   </para>
+   <programlisting>
+<![CDATA[% dblatex -I "/another/path /last/case" /initial/path/document.sgml
+]]>   </programlisting>
+   <para>
+    The figure1 lookup is done in the following directories, in respect of the order:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    <filename>/initial/path/rep1/rep2</filename> ;
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    <filename>/another/path/rep1/rep2</filename> ;
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    <filename>/last/case/rep1/rep2</filename>.
+    </para>
+   </listitem>
+   </itemizedlist>
+</example>
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Creating Tables
+  </title>
+  <para>
+   DocBook tables can be quite complex. This is why the tool doesn't support all the possibilities. Here is what is supported:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   Columns without specified widths (<sgmltag>colspec</sgmltag> without <sgmltag>colwidth</sgmltag> attribute) have the same size.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   A table width is always equal to the page width, if at least one column doesn't contain a fixed width attribute (e.g. colwidth=&ldquo;12cm&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Fixed column widths are supported (e.g. colwidth=&ldquo;10cm&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Fixed column widths must be declared in centimeters (&ldquo;cm&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Proportional column widths are supported (e.g. colwidth= &ldquo;5*&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Proportional and fixed colum width together is not supported (e.g. colwidth=&ldquo;5*+10cm&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The <sgmltag>morerows</sgmltag> attribute of a table entry (<sgmltag>entry</sgmltag> element) is supported.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The <sgmltag>orient</sgmltag> table attribute is supported (portrait and landscape). 
+   </para>
+  </listitem>
+  </itemizedlist>
+   <sect2>
+    <title>
+    Tables without colwidth
+   </title>
+   <para>
+    When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given.
+   </para>
+&table.eg00;
+&table.eg01;
+&table.eg02;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with mixed colspec
+   </title>
+   <para>
+    A table can have <sgmltag>colspec</sgmltag> elements containing <sgmltag>colwidth</sgmltag> attribute mixed with <sgmltag>colspec</sgmltag> elements without <sgmltag>colwidth</sgmltag>. The following XML source: 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left">
+]]><![CDATA[    <colspec colname="c1"/>
+]]><![CDATA[    <colspec align="left" colwidth="4cm"/>
+]]><![CDATA[    <colspec align="right" colwidth="5cm"/>
+]]><![CDATA[    <colspec align="center"/>
+]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    is rendered like this:
+   </para>
+&table.eg1;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with proportional and fixed colwidth
+   </title>
+   <para>
+    Proportional column widths are supported. The following XML source:
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="*"/> 
+]]><![CDATA[    <colspec align="left" colwidth="2*"/> 
+]]><![CDATA[    <colspec align="right" colwidth="3*"/> 
+]]><![CDATA[    <colspec align="center"/>
+]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    gives this table:
+   </para>
+&table.eg2;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with fixed colwidths
+   </title>
+   <para>
+    All the columns can have fixed size, like this: 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="2cm"/> 
+]]><![CDATA[    <colspec align="left" colwidth="2.5cm"/> 
+]]><![CDATA[    <colspec align="right" colwidth="5cm"/> 
+]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    It gives the following table:
+   </para>
+&table.eg3;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with morerows
+   </title>
+   <para>
+    A table can contain entries that cover several lines. The following XML source contains an entry covering 4 lines: 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="*"/>
+]]><![CDATA[    ...
+]]><![CDATA[    <tbody>
+]]><![CDATA[    <entry morerows="3">it covers 4 lines</entry>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    Here is an example of table containing several entries with morerows attribute:
+   </para>
+&table.eg4;
+   </sect2>
+   <sect2>
+    <title>
+    Landscape tables
+   </title>
+   <para>
+    A table can be displayed in a lanscape format by using the <sgmltag>orient</sgmltag> attribute. The following XML source is an example. 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable orient="land">
+]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="*"/>
+]]><![CDATA[    ...
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    Here is how it is displayed.
+   </para>
+&table.land;
+   </sect2>
+   <sect2>
+    <title>
+    Smaller tables
+   </title>
+   <para>
+    For big tables it can be usefull to have smaller text, so that the table is not too large or too long and it can be displayed within a page. It is possible to specify smaller table text by using the <sgmltag>role</sgmltag> attribute of the elements <sgmltag>table</sgmltag> or <sgmltag>informaltable</sgmltag>.
+   </para>
+   <para>
+    The values and the &ldquo;role&rdquo; dedicated to this attribute are specific to dblatex, but it is compliant with the DocBook specification because in general the <sgmltag>role</sgmltag> attribute purpose is never defined.
+   </para>
+   <para>
+    The available text size definitions supported by <sgmltag>role</sgmltag> are directly taken from LaTeX:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    small,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    footnotesize,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    scriptsize,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    tiny.
+    </para>
+   </listitem>
+   </itemizedlist>
+   <para>
+    Here are examples for each size.
+   </para>
+&table.small1;
+&table.small2;
+&table.small3;
+&table.small4;
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Writing LaTeX mathematical equations
+  </title>
+   <sect2>
+    <title>
+    Presentation
+   </title>
+   <para>
+    DocBook doesn't define elements for writing mathematical equations. Only few elements exist that tell how equation should be displayed (inlined, block):
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    <sgmltag>inlineequation</sgmltag> tells that the equation is inlined,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    <sgmltag>informalequation</sgmltag> tells that the equation is displayed as a block, without a title.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    <sgmltag>equation</sgmltag> tells that the equation is displayed as a block, with or without a title.
+    </para>
+   </listitem>
+   </itemizedlist>
+   <para>
+    These tags include a graphic (<sgmltag>graphic</sgmltag> or <sgmltag>mediaobject</sgmltag>) or an alternative text equation, as shown by the example.
+   </para>
+<example><title>Equation taken from TDG</title>
+   <programlisting>
+<![CDATA[<equation><title>Last Theorem of Fermat</title> 
+]]><![CDATA[  <alt>x^n + y^n &ne; z^n &forall; n &ne; 2</alt>
+]]><![CDATA[  <graphic fileref="figures/fermat"></graphic>
+]]><![CDATA[</equation>
+]]>   </programlisting>
+</example>
+   </sect2>
+   <sect2>
+    <title>
+    Implementation choice
+   </title>
+   <para>
+    The principle is to use only the <sgmltag>alt</sgmltag> element. If initially <sgmltag>alt</sgmltag> contains actually the text to print, it is chosen to use this element to embed LaTeX mathematical equations. This choice has the following advantages:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    The translation done by dblatex is really easy, since the equation is already written in LaTeX.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    LaTeX is one of the best word processor to render mathematical formulas.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    One doesn't need to write the equations in MathML.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    This method isn't specific to this tool (see the following section).
+    </para>
+   </listitem>
+   </itemizedlist>
+   <para>
+    Besides, the implementation is as light as possible. This is why it is up to the writer to properly use the mathematical delimiters (&dollar;, &bsol;(, &bsol;), &bsol;&lsqb;, &bsol;&rsqb;). By this way the writer fully controls how he writes equations.
+   </para>
+   </sect2>
+   <sect2>
+    <title>
+    Compatibility
+   </title>
+   <para>
+    This implementation is not contradictory nor specific. In partticular, the <ulink url="http://ricardo.ecn.wfu.edu/~cottrell/dbtexmath/">DBTeXMath</ulink> proposal to extend the DSSSL stylesheets used by jade follows the same approach, and is integrated in the Norman Walsh XSL stylesheets.
+   </para>
+   </sect2>
+   <sect2>
+    <title>
+    Examples
+   </title>
+   <para>
+    The following examples show how to write the equations.
+   </para>
+<example><title>Inlined Equation</title>
+&equation.eg1; 
+&lst.equation.eg1;
+</example>
+<example><title>Equation in a block</title>
+&equation.eg2;
+&lst.equation.eg2;
+</example>
+<example><title>Equation in a float</title>
+&equation.eg3;
+&lst.equation.eg3;
+</example>
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Writing MathML equations
+  </title>
+  <para>
+   You can write MathML equations in a DocBook based document, by using the <ulink url="http://www.oasis-open.org/committees/docbook/xml/mathml/1.0/index.shtml">MathML Module for DocBook XML</ulink> instead of the DocBook DTD.
+  </para>
+  <para>
+   dblatex now translates the MathML equations to latex by using the excellent stylesheets of the <ulink url="http://xsltml.sourceforge.net">XSLT MathML Library</ulink> by Vasil Yaroshevich. A large amount of tests from the <ulink url="http://www.w3.org/Math/testsuite/">W3C MathML Test Suite 2.0</ulink> is supported (657 of 712 tests). The test file used to validate the MathML stylesheets is provided in the package. 
+  </para>
+  </sect1>
+  <sect1>
+   <title>
+   Creating an Index
+  </title>
+  <para>
+   An index is automatically generated if some index entries (<sgmltag>indexterm</sgmltag>), telling the terms to put in the index, are written in the document.
+  </para>
+<example><title>Index Entry</title>
+  <programlisting>
+<![CDATA[<para>In this paragraph is described the function 
+]]><![CDATA[<function>strcpy</function><indexterm><primary>strcpy</primary></indexterm>.
+]]><![CDATA[</para>
+]]>  </programlisting>
+</example>
+  <para>
+   The index is put at the end of the document. It is not possible to put it somewhere else.
+  </para>
+  </sect1>
+  <sect1>
+   <title>
+   Writing a Bibliography
+  </title>
+  <para>
+   A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections.
+  </para>
+  <para>
+   The writer selects information that describes each bibliography entry (<sgmltag>biblioentry</sgmltag>), and chooses the presentation order. The titles and authors are displayed first.
+  </para>
+<example><title>A Bibliography</title>
+  <programlisting>
+<![CDATA[<bibliography><title>Bibliography Example</title> 
+]]><![CDATA[  <bibliodiv><title>References</title>
+]]><![CDATA[    <biblioentry>
+]]><![CDATA[      <title>Document title</title>
+]]><![CDATA[      <author><firstname>J.</firstname><surname>Duval</surname></author>
+]]><![CDATA[      <pubsnumber>DEX000567325</pubsnumber>
+]]><![CDATA[    </biblioentry>
+]]><![CDATA[  </bibliodiv>
+]]><![CDATA[  <bibliodiv><title>White papers</title>
+]]><![CDATA[    <biblioentry>
+]]><![CDATA[      <title>Technical notes</title>
+]]><![CDATA[      <authorgroup>
+]]><![CDATA[        <author><firstname>J.</firstname><surname>Duval</surname></author>
+]]><![CDATA[        <author><firstname>R.</firstname><surname>Marion</surname></author>
+]]><![CDATA[      </authorgroup>
+]]><![CDATA[      <pubsnumber>DEX000704520</pubsnumber>
+]]><![CDATA[    </biblioentry>
+]]><![CDATA[  </bibliodiv>
+]]><![CDATA[</bibliography>
+]]>  </programlisting>
+</example>
+  </sect1>
+  <sect1>
+   <title>
+   Document Revisions
+  </title>
+  <para>
+   The attribute <sgmltag>revisionflag</sgmltag> is usefull to identify the changes between two revisions of a document. This information is managed by dblatex, that adds revision bars in the margin of the paragraphs changed, such like in this <phrase revisionflag="changed">paragraph</phrase>.
+  </para>
+  <para>
+   Adding the revision flags can be manual, but its is tedious and error prone. The perl script <ulink url="http://www.sun.com/xml/developers/diffmk/">diffmk</ulink> by Norman Walsh can do the work for you. It works fine, but it depends on several Perl modules.
+  </para>
+<note>
+The revision bars only appear when using the "dvips" driver. It seems to be a limitation of the LaTeX macros defined by the changebar package.
+</note>
+  </sect1>
+  <sect1>
+   <title>
+   Publishing with dblatex
+  </title>
+  <para>
+   To publish your document, you just need to use the script <filename>dblatex</filename>. 
+  </para>
+   <sect2>
+    <title>
+    Synopsis
+   </title>
+   <programlisting>
+<![CDATA[dblatex [-t {html|tex|dvi|ps|pdf}] [-b {dvips|pdftex}] [-o output] [other options] file.{xml|sgml}
+]]>   </programlisting>
+   </sect2>
+   <sect2>
+    <title>
+    Description
+   </title>
+   <para>
+    The script works on an XML or SGML file and can produce LaTeX, DVI, Postscript and PDF output. By default (i.e. without option) a PDF file is produced in the same directory where the input file is, with the same base name.
+   </para>
+   </sect2>
+   <sect2>
+    <title>
+    Options
+   </title>
+   <variablelist>
+    <varlistentry>
+    <term>
+    -t:
+</term><listitem><para>output format. By default the format is PDF.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -b:
+</term><listitem><para>backend driver to use. The available drivers are &ldquo;dvips&rdquo; (latex) and &ldquo;pdftex&rdquo; (pdflatex). By default the &ldquo;dvips&rdquo; driver is selected. See also <xref linkend="sec-process">.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -f:
+</term><listitem><para>input figures format, specified to have on the fly conversion.. See also <xref linkend="sec-figconv">.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -I:
+</term><listitem><para>additional lookup paths of the figures. See <xref linkend="sec-lookup">.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -o:
+</term><listitem><para>output filename. When not used, the input file name is used, with a suffix related to the output format.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -d:
+</term><listitem><para>debug mode. It only keeps the temporary directory in which dblatex actually works.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -p:
+</term><listitem><para>specify a configuration file. See <xref linkend="sec-param">.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -S:
+</term><listitem><para>specification file. A specification file can be used to group all the options and customizations to apply. See <xref linkend="sec-specs">.
+    </para>
+   </listitem>
+   </varlistentry>
+    <varlistentry>
+    <term>
+    -x:
+</term><listitem><para>options to pass to the XSLT. The example below passes the options &ldquo;--timing&rdquo; and &ldquo;--profile&rdquo; to the XSLT. Using this option supposes that you know the supported XSLT options. 
+    </para>
+    <programlisting>
+<![CDATA[dblatex -x "--timing --profile" file.sgml
+]]>    </programlisting>
+   </listitem>
+   </varlistentry>
+   </variablelist>
+   </sect2>
+   <sect2>
+    <title>
+    Other options
+   </title>
+   <para>
+    Other options are defined to customize the tool, but they should be used in exceptional cases, for test or debug purpose. These options are defined in section <xref linkend="sec-specs"> and should normaly be set through a specification file.
+   </para>
+   </sect2>
+  </sect1>
+ </chapter>
+ <chapter id="sec-custom">
+  <title>
+  Customization
+ </title>
+ <para>
+  The transformation process (and thus the output rendering) can be heavily customized by:
+ </para>
+ <itemizedlist>
+  <listitem>
+  <para>
+  using a configuration stylesheet,
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  using customized stylesheets,
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  using a customized LaTeX style package.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  using a LaTeX post process script.
+  </para>
+ </listitem>
+ </itemizedlist>
+ <para>
+  All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs">) to create a new tool dedicated to your needs.
+ </para>
+  <sect1 id="sec-param">
+   <title>
+   Configuration stylesheet
+  </title>
+  <para>
+   The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p</option>. The available configuration parameters are the following:
+  </para>
+&param;
+   <sect2 id="sec-hyperparam">
+    <title>
+    latex.hyperparam
+   </title>
+   <para>
+    This parameter gives the options to pass to the LaTeX hyperref package. No validity check is done. 
+   </para>
+   <para>
+    For instance, the Table of Content rendering (link color, etc.) can be changed. Look at the hyperref.sty documentation to know all the hyperref options available. 
+   </para>
+<example><title>Configuring with latex.hyperparam</title>
+   <programlisting>
+<![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
+]]><![CDATA[<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+]]><![CDATA[ 
+]]><![CDATA[<!-- We want TOC links in the titles (not in the page numbers), and blue. 
+]]><![CDATA[ -->
+]]><![CDATA[<xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue</xsl:param>
+]]><![CDATA[
+]]><![CDATA[</xsl:stylesheet>
+]]>   </programlisting>
+</example>
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Customized stylesheets
+  </title>
+  <para>
+   If one needs to change some of the translations done by the XSL stylesheets, it is possible to provide user stylesheets to override the templates. To do this, write the stylesheets (e.g. mystyle.xsl) and include them in the configuration file such as shown by the following example.
+  </para>
+<example><title>Using a customized stylesheet in a configuration file</title>
+  <programlisting>
+<![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
+]]><![CDATA[<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+]]><![CDATA[ 
+]]><![CDATA[<!-- Let's import our own XSL to override the default behaviour. 
+]]><![CDATA[ -->
+]]><![CDATA[<xsl:import href="mystyle.xsl"/>
+]]><![CDATA[
+]]><![CDATA[</xsl:stylesheet>
+]]>  </programlisting>
+</example>
+  </sect1>
+  <sect1>
+   <title>
+   Customized LaTeX style
+  </title>
+  <para>
+   The actual output rendering is done by the latex style package used, and not by the XSL stylesheets whose role is only to translate to latex. Users can provide their own LaTeX style file, in respect of some rules:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   The LaTeX style package preamble must support all the options that the XSL stylesheets can pass to the package.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Some packages must be used to make all the thing work.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The docbook interface must be defined: the XSL stylesheets register some elements information in LaTeX commands. These commands or macro are the only ones specific to DocBook that are explicitely used by the XSL stylesheets. Other specific macros are used but are not intended to be changed by the user. These hidden macros are defined in the dbk_core latex package.
+   </para>
+  </listitem>
+  </itemizedlist>
+  <para>
+   The latex style file to use is specified by using the option <option>--style <replaceable>latex_style</replaceable></option>. An example of a simple LaTeX DocBook style is provided in the package.
+  </para>
+   <sect2>
+    <title>
+    Package options
+   </title>
+&styoption;
+   </sect2>
+   <sect2>
+    <title>
+    Needed packages
+   </title>
+&stypackage;
+   </sect2>
+   <sect2>
+    <title>
+    DocBook interface
+   </title>
+   <para>
+    All the latex commands beginning with DBK are related to elements under <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>.
+   </para>
+&stycommand;
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Latex post process script
+  </title>
+  <para>
+   Extra user actions can be processed on the latex file produced by the XSL stylesheets or on its temporary working files produced by the latex compilation. 
+  </para>
+  <para>
+   For instance, in the documents I write the cover page must display the number of pages of the document, but written in full letters (e.g. 23 is written &ldquo;twenty three&rdquo;). The latex post process script is then helpfull, and in this particular case it patches the .aux file.
+  </para>
+  <para>
+   The post process script is called just before the last latex compilation, and takes one parameter, the latex file compiled by the tool.
+  </para>
+  </sect1>
+  <sect1 id="sec-specs">
+   <title>
+   Specification file
+  </title>
+  <para>
+   A master configuration file, also called a specification file, can be defined to list all the customizations and options to apply. Such a file is passed by using the option <option>-S <replaceable>specs</replaceable></option>.
+  </para>
+  <para>
+   The format of the file is the following:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   Every comment starts with a &ldquo;&num;&rdquo;, and is ignored.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The file must contain one parameter by line.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The format of a parameter is the following:
+   </para>
+   <programlisting>
+<![CDATA[<keyword>: <value>
+]]>   </programlisting>
+  </listitem>
+   <listitem>
+   <para>
+   Every parameter is mapped to an option that can be passed to <command>dblatex</command>.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   An unknown parameter is silently ignored (the whole line is dropped).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The parameters defining a path (a file or a directory) can take absolute or relative paths. A relative path must be defined from the specification file itself. For instance, a specification file under <filename>/the/spec/directory/</filename> with a parameter describing the file <filename>../where/this/file/is/myfile</filename> points to <filename>/the/spec/where/this/file/is/myfile</filename>.
+   </para>
+  </listitem>
+  </itemizedlist>
+  <para>
+   The following table lists the supported parameters and the corresponding command line option.
+  </para>
+&specparam;
+  <para>
+   Here is the specification file used for this manual.
+  </para>
+<example><title>Specification file example</title>
+&specmanual;
+</example>
+  </sect1>
+  <sect1>
+   <title>
+   Customization order
+  </title>
+  <para>
+   All the customization queries are translated to the corresponding command line options. Thus, using several customization methods can be unconsistent because each of them override the same option with another value. 
+  </para>
+  <para>
+   For instance, you can specify the use of a specification file in which it is said to use a latex style (parameter TexStyle) and explicitely use the <option>--style</option> command line option. So, what is the behaviour?
+  </para>
+  <para>
+   The options order is the following:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   If a specification file is used (<option>-S</option> option), the options are set to the specification file parameters.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The options explicitely passed override the specification file setting, whatever is the position of the options (i.e. before or after the <option>-S</option> option).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   If an option is passed several times, this is the last occurence that is used.
+   </para>
+  </listitem>
+  </itemizedlist>
+<example><title>Customization order</title>
+  <para>
+   Let's consider the specification file containing the following parameters:
+  </para>
+  <programlisting>
+<![CDATA[XslParam: file3.xsl
+]]><![CDATA[Options: -b pdftex 
+]]><![CDATA[TexStyle: mystyle1
+]]>  </programlisting>
+  <para>
+   And now the command line:
+  </para>
+  <programlisting>
+<![CDATA[dblatex -b dvips -p file1.xsl -p file2.xsl -S file.specs --style mystyle2 mydoc.sgml
+]]>  </programlisting>
+  <para>
+   The setting used is the following:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   &ldquo;-b dvips&rdquo; overrides &ldquo;-b pdftex&rdquo; set by the spec file.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   &ldquo;-p file2.xsl&rdquo; overrides &ldquo;-p file1.xsl&rdquo; since it is defined after, and overrides &ldquo;file3.xsl&rdquo; set by the spec file. 
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   &ldquo;--style mystyle2&rdquo; override &ldquo;mystyle1&rdquo; set by the spec file.
+   </para>
+  </listitem>
+  </itemizedlist>
+</example>
+  </sect1>
+ </chapter>
+ <chapter>
+  <title>
+  Thanks
+ </title>
+ <para>
+  Thanks to the people who contribute to the project: Jean-Yves Le Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help, and all the users for their remarks to improve the product, like Vincent Hottier who asked for the embedded LaTeX equations support. 
+ </para>
+ </chapter>
+
+
+</book>

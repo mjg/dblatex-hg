@@ -1,0 +1,382 @@
+#!/usr/bin/env perl
+    eval 'exec /usr/bin/env perl -S $0 ${1+"$@"}'
+        if $running_under_some_shell;
+
+use File::Basename;
+use Getopt::Std;
+
+#
+# Formattage des tableaux, pour gérer les cellules sur plusieurs lignes
+# use table;
+#
+$row = "";
+@mrows = ();
+@sizes = ();
+@aligs = ();
+$nbcols = 0;
+
+$force_hyphen = 1;
+$istable = 0;
+
+#
+# Mémorisation d'infos de l'entete : la taille des colonnes et leur alignement
+#
+sub prepare_table
+{
+  local($line) = $_[0];
+  my $i = 0;
+  my @a = ();
+  
+  @a = split(/(p{[^\|]*)/, $line);
+  foreach (@a) {
+    if (/p{/) {
+      ($sizes[$i] = $_) =~ s/p{(.*)}/$1/;
+      $i++;
+    } else {
+      ($aligs[$i] = $_) =~ s/.*{(.[^}]*)}$/$1/;
+    }
+  }
+}
+
+sub hline2cline
+{
+  local($row) = $_[0];
+  local($ncols) = $_[1];
+  my $i;
+  my $first = 1;
+  my $last = 1;
+  my $pl = "";
+  my $bord = 0;
+  my $prow = "";
+  my $erow = "";
+
+  my @u;
+  $row =~ s/\\hline/<hline>/;
+  $row =~ s/\\tabularnewline/<tabularnewline>/;
+  @u = split("<hline>", $row);
+  if ($#u > 0) {
+    $prow = $u[0];
+    $prow .= "\\hline";
+    $row = $u[1];
+  }
+  @u = split("<tabularnewline>", $row);
+  if ($#u > 0) {
+    $row = $u[0];
+    $erow = "\\tabularnewline";
+    $erow .= $u[1];
+  }
+
+  # dump_mrows($ncols);
+  for($i = 0; $i < $ncols; $i++) {
+    if ($mrows[$i] <= 0) {
+      # on mémorise la ligne à tracer
+      $bord = 1;
+      $last = $i+1;
+    } else {
+      # on trace la ligne jusqu'à cette cellule
+      if ($bord) {
+        $pl = "$pl\\cline{$first-$last}";
+        $bord = 0;
+      }
+      $first = $i+2;
+    }
+  }
+  if ($bord && (($first != 1) || ($last != $ncols))) {
+    $pl = "$pl\\cline{$first-$last}";
+  }
+  if ($pl ne "") {
+    $prow =~ s/\\hline/$pl/;
+  }
+  return ($prow, $row, $erow);
+}
+
+#
+# Fonction principale de traitement des lignes de tableau. Le principe est
+# de traiter ligne par ligne de tableau, et de n'afficher cette
+# ligne qu'une fois traitée.
+#
+sub table_parse
+{
+  local($line) = $_[0];
+  local($to) = $_[1];
+  my $i, $pos;
+  my @columns = ();
+
+  if (/begin{longtable}/) {
+    $istable = 1;
+    prepare_table($_);
+  }
+  if (not($istable)) {
+    print $to $line;
+    return;
+  }
+  $row = "$row$line";
+  if (/end{longtable}/) {
+    #
+    # c'est fini, on purge la ligne
+    #
+    $istable = 0;
+    print $to $row;
+    $row = "";
+    $nbcols = 0;
+    return;
+  }
+  
+  #
+  # on ne traite qu'une ligne qui se termine
+  #
+  if (not(/\\tabularnewline/)) {
+    return;
+  }
+  #
+  # pour la ligne précédente, on trace la bordure selon les cellules qui
+  # chevauchent plusieurs lignes.
+  #
+  ($brow, $row, $erow) = hline2cline($row, $nbcols+1);
+  @columns = split('&', $row);
+  $nbcols = ($#columns > $nbcols) ? $#columns : $nbcols;
+
+  #
+  # pour chaque cellule de la ligne :
+  # - insertion des cellules vides dues à des cellules sur plusieurs
+  #   lignes,
+  # - décompte par colonne des cellules vides,
+  # - mémorisation des nouvelles cellules sur plusieurs lignes
+  # - mise en forme des cellules "multirow"
+  #
+  print $to $brow;
+  for ($i=0, $pos=0; $pos<=$nbcols; $pos++) {
+    $c = $columns[$i];
+    if ($mrows[$pos] > 0) {
+      #
+      # insertion d'une cellule vide, et on la décompte des cellules couvertes
+      # pour les lignes suivantes de cette colonne.
+      #
+      print $to " & ";
+      $mrows[$pos] --;
+    } else {
+      if ($c =~ /multirow/) {
+        $mrows[$pos] = $c;
+        $mrows[$pos] =~ s/\n//g;
+        $mrows[$pos] =~ s/.*multirow{([^}]*)}.*/$1/;
+        $mrows[$pos] -= 1;
+        #
+        # on met la taille de la colonne
+        # ainsi que l'alignement de la colonne, qui est perdu sinon par
+        # multirow (qui aligne par défaut à gauche)
+        #
+        $s = $sizes[$pos];
+        $a = $aligs[$pos];
+        $c =~ s/\*{/{$s}{$a /;
+        # macro à utiliser au lieu de multirow, pour que ça marche avec tsize
+        $c =~ s/multirow/mrow/;
+      }
+      print $to $c;
+      if ($i < $#columns) {
+        # on écrit le séparateur
+        print $to "&";
+      }
+      $i ++;
+    }
+  }
+  print $to $erow;
+  $row = "";
+}
+
+$keyon = '\\\\xt';
+$keyoff = '/xt';
+
+sub translate
+{
+  local($line) = $_[0];
+  if ($istable && $force_hyphen) {
+    # Two passes, to cut every letter (not every two letters)
+    $line =~ s/([^ \t])([^ \t\n])/$1<cut>$2/g;
+    $line =~ s/<cut>([^ \t])([^ \t\n])/<cut>$1<cut>$2/g;
+  }
+  $line =~ s/\\/\\textbackslash/g;
+  $line =~ s/_/\\_/g;
+  $line =~ s/{/\\{/g;
+  $line =~ s/}/\\}/g;
+  $line =~ s/%/\\%/g;
+  $line =~ s/&#8220;/{}``/g;
+  $line =~ s/&#8221;/{}''/g;
+  $line =~ s/&#732;/\\textasciitilde{}/g;
+  $line =~ s/&#x201C;/{}``/g;
+  $line =~ s/&#x201D;/{}''/g;
+  $line =~ s/&&#x2DC;/\\textasciitilde{}/g;
+  $line =~ s/&/\\&/g;
+  $line =~ s/#/\\#/g;
+  $line =~ s/\$/\\\$/g;
+  $line =~ s/ /~/g;
+  $line =~ s/\\textbackslash/\\textbackslash{}/g;
+  $line =~ s/\327/\$\\times\$/g;
+  $line =~ s/°/\\ensuremath{°}/g;
+  $line =~ s/-/-{}/g;
+
+  # force hyphenation in table cells
+  if ($istable && $force_hyphen) {
+    $line =~ s/<cut>/\\-/g;
+  }
+  return $line;
+}
+
+$figcount = 0;
+
+sub eps2xxx
+{
+  local($in) = $_[0];
+  local($out) = $_[1];
+  local($format) = $_[2];
+
+  my $action = "";
+  for ($format) { 
+    /pdf/ && do { $action = "epstopdf --outfile=$out $in"; last; };
+    /png/ && do { $action = "convert $in $out"; last; };
+  }
+  return $action;
+}
+
+sub figconvert
+{
+  local($line) = $_[0];
+
+  if (/\\includegraphics/) {
+    ($f = $line) =~ s/.*\\includegraphics[^{]*{([^}]*)}.*\n/$1/;
+    # On enlève l'extension
+    $fig = dirname($f)."/".basename($f, ".$figin");
+
+    # On veut le chemin absolu
+    if (not(-f "$fig.$figin"))  {
+      $fig = "$path/$fig";
+    }
+    # On convertit la figure
+    if (-f "$fig.$figin") {
+      $newfig = "fig".$figcount++.".$figout";
+      for ($fig2dev) {
+        /fig2eps/ && do{
+          $dofig = "fig2dev -L $figout $fig.fig > $newfig"; last;
+        };
+        (/fig2pdf/ || /fig2png/) && do{
+          $dofig = "fig2dev -L eps $fig.fig > tmp_fig.eps";
+          $dofig .= "; ".eps2xxx("tmp_fig.eps", $newfig, $figout);
+          last;
+        }
+      }
+      if ($dofig) {
+        print "$dofig\n";
+        system("$dofig");
+        $line =~ s/$f/$newfig/;
+      }
+    }
+  }
+  return $line
+}
+
+sub parse_inlined
+{
+  local($line) = $_[0];
+  my @texts = split("$keyon ", $line);
+  my $mode = 0;
+  my $nline = "";
+  my $l;
+
+  for ($i = 0; $i <= $#texts; $i++) {
+    $l = $texts[$i];
+    @blks = split("$keyoff ", $l);
+
+    # Cas particulier du dernier /xt à enlever, qui est sans espace
+    if ($#blks == 0) { @blks = split($keyoff, $l); }
+    
+    if ($i > 0) { $mode = 1; }
+
+    # Seule la première partie est à convertir
+    if ($mode == 1) {
+      $blks[0] = translate($blks[0]);
+    }
+    $nline = "$nline$blks[0]";
+    if ($#blks > 0) {
+      $mode = 0;
+      $nline = "$nline$blks[1]";
+    }
+  }
+  return $nline;
+}
+
+sub parse_sgml
+{
+  local($rawtex) = $_[0];
+  local($cleantex) = $_[1];
+  my $mode = 0;
+  my $line = "";
+  my $file = "";
+  my $RTEX = "f$rawtex";
+  my $CTEX = "f$cleantex";
+
+  print "$rawtex -> $cleantex\n";
+
+  if (-f $cleantex) {
+#    print "***Warning: $cleantex already exists\n";
+    system("mv $cleantex $cleantex~");
+  }
+
+  open($RTEX, "<$rawtex") || die "Cannot open $rawtex\n";
+  open($CTEX, ">$cleantex") || die "Cannot open $cleantex\n";
+
+  while (<$RTEX>) {
+    $line = $_;
+
+    # Conversion des figures si nécessaire
+    if ($fig2dev) {
+      $line = figconvert($line);
+    }
+
+    if (/$keyon\n/) {
+      $line =~ s/$keyon//;
+      $mode = 1;
+      chomp $line;
+    } elsif ($mode == 1) {
+      $line =~ s/$keyoff//;
+      $line = translate($line);
+    }
+    if (/$keyoff\n/) {
+      $line =~ s/$keyoff//;
+      $mode = 0;
+      chomp $line;
+    } elsif (/$keyon /) {
+      # Cas plus complexe, 'xt' est dans le ligne
+      $line = parse_inlined($line);
+    }
+    table_parse($line, $CTEX);
+  }
+  close($RTEX);
+  close($CTEX);
+}
+
+getopts("f:p:");
+
+if ($opt_f) {
+  $fig2dev = $opt_f;
+  ($figin = $opt_f) =~ s/([^2]*).*/$1/;
+  ($figout = $opt_f) =~ s/[^2]*2(.*)/$1/;
+  # Pas de conversion si les formats sont identiques !
+  if ($figin eq $figout) {
+    $fig2dev = "";
+  }
+}
+if ($opt_p) {
+  $path = $opt_p;
+}
+
+$rawtex = $ARGV[0];
+$cleantex = basename($rawtex, '.tex');
+$cleantex = dirname($rawtex). "/${cleantex}_c.tex";
+shift;
+
+if (@ARGV) {
+  $cleantex = $ARGV[0];
+}
+
+parse_sgml($rawtex, $cleantex, 0);
+
+

@@ -1,0 +1,38 @@
+<!--############################################################################# 
+ |	$Id$
+ |- #############################################################################
+ |	$Author$
+ |														
+ |   PURPOSE:
+ + ############################################################################## -->
+
+SHORT
+	* <xsl:apply-templates mode="slash.hyphen"/> FOR URLS
+	* There also needs to be some way of handling character entities like
+	&mdash; (or their Unicode equivalents).  It is a pity that XPath
+	doesn't have functions for regular expression substitution.
+	* Fix sub/superscript
+	* Tables, tables, tables, always tables... Anyone?
+	* Bibliography 
+		* bibliomixed is not supported
+		* author(s), title, ok... rest?
+		* Manage .bst files ?
+
+	* Qanda is not supported at all
+	* Math
+		* Improve support for MathElems tags (customized DTD)
+		* Improve support for tm and inlinetm (embedded LaTeX Math)
+		* Start MathML support
+	* Lists
+		* Ordered lists are mapped to enumerate, regardless of 'continues'
+
+	* Index : basic support. Only ONE index per LaTeX Document.
+		Support for several see/seealso
+
+
+LONG
+	* Add chunking, so each chapter/part/etc... is created on a separate .tex file
+	  and manage the \input.
+	* Better support of everything :)
+	* Package.. rpm/deb/tgz 
+	* add autoconf/install check for JDK/JRE and xt/xp
