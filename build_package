@@ -1,29 +1,29 @@
 #!/bin/sh
 
 use_ssh=0
+use_remote=`cat CVS/Root | grep "@"|wc -l`
+cvspackage=`cat CVS/Repository`
 
+# we can force some behaviour
 while true
 do
   case "$1" in
   --ssh) use_ssh=1 ;;
+  --local) use_remote=0 ;;
   *) break ;;
   esac
   shift
 done
 
-if [ $use_ssh -eq 0 ]; then
-
-CVSROOT=:pserver:anonymous@cvs.dblatex.sourceforge.net:/cvsroot/dblatex
-export CVSROOT
-
-else
-
-echo "use ssh mode"
-CVSROOT=:ext:marsgui@cvs.dblatex.sourceforge.net:/cvsroot/dblatex
-export CVSROOT
-CVS_RSH=ssh
-export CVS_RSH
-
+if [ $use_ssh -eq 1 ]; then
+  echo "use ssh mode"
+  CVSROOT=:ext:marsgui@cvs.sourceforge.net:/cvsroot/dblatex
+  export CVSROOT
+  CVS_RSH=ssh
+  export CVS_RSH
+elif [ $use_remote -ne 0 ]; then
+  CVSROOT=:pserver:anonymous@cvs.sourceforge.net:/cvsroot/dblatex
+  export CVSROOT
 fi
 
 package=dblatex
@@ -43,7 +43,7 @@ release=$package-$version
 
 echo "building version $version"
 
-cd /tmp; cvs -z3 -q export -r $tag -d $release $package; rc=$?
+cd /tmp; cvs -z3 -q export -r $tag -d $release $cvspackage; rc=$?
 cd -
 
 if [ $rc -ne 0 ]; then
@@ -57,6 +57,9 @@ rm /tmp/$release/xsl/common/.cvsignore
 rm /tmp/$release/xsl/common/Makefile
 rm -r /tmp/$release/tests/mathml/build
 rm /tmp/$release/tests/mathml/excluded*
+
+# Temporary manual cleanup
+rm -r /tmp/$release/xsl/latex-0.5.1
 
 # Make the package version file
 sed "s/devel/$version/" /tmp/$release/xsl/version.xsl > \
