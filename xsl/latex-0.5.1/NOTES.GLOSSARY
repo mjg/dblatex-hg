@@ -1,7 +1,0 @@
-The docbook approach for glossary is different from the LaTeX one. 
-In the LaTeX approach, you add glossterms as if you were adding indexterms etc... 
-In docbook, glossterms are all inside the glossary, usually at the end of the document. 
-
-In these XSL Stylesheets
-------------------------
-Process glossterms without taking into account LaTeX glossary management.
