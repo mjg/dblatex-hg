@@ -5,17 +5,17 @@
 use File::Basename;
 
 %empty_tags = (
-  "area",
-  "audiodata",
-  "beginpage",
-  "co",
-  "colspec",
-  "constraint",
-  "footnoteref",
-  "graphic",
-  "imagedata",
-  "inlinegraphic",
-  "xref"
+  "area"          => '',
+  "audiodata"     => '',
+  "beginpage"     => '',
+  "co"            => '',
+  "colspec"       => '',
+  "constraint"    => '',
+  "footnoteref"   => '',
+  "graphic"       => '',
+  "imagedata"     => '',
+  "inlinegraphic" => '',
+  "xref"          => ''
   );
 
 sub parse_entities

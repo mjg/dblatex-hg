@@ -112,6 +112,14 @@ if [ "$texinputs" != "" ]; then
   export TEXINPUTS
 fi
 
+# Driver consistency check
+case "$ext" in
+ps | dvi) if [ "$btex" != "dvips" ]; then
+            btex="dvips"
+            echo "TeX Backend Driver forced to $btex"
+          fi ;;
+esac
+
 # Let's check the backend driver and do the appropriate actions
 case "$btex" in
 pdftex) btexrun=$btexpath/runpdflatex ;

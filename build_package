@@ -1,0 +1,71 @@
+#!/bin/sh
+
+use_ssh=0
+
+while true
+do
+  case "$1" in
+  --ssh) use_ssh=1 ;;
+  *) break ;;
+  esac
+  shift
+done
+
+if [ $use_ssh -eq 0 ]; then
+
+CVSROOT=:pserver:anonymous@cvs.dblatex.sourceforge.net:/cvsroot/dblatex
+export CVSROOT
+
+else
+
+echo "use ssh mode"
+CVSROOT=:ext:marsgui@cvs.dblatex.sourceforge.net:/cvsroot/dblatex
+export CVSROOT
+CVS_RSH=ssh
+export CVS_RSH
+
+fi
+
+package=dblatex
+
+if [ $# -lt 1 ]; then
+  echo "$0 [--ssh] vX_Y_Z"
+	exit 1
+fi
+tag=$1
+
+# The actual release number is given from the tag:
+#   vX_Y_Z -> X.Y.Z
+#
+version=`echo $tag|tr "_" "."|sed 's/^v//'`
+
+release=$package-$version
+
+echo "building version $version"
+
+cd /tmp; cvs -z3 -q export -r $tag -d $release $package; rc=$?
+cd -
+
+if [ $rc -ne 0 ]; then
+  echo "CVS failed"
+  exit 1
+fi
+
+# Remove the devel only files
+rm /tmp/$release/build_package
+rm /tmp/$release/xsl/common/.cvsignore
+rm /tmp/$release/xsl/common/Makefile
+
+# Make the package version file
+sed "s/devel/$version/" /tmp/$release/xsl/version.xsl > \
+     /tmp/$release/xsl/version2.xsl
+mv /tmp/$release/xsl/version2.xsl /tmp/$release/xsl/version.xsl
+
+# Make the package doc
+echo "$version" > /tmp/$release/docs/version.sgml
+gmake -C /tmp/$release/docs
+
+# Make the ball
+tar cvf - -C /tmp $release | bzip2 > $release.tar.bz2
+rm -r /tmp/$release
+
