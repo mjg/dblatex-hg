@@ -1,0 +1,160 @@
+<chapter><title>Introduction
+ </title>
+<sect1>
+<title>Why a DB2LaTeX clone?</title>
+<para>dblatex is actually a <ulink url="http://db2latex.sourceforge.net">DB2LaTeX</ulink> clone, since it takes the major part of its XSL stylesheets. So, why this project? The purpose is a bit different on these points:</para>
+<itemizedlist>
+<listitem><para>The project is end-user oriented, that is it tries to hide as much as possible the latex compiling stuff by providing a single clean script to produce directly DVI, PostScript and PDF output.</para></listitem>
+<listitem><para>The actual output rendering is done not only by the XSL stylesheets transformation, but also by a dedicated LaTeX package. The purpose is to allow a deep LaTeX customisation without changing the XSL stylesheets.</para></listitem>
+<listitem><para>Post-processing is done by Perl, to make publication faster, and to parse things not so easily done by the XSL stylesheets (tables).</para></listitem>
+</itemizedlist></sect1>
+  <sect1>
+   <title>
+   Features
+  </title>
+  <para>
+   With dblatex you can: 
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   transform a DocBook XML/SGML book or article to pure LaTeX,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   compile the temporary LaTeX file with latex or pdflatex, to produce DVI, PostScript and PDF files,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   convert on the fly the figures included in the document,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write complex tables,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write several bibliographies,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   create an index,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write mathematical equations in LaTeX,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   write mathematical equation in MathML,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   have revision bars,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   customise the output rendering with an XSL configuration file,
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   use your own LaTeX style package.
+   </para>
+  </listitem>
+  </itemizedlist>
+  </sect1>
+  <sect1>
+   <title>
+   Version
+  </title>
+  <para>
+   This manual is for dblatex version &version;.
+  </para>
+  </sect1>
+  <sect1 id="sec-changes"><title>Changes</title>
+  <para>The changes between release &version; and release 0.1.3 are:
+  &changes;
+  </para>
+  </sect1>
+  <sect1>
+   <title>
+   Publishing Principles
+  </title>
+  <para>
+   Dblatex transforms a DocBook XML/SGML document to LaTeX. Once transformed into LaTeX, standard LaTeX tools are used to produce DVI, Postcript or PDF files.
+  </para>
+   <para>
+    <xref linkend="fig-processus"> explains the process applied. It shows the tools used and the steps. The emphasized tools are provided by the package.
+   </para>
+<figure id="fig-processus">
+<title>Transforming Process</title>
+<mediaobject><imageobject> 
+<imagedata fileref="processus" align="center" width="60%">
+</imageobject></mediaobject></figure>
+   <sect2 id="sec-process">
+    <title>
+    Backend Drivers
+   </title>
+   <para>
+    The main script allows to use two LaTeX backend drivers:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    The &ldquo;dvips&rdquo; driver calls <command>latex</command>, and produces DVI, Postscript and at the end PDF files. The drawback is that converting to PDF can take a while. 
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    The &ldquo;pdftex&rdquo; driver calls <command>pdflatex</command>, to produce directly PDF files. The conversion is fast, the file size is smaller, but only PDF graphics are accepted.
+    </para>
+   </listitem>
+   </itemizedlist>
+   </sect2>
+   <sect2 id="sec-stylesheets">
+    <title> XSL Stylesheets </title>
+    <para>
+    The XSL stylesheets located under <filename>xsl/</filename> are used to transform from XML to &ldquo;raw&rdquo; LaTeX. The main file is <filename>latex_book_fast.xsl</filename>, that includes the other stylesheets of the directory.
+    </para>
+   </sect2>
+   <sect2 id="sec-perl-process">
+    <title> Perl Post Processing</title>
+   <para>
+    Actually the XSL stylesheets doesn't produce valid LaTeX. The reason is that some
+    DocBook processing is too complex or too time-consuming for XSL
+    transforming. Here are the main actions done to produce valid LaTeX from raw
+    LaTeX:
+   </para>
+   <itemizedlist>
+    <listitem>
+   <para>Transform the entities to valid LaTeX characters (e.g. &amp;nbsp; is
+   transformed to '~'). Perl is suited and performant for this
+   task.</para>
+   </listitem>
+    <listitem>
+   <para>Build the tables. DocBook Tables can be hard to translate into LaTeX
+   (ConTeXt tables are far easier). This is why Perl is really helpfull to
+   implement some algorithms not so easy to do by XSL programming. The main
+   difficulties are about the missing cells, or cells spanned on several columns
+   and/or rows.</para>
+   </listitem>
+   </itemizedlist>
+   </sect2>
+   <sect2>
+    <title> LaTeX Style Package</title>
+    <para>
+    Once valid LaTeX is available, the LaTeX style package (docbook.sty) under <filename>latex/style/</filename> is used to customize the output rendering. It includes the other files of the directory. You can also provide your own LaTeX style (cf. <xref linkend="sec-custom">).
+    </para>
+   </sect2>
+  </sect1>
+ </chapter>

@@ -1,9 +1,9 @@
 %!PS-Adobe-2.0 EPSF-2.0
 %%Title: processus.fig
 %%Creator: fig2dev Version 3.2.3 Patchlevel 
-%%CreationDate: Tue Jul 15 20:28:48 2003
-%%For: ben@localhost.localdomain ()
-%%BoundingBox: 0 0 493 349
+%%CreationDate: Fri May 14 21:54:18 2004
+%%For: ben@moon.localdomain ()
+%%BoundingBox: 0 0 394 439
 %%Magnification: 1.0000
 %%EndComments
 /$F2psDict 200 dict def
@@ -45,8 +45,8 @@ $F2psDict /mtrx matrix put
 
 end
 save
-newpath 0 349 moveto 0 0 lineto 493 0 lineto 493 349 lineto closepath clip newpath
--57.0 433.0 translate
+newpath 0 439 moveto 0 0 lineto 394 0 lineto 394 439 lineto closepath clip newpath
+-161.0 523.0 translate
 1 -1 scale
 
 /cp {closepath} bind def
@@ -118,8 +118,8 @@ newfontname newfont definefont pop end } def
 8#370 /oslash 8#371 /ugrave 8#372 /uacute 8#373 /ucircumflex
 8#374 /udieresis 8#375 /yacute 8#376 /thorn 8#377 /ydieresis] def
 /Times-Roman /Times-Roman-iso isovec ReEncode
-/Times-BoldItalic /Times-BoldItalic-iso isovec ReEncode
 /Times-Italic /Times-Italic-iso isovec ReEncode
+/Times-BoldItalic /Times-BoldItalic-iso isovec ReEncode
 /$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
 /$F2psEnd {$F2psEnteredState restore end} def
 
@@ -130,40 +130,37 @@ $F2psBegin
 /Times-Italic-iso ff 180.00 scf sf
 5175 2250 m
 gs 1 -1 sc (sgml2xml.pl) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+6300 6450 m
+gs 1 -1 sc (dvips) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+6300 7500 m
+gs 1 -1 sc (ps2pdf) col0 sh gr
 % Polyline
 7.500 slw
  [15 45] 45 sd
-n 1230 3375 m 1125 3375 1125 4995 105 arcto 4 {pop} repeat
-  1125 5100 4845 5100 105 arcto 4 {pop} repeat
-  4950 5100 4950 3480 105 arcto 4 {pop} repeat
-  4950 3375 1230 3375 105 arcto 4 {pop} repeat
+n 3030 4650 m 2925 4650 2925 6195 105 arcto 4 {pop} repeat
+  2925 6300 4395 6300 105 arcto 4 {pop} repeat
+  4500 6300 4500 4755 105 arcto 4 {pop} repeat
+  4500 4650 3030 4650 105 arcto 4 {pop} repeat
  cp gs col0 s gr  [] 0 sd
-/Times-Italic-iso ff 180.00 scf sf
-3975 4200 m
-gs 1 -1 sc (convnum.pl) col0 sh gr
 % Polyline
  [15 45] 45 sd
-n 5280 3375 m 5175 3375 5175 4995 105 arcto 4 {pop} repeat
-  5175 5100 8895 5100 105 arcto 4 {pop} repeat
-  9000 5100 9000 3480 105 arcto 4 {pop} repeat
-  9000 3375 5280 3375 105 arcto 4 {pop} repeat
+n 5655 4650 m 5550 4650 5550 8295 105 arcto 4 {pop} repeat
+  5550 8400 7020 8400 105 arcto 4 {pop} repeat
+  7125 8400 7125 4755 105 arcto 4 {pop} repeat
+  7125 4650 5655 4650 105 arcto 4 {pop} repeat
  cp gs col0 s gr  [] 0 sd
-/Times-Italic-iso ff 180.00 scf sf
-8025 4200 m
-gs 1 -1 sc (convnum.pl) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-3150 5325 m
-gs 1 -1 sc (dvips) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-3150 6375 m
-gs 1 -1 sc (ps2pdf) col0 sh gr
 % Polyline
  [15 45] 45 sd
-n 1080 2025 m 975 2025 975 7095 105 arcto 4 {pop} repeat
-  975 7200 9045 7200 105 arcto 4 {pop} repeat
-  9150 7200 9150 2130 105 arcto 4 {pop} repeat
-  9150 2025 1080 2025 105 arcto 4 {pop} repeat
+n 2805 2025 m 2700 2025 2700 8595 105 arcto 4 {pop} repeat
+  2700 8700 7245 8700 105 arcto 4 {pop} repeat
+  7350 8700 7350 2130 105 arcto 4 {pop} repeat
+  7350 2025 2805 2025 105 arcto 4 {pop} repeat
  cp gs col0 s gr  [] 0 sd
+/Times-Italic-iso ff 180.00 scf sf
+5175 4350 m
+gs 1 -1 sc (texclean) col0 sh gr
 % Polyline
 n 4650 1425 m 5400 1425 l 5400 1950 l 4650 1950 l
  cp gs col0 s gr 
@@ -186,175 +183,178 @@ n 4995 2339 m 5025 2459 l 5055 2339 l 4995 2339 l  cp gs 0.00 setgray ef gr  col
 4875 2775 m
 gs 1 -1 sc (.xml) col0 sh gr
 % Polyline
-gs  clippath
-2640 4830 m 2640 4770 l 2489 4770 l 2609 4800 l 2489 4830 l cp
-eoclip
-n 2625 3525 m 2175 3525 l 2175 4800 l
- 2625 4800 l gs col0 s gr gr
-
-% arrowhead
-n 2489 4830 m 2609 4800 l 2489 4770 l 2489 4830 l  cp gs 0.00 setgray ef gr  col0 s
+n 4650 3525 m 5400 3525 l 5400 4050 l 4650 4050 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 180.00 scf sf
+4875 3825 m
+gs 1 -1 sc (.rtex) col0 sh gr
 % Polyline
-gs  clippath
-2970 4515 m 3030 4515 l 3030 4364 l 3000 4484 l 2970 4364 l cp
-eoclip
-n 3000 3750 m
- 3000 4500 l gs col0 s gr gr
-
-% arrowhead
-n 2970 4364 m 3000 4484 l 3030 4364 l 2970 4364 l  cp gs 0.00 setgray ef gr  col0 s
+n 4650 4575 m 5400 4575 l 5400 5100 l 4650 5100 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 180.00 scf sf
+4875 4875 m
+gs 1 -1 sc (.tex) col0 sh gr
 % Polyline
-gs  clippath
-3360 4770 m 3360 4830 l 3511 4830 l 3391 4800 l 3511 4770 l cp
-eoclip
-n 3375 3525 m 3825 3525 l 3825 4800 l
- 3375 4800 l gs col0 s gr gr
-
-% arrowhead
-n 3511 4770 m 3391 4800 l 3511 4830 l 3511 4770 l  cp gs 0.00 setgray ef gr  col0 s
-% Polyline
-n 2625 3225 m 3375 3225 l 3375 3750 l 2625 3750 l
+n 5775 5625 m 6525 5625 l 6525 6150 l 5775 6150 l
  cp gs col7 1.00 shd ef gr gs col0 s gr 
 % Polyline
-n 2625 4500 m 3375 4500 l 3375 5025 l 2625 5025 l
- cp gs col7 1.00 shd ef gr gs col0 s gr 
-/Times-Roman-iso ff 180.00 scf sf
-3150 4200 m
-gs 1 -1 sc (latex) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-1200 4050 m
-gs 1 -1 sc (makeindex) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-1350 4350 m
-gs 1 -1 sc (bibtex) col0 sh gr
-/Times-BoldItalic-iso ff 180.00 scf sf
-4200 3300 m
-gs 1 -1 sc (runlatex) col0 sh gr
-% Polyline
-gs  clippath
-6690 4830 m 6690 4770 l 6539 4770 l 6659 4800 l 6539 4830 l cp
-eoclip
-n 6675 3525 m 6225 3525 l 6225 4800 l
- 6675 4800 l gs col0 s gr gr
-
-% arrowhead
-n 6539 4830 m 6659 4800 l 6539 4770 l 6539 4830 l  cp gs 0.00 setgray ef gr  col0 s
-% Polyline
-gs  clippath
-7020 4515 m 7080 4515 l 7080 4364 l 7050 4484 l 7020 4364 l cp
-eoclip
-n 7050 3750 m
- 7050 4500 l gs col0 s gr gr
-
-% arrowhead
-n 7020 4364 m 7050 4484 l 7080 4364 l 7020 4364 l  cp gs 0.00 setgray ef gr  col0 s
-% Polyline
-gs  clippath
-7410 4770 m 7410 4830 l 7561 4830 l 7441 4800 l 7561 4770 l cp
-eoclip
-n 7425 3525 m 7875 3525 l 7875 4800 l
- 7425 4800 l gs col0 s gr gr
-
-% arrowhead
-n 7561 4770 m 7441 4800 l 7561 4830 l 7561 4770 l  cp gs 0.00 setgray ef gr  col0 s
-% Polyline
-n 6675 3225 m 7425 3225 l 7425 3750 l 6675 3750 l
- cp gs col7 1.00 shd ef gr gs col0 s gr 
-% Polyline
-n 6675 4500 m 7425 4500 l 7425 5025 l 6675 5025 l
- cp gs col7 1.00 shd ef gr gs col0 s gr 
-/Times-Roman-iso ff 180.00 scf sf
-5250 4050 m
-gs 1 -1 sc (makeindex) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-5400 4350 m
-gs 1 -1 sc (bibtex) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-7125 4200 m
-gs 1 -1 sc (pdflatex) col0 sh gr
-/Times-BoldItalic-iso ff 180.00 scf sf
-8025 3300 m
-gs 1 -1 sc (runpdflatex) col0 sh gr
-% Polyline
-n 2625 5550 m 3375 5550 l 3375 6075 l 2625 6075 l
+n 5775 6675 m 6525 6675 l 6525 7200 l 5775 7200 l
  cp gs col0 s gr 
 % Polyline
-n 2625 6600 m 3375 6600 l 3375 7125 l 2625 7125 l
+n 5775 7725 m 6525 7725 l 6525 8250 l 5775 8250 l
  cp gs col0 s gr 
 % Polyline
 gs  clippath
-2970 5565 m 3030 5565 l 3030 5414 l 3000 5534 l 2970 5414 l cp
+6120 6690 m 6180 6690 l 6180 6539 l 6150 6659 l 6120 6539 l cp
 eoclip
-n 3000 5025 m
- 3000 5550 l gs col0 s gr gr
+n 6150 6150 m
+ 6150 6675 l gs col0 s gr gr
 
 % arrowhead
-n 2970 5414 m 3000 5534 l 3030 5414 l 2970 5414 l  cp gs 0.00 setgray ef gr  col0 s
+n 6120 6539 m 6150 6659 l 6180 6539 l 6120 6539 l  cp gs 0.00 setgray ef gr  col0 s
 % Polyline
 gs  clippath
-2970 6615 m 3030 6615 l 3030 6464 l 3000 6584 l 2970 6464 l cp
+6120 7740 m 6180 7740 l 6180 7589 l 6150 7709 l 6120 7589 l cp
 eoclip
-n 3000 6075 m
- 3000 6600 l gs col0 s gr gr
+n 6150 7200 m
+ 6150 7725 l gs col0 s gr gr
 
 % arrowhead
-n 2970 6464 m 3000 6584 l 3030 6464 l 2970 6464 l  cp gs 0.00 setgray ef gr  col0 s
+n 6120 7589 m 6150 7709 l 6180 7589 l 6120 7589 l  cp gs 0.00 setgray ef gr  col0 s
 /Times-Roman-iso ff 180.00 scf sf
-2850 5850 m
+6000 6975 m
 gs 1 -1 sc (.ps) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-2850 6900 m
+6000 8025 m
 gs 1 -1 sc (.pdf) col0 sh gr
 % Polyline
-gs  clippath
-2970 3240 m 3030 3240 l 3030 3089 l 3000 3209 l 2970 3089 l cp
-eoclip
-n 3000 2700 m
- 3000 3225 l gs col0 s gr gr
-
-% arrowhead
-n 2970 3089 m 3000 3209 l 3030 3089 l 2970 3089 l  cp gs 0.00 setgray ef gr  col0 s
+n 3525 5625 m 4275 5625 l 4275 6150 l 3525 6150 l
+ cp gs col7 1.00 shd ef gr gs col0 s gr 
+% Polyline
+n 7575 2925 m 9225 2925 l 9225 3525 l 7575 3525 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 180.00 scf sf
+7800 3300 m
+gs 1 -1 sc (XSL Stylesheets) col0 sh gr
+% Polyline
+n 7575 4875 m 9225 4875 l 9225 5475 l 7575 5475 l
+ cp gs col0 s gr 
+/Times-Roman-iso ff 180.00 scf sf
+7800 5250 m
+gs 1 -1 sc (LaTeX Package) col0 sh gr
 % Polyline
 gs  clippath
-7020 3240 m 7080 3240 l 7080 3089 l 7050 3209 l 7020 3089 l cp
+4995 3540 m 5055 3540 l 5055 3389 l 5025 3509 l 4995 3389 l cp
 eoclip
-n 7050 2700 m
- 7050 3225 l gs col0 s gr gr
+n 5025 3000 m
+ 5025 3525 l gs col0 s gr gr
 
 % arrowhead
-n 7020 3089 m 7050 3209 l 7080 3089 l 7020 3089 l  cp gs 0.00 setgray ef gr  col0 s
+n 4995 3389 m 5025 3509 l 5055 3389 l 4995 3389 l  cp gs 0.00 setgray ef gr  col0 s
 % Polyline
-n 5400 2700 m
- 7050 2700 l gs col0 s gr 
+gs  clippath
+4995 4590 m 5055 4590 l 5055 4439 l 5025 4559 l 4995 4439 l cp
+eoclip
+n 5025 4050 m
+ 5025 4575 l gs col0 s gr gr
+
+% arrowhead
+n 4995 4439 m 5025 4559 l 5055 4439 l 4995 4439 l  cp gs 0.00 setgray ef gr  col0 s
 % Polyline
-n 3000 2700 m
- 4650 2700 l gs col0 s gr 
+n 4650 4575 m 5400 4575 l 5400 5100 l 4650 5100 l
+ cp gs col7 1.00 shd ef gr gs col0 s gr 
+% Polyline
+gs  clippath
+3720 5640 m 3780 5640 l 3780 5489 l 3750 5609 l 3720 5489 l cp
+eoclip
+n 4650 4800 m 3750 4800 l
+ 3750 5625 l gs col0 s gr gr
+
+% arrowhead
+n 3720 5489 m 3750 5609 l 3780 5489 l 3720 5489 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+4095 5640 m 4155 5640 l 4155 5489 l 4125 5609 l 4095 5489 l cp
+eoclip
+n 4650 5025 m 4125 5025 l
+ 4125 5625 l gs col0 s gr gr
+
+% arrowhead
+n 4095 5489 m 4125 5609 l 4155 5489 l 4095 5489 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+5895 5640 m 5955 5640 l 5955 5489 l 5925 5609 l 5895 5489 l cp
+eoclip
+n 5400 5025 m 5925 5025 l
+ 5925 5625 l gs col0 s gr gr
+
+% arrowhead
+n 5895 5489 m 5925 5609 l 5955 5489 l 5895 5489 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+6270 5640 m 6330 5640 l 6330 5489 l 6300 5609 l 6270 5489 l cp
+eoclip
+n 5400 4800 m 6300 4800 l
+ 6300 5625 l gs col0 s gr gr
+
+% arrowhead
+n 6270 5489 m 6300 5609 l 6330 5489 l 6270 5489 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+5910 3195 m 5910 3255 l 6061 3255 l 5941 3225 l 6061 3195 l cp
+eoclip
+n 7575 3225 m
+ 5925 3225 l gs col0 s gr gr
+
+% arrowhead
+n 6061 3195 m 5941 3225 l 6061 3255 l 6061 3195 l  cp gs 0.00 setgray ef gr  col0 s
+% Polyline
+gs  clippath
+6885 5145 m 6885 5205 l 7036 5205 l 6916 5175 l 7036 5145 l cp
+eoclip
+n 7575 5175 m
+ 6900 5175 l gs col0 s gr gr
+
+% arrowhead
+n 7036 5145 m 6916 5175 l 7036 5205 l 7036 5145 l  cp gs 0.00 setgray ef gr  col0 s
 /Times-Roman-iso ff 180.00 scf sf
-2325 3000 m
+5175 3300 m
 gs 1 -1 sc (xsltproc) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-7125 3000 m
-gs 1 -1 sc (xsltproc) col0 sh gr
+4725 5400 m
+gs 1 -1 sc (makeindex) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-3375 2625 m
+4875 5700 m
+gs 1 -1 sc (bibtex) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+3000 5250 m
+gs 1 -1 sc (pdflatex) col0 sh gr
+/Times-BoldItalic-iso ff 180.00 scf sf
+2925 4575 m
+gs 1 -1 sc (runpdflatex) col0 sh gr
+/Times-BoldItalic-iso ff 180.00 scf sf
+6450 4575 m
+gs 1 -1 sc (runlatex) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+6000 8625 m
 gs 1 -1 sc (-b dvips) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-5775 2625 m
+3300 6525 m
 gs 1 -1 sc (-b pdftex) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+6450 5250 m
+gs 1 -1 sc (latex) col0 sh gr
 /Times-BoldItalic-iso ff 180.00 scf sf
-8475 1950 m
+6600 1950 m
 gs 1 -1 sc (dblatex) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-2850 3525 m
-gs 1 -1 sc (.tex) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-2850 4800 m
+6000 5925 m
 gs 1 -1 sc (.dvi) col0 sh gr
 /Times-Roman-iso ff 180.00 scf sf
-6900 3525 m
-gs 1 -1 sc (.tex) col0 sh gr
-/Times-Roman-iso ff 180.00 scf sf
-6900 4800 m
+3750 5925 m
 gs 1 -1 sc (.pdf) col0 sh gr
+/Times-Roman-iso ff 180.00 scf sf
+4875 4875 m
+gs 1 -1 sc (.tex) col0 sh gr
 $F2psEnd
 rs

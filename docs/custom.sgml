@@ -1,0 +1,275 @@
+ <chapter id="sec-custom">
+  <title>
+  Customization
+ </title>
+ <para>
+  The transformation process (and thus the output rendering) can be heavily customized by:
+ </para>
+ <itemizedlist>
+  <listitem>
+  <para>
+  using a configuration stylesheet,
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  using customized stylesheets,
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  using a customized LaTeX style package.
+  </para>
+ </listitem>
+  <listitem>
+  <para>
+  using a LaTeX post process script.
+  </para>
+ </listitem>
+ </itemizedlist>
+ <para>
+  All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs">) to create a new tool dedicated to your needs.
+ </para>
+  <sect1 id="sec-param">
+   <title>
+   Configuration stylesheet
+  </title>
+  <para>
+   The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p</option>. The available configuration parameters are the following:
+  </para>
+&param;
+   <sect2 id="sec-hyperparam">
+    <title>
+    latex.hyperparam
+   </title>
+   <para>
+    This parameter gives the options to pass to the LaTeX hyperref package. No validity check is done. 
+   </para>
+   <para>
+    For instance, the Table of Content rendering (link color, etc.) can be changed. Look at the hyperref.sty documentation to know all the hyperref options available. 
+   </para>
+<example><title>Configuring with latex.hyperparam</title>
+   <programlisting>
+<![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
+]]><![CDATA[<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+]]><![CDATA[ 
+]]><![CDATA[<!-- We want TOC links in the titles (not in the page numbers), and blue. 
+]]><![CDATA[ -->
+]]><![CDATA[<xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue</xsl:param>
+]]><![CDATA[
+]]><![CDATA[</xsl:stylesheet>
+]]>   </programlisting>
+</example>
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Customized stylesheets
+  </title>
+  <para>
+   If one needs to change some of the translations done by the XSL stylesheets, it is possible to provide user stylesheets to override the templates. To do this, write the stylesheets (e.g. mystyle.xsl) and include them in the configuration file such as shown by the following example.
+  </para>
+<example><title>Using a customized stylesheet in a configuration file</title>
+  <programlisting>
+<![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
+]]><![CDATA[<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+]]><![CDATA[ 
+]]><![CDATA[<!-- Let's import our own XSL to override the default behaviour. 
+]]><![CDATA[ -->
+]]><![CDATA[<xsl:import href="mystyle.xsl"/>
+]]><![CDATA[
+]]><![CDATA[</xsl:stylesheet>
+]]>  </programlisting>
+</example>
+  </sect1>
+  <sect1>
+   <title>
+   Customized LaTeX style
+  </title>
+  <para>
+   The actual output rendering is done by the latex style package used, and not by the XSL stylesheets whose role is only to translate to latex. Users can provide their own LaTeX style file, in respect of some rules:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   The LaTeX style package preamble must support all the options that the XSL stylesheets can pass to the package.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Some packages must be used to make all the thing work.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The docbook interface must be defined: the XSL stylesheets register some elements information in LaTeX commands. These commands or macro are the only ones specific to DocBook that are explicitely used by the XSL stylesheets. Other specific macros are used but are not intended to be changed by the user. These hidden macros are defined in the dbk_core latex package.
+   </para>
+  </listitem>
+  </itemizedlist>
+  <para>
+   The latex style file to use is specified by using the option <option>--style <replaceable>latex_style</replaceable></option>. An example of a simple LaTeX DocBook style is provided in the package.
+  </para>
+   <sect2>
+    <title>
+    Package options
+   </title>
+   <para>A compliant LaTeX style package supports the following options. The options are
+   provided by the XSL stylesheets according to the document attributes.</para>
+&styoption;
+   </sect2>
+   <sect2>
+    <title>
+    Needed packages
+   </title>
+   <para>A LaTeX style package must at least include the following packages.</para>
+&stypackage;
+   </sect2>
+   <sect2>
+    <title>
+    DocBook interface
+   </title>
+   <para>
+    All the latex commands beginning with DBK are related to elements under <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>.
+   </para>
+&stycommand;
+   </sect2>
+  </sect1>
+  <sect1>
+   <title>
+   Latex post process script
+  </title>
+  <para>
+   Extra user actions can be processed on the latex file produced by the XSL stylesheets or on its temporary working files produced by the latex compilation. 
+  </para>
+  <para>
+   For instance, in the documents I write the cover page must display the number of pages of the document, but written in full letters (e.g. 23 is written &ldquo;twenty three&rdquo;). The latex post process script is then helpfull, and in this particular case it patches the .aux file.
+  </para>
+  <para>
+   The post process script is called just before the last latex compilation, and takes one parameter, the latex file compiled by the tool.
+  </para>
+  </sect1>
+  <sect1 id="sec-specs">
+   <title>
+   Specification file
+  </title>
+  <para>
+   A master configuration file, also called a specification file, can be defined to list all the customizations and options to apply. Such a file is passed by using the option <option>-S <replaceable>specs</replaceable></option>.
+  </para>
+  <para>
+   The format of the file is the following:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   Every comment starts with a &ldquo;&num;&rdquo;, and is ignored.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The file must contain one parameter by line.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The format of a parameter is the following:
+   </para>
+   <programlisting>
+<![CDATA[<keyword>: <value>
+]]>   </programlisting>
+  </listitem>
+   <listitem>
+   <para>
+   Every parameter is mapped to an option that can be passed to <command>dblatex</command>.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   An unknown parameter is silently ignored (the whole line is dropped).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The parameters defining a path (a file or a directory) can take absolute or relative paths. A relative path must be defined from the specification file itself. For instance, a specification file under <filename>/the/spec/directory/</filename> with a parameter describing the file <filename>../where/this/file/is/myfile</filename> points to <filename>/the/spec/where/this/file/is/myfile</filename>.
+   </para>
+  </listitem>
+  </itemizedlist>
+  <para>
+   The following table lists the supported parameters and the corresponding command line option.
+  </para>
+&specparam;
+  <para>
+   Here is the specification file used for this manual.
+  </para>
+<example><title>Specification file example</title>
+&specmanual;
+</example>
+  </sect1>
+  <sect1>
+   <title>
+   Customization order
+  </title>
+  <para>
+   All the customization queries are translated to the corresponding command line options. Thus, using several customization methods can be unconsistent because each of them override the same option with another value. 
+  </para>
+  <para>
+   For instance, you can specify the use of a specification file in which it is said to use a latex style (parameter TexStyle) and explicitely use the <option>--style</option> command line option. So, what is the behaviour?
+  </para>
+  <para>
+   The options order is the following:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   If a specification file is used (<option>-S</option> option), the options are set to the specification file parameters.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The options explicitely passed override the specification file setting, whatever is the position of the options (i.e. before or after the <option>-S</option> option).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   If an option is passed several times, this is the last occurence that is used.
+   </para>
+  </listitem>
+  </itemizedlist>
+<example><title>Customization order</title>
+  <para>
+   Let's consider the specification file containing the following parameters:
+  </para>
+  <programlisting>
+<![CDATA[XslParam: file3.xsl
+]]><![CDATA[Options: -b pdftex 
+]]><![CDATA[TexStyle: mystyle1
+]]>  </programlisting>
+  <para>
+   And now the command line:
+  </para>
+  <programlisting>
+<![CDATA[dblatex -b dvips -p file1.xsl -p file2.xsl -S file.specs --style mystyle2 mydoc.sgml
+]]>  </programlisting>
+  <para>
+   The setting used is the following:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   &ldquo;-b dvips&rdquo; overrides &ldquo;-b pdftex&rdquo; set by the spec file.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   &ldquo;-p file2.xsl&rdquo; overrides &ldquo;-p file1.xsl&rdquo; since it is defined after, and overrides &ldquo;file3.xsl&rdquo; set by the spec file. 
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   &ldquo;--style mystyle2&rdquo; override &ldquo;mystyle1&rdquo; set by the spec file.
+   </para>
+  </listitem>
+  </itemizedlist>
+</example>
+  </sect1>
+ </chapter>
+

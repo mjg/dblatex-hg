@@ -51,7 +51,12 @@ lang).</para>
 <para><sgmltag>Qandaset</sgmltag> improved. <sgmltag>Qandadiv</sgmltag> can be nested under any section.</para>
 </listitem>
 <listitem>
-<para>Better <sgmltag>xref</sgmltag> support. Now <sgmltag>xreflabel</sgmltag>, <sgmltag>endterm</sgmltag> works.</para>
+<para>Better <sgmltag>xref</sgmltag> support. Now <sgmltag>xreflabel</sgmltag> and <sgmltag>endterm</sgmltag> work.</para>
+</listitem>
+<listitem>
+<para>The latex hyperref package is now automatically included in the dbk_core
+package. A customized LaTeX style package shouldn't include hyperref
+anymore.</para>
 </listitem>
 <listitem>
 <para><sgmltag>Link</sgmltag> now works.</para>
