@@ -92,10 +92,11 @@
       <xsl:with-param name="prop" select="'\textheight'"/>
     </xsl:call-template>
   </xsl:variable>
+  <!-- viewport is valid only if there's some viewport spec, and content or scale.
+       TDG says that viewport spec without content/scale and scalefit=0 is ignored. -->
   <xsl:variable name="viewport">
     <xsl:choose>
-    <xsl:when test="(@width or @depth) and (@contentwidth or @contentdepth or @scale
-                     or @scalefit='0')">
+    <xsl:when test="(@width or @depth) and (@contentwidth or @contentdepth or @scale)">
       <xsl:value-of select="1"/>
     </xsl:when>
     <xsl:otherwise>
@@ -113,11 +114,12 @@
   <xsl:if test="$viewport=1">
     <xsl:text>\begin{minipage}[c]</xsl:text>
     <xsl:if test="@depth">
+      <!-- depth -->
       <xsl:text>[</xsl:text>
       <xsl:value-of select="$depth"/>
       <xsl:text>]</xsl:text>
       <xsl:text>[</xsl:text>
-      <!-- vertical alignment -->
+      <!-- vertical alignment (meaningfull only with depth) -->
       <xsl:choose>
       <xsl:when test="@valign='bottom'">
         <xsl:text>b</xsl:text>
@@ -134,6 +136,7 @@
       </xsl:choose>
       <xsl:text>]</xsl:text>
     </xsl:if>
+    <!-- width -->
     <xsl:text>{</xsl:text>
     <xsl:choose>
     <xsl:when test="@width">
@@ -163,6 +166,7 @@
   </xsl:when>
   </xsl:choose>
   <xsl:text>{\includegraphics[</xsl:text>
+  <!-- TDG says that content, scale and scalefit are mutually exclusive -->
   <xsl:choose>
     <!-- content area spec -->
     <xsl:when test="@contentwidth or @contentdepth"> 
@@ -199,7 +203,7 @@
       <xsl:text>scale=</xsl:text>
       <xsl:value-of select="number(@scale) div 100"/>
     </xsl:when>
-    <!-- only content area spec with scalefit -->
+    <!-- only viewport area spec with scalefit -->
     <xsl:when test="not(@scalefit) or @scalefit='1'">
       <xsl:if test="@width">
         <xsl:text>width=</xsl:text>
@@ -211,6 +215,7 @@
         <xsl:value-of select="$depth"/>
         <xsl:text>,</xsl:text>
       </xsl:if>
+      <!-- TDG says that scale to fit cannot be anamorphic -->
       <xsl:text>keepaspectratio=true</xsl:text>
     </xsl:when>
   </xsl:choose>
