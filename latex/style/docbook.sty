@@ -40,6 +40,9 @@
 \newcommand{\DBKtoclof}{true}
 
 % Adaptation...
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
@@ -108,36 +111,7 @@
 \usepackage{tabularx}
 \usepackage{colortbl}
 
-\@ifundefined{hyperparam}{
-  \def\hyperparam{linktocpage,colorlinks,citecolor=blue}
-}
- 
-\@ifundefined{pdfoutput}{
-% Ce qui suit est a definir uniquement si on veut pouvoir aussi generer
-% du PDF avec ps2pdf.
-% Cela peut etre utile si la conversion des figures .eps en .pdf (via
-% epstopdf) apparait trop fastidieuse...
-  \usepackage{pslatex}
-  \ifthenelse{\equal{\DBKhyperlink}{yes}}{
-    %% Hyper-liens en couleur pour fichier PDF
-    \usepackage[dvips,
-                \hyperparam,
-                pdftitle={\DBKtitle},
-                pdfsubject={\DBKsubject},
-                pdfauthor={\DBKredacteur}]{hyperref}
-    \def\hyperlabel#1{\Hy@raisedlink{\hyper@anchorstart{#1}\hyper@anchorend}}
-  }{
-    %% Hyper-liens en Noir&Blanc pour fichier PS
-    %\usepackage[dvips,linktocpage,
-      %pdftitle={\DBKtitle},
-      %pdfsubject={\DBKsubject},
-      %pdfauthor={\DBKredacteur}]{hyperref}
-  }
-}{
-  \usepackage{pslatex}
-  \usepackage[pdftex,\hyperparam]{hyperref}
-  \def\hyperlabel#1{\hypertarget{#1}{}}
-}
+\usepackage{dbk_hyper}
 
 \usepackage{fancyhdr}
 
