@@ -93,7 +93,7 @@
 <!-- ==================================================================== -->
 <!-- some special cases -->
 
-<xsl:template match="author|editor|othercredit">
+<xsl:template match="author|editor|othercredit|personname">
   <xsl:call-template name="person.name"/>
 </xsl:template>
 
