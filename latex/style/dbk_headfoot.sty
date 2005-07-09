@@ -1,36 +1,38 @@
 % ##############################################################################
-% ### En-tete et pied de page
+% ### Header and Footer Page
 % ##############################################################################
 
-\pagestyle{fancy}
+\pagestyle{fancyplain}
 \renewcommand{\headrulewidth}{0.5pt}
 \renewcommand{\footrulewidth}{0.5pt}
+\renewcommand{\plainheadrulewidth}{0.5pt}
+\renewcommand{\plainfootrulewidth}{0.5pt}
 \setcounter{page}{1}
 
-% Entete et pied de page de la premiere page
+% Fancy header/footer for the first page
 
 \chead[]{%
-	\begin{tabular}{
+  \begin{tabular}{
     >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
-		\multirow{3}{5.6cm}{\DBKtitle}
+    \multirow{3}{5.6cm}{\DBKtitle}
     & & \tabularnewline%
-		& \framebox{\textsc{\textsf{\DBKreleaseinfo}}}
+    & \framebox{\textsc{\textsf{\DBKreleaseinfo}}}
     & \textsf{\arabic{page} / \getpagerefnumber{LastPage}} \tabularnewline %
-		& & \tabularnewline%
-	\end{tabular}%
+    & & \tabularnewline%
+  \end{tabular}%
 } %
 
-% Entete et pied de page du corps du doc
+% Fancy header/footer for the doc body
 
 \def\DBKcheadbody{%
-	\begin{tabular}{
+  \begin{tabular}{
     >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
-		\multirow{3}{5.6cm}{\DBKtitle}
+    \multirow{3}{5.6cm}{\DBKtitle}
     & & \textsf{\DBKreference{} Ed. \DBKedition} \tabularnewline%
-		& \framebox{\textsc{\textsf{\DBKreleaseinfo}}} &  \tabularnewline %
-		& & \textsf{\arabic{page} / \getpagerefnumber{LastPage}}
+    & \framebox{\textsc{\textsf{\DBKreleaseinfo}}} &  \tabularnewline %
+    & & \textsf{\arabic{page} / \getpagerefnumber{LastPage}}
   \tabularnewline%
-	\end{tabular}%
+  \end{tabular}%
 }
 
 \lhead[]{}
