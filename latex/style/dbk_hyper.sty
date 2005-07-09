@@ -8,7 +8,7 @@
 
 \ifthenelse{\equal{\DBKhyperlink}{yes}}{
   \@ifundefined{hyperparam}{
-    \def\hyperparam{linktocpage,colorlinks,citecolor=blue}
+    \def\hyperparam{linktocpage,colorlinks,citecolor=blue,pdfstartview=FitH}
   }{}
   \@ifundefined{pdfoutput}{
     \usepackage[dvips,\hyperparam]{hyperref}
