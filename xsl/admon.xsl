@@ -22,6 +22,8 @@
   <xsl:text>\end{DBKadmonition}&#10;</xsl:text>
 </xsl:template>
 
+<xsl:template match="note/title|important/title|
+                     warning/title|caution/title|tip/title"/>
 
 <xsl:template name="admon.graphic">
   <xsl:param name="node" select="."/>
