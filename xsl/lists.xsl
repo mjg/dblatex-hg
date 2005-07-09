@@ -59,11 +59,10 @@
 </xsl:template>
 
 <xsl:template match="varlistentry/term">
-  <xsl:apply-templates/><xsl:text>, </xsl:text>
-</xsl:template>
-
-<xsl:template match="varlistentry/term[position()=last()]">
   <xsl:apply-templates/>
+  <xsl:if test="position()!=last()">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="varlistentry/listitem">
