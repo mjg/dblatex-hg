@@ -185,7 +185,8 @@ if [ -f $upwd/$file ]; then
 fi
 
 # Let's convert to XML first if needed
-if [ "$basefile" != "$sgmlfile" ]; then
+is_xml=`file $file| grep -c "XML"`
+if [ $is_xml -eq 0 ]; then
   $scriptpath/sgml2xml.pl - $file $sgmlfile.xml
   file=${sgmlfile}.xml
 fi
@@ -224,6 +225,7 @@ gmake -s -C $tmpdir -f $scriptpath/make.build \
         XPATH="$xpath" \
         XSL=$xsl \
         XOPT=$xopt \
+        XMLFILE=$file \
         TEXCLEAN=$scriptpath/texclean \
         FIG2DEV=$fig2dev \
         TEXRUN="$btexrun" TEXDRV=$btex $out
@@ -240,6 +242,7 @@ if [ $debug -eq 0 ]; then
 else
   # For easy debug
   echo "TEXINPUTS=$TEXINPUTS" > $tmpdir/env_tex
+  echo "export TEXINPUTS"    >> $tmpdir/env_tex
   echo "$tmpdir is not removed"
 fi
 exit $rc

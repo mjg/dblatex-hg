@@ -39,12 +39,13 @@ endif
 %.tex: %.rtex FORCE
 	@$(TEXCLEAN) -b $(TEXDRV) -p $(SRCDIR) -f "$(FIG2DEV)" $< $@
 
-%.rtex: %.xml FORCE
+%.rtex: $(XMLFILE) FORCE
 ifeq ($(XSLT),xt)
 	java com.jclark.xsl.sax.Driver $< $(XSL) > $@
 else
 ifeq ($(XSLT),xsltproc)
 	xsltproc --catalogs $(XOPT) $(XSL) $< > $@
+#	xsltproc --catalogs --novalid $(XOPT) $(XSL) $< > $@
 #	xsltproc --catalogs --novalid --timing --profile $(XSL) $< > $@
 endif
 endif
