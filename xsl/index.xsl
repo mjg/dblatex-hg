@@ -10,14 +10,15 @@
   <!-- actual sorting entry -->
   <xsl:if test="$node/@sortas">
     <xsl:value-of select="normalize-space($node/@sortas)"/>
-    <xsl:text>@</xsl:text>
+    <xsl:text>@{</xsl:text>
   </xsl:if>
   <!-- entry display -->
-  <xsl:text>{</xsl:text>
   <xsl:call-template name="normalize-scape">
     <xsl:with-param name="string" select="$node"/>
   </xsl:call-template>
-  <xsl:text>}</xsl:text>
+  <xsl:if test="$node/@sortas">
+    <xsl:text>}</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="indexterm">
