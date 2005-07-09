@@ -28,7 +28,6 @@
   <xsl:copy-of select="$normalized.title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
-  <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
   <xsl:apply-templates/>
 </xsl:template>
 

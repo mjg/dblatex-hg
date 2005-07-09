@@ -22,9 +22,6 @@
   <xsl:value-of select="title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
-  <xsl:if test="$level='0'">
-    <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
-  </xsl:if>
 
   <xsl:text>\begin{bibgroup}&#10;</xsl:text>
   <xsl:text>\begin{thebibliography}{</xsl:text>
@@ -91,9 +88,6 @@
     <xsl:value-of select="(title|bibliographyinfo/title)[1]"/>
     <xsl:text>}&#10;</xsl:text>
     <xsl:call-template name="label.id"/>
-    <xsl:if test="$level='0'">
-      <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
-    </xsl:if>
   </xsl:otherwise>
   </xsl:choose>
   <xsl:apply-templates select="bibliodiv"/> 

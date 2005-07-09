@@ -12,7 +12,6 @@
   <xsl:text>% Chapter &#10;</xsl:text>
   <xsl:text>% ------- &#10;</xsl:text>
   <xsl:call-template name="element.and.label"/>
-  <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
   <xsl:apply-templates/>
 </xsl:template>
 
