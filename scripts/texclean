@@ -17,6 +17,7 @@ $nbcols = 0;
 
 $force_hyphen = 1;
 $istable = 0;
+$tblparse = 0;
 
 #
 # Mémorisation d'infos de l'entete : la taille des colonnes et leur alignement
@@ -93,9 +94,8 @@ sub hline2cline
 }
 
 #
-# Fonction principale de traitement des lignes de tableau. Le principe est
-# de traiter ligne par ligne de tableau, et de n'afficher cette
-# ligne qu'une fois traitée.
+# Main parsing table routine. The principle is to process each table row
+# when rows are complete (a row can cover several lines).
 #
 sub table_parse
 {
@@ -104,47 +104,58 @@ sub table_parse
   my $i, $pos;
   my @columns = ();
 
+  if (/%%% parse_table/) {
+    # note that the following table will need to be parsed
+    $tblparse = 1;
+    # print "Parsing table\n";
+  }
   if (/begin{longtable}/) {
     $istable = 1;
-    prepare_table($_);
+    if ($tblparse) {
+      prepare_table($_);
+    }
   }
   if (not($istable)) {
     print $to $line;
     return;
   }
-  $row = "$row$line";
   if (/end{longtable}/) {
     #
-    # c'est fini, on purge la ligne
+    # table ends, flush the current row
     #
+    print $to "$row$line";
     $istable = 0;
-    print $to $row;
+    $tblparse = 0;
     $row = "";
     $nbcols = 0;
     return;
   }
+  # if no parsing, just print the line
+  if (not($tblparse)) {
+    print $to $line;
+    return;
+  }
   
   #
-  # on ne traite qu'une ligne qui se termine
+  # when parsing, only process a complete row
   #
+  $row = "$row$line";
   if (not(/\\tabularnewline/)) {
     return;
   }
   #
-  # pour la ligne précédente, on trace la bordure selon les cellules qui
-  # chevauchent plusieurs lignes.
+  # for the previous row, print borders (depends on pending multirow cells)
   #
   ($brow, $row, $erow) = hline2cline($row, $nbcols);
   @columns = split('&', $row);
   $nbcols = ($#columns > $nbcols) ? $#columns : $nbcols;
 
   #
-  # pour chaque cellule de la ligne :
-  # - insertion des cellules vides dues à des cellules sur plusieurs
-  #   lignes,
-  # - décompte par colonne des cellules vides,
-  # - mémorisation des nouvelles cellules sur plusieurs lignes
-  # - mise en forme des cellules "multirow"
+  # for each column, for the current row:
+  # - insert the empty cells due to pending mrow cells,
+  # - update the pending mrow cells count,
+  # - setup the new pending mrow cells,
+  # - print the "multirow" cells
   #
   print $to $brow;
 
@@ -153,8 +164,8 @@ sub table_parse
 
     if ($mrows[$pos] > 0) {
       #
-      # insertion d'une cellule vide, et on la décompte des cellules couvertes
-      # pour les lignes suivantes de cette colonne.
+      # insert an empty cell, and update the pending mrow cells for this
+      # column.
       #
       print $to " & ";
       $mrows[$pos] --;
@@ -178,20 +189,19 @@ sub table_parse
         }
       }
       if ($c =~ /multirow/) {
-        # get the rows count
+        # set the pending mrows cells count
         $mrows[$pos] = $c;
         $mrows[$pos] =~ s/\n//g;
         $mrows[$pos] =~ s/.*multirow{([^}]*)}.*/$1/;
         $mrows[$pos] -= 1;
         #
-        # on met la taille de la colonne
-        # ainsi que l'alignement de la colonne, qui est perdu sinon par
-        # multirow (qui aligne par défaut à gauche)
+        # set the column size and its alignment (which is lost by
+        # multirow that aligns to left by default)
         #
         $s = $sizes[$pos];
         $a = $aligs[$pos];
         $c =~ s/\*{/{$s}{$a /;
-        # macro à utiliser au lieu de multirow, pour que ça marche avec tsize
+        # macro to use instead of multirow, to be compatible with \tsize
         $c =~ s/multirow/mrow/;
       }
       # shift the multicolums
@@ -203,7 +213,7 @@ sub table_parse
       }
       print $to $c;
       if ($i < $#columns) {
-        # on écrit le séparateur
+        # print the separator
         print $to " & ";
       }
       $i ++;
@@ -229,12 +239,16 @@ sub translate
   $line =~ s/{/\\{/g;
   $line =~ s/}/\\}/g;
   $line =~ s/%/\\%/g;
+  $line =~ s/&#732;/\\textasciitilde{}/g;
+  $line =~ s/&#8211;/\\textendash{}/g;
+  $line =~ s/&#8212;/\\textemdash{}/g;
   $line =~ s/&#8220;/{}``/g;
   $line =~ s/&#8221;/{}''/g;
-  $line =~ s/&#732;/\\textasciitilde{}/g;
+  $line =~ s/&#x2DC;/\\textasciitilde{}/g;
+  $line =~ s/&#x2013;/\\textendash{}/g;
+  $line =~ s/&#x2014;/\\textemdash{}/g;
   $line =~ s/&#x201C;/{}``/g;
   $line =~ s/&#x201D;/{}''/g;
-  $line =~ s/&&#x2DC;/\\textasciitilde{}/g;
   $line =~ s/&/\\&/g;
   $line =~ s/#/\\#/g;
   $line =~ s/\$/\\\$/g;
