@@ -176,7 +176,7 @@ sub table_parse
       # shift to the real position
       if ($c =~ /%<num=/) {
         $rpos = $c;
-        $rpos =~ s/.*%<num=([^>]*).*\n/$1/;
+        $rpos =~ s/[^%]*%<num=([^>]*).*\n/$1/;
         $rpos -= 1;
         # skip the info
         $c =~ s/%<num=.*>%\n//;
@@ -252,7 +252,7 @@ sub translate
   $line =~ s/&/\\&/g;
   $line =~ s/#/\\#/g;
   $line =~ s/\$/\\\$/g;
-  $line =~ s/ /~/g;
+  $line =~ s/\240/~/g;
   $line =~ s/\\textbackslash/\\textbackslash{}/g;
   $line =~ s/\327/\$\\times\$/g;
   $line =~ s/°/\\ensuremath{°}/g;
