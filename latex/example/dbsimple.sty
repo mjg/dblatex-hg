@@ -9,9 +9,6 @@
 \DeclareOption{nohyperlink}{ \def\DBKhyperlink{no} }
 \DeclareOption{article}{ \def\DBKisarticle{yes} }
 \DeclareOption{report}{ \def\DBKisarticle{no} }
-\DeclareOption{fr}{ \def\DBKlocale{fr} }
-\DeclareOption{en}{ \def\DBKlocale{en} }
-\DeclareOption{nl}{ \def\DBKlocale{nl} }
 
 % Default values
 \ExecuteOptions{nohyperlink,report,en}
@@ -62,7 +59,7 @@
 
 \floatstyle{ruled}
 \newfloat{example}{ht}{loe}[section]
-\floatname{example}{Exemple}
+\floatname{example}{Example}
 
 \floatstyle{plain}
 \newfloat{dbequation}{ht}{loe}[section]
