@@ -12,6 +12,11 @@
 \usepackage{multirow}
 \usepackage{calc}
 
+% Temporary latex/3797 bug fix (colortbl) by Morten Hoegholm
+\expandafter\renewcommand\expandafter\multicolumn
+  \expandafter[\expandafter3\expandafter]\expandafter{%
+  \multicolumn{#1}{#2}{#3}}
+
 % For the newtbl code
 \newdimen\newtblstarfactor%
 \newdimen\newtblsparewidth%
@@ -22,7 +27,7 @@
 \newdimen\cellsz
 \newcounter{colnb}
 
-% Taille de marge d'une cellule
+% Margin cell size
 \setlength{\mcellsz}{4mm}
 
 % Méthode pour redimensionner les colonnes d'un tableau

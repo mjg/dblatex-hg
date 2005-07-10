@@ -109,7 +109,6 @@
 \usepackage{subfigure}
 \usepackage{ifthen}
 \usepackage{tabularx}
-\usepackage{colortbl}
 
 \usepackage{dbk_hyper}
 
@@ -174,26 +173,26 @@
 % Redéfinition de index, pour avoir l'entete+pied de page et le nombre total
 % de pages
 \renewenvironment{theindex}
-               {\if@twocolumn
-                  \@restonecolfalse
-                \else
-                  \@restonecoltrue
-                \fi
-                \columnseprule \z@
-                \columnsep 35\p@
-                \pagebreak
-                \refstepcounter{chapter}
-                % Pour ne pas avoir le numéro, remplacer makechapterhead par
-                % makeschapterhead
-                \twocolumn[\@makechapterhead{\indexname}]%
-                % \chapter{\indexname}{%
-                % \@mkboth{\MakeUppercase\indexname}%
-                %        {\MakeUppercase\indexname}
-                % }%
-                \thispagestyle{plain}\parindent\z@
-                \parskip\z@ \@plus .3\p@\relax
-                \let\item\@idxitem}
-               {\if@restonecol\onecolumn\else\clearpage\fi}
+  {\if@twocolumn
+     \@restonecolfalse
+   \else
+     \@restonecoltrue
+   \fi
+   \columnseprule \z@
+   \columnsep 35\p@
+   \pagebreak
+   \refstepcounter{chapter}
+   % Pour ne pas avoir le numéro, remplacer makechapterhead par
+   % makeschapterhead
+   \twocolumn[\@makechapterhead{\indexname}]%
+   % \chapter{\indexname}{%
+   % \@mkboth{\MakeUppercase\indexname}%
+   %        {\MakeUppercase\indexname}
+   % }%
+   \thispagestyle{plain}\parindent\z@
+   \parskip\z@ \@plus .3\p@\relax
+   \let\item\@idxitem}
+  {\if@restonecol\onecolumn\else\clearpage\fi}
 
 \let\stdindex=\theindex
 \let\endstdindex=\endtheindex
