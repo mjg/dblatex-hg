@@ -14,7 +14,6 @@
   <xsl:text>% Reference &#10;</xsl:text>
   <xsl:text>% ---------&#10;</xsl:text>
   <xsl:call-template name="element.and.label"/>
-  <xsl:text>\thispagestyle{fancy}&#10;</xsl:text>
   <xsl:apply-templates select="partintro"/>
   <xsl:apply-templates select="*[local-name(.) != 'partintro']"/>
 </xsl:template>
@@ -22,6 +21,7 @@
 <xsl:template match="reference/docinfo"/>
 <xsl:template match="reference/title"/>  
 <xsl:template match="reference/subtitle"/>
+<xsl:template match="refentryinfo|refentryinfo/*"/>
 
 <!-- ############
      # refentry #
@@ -35,10 +35,10 @@
   <xsl:variable name="title">
     <xsl:choose>
     <xsl:when test="$refentrytitle">
-      <xsl:apply-templates select="$refentrytitle[1]" mode="title"/>
+      <xsl:apply-templates select="$refentrytitle[1]"/>
     </xsl:when>
     <xsl:when test="$refname">
-      <xsl:apply-templates select="$refname[1]" mode="title"/>
+      <xsl:apply-templates select="$refname[1]"/>
     </xsl:when>
     <xsl:otherwise></xsl:otherwise>
   </xsl:choose>
