@@ -9,13 +9,14 @@
 </xsl:template>
 
 <xsl:template match="procedure/title"/>
+<xsl:template match="step/title"/>
 
 <xsl:template match="step">
   <xsl:text>\item{</xsl:text>
   <xsl:call-template name="label.id"/>
   <xsl:if test="title">
     <xsl:text>{\sc </xsl:text>
-    <xsl:apply-templates select="title"/>
+    <xsl:value-of select="title"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:apply-templates/>
