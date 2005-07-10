@@ -52,6 +52,13 @@ MATHML 2.0 SUPPORT
   used here are derived from the original package and are not maintained by the
   xsltml author or maintainer.
 
+NEW TABLE SUPPORT
+--------------------------------------------------------------------------------
+  The newtbl code (http://www.vistair.com/newtbl) by David Hedley is now
+  included to drive the DocBook tables.
+  One can switch to this very good implementation by setting the parameter
+  newtbl.use='1'. 
+
 MISCELLANEOUS
 --------------------------------------------------------------------------------
   * string-replace by David Carlisle http://www.jclark.com
