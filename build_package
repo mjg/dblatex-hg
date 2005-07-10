@@ -3,6 +3,7 @@
 use_ssh=0
 use_remote=`cat CVS/Root | grep -c "@"`
 cvspackage=`cat CVS/Repository`
+cvsroot=`cat CVS/Root`
 
 # we can force some behaviour
 while true
@@ -24,13 +25,16 @@ if [ $use_ssh -eq 1 ]; then
 elif [ $use_remote -ne 0 ]; then
   CVSROOT=:pserver:anonymous@cvs.sourceforge.net:/cvsroot/dblatex
   export CVSROOT
+else
+  CVSROOT=$cvsroot
+  export CVSROOT
 fi
 
 package=dblatex
 
 if [ $# -lt 1 ]; then
   echo "$0 [--ssh] vX_Y_Z"
-	exit 1
+  exit 1
 fi
 tag=$1
 
