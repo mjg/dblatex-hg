@@ -11,6 +11,8 @@
 <xsl:param name="latex.output.revhistory">1</xsl:param>
 <xsl:param name="latex.figure.position">[htbp]</xsl:param>
 <xsl:param name="latex.figure.boxed">0</xsl:param>
+<xsl:param name="latex.babel.use">1</xsl:param>
+<xsl:param name="latex.babel.language"/>
 <xsl:param name="biblioentry.item.separator">, </xsl:param>
 
 <!-- Default behaviour setting -->
