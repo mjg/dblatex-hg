@@ -57,6 +57,29 @@
 </xsl:template>
 
 
+<xsl:template name="scape.index">
+  <xsl:param name="string"/>
+  <xsl:call-template name="string-replace">
+  <xsl:with-param name="from">@</xsl:with-param>
+  <xsl:with-param name="to">"@</xsl:with-param>
+  <xsl:with-param name="string">
+    <xsl:call-template name="string-replace">
+    <xsl:with-param name="from">!</xsl:with-param>
+    <xsl:with-param name="to">"!</xsl:with-param>
+    <xsl:with-param name="string">
+      <xsl:call-template name="string-replace">
+      <xsl:with-param name="from">|</xsl:with-param>
+      <xsl:with-param name="to">\ensuremath{"|}</xsl:with-param>
+      <xsl:with-param name="string">
+        <xsl:call-template name="tex-format">
+          <xsl:with-param name="string" select="normalize-space($string)"/>
+        </xsl:call-template>
+      </xsl:with-param>
+      </xsl:call-template></xsl:with-param>
+    </xsl:call-template></xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
 <!-- To do: how to scape tabs? xt plants -->
 <xsl:template match="text()" mode="latex.programlisting">
   <xsl:value-of select="."/> 
@@ -69,7 +92,7 @@
   </xsl:call-template>
 </xsl:template>
 
-
+<!-- Old "scape" routine replaced by a cleaner engine -->
 <xsl:template name="scape2" >
   <xsl:param name="string"/>
   <xsl:call-template name="string-replace">
@@ -122,8 +145,8 @@
 
 
 <!--  (c) David Carlisle
-  replace all occurences of the character(s) `from'
-       by the string `to' in the string `string'.
+      replace all occurences of the character(s) `from'
+      by the string `to' in the string `string'.
   -->
 <xsl:template name="string-replace" >
   <xsl:param name="string"/>

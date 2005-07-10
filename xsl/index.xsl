@@ -9,11 +9,13 @@
   <xsl:param name="node" select="."/>
   <!-- actual sorting entry -->
   <xsl:if test="$node/@sortas">
-    <xsl:value-of select="normalize-space($node/@sortas)"/>
+    <xsl:call-template name="scape.index">
+      <xsl:with-param name="string" select="$node/@sortas"/>
+    </xsl:call-template>
     <xsl:text>@{</xsl:text>
   </xsl:if>
   <!-- entry display -->
-  <xsl:call-template name="normalize-scape">
+  <xsl:call-template name="scape.index">
     <xsl:with-param name="string" select="$node"/>
   </xsl:call-template>
   <xsl:if test="$node/@sortas">
