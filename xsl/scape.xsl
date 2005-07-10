@@ -15,32 +15,47 @@
   <xsl:value-of select="."/> 
 </xsl:template>
 
-<xsl:template match="text()" mode="slash.hyphen">
+<xsl:template name="do.slash.hyphen">
+  <xsl:param name="str"/>
   <xsl:choose>
-  <xsl:when test="contains(.,'://')">
+  <xsl:when test="contains($str,'/')">
     <xsl:call-template name="scape">
-    <xsl:with-param name="string">
-      <xsl:value-of select="substring-before(.,'://')"/>
-      <xsl:value-of select="'://'"/>
-      <xsl:call-template name="string-replace">
-      <xsl:with-param name="to">/\-</xsl:with-param>
-      <xsl:with-param name="from">/</xsl:with-param>
-      <xsl:with-param name="string" select="substring-after(.,'://')"/>
-      </xsl:call-template></xsl:with-param>
+      <xsl:with-param name="string" select="substring-before($str,'/')"/>
+    </xsl:call-template>
+    <xsl:text>/\-</xsl:text>
+    <xsl:call-template name="do.slash.hyphen">
+      <xsl:with-param name="str" select="substring-after($str,'/')"/>
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="scape">
-    <xsl:with-param name="string">
-      <xsl:call-template name="string-replace">
-      <xsl:with-param name="to">/\-</xsl:with-param>
-      <xsl:with-param name="from">/</xsl:with-param>
-      <xsl:with-param name="string" select="."/>
-      </xsl:call-template></xsl:with-param>
+      <xsl:with-param name="string" select="$str"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<xsl:template match="text()" mode="slash.hyphen">
+  <xsl:choose>
+  <xsl:when test="contains(.,'://')">
+    <xsl:call-template name="scape">
+      <xsl:with-param name="string">
+        <xsl:value-of select="substring-before(.,'://')"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:value-of select="'://'"/>
+    <xsl:call-template name="do.slash.hyphen">
+      <xsl:with-param name="str" select="substring-after(.,'://')"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="do.slash.hyphen">
+      <xsl:with-param name="str" select="."/>
+    </xsl:call-template>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <!-- To do: how to scape tabs? xt plants -->
 <xsl:template match="text()" mode="latex.programlisting">
@@ -55,7 +70,7 @@
 </xsl:template>
 
 
-<xsl:template name="scape" >
+<xsl:template name="scape2" >
   <xsl:param name="string"/>
   <xsl:call-template name="string-replace">
   <xsl:with-param name="to">$&lt;$</xsl:with-param>
