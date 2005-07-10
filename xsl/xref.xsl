@@ -26,12 +26,6 @@
   <xsl:otherwise>
     <xsl:variable name="text">
       <xsl:choose>
-      <!-- If an xreflabel has been specified for the target -->
-      <xsl:when test="$target/@xreflabel">
-        <xsl:text>"</xsl:text>
-        <xsl:value-of select="$target/@xreflabel"/>
-        <xsl:text>"</xsl:text>
-      </xsl:when>
       <!-- If there is an endterm -->
       <xsl:when test="@endterm">
         <xsl:variable name="etarget" select="id(@endterm)[1]"/>
@@ -48,6 +42,12 @@
           <xsl:apply-templates select="$etarget" mode="xref.text"/>
         </xsl:otherwise>
         </xsl:choose>
+      </xsl:when>
+      <!-- If an xreflabel has been specified for the target -->
+      <xsl:when test="$target/@xreflabel">
+        <xsl:text>"</xsl:text>
+        <xsl:value-of select="$target/@xreflabel"/>
+        <xsl:text>"</xsl:text>
       </xsl:when>
       <!-- nothing specified -->
       <xsl:otherwise/>
@@ -72,12 +72,21 @@
 </xsl:template>
 
 <xsl:template match="ulink">
-  <xsl:text>\href{</xsl:text>
-  <xsl:value-of select="@url"/>
-  <xsl:text>}{</xsl:text>
-  <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
-  <xsl:apply-templates mode="slash.hyphen"/>
-  <xsl:text>}</xsl:text>
+  <xsl:choose>
+  <xsl:when test=".=''">
+    <xsl:text>\url{</xsl:text>
+    <xsl:value-of select="@url"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\href{</xsl:text>
+    <xsl:value-of select="@url"/>
+    <xsl:text>}{</xsl:text>
+    <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
+    <xsl:apply-templates mode="slash.hyphen"/>
+    <xsl:text>}</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- it now works thanks to "hyperlabel" -->
@@ -92,7 +101,7 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:copy-of select="id(@endterm)[1]"/>
-	</xsl:otherwise>
+  </xsl:otherwise>
   </xsl:choose>
   <xsl:text>}</xsl:text>
 </xsl:template>
@@ -130,10 +139,10 @@
                   or name($target) = 'index'
                   or name($target) = 'setindex'
                   or name($target) = 'colophon'">
-      <!-- xsl:call-template name="gentext.startquote"/ -->
+    <!-- xsl:call-template name="gentext.startquote"/ -->
     <xsl:text>"</xsl:text>
-      <xsl:apply-templates select="$target" mode="title.content"/>
-        <!-- xsl:call-template name="gentext.endquote"/ -->
+    <xsl:apply-templates select="$target" mode="title.content"/>
+    <!-- xsl:call-template name="gentext.endquote"/ -->
     <xsl:text>"</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -229,7 +238,7 @@
 
 <xsl:template match="cmdsynopsis" mode="xref-to">
   <xsl:variable name="command" select="(.//command)[1]"/>
-	<xsl:apply-templates select="$command" mode="xref"/>
+  <xsl:apply-templates select="$command" mode="xref"/>
 </xsl:template>
 
 <xsl:template match="funcsynopsis" mode="xref-to">
