@@ -3,7 +3,7 @@
 
 <!-- We want the TOC links in the titles, and in blue.
  -->
-<xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue</xsl:param>
+<xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue,pdfstartview=FitH</xsl:param>
 <xsl:param name="latex.style">tas_model2</xsl:param>
 
 </xsl:stylesheet>
