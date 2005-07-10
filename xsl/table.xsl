@@ -1,104 +1,11 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
 
-<xsl:template match="table">
-  <xsl:call-template name="resizetable">
-    <xsl:with-param name="pos" select="'1'"/>
-    <xsl:with-param name="variacols" select="tgroup/@cols"/>
-    <xsl:with-param name="fixedcols" select="'0'"/>
-    <xsl:with-param name="fixedwidth" select="'0'"/>
-    <xsl:with-param name="colspecs" select="./tgroup/colspec"/>
-  </xsl:call-template>
-  <!-- do we need to change text size? -->
-  <xsl:variable name="size">
-    <xsl:choose>
-    <xsl:when test="@role='small' or @role='footnotesize' or
-                    @role='scriptsize' or @role='tiny'">
-      <xsl:value-of select="@role"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>normal</xsl:text>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:if test="@orient='land'">
-    <xsl:text>\begin{landscape}&#10;</xsl:text>
-  </xsl:if>
-  <xsl:text>\begin{table}[htbp]&#10;</xsl:text>
-  <xsl:if test="$size!='normal'">
-    <xsl:text>\begin{</xsl:text>
-    <xsl:value-of select="$size"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
-  <xsl:text>\begin{center}&#10;</xsl:text>
-  <xsl:apply-templates/>
-  <xsl:text>&#10;\end{center}&#10;</xsl:text>
-  <xsl:if test="$size!='normal'">
-    <xsl:text>\end{</xsl:text>
-    <xsl:value-of select="$size"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
-  <xsl:text>&#10;\caption{</xsl:text>
-  <xsl:choose> 
-    <xsl:when test="title">
-      <xsl:call-template name="normalize-scape">
-        <xsl:with-param name="string" select="title"/>
-      </xsl:call-template>
-    </xsl:when> 
-    <xsl:otherwise>
-      <xsl:text>*** Title expected</xsl:text>
-    </xsl:otherwise> 
-  </xsl:choose>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
-  <xsl:text>\end{table}&#10;</xsl:text>
-  <xsl:if test="@orient='land'">
-    <xsl:text>\end{landscape}&#10;</xsl:text>
-  </xsl:if>
-</xsl:template>
+<!--############################################################################
+    XSLT Stylesheet DocBook -> LaTeX 
+    ############################################################################ -->
 
-<xsl:template match="table/title"/>
-
-<xsl:template match="informaltable">
-  <xsl:call-template name="resizetable">
-    <xsl:with-param name="pos" select="'1'"/>
-    <xsl:with-param name="variacols" select="tgroup/@cols"/>
-    <xsl:with-param name="fixedcols" select="'0'"/>
-    <xsl:with-param name="fixedwidth" select="'0'"/>
-    <xsl:with-param name="colspecs" select="./tgroup/colspec"/>
-  </xsl:call-template>
-  <!-- do we need to change text size? -->
-  <xsl:variable name="size">
-    <xsl:choose>
-    <xsl:when test="@role='small' or @role='footnotesize' or
-                    @role='scriptsize' or @role='tiny'">
-      <xsl:value-of select="@role"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>normal</xsl:text>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:if test="@orient='land'">
-    <xsl:text>\begin{landscape}&#10;</xsl:text>
-  </xsl:if>
-  <xsl:if test="$size!='normal'">
-    <xsl:text>\begin{</xsl:text>
-    <xsl:value-of select="$size"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
-  <xsl:text>\begin{center}&#10;</xsl:text>
-  <xsl:apply-templates/>
-  <xsl:text>\end{center}&#10;</xsl:text>
-  <xsl:if test="$size!='normal'">
-    <xsl:text>\end{</xsl:text>
-    <xsl:value-of select="$size"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
-  <xsl:if test="@orient='land'">
-    <xsl:text>\end{landscape}&#10;</xsl:text>
-  </xsl:if>
-</xsl:template>
+<!-- Table group formatting expecting texclean post-processing -->
 
 <xsl:template name="tgroup.build">
   <xsl:param name="kind"/>
@@ -139,8 +46,8 @@
 
 <xsl:template match="tgroup">
   <xsl:call-template name="tgroup.build">
-  <!-- Maybe we should use tabular... -->
-  <xsl:with-param name="kind" select="'longtable'"/>
+    <!-- Maybe we should use tabular... -->
+    <xsl:with-param name="kind" select="'longtable'"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -289,11 +196,15 @@
 </xsl:template>
 
 <xsl:template match="thead/row/entry">
-<xsl:apply-templates/><xsl:text> &amp; </xsl:text> 
-</xsl:template>
-
-<xsl:template match="thead/row/entry[position()=last()]">
-<xsl:apply-templates/><xsl:text> \tabularnewline &#10;</xsl:text> 
+  <xsl:apply-templates/>
+  <xsl:choose>
+  <xsl:when test="position()=last()">
+    <xsl:text> \tabularnewline &#10;</xsl:text> 
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text> &amp; </xsl:text> 
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- the function gives the colnum of a colspec by selecting the closest preceding
