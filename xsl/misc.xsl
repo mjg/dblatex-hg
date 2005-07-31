@@ -118,6 +118,11 @@
     <xsl:value-of select="normalize-space($info/pubsnumber)"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
+  <xsl:if test="$info/pubdate">
+    <xsl:text>\renewcommand{\DBKpubdate}{</xsl:text>
+    <xsl:value-of select="normalize-space($info/pubdate)"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
   <xsl:if test="$info/address">
     <xsl:text>\renewcommand{\DBKsite}{</xsl:text>
     <xsl:value-of select="normalize-space($info/address)"/>
@@ -128,6 +133,11 @@
     <xsl:call-template name="normalize-scape">
       <xsl:with-param name="string" select="$info/edition"/>
     </xsl:call-template>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$info/copyright">
+    <xsl:text>\renewcommand{\DBKcopyright}{</xsl:text>
+    <xsl:apply-templates select="$info/copyright" mode="bibliography.mode"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:if test="$info/subtitle">
@@ -229,9 +239,12 @@
   <xsl:text>}&#10;</xsl:text>
 
   <!-- Apply the revision history here -->
-  <xsl:if test="bookinfo/revhistory">
-    <xsl:apply-templates select="bookinfo/revhistory"/>
-  </xsl:if>
+  <xsl:apply-templates select="bookinfo/revhistory"/>
+
+  <!-- Apply the legalnotices here -->
+  <xsl:call-template name="print.legalnotice">
+    <xsl:with-param name="nodes" select="bookinfo/legalnotice"/>
+  </xsl:call-template>
 
   <xsl:value-of select="$latex.book.begindocument"/>
   <xsl:text>\long\def\hyper@section@backref#1#2#3{%&#10;</xsl:text>

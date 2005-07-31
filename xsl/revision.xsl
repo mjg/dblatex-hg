@@ -7,33 +7,33 @@
 
 
 <xsl:template match="revhistory">
-<xsl:if test="$latex.output.revhistory=1">
-	<xsl:message>Processing Revision History </xsl:message>
-	<xsl:text>
-%% -------------------
-%% Table des Revisions
-%% -------------------
+  <xsl:if test="$latex.output.revhistory=1">
+    <xsl:message>Processing Revision History </xsl:message>
+    <xsl:text>
+%% ----------------------
+%% Revision History Table
+%% ----------------------
 \renewcommand{\DBKrevhistory}{
 \begin{DBKrevtable}
 </xsl:text>
-  <xsl:apply-templates/>
-  <xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>
 \end{DBKrevtable}}
 
-</xsl:text>
-</xsl:if>
+    </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="revhistory/revision">
-<xsl:variable name="revnumber" select=".//revnumber"/>
-<xsl:variable name="revdate"   select=".//date"/>
-<xsl:variable name="revremark" select=".//revremark|.//revdescription"/>
-<xsl:variable name="revauthor" select=".//authorinitials"/>
+  <xsl:variable name="revnumber" select=".//revnumber"/>
+  <xsl:variable name="revdate"   select=".//date"/>
+  <xsl:variable name="revremark" select=".//revremark|.//revdescription"/>
+  <xsl:variable name="revauthor" select=".//authorinitials"/>
   <xsl:text>~\par&#10;</xsl:text>
   <!-- Elements de la revision -->
   <xsl:if test="$revnumber">
- 		<xsl:apply-templates select="$revnumber"/>
- 	</xsl:if>
+    <xsl:apply-templates select="$revnumber"/>
+  </xsl:if>
   <xsl:text>~\par&#10;</xsl:text>
   <xsl:text>&#10;&amp; </xsl:text>
   <xsl:text>~\par&#10;</xsl:text>
@@ -41,7 +41,7 @@
   <xsl:text>&#10;&amp; </xsl:text>
   <xsl:text>~\par&#10;</xsl:text>
   <xsl:if test="$revremark"> 
-  	<xsl:apply-templates select="$revremark"/> 
+    <xsl:apply-templates select="$revremark"/> 
   </xsl:if>
   <xsl:text>&#10;&amp; </xsl:text>
   <xsl:text>~\par&#10;</xsl:text>

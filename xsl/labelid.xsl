@@ -11,12 +11,13 @@
       <xsl:call-template name="sec-map">
         <xsl:with-param name="keyword" select="local-name(.)"/>
       </xsl:call-template>
-      <xsl:call-template name="normalize-scape">
-        <xsl:with-param name="string" select="title"/>
-      </xsl:call-template>
+      <xsl:apply-templates select="title" mode="toc"/>
+      <xsl:text>{</xsl:text> 
+      <xsl:apply-templates select="title" mode="content"/>
       <xsl:text>}</xsl:text> 
     </xsl:with-param>
   </xsl:call-template>
+  <xsl:apply-templates select="title" mode="foottext"/>
 </xsl:template>
 
 <xsl:template name="label.id">
@@ -25,10 +26,10 @@
   <xsl:variable name="id">
     <xsl:choose>
       <xsl:when test="$object/@id">
- 	     <xsl:value-of select="$object/@id"/>
+        <xsl:value-of select="$object/@id"/>
       </xsl:when>
       <xsl:otherwise>
- 	     <xsl:value-of select="''"/>
+        <xsl:value-of select="''"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -46,12 +47,30 @@
 </xsl:template>
 
 <xsl:template name="title.and.label">
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="title"/>
-  </xsl:call-template>
+  <xsl:apply-templates select="title" mode="toc"/>
+  <xsl:text>{</xsl:text> 
+  <xsl:apply-templates select="title" mode="content"/>
   <xsl:text>}&#10;</xsl:text> 
   <xsl:call-template name="label.id"/>
+  <xsl:apply-templates select="title" mode="foottext"/>
+</xsl:template>
+
+<!-- optionally the TOC entry text can be different from the actual
+     title if the title contains unsupported things -->
+<xsl:template match="title" mode="toc">
+  <xsl:variable name="foot" select="descendant::footnote"/>
+  <xsl:if test="count($foot)&gt;0">
+    <xsl:text>[</xsl:text> 
+    <xsl:variable name="s">
+      <xsl:apply-templates mode="footskip"/>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($s)"/>
+    <xsl:text>]</xsl:text> 
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="title" mode="content">
+  <xsl:apply-templates/>
 </xsl:template>
 
 </xsl:stylesheet>
-

@@ -40,7 +40,8 @@
       <xsl:call-template name="get.sect.level"/>
     </xsl:with-param>
   </xsl:call-template>
-	<xsl:copy-of select="$title"/>
+  <xsl:text>{</xsl:text>
+  <xsl:copy-of select="$title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
   <xsl:if test="$preamble">
@@ -77,7 +78,8 @@
   <xsl:call-template name="map.sect.level">
     <xsl:with-param name="level" select="$l+1"/>
   </xsl:call-template>
-	<xsl:copy-of select="title"/>
+  <xsl:text>{</xsl:text>
+  <xsl:copy-of select="title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
 

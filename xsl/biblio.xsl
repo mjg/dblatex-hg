@@ -19,6 +19,7 @@
   <xsl:call-template name="map.sect.level">
     <xsl:with-param name="level" select="$level"/>
   </xsl:call-template>
+  <xsl:text>{</xsl:text>
   <xsl:value-of select="title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
@@ -85,6 +86,7 @@
     <xsl:call-template name="map.sect.level">
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="(title|bibliographyinfo/title)[1]"/>
     <xsl:text>}&#10;</xsl:text>
     <xsl:call-template name="label.id"/>
@@ -309,12 +311,12 @@
 </xsl:template>
 
 <xsl:template match="year" mode="bibliography.mode">
-  <xsl:apply-templates/><xsl:text>, </xsl:text>
+  <xsl:apply-templates/>
+  <xsl:if test="position()!=last()">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
-<xsl:template match="year[position()=last()]" mode="bibliography.mode">
-  <xsl:apply-templates/>
-</xsl:template>
 
 <!-- to manage entities correctly (such as &amp;) -->
 <xsl:template match="holder|publishername" mode="bibliography.mode">

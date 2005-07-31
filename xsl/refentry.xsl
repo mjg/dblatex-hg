@@ -52,6 +52,7 @@
       <xsl:call-template name="get.sect.level"/>
     </xsl:with-param>
   </xsl:call-template>
+  <xsl:text>{</xsl:text>
   <xsl:value-of select="$title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>

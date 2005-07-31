@@ -42,7 +42,6 @@
   <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="footnote/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="textobject/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="step/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="entry/para"> <xsl:apply-templates/> </xsl:template>

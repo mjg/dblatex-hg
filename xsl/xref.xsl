@@ -92,12 +92,16 @@
 <!-- it now works thanks to "hyperlabel" -->
 
 <xsl:template match="link">
-  <xsl:text>\href{#</xsl:text>
+  <xsl:text>\hyperlink{</xsl:text>
   <xsl:value-of select="@linkend"/> 
   <xsl:text>}{</xsl:text>
   <xsl:choose>
   <xsl:when test=".!=''">
-    <xsl:copy-of select="normalize-space(.)"/>
+    <xsl:call-template name="normalize-scape">
+      <xsl:with-param name="string">
+        <xsl:copy-of select="."/>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
     <xsl:copy-of select="id(@endterm)[1]"/>

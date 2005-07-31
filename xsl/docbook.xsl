@@ -19,6 +19,7 @@
 <xsl:include href="tablen.xsl"/>
 <xsl:include href="admon.xsl"/>
 <xsl:include href="revision.xsl"/>
+<xsl:include href="legalnotice.xsl"/>
 <xsl:include href="example.xsl"/>
 <xsl:include href="inlined.xsl"/>
 <xsl:include href="format.xsl"/>

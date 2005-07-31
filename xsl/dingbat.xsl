@@ -16,8 +16,9 @@
   <xsl:param name="dingbat">bullet</xsl:param>
   <xsl:choose>
     <xsl:when test="$dingbat='bullet'"> $\bullet$ </xsl:when>
-    <xsl:when test="$dingbat='copyright'">\copyright{}</xsl:when>
-    <xsl:when test="$dingbat='registered'">\textregistered{}</xsl:when>
+    <!-- \textnormal to prevent from latex/3420 bug in bold environment -->
+    <xsl:when test="$dingbat='copyright'">\textnormal{\copyright}</xsl:when>
+    <xsl:when test="$dingbat='registered'">\textnormal{\textregistered}</xsl:when>
     <xsl:when test="$dingbat='trademark'">\texttrademark{}</xsl:when>
     <xsl:when test="$dingbat='nbsp'">&#x00A0;</xsl:when>
     <xsl:when test="$dingbat='ldquo'">"</xsl:when>

@@ -28,5 +28,6 @@
 <map key="_"                text="\_"/>
 <map key="$"                text="\$"/>
 <map key="%"                text="\%"/>
+<map key="^"                text="\^"/>
 <map key="\"                text="\textbackslash"/>
 </mapping>

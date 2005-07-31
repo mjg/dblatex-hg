@@ -5,6 +5,12 @@
     XSLT Stylesheet DocBook -> LaTeX
     ############################################################################ -->
 
+<xsl:param name="figure.note"/>
+<xsl:param name="figure.tip"/>
+<xsl:param name="figure.important">warning</xsl:param>
+<xsl:param name="figure.warning">warning</xsl:param>
+<xsl:param name="figure.caution">warning</xsl:param>
+
 <xsl:template match="note|important|warning|caution|tip">
   <xsl:text>\begin{DBKadmonition}{</xsl:text>
   <xsl:call-template name="admon.graphic"/><xsl:text>}{</xsl:text>
@@ -28,10 +34,22 @@
 <xsl:template name="admon.graphic">
   <xsl:param name="node" select="."/>
   <xsl:choose>
-    <xsl:when test="name($node)='warning'">warning</xsl:when>
-    <xsl:when test="name($node)='caution'">warning</xsl:when>
-    <xsl:when test="name($node)='important'">warning</xsl:when>
-    <xsl:otherwise>none</xsl:otherwise>
+    <xsl:when test="name($node)='warning'">
+      <xsl:value-of select="$figure.warning"/>
+    </xsl:when>
+    <xsl:when test="name($node)='caution'">
+      <xsl:value-of select="$figure.caution"/>
+    </xsl:when>
+    <xsl:when test="name($node)='important'">
+      <xsl:value-of select="$figure.important"/>
+    </xsl:when>
+    <xsl:when test="name($node)='note'">
+      <xsl:value-of select="$figure.note"/>
+    </xsl:when>
+    <xsl:when test="name($node)='tip'">
+      <xsl:value-of select="$figure.tip"/>
+    </xsl:when>
+    <xsl:otherwise></xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 

@@ -58,18 +58,18 @@
   <xsl:param name="content">
     <xsl:apply-templates/>
   </xsl:param>
-  <xsl:text>$^{\textrm{{\tiny </xsl:text>
+  <xsl:text>$^{\text{</xsl:text>
   <xsl:copy-of select="$content"/>
-  <xsl:text>}}}$</xsl:text>
+  <xsl:text>}}$</xsl:text>
 </xsl:template>
 
 <xsl:template name="inline.subscriptseq">
   <xsl:param name="content">
     <xsl:apply-templates/>
   </xsl:param>
-  <xsl:text>$_{\textrm{{\tiny </xsl:text>
+  <xsl:text>$_{\text{</xsl:text>
   <xsl:copy-of select="$content"/>
-  <xsl:text>}}}$</xsl:text>
+  <xsl:text>}}$</xsl:text>
 </xsl:template>
 
 <xsl:template name="inline.monoseq">

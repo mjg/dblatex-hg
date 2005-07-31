@@ -26,6 +26,7 @@
       </xsl:with-param>
       <xsl:with-param name="num" select="'0'"/>
     </xsl:call-template>
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="$title"/>
     <xsl:text>}&#10;</xsl:text>
     <xsl:call-template name="label.id"/>
@@ -66,6 +67,7 @@
       </xsl:choose>
     </xsl:with-param>
   </xsl:call-template>
+  <xsl:text>{</xsl:text>
   <xsl:value-of select="title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>

@@ -57,7 +57,6 @@
     <xsl:text>*</xsl:text>
   </xsl:when>
   </xsl:choose>
-  <xsl:text>{</xsl:text>
 </xsl:template>
 
 <xsl:template match="section">

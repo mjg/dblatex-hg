@@ -25,6 +25,8 @@
   -->
   <xsl:if test="self::mediaobject and not(parent::figure)">
     <xsl:text>&#10;</xsl:text>
+    <xsl:text>\begin{minipage}[c]{\linewidth}&#10;</xsl:text>
+    <xsl:text>\begin{center}&#10;</xsl:text>
   </xsl:if>
   <xsl:choose>
     <xsl:when test="imageobject">
@@ -35,6 +37,16 @@
     </xsl:otherwise>
   </xsl:choose>
   <xsl:if test="self::mediaobject and not(parent::figure)">
+    <!-- print the caption even if not in a float -->
+    <xsl:if test="caption">
+      <xsl:text>\begin{center}&#10;</xsl:text>
+      <xsl:call-template name="normalize-scape">
+        <xsl:with-param name="string" select="caption"/>
+      </xsl:call-template>
+      <xsl:text>\end{center}&#10;</xsl:text>
+    </xsl:if> 
+    <xsl:text>\end{center}&#10;</xsl:text>
+    <xsl:text>\end{minipage}&#10;</xsl:text>
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
@@ -112,8 +124,9 @@
       <xsl:with-param name="prop" select="'\textheight'"/>
     </xsl:call-template>
   </xsl:variable>
-  <!-- viewport is valid only if there's some viewport spec, and content or scale.
-       TDG says that viewport spec without content/scale and scalefit=0 is ignored. -->
+  <!-- viewport is valid only if there's some viewport spec, and content or
+       scale. TDG says that viewport spec without content/scale and scalefit=0
+       is ignored. -->
   <xsl:variable name="viewport">
     <xsl:choose>
     <xsl:when test="(@width or @depth) and (@contentwidth or @contentdepth or @scale)">
