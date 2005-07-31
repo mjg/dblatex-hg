@@ -239,6 +239,7 @@ sub translate
   $line =~ s/{/\\{/g;
   $line =~ s/}/\\}/g;
   $line =~ s/%/\\%/g;
+  $line =~ s/\^/\\\^/g;
   $line =~ s/&#732;/\\textasciitilde{}/g;
   $line =~ s/&#8211;/\\textendash{}/g;
   $line =~ s/&#8212;/\\textemdash{}/g;
