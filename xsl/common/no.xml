@@ -319,7 +319,7 @@
    </context>
 
    <context name="authorgroup">
-      <template name="sep" text=","/>
+      <template name="sep" text=", "/>
       <template name="sep2" text=" og "/>
       <template name="seplast" text=", og "/>
    </context>

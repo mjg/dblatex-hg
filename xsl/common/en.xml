@@ -326,7 +326,7 @@
    </context>
 
    <context name="authorgroup">
-      <template name="sep" text=","/>
+      <template name="sep" text=", "/>
       <template name="sep2" text=" and "/>
       <template name="seplast" text=", and "/>
    </context>
