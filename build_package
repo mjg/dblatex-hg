@@ -64,6 +64,7 @@ rm /tmp/$release/tests/mathml/excluded*
 
 # Temporary manual cleanup
 rm -r /tmp/$release/xsl/latex-0.5.1
+rm -r /tmp/$release/latex/example
 
 # Make the package version file
 sed "s/devel/$version/" /tmp/$release/xsl/version.xsl > \
