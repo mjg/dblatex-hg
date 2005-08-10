@@ -174,7 +174,10 @@
   <xsl:value-of select="$biblioentry.tag"/>
   <xsl:text>}&#10;</xsl:text> 
   <!-- first, biblioentry information (if any) -->
-  <xsl:variable name="data" select="copyright|
+  <xsl:variable name="data" select="subtitle|
+                                    volumenum|
+                                    edition|
+                                    copyright|
                                     publisher|
                                     pubdate|
                                     pagenums|
@@ -247,7 +250,10 @@
     <xsl:value-of select="$biblioentry.item.separator"/>
   </xsl:if>
   <xsl:apply-templates select="title" mode="bibliography.mode"/>
-  <xsl:for-each select="copyright|
+  <xsl:for-each select="subtitle|
+                        volumenum|
+                        edition|
+                        copyright|
                         publisher|
                         pubdate|
                         pagenums|

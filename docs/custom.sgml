@@ -68,7 +68,7 @@
   <option>-P <replaceable>parameter=value</replaceable></option> option.</para>
   <para>The following example set the latex.hyperparam parameter value:
    <programlisting>
-<![CDATA[  dblatex -P latex.hyperparam=colorlinks,lincolor=blue myfile.xml
+<![CDATA[  dblatex -P latex.hyperparam=colorlinks,linkcolor=blue myfile.xml
 ]]></programlisting>
   </para>
   </sect1>
@@ -92,7 +92,7 @@
 ]]>  </programlisting>
 </example>
   </sect1>
-  <sect1>
+  <sect1 id="sec-custom-latex">
    <title>
    Customized LaTeX style
   </title>
@@ -143,6 +143,7 @@
    </para>
 &stycommand;
    </sect2>
+&stydebug;
   </sect1>
   <sect1>
    <title>

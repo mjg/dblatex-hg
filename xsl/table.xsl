@@ -14,6 +14,13 @@
   <xsl:variable name="colspecs" select="colspec"/>
   <xsl:variable name="frame" select="parent::*/@frame"/>
 
+  <xsl:text>%%% parse_table %%%&#10;</xsl:text>
+  <xsl:call-template name="resizetable">
+    <xsl:with-param name="pos" select="'1'"/>
+    <xsl:with-param name="variacols" select="@cols"/>
+    <xsl:with-param name="colspecs" select="colspec"/>
+  </xsl:call-template>
+
   <xsl:text>\begin{</xsl:text>
   <xsl:value-of select="$kind"/>
   <xsl:text>}{</xsl:text>
@@ -413,7 +420,7 @@
       <xsl:with-param name="align" select="((ancestor::*[@align])[last])/@align"/>
       <xsl:with-param name="small" select="'0'"/>
     </xsl:call-template>
-    <xsl:text>p{\tsize{1}}</xsl:text>
+    <xsl:text>p{\tsize}</xsl:text>
     <!-- no separator for the last one -->
     <xsl:if test="$colno>1 or $chklast!='1'">
       <xsl:call-template name="build.colsep"/>
@@ -503,14 +510,109 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="star.count">
+  <xsl:param name="width"/>
+  <xsl:param name="count" select="'0'"/>
 
-<!-- Evalue le redimensionnement d'une table -->
+  <!-- Part to parse -->
+  <xsl:variable name="w0">
+    <xsl:choose>
+    <xsl:when test="contains($width, '+')">
+      <xsl:value-of select="substring-before($width, '+')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$width"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Get the star count -->
+  <xsl:variable name="val">
+    <xsl:choose>
+    <xsl:when test="contains($w0, '*')">
+      <xsl:variable name="factor" select="substring-before($w0, '*')"/>
+      <xsl:choose>
+      <xsl:when test="$factor=''">
+        <xsl:value-of select="'1'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$factor"/>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="'0'"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Update the star count, and work on the other part if any -->
+  <xsl:choose>
+  <xsl:when test="contains($width, '+')">
+    <xsl:call-template name="star.count">
+      <xsl:with-param name="width" select="substring-after($width, '+')"/>
+      <xsl:with-param name="count" select="$count + $val"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$count + $val"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="fixed.select">
+  <xsl:param name="width"/>
+  <xsl:param name="fixed" select="''"/>
+
+  <!-- Part to parse -->
+  <xsl:variable name="w0">
+    <xsl:choose>
+    <xsl:when test="contains($width, '+')">
+      <xsl:value-of select="substring-before($width, '+')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$width"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Filter the fixed width -->
+  <xsl:variable name="val">
+    <xsl:if test="not(contains($w0, '*'))">
+      <xsl:value-of select="$w0"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <!-- Update the fixed pattern, and work on the other part if any -->
+  <xsl:variable name="newfixed">
+    <xsl:if test="$fixed!=''">
+      <xsl:value-of select="$fixed"/>
+      <xsl:if test="$val!=''">
+        <xsl:text>+</xsl:text>
+      </xsl:if>
+    </xsl:if>
+    <xsl:value-of select="$val"/>
+  </xsl:variable>
+  
+  <xsl:choose>
+  <xsl:when test="contains($width, '+')">
+    <xsl:call-template name="fixed.select">
+      <xsl:with-param name="width" select="substring-after($width, '+')"/>
+      <xsl:with-param name="fixed" select="$newfixed"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$newfixed"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Summarize the total fixed width and stars for the entire table -->
 
 <xsl:template name="resizetable">
   <xsl:param name="pos"/>
   <xsl:param name="variacols"/>
-  <xsl:param name="fixedcols"/>
-  <xsl:param name="fixedwidth"/>
+  <xsl:param name="fixedwidth" select="''"/>
   <xsl:param name="colspecs"/>
 
   <xsl:variable name="spec" select="$colspecs[position()=$pos]"/>
@@ -518,80 +620,54 @@
   <xsl:when test="$spec">
     <xsl:variable name="cw" select="$spec/@colwidth"/>
 
-    <!-- Nombre supplementaire de colonnes proportionnelles (virtuelles) a
-         ajouter -->
-    <xsl:variable name="coladded">
+    <!-- Number of stars contained in this colwidth -->
+    <xsl:variable name="this.star">
       <xsl:choose>
-      <xsl:when test="contains($cw, '*')">
-        <xsl:variable name="p" select="substring-before($cw, '*')"/>
-        <xsl:choose>
-        <xsl:when test="$p &gt;= 1">
-          <xsl:value-of select="$p - 1"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="'0'"/>
-        </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:when test="contains($cw, 'cm')">
-        <xsl:value-of select="'-1'"/>
+      <xsl:when test="$cw">
+        <xsl:call-template name="star.count">
+          <xsl:with-param name="width" select="$cw"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="'0'"/>
-      </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <!-- Indique si la colonne est de taille fixe -->
-    <xsl:variable name="colfixed">
-      <xsl:choose>
-      <xsl:when test="contains($cw, 'cm')">
+        <!-- No colwidth mean '*' -->
         <xsl:value-of select="'1'"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'0'"/>
       </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
-    <!-- Taille fixe a retrancher pour cette colonne -->
+ 
+    <!-- Fixed size update -->
     <xsl:variable name="width">
-      <xsl:choose>
-      <xsl:when test="contains($cw, 'cm')">
-        <xsl:variable name="p" select="substring-before($cw, 'cm')"/>
-        <xsl:choose>
-        <xsl:when test="$p">
-          <xsl:value-of select="$p"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="'0'"/>
-        </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'0'"/>
-      </xsl:otherwise>
-      </xsl:choose>
+      <xsl:variable name="this.fixed">
+        <xsl:call-template name="fixed.select">
+          <xsl:with-param name="width" select="$cw"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$fixedwidth!=''">
+        <xsl:value-of select="$fixedwidth"/>
+        <xsl:if test="$this.fixed!=''">
+          <xsl:text>+</xsl:text>
+        </xsl:if>
+      </xsl:if>
+      <xsl:value-of select="$this.fixed"/>
     </xsl:variable>
-
+ 
     <xsl:call-template name="resizetable">
       <xsl:with-param name="pos" select="$pos + 1"/>
-      <xsl:with-param name="variacols" select="$variacols + $coladded"/>
-      <xsl:with-param name="fixedcols" select="$fixedcols + $colfixed"/>
-      <xsl:with-param name="fixedwidth" select="$fixedwidth + $width"/>
+      <xsl:with-param name="variacols" select="$variacols + $this.star -1"/>
+      <xsl:with-param name="fixedwidth" select="$width"/>
       <xsl:with-param name="colspecs" select="$colspecs"/>
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <!-- L'ensemble des colspecs est traite, on produit la commande latex -->
+    <!-- All the colspecs are done, so write the latex command -->
     <xsl:if test="$variacols &gt; 0">
       <xsl:text>\resizetable{</xsl:text>
       <xsl:value-of select="$variacols"/>
       <xsl:text>}{</xsl:text>
-      <xsl:value-of select="$fixedcols"/>
+      <xsl:value-of select="@cols"/>
       <xsl:text>}{</xsl:text>
       <xsl:value-of select="$fixedwidth"/>
-      <xsl:text>cm}{</xsl:text>
+      <xsl:text>}{</xsl:text>
       <xsl:if test="@orient='land'">
         <xsl:text>land</xsl:text>
       </xsl:if>
@@ -617,22 +693,14 @@
   <xsl:text>p{</xsl:text>
   <xsl:choose>
   <xsl:when test="@colwidth">
-    <xsl:choose>
-    <xsl:when test="contains(@colwidth, 'cm')">
-      <xsl:value-of select="@colwidth"/>
-    </xsl:when>
-    <xsl:when test="contains(@colwidth, '*') and substring-before(@colwidth, '*')!=''">
-      <xsl:text>\tsize{</xsl:text>
-      <xsl:value-of select="substring-before(@colwidth, '*')"/>
-      <xsl:text>}</xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>\tsize{1}</xsl:text>
-    </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="replace-string" mode="newtbl">
+      <xsl:with-param name="text" select="@colwidth"/>
+      <xsl:with-param name="replace">*</xsl:with-param>
+      <xsl:with-param name="with">\tsize</xsl:with-param>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>\tsize{1}</xsl:text>
+    <xsl:text>\tsize</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
   <xsl:text>}</xsl:text>

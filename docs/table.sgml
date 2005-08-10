@@ -1,0 +1,251 @@
+  <sect1>
+   <title>
+   Creating Tables
+  </title>
+  <para>
+   DocBook tables can be quite complex. This is why the tool doesn't support all the possibilities.
+  </para>
+  <para>
+   The tool contains two engines to create tables: the default Perl parsing, and a
+   new excellent implementation by David Hedley completely written in XSL.
+   One can select this new implementation with the parameter <varname>newtbl.use</varname> set to 1.
+  </para>
+  <para>
+   Here is what is supported:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   Columns without specified widths (<sgmltag>colspec</sgmltag> without <sgmltag>colwidth</sgmltag> attribute) have the same size.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   A table width is always equal to the page width, if at least one column doesn't contain a fixed width attribute (e.g. colwidth=&ldquo;12cm&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Fixed column widths are supported (e.g. colwidth=&ldquo;10cm&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Fixed column widths must be declared in centimeters in default implementation (&ldquo;cm&rdquo;). The new XSL table implementation supports any units.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Proportional column widths are supported (e.g. colwidth= &ldquo;5*&rdquo;).
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Proportional and fixed colum width together is not supported (e.g. colwidth=&ldquo;5*+10cm&rdquo;). The new XSL table implementation has a better support for this, even if it is not (yet) perfect.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The <sgmltag>morerows</sgmltag> attribute of a table entry (<sgmltag>entry</sgmltag> element) is supported.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The <sgmltag>namest</sgmltag> and <sgmltag>nameend</sgmltag> attributes of a table entry (<sgmltag>entry</sgmltag> element) are supported. It is possible to have a cell spanned on several columns.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Mixing column and row spanning is not supported.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The <sgmltag>orient</sgmltag> table attribute is supported (portrait and landscape). 
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   It is possible to have missing cell entries in a table. 
+   </para>
+  </listitem>
+  </itemizedlist>
+   <sect2>
+    <title>
+    Tables without colwidth
+   </title>
+   <para>
+    When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given.
+   </para>
+&table.eg00;
+&table.eg01;
+&table.eg02;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with mixed colspec
+   </title>
+   <para>
+    A table can have <sgmltag>colspec</sgmltag> elements containing <sgmltag>colwidth</sgmltag> attribute mixed with <sgmltag>colspec</sgmltag> elements without <sgmltag>colwidth</sgmltag>. The following XML source: 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left">
+]]><![CDATA[    <colspec colname="c1"/>
+]]><![CDATA[    <colspec align="left" colwidth="4cm"/>
+]]><![CDATA[    <colspec align="right" colwidth="5cm"/>
+]]><![CDATA[    <colspec align="center"/>
+]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    is rendered like this:
+   </para>
+&table.eg1;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with proportional and fixed colwidth
+   </title>
+   <para>
+    Proportional column widths are supported. The following XML source:
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="*"/> 
+]]><![CDATA[    <colspec align="left" colwidth="2*"/> 
+]]><![CDATA[    <colspec align="right" colwidth="3*"/> 
+]]><![CDATA[    <colspec align="center"/>
+]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    gives this table:
+   </para>
+&table.eg2;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with fixed colwidths
+   </title>
+   <para>
+    All the columns can have fixed size, like this: 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="2cm"/> 
+]]><![CDATA[    <colspec align="left" colwidth="2.5cm"/> 
+]]><![CDATA[    <colspec align="right" colwidth="5cm"/> 
+]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    It gives the following table:
+   </para>
+&table.eg3;
+   </sect2>
+   <sect2>
+    <title>
+    Tables with morerows
+   </title>
+   <para>
+    A table can contain entries that cover several lines. The following XML source contains an entry covering 4 lines: 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable>
+]]><![CDATA[  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="*"/>
+]]><![CDATA[    ...
+]]><![CDATA[    <tbody>
+]]><![CDATA[    <entry morerows="3">it covers 4 lines</entry>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    Here is an example of table containing several entries with morerows attribute:
+   </para>
+&table.eg4;
+   </sect2>
+   <sect2>
+    <title>
+    Landscape tables
+   </title>
+   <para>
+    A table can be displayed in a lanscape format by using the <sgmltag>orient</sgmltag> attribute. The following XML source is an example. 
+   </para>
+   <programlisting>
+<![CDATA[<informaltable orient="land">
+]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+]]><![CDATA[    <colspec colname="c1" colwidth="*"/>
+]]><![CDATA[    ...
+]]><![CDATA[    <tbody>
+]]><![CDATA[    ...
+]]><![CDATA[    </tbody>
+]]><![CDATA[  </tgroup>
+]]><![CDATA[</informaltable>
+]]>   </programlisting>
+   <para>
+    Here is how it is displayed.
+   </para>
+&table.land;
+   </sect2>
+   <sect2>
+    <title>
+    Smaller tables
+   </title>
+   <para>
+    For big tables it can be usefull to have smaller text, so that the table is not too large or too long and it can be displayed within a page. It is possible to specify smaller table text by using the <sgmltag>role</sgmltag> attribute of the elements <sgmltag>table</sgmltag> or <sgmltag>informaltable</sgmltag>.
+   </para>
+   <para>
+    The values and the &ldquo;role&rdquo; dedicated to this attribute are specific to dblatex, but it is compliant with the DocBook specification because in general the <sgmltag>role</sgmltag> attribute purpose is never defined.
+   </para>
+   <para>
+    The available text size definitions supported by <sgmltag>role</sgmltag> are directly taken from LaTeX:
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+    small,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    footnotesize,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    scriptsize,
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    tiny.
+    </para>
+   </listitem>
+   </itemizedlist>
+   <para>
+    Here are examples for each size.
+   </para>
+&table.small1;
+&table.small2;
+&table.small3;
+&table.small4;
+   </sect2>
+  </sect1>

@@ -17,15 +17,6 @@
 <xsl:param name="newtbl.use" select="'0'"/>
 
 <xsl:template match="table">
-  <xsl:if test="$newtbl.use!='1'">
-    <xsl:call-template name="resizetable">
-      <xsl:with-param name="pos" select="'1'"/>
-      <xsl:with-param name="variacols" select="tgroup/@cols"/>
-      <xsl:with-param name="fixedcols" select="'0'"/>
-      <xsl:with-param name="fixedwidth" select="'0'"/>
-      <xsl:with-param name="colspecs" select="./tgroup/colspec"/>
-    </xsl:call-template>
-  </xsl:if>
   <!-- do we need to change text size? -->
   <xsl:variable name="size">
     <xsl:choose>
@@ -56,7 +47,6 @@
     </xsl:apply-templates>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>%%% parse_table %%%&#10;</xsl:text>
     <xsl:apply-templates/>
   </xsl:otherwise>
   </xsl:choose>
@@ -88,15 +78,6 @@
 <xsl:template match="table/title"/>
 
 <xsl:template match="informaltable">
-  <xsl:if test="$newtbl.use!='1'">
-    <xsl:call-template name="resizetable">
-      <xsl:with-param name="pos" select="'1'"/>
-      <xsl:with-param name="variacols" select="tgroup/@cols"/>
-      <xsl:with-param name="fixedcols" select="'0'"/>
-      <xsl:with-param name="fixedwidth" select="'0'"/>
-      <xsl:with-param name="colspecs" select="./tgroup/colspec"/>
-    </xsl:call-template>
-  </xsl:if>
   <!-- do we need to change text size? -->
   <xsl:variable name="size">
     <xsl:choose>
@@ -126,7 +107,6 @@
     </xsl:apply-templates>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>%%% parse_table %%%&#10;</xsl:text>
     <xsl:apply-templates/>
   </xsl:otherwise>
   </xsl:choose>

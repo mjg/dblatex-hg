@@ -12,14 +12,18 @@ usage ()
   echo "Install options:"
   echo "--prefix=PREFIX        where to install the package"
   echo "--catalog=CATALOG      catalogs location"
+  echo "--target=TARGET        default latex style"
   exit 1
 }
 
 # Default configuration
 prefix=/usr/local
 catalog=
+target=
 ENVCATS=
 EXPCATS=
+ENVMAKE=
+EXPMAKE=
 
 args="$*"
 
@@ -28,8 +32,9 @@ do
   optarg=`expr "x$1" : 'x[^=]*=\(.*\)'`
   case "$1" in
   --prefix=*)      prefix=$optarg;;
-  --exec-prefix=*) ;; # rien à faire, simple compatibilité
+  --exec-prefix=*) ;; # Nothing to do, provided only for compatibility
   --catalog=*)     catalog=$optarg;;
+  --target=*)      target=$optarg;;
   -*)              echo "$1: unknown option"; usage; break;;
   *) break;;
   esac
@@ -49,8 +54,12 @@ if [ "$catalog" != "" ]; then
   fi
 fi
 
+if [ "$target" != "" ]; then
+  default_opt="-T $target"
+fi
+
 notfound=""
-for util in gmake perl xsltproc latex kpsewhich; do
+for util in perl xsltproc latex pdflatex kpsewhich; do
   path=`which $util 2>/dev/null|sed 's/^no //'`
   if [ "$path" = "" ]; then
     status="no"
@@ -60,6 +69,27 @@ for util in gmake perl xsltproc latex kpsewhich; do
   fi
   echo "+checking $util... $status"
 done
+
+# Special check procedure for GNU make (can be gmake or make)
+status="no"
+path=`which gmake 2>/dev/null|sed 's/^no //'`
+if [ "$path" = "" ]; then
+  echo "+checking gmake... $status"
+  path=`which make 2>/dev/null|sed 's/^no //'`
+  if [ "$path" != "" ]; then
+    gnu=`make -v 2>/dev/null|grep -c GNU`
+    if [ $gnu -ne 0 ]; then
+      ENVMAKE="GMAKE=make"
+      EXPMAKE="export GMAKE"
+      status="yes"
+    fi
+  fi
+else
+  status="yes"
+fi
+      
+echo "+checking [g]make... $status"
+[ "$status" = "no" ] && notfound="[g]make $notfound"
 
 # Check the Latex dependencies
 deps_sty=`perl -e 'while(<>) {
@@ -126,10 +156,12 @@ $shel
 #
 $ENVCATS
 $EXPCATS
+$ENVMAKE
+$EXPMAKE
 TEXINPUTS=:$share/$package/latex//:\\\$TEXINPUTS
 export TEXINPUTS
 
-$share/$package/scripts/dblatex \\\$*
+$share/$package/scripts/dblatex $default_opt \\\$*
 eof
 
 #

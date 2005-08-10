@@ -10,14 +10,94 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top">latex.hyperparam</entry>
-<entry align="center" valign="top">cf. <xref  linkend="sec-hyperparam"></entry>
-<entry align="center" valign="top">empty</entry>
+<entry>latex.hyperparam</entry>
+<entry>cf. <xref  linkend="sec-hyperparam"></entry>
+<entry>empty</entry>
 </row>
 <row>
-<entry align="center" valign="top">latex.figure.boxed</entry>
-<entry align="center" valign="top">If set to 1, put the images into a framed box.</entry>
-<entry align="center" valign="top">0</entry>
+<entry>latex.figure.boxed</entry>
+<entry>If set to 1, put the images into a framed box.</entry>
+<entry>0</entry>
+</row>
+<row>
+<entry>latex.babel.use</entry>
+<entry>Set to 1 the babel package corresponding to the document language is
+included. Set to 0 no babel package is included whatever the document language
+is.</entry>
+<entry>1</entry>
+</row>
+<row>
+<entry>latex.babel.language</entry>
+<entry>This parameter forces the use of the specified babel
+language whatever the document language is.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>latex.class.options</entry>
+<entry>Options passed to the \documentclass command.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>newtbl.use</entry>
+<entry>Set to 1, use the David Hedley table support.</entry>
+<entry>0</entry>
+</row>
+<row>
+<entry>newtbl.format.thead</entry>
+<entry>LaTeX formatting for head table cells.</entry>
+<entry>\bfseries%&#10;</entry>
+</row>
+<row>
+<entry>newtbl.format.tbody</entry>
+<entry>LaTeX formatting for body table cells.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>newtbl.format.tfoot</entry>
+<entry>LaTeX formatting for foot table cells.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>newtbl.default.colsep</entry>
+<entry>Set to 1, print the column separators when no
+<sgmltag>colspec</sgmltag> attribute is specified.</entry>
+<entry>1</entry>
+</row>
+<row>
+<entry>newtbl.default.rowsep</entry>
+<entry>Set to 1, print the row separators when no
+<sgmltag>rowspec</sgmltag> attribute is specified.</entry>
+<entry>1</entry>
+</row>
+<row>
+<entry>figure.note</entry>
+<entry>Figure to use to render a <sgmltag>note</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>figure.tip</entry>
+<entry>Figure to use to render a <sgmltag>tip</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>figure.important</entry>
+<entry>Figure to use to render a <sgmltag>important</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<row>
+<entry>figure.warning</entry>
+<entry>Figure to use to render a <sgmltag>warning</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<row>
+<entry>figure.caution</entry>
+<entry>Figure to use to render a <sgmltag>caution</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
 </row>
 </tbody>
 </tgroup>

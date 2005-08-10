@@ -1,0 +1,186 @@
+ <chapter>
+  <title>
+  Installing the package
+ </title>
+  <sect1>
+   <title>
+   Content
+  </title>
+  <para>
+   The package contains the following:
+  </para>
+  <variablelist>
+   <varlistentry>
+   <term>
+   docs/
+</term><listitem><para>Contains the files of this document.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   latex/
+</term><listitem><para>Contains all the latex stuff: LaTeX style files, logos, and scripts to compile the LaTeX output.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   scripts/
+</term><listitem><para>Several scripts, including the main script of the package.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   xsl/
+</term><listitem><para>XSL stylesheets.
+   </para>
+  </listitem>
+  </varlistentry>
+   <varlistentry>
+   <term>
+   tests/
+</term><listitem><para>Test files.
+   </para>
+  </listitem>
+  </varlistentry>
+  </variablelist>
+  </sect1>
+  <sect1>
+   <title>
+   Dependencies
+  </title>
+  <para>
+   To work, the following items must be available:
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+   An XSLT. <filename>xsltproc</filename> is the default XSLT used.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   The XML DocBook DTD.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   A recent LaTeX distribution. The configure script checks that the needed latex packages are available.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   Perl 5.x.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   GNU make.
+   </para>
+  </listitem>
+  </itemizedlist>
+  </sect1>
+  <sect1>
+   <title>
+   Installation
+  </title>
+   <sect2>
+    <title>
+    Installing the dependencies
+   </title>
+   <para>
+    To use the package, install properly the dependencies:
+   </para>
+   <orderedlist>
+    <listitem>
+    <para>
+    Install Perl 5.x and GNU make if necessary.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Install LaTeX.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Install the XSLT. By default <filename>xsltproc</filename> is used.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Install the XML DocBook DTD.
+    </para>
+   </listitem>
+    <listitem>
+    <para>
+    Create a catalog file, that defines where to find the DTD. Here is an example:
+    </para>
+    <programlisting>
+<![CDATA[PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+]]><![CDATA[    "file:///usr/local/share/xml/docbook/dtd/4.1.2/docbookx.dtd"
+]]>    </programlisting>
+    <para>
+     If the XML Gnome tools are available, it's a good idea to create an XML catalog by using <filename>xmlcatalog</filename> such like this:
+    </para>
+    <programlisting>
+<![CDATA[% xmlcatalog --noout --create mycatalog
+]]><![CDATA[% xmlcatalog --noout --add 'public' '-//OASIS//DTD DocBook XML V4.1.2//EN' \
+]]><![CDATA[                           'file://path/to/4.1.2/docbookx.dtd' mycatalog
+]]>    </programlisting>
+   </listitem>
+    <listitem>
+    <para>
+    Add the catalog path to the SGML_CATALOG_FILES variable:
+    </para>
+<programlisting><![CDATA[export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:/path/to/mycatalog
+]]></programlisting>
+   <para>
+    You can skip this step if you configure the dblatex installation with the <option>--catalog</option> option.
+   </para>
+   </listitem>
+   </orderedlist>
+   </sect2>
+   <sect2>
+    <title>
+    Installing the tool
+   </title>
+   <para>
+    The steps to follow are the following:
+   </para>
+   <orderedlist>
+    <listitem>
+    <para>
+    Untar the ball. For a bzipped release, do as follow:
+    </para>
+<programlisting><![CDATA[% bzip2 -dc dblatex-x.x.x.tar.bz2 | tar xvf -]]></programlisting>
+   <para>
+    For a gzipped release, do as follow:
+   </para>
+    <programlisting>
+<![CDATA[% gunzip -c dblatex-x.x.x.tar.gz | tar xvf -
+]]>    </programlisting>
+   </listitem>
+    <listitem>
+    <para>
+    Call the <command>configure</command> script, that checks the dependencies and prepares the installation. In the example, the <filename>dblatex</filename> script is installed under <filename>/usr/local/bin</filename> and the other files are installed under <filename>/usr/local/share/dblatex</filename>. Besides, the <option>--catalog</option> option tells where to find the catalog.
+    </para>
+    <programlisting>
+<![CDATA[% cd dblatex-x.x.x
+]]><![CDATA[% ./configure --prefix=/usr/local --catalog=/path/to/mycatalog
+]]>    </programlisting>
+   </listitem>
+    <listitem>
+    <para>
+    Install:
+    </para>
+    <programlisting>
+<![CDATA[% gmake install
+]]>    </programlisting>
+   </listitem>
+   </orderedlist>
+   </sect2>
+  </sect1>
+ </chapter>

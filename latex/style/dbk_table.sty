@@ -1,10 +1,11 @@
 %%
-%% Gestion de la taille des colonnes d'un tableau.
-%% Dans le principe on deux types de colonnes :
-%% - des colonnes de tailles fixes, dont on veux connaitre le nombre
-%%   ainsi que la taille consommée
-%% - des colonnes de taille proportionnelle à la place qui reste (après le
-%%   retrait de la taille fixe totale), dont on veut connaître le nombre.
+%% Manages the table columns sizes.
+%%
+%% The principle is to evaluate the column size involved by a star '*' factor.
+%% To evaluate this you need to know:
+%% - the total table size (\textwidth),
+%% - the fixed sizes specified in @colwidth,
+%% - the number of star factors contained in the table.
 
 \usepackage{longtable}
 \usepackage{lscape}
@@ -23,35 +24,40 @@
 \newdimen\newtblcolwidth%
 
 \newdimen\colwidth
+\newdimen\fixwidth
 \newdimen\mcellsz
 \newdimen\cellsz
 \newcounter{colnb}
 
 % Margin cell size
-\setlength{\mcellsz}{4mm}
+\setlength{\mcellsz}{2\tabcolsep}
 
-% Méthode pour redimensionner les colonnes d'un tableau
-% #1 : nombre de colonnes proportionnelles (incluant les virtuelles). Ne doit
-%      pas etre nul.
-% #2 : nombre de colonnes fixes
-% #3 : taille cumulée des colonnes fixes
+% Macro that evaluates the column size for one '*' factor
+%   #1: number of '*' factors. Must not be zero.
+%   #2: total number of columns
+%   #3: cumulated fixed size for all the columns
+%   #4: orientation
 
 \def\resizetable#1#2#3#4{ %
+  \ifthenelse{\equal{#3}{}}{%
+    \setlength{\fixwidth}{0cm}%
+  }{
+    \setlength{\fixwidth}{#3}%
+  }
   \ifthenelse{\equal{#4}{land}}{%
-    \setlength{\colwidth}{\textheight-#3}%
+    \setlength{\colwidth}{\textheight}%
   }{%
-    \setlength{\colwidth}{\textwidth-#3}%
+    \setlength{\colwidth}{\textwidth}%
   }%
-  \setlength{\colwidth}{\colwidth-#2\mcellsz}%
+  \setlength{\colwidth}{\colwidth-\fixwidth-#2\mcellsz}%-\mcellsz}%
   \setcounter{colnb}{#1}%
   \divide\colwidth\value{colnb}%
 }
 
-% La taille de la colonne est un multiple de la granularité complète
-% moins la marge à prendre (4mm)
-\def\tsize#1{ #1\colwidth-\mcellsz }
+% Size of a proportional '*' column
+\def\tsize{\colwidth}
 
-% raccourci pour utiliser multirow, qui marche avec tsize
+% Shortcut to use multirow, so that it works with tsize
 \def\mrow#1#2#3{ %
   \setlength{\cellsz}{#2}%
   \multirow{#1}{\cellsz}{#3}%

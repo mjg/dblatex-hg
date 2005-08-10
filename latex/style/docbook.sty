@@ -7,46 +7,44 @@
 \DeclareOption{nohyperlink}{ \def\DBKhyperlink{no} }
 \DeclareOption{article}{ \def\DBKisarticle{yes} }
 \DeclareOption{report}{ \def\DBKisarticle{no} }
-\DeclareOption{fr}{ \def\DBKlocale{fr} }
-\DeclareOption{en}{ \def\DBKlocale{en} }
-\DeclareOption{nl}{ \def\DBKlocale{nl} }
 
 % Default values
-\ExecuteOptions{nohyperlink,report,en}
+\ExecuteOptions{nohyperlink,report}
 
 % If defined, process the options
 \ProcessOptions\relax
 
-% Default Parameters
-\newcommand{\DBKprojet}{}
+% ##############################################################################
+% ### DocBook and local commands
+% ##############################################################################
+% Default DocBook Parameters
 \newcommand{\DBKreference}{}
 \newcommand{\DBKtitle}{Main Title}
 \newcommand{\DBKsubtitle}{}
-\newcommand{\DBKsubject}{}
 \newcommand{\DBKdate}{\today}
-\newcommand{\DBKredacteur}{Auteur}
-\newcommand{\DBKapprouveur}{Approuveur}
-\newcommand{\DBKrevisionIndice}{}
-\newcommand{\DBKrevisionDate}{}
-\newcommand{\DBKrevisionNom}{}
-\newcommand{\DBKrevisionTexte}{}
-\newcommand{\DBKpagetotal}{
-  \getpagerefnumber{LastPage}~(\getpagerefnumber{LastPageLetter})}
-\newcommand{\DBKpagedocument}{\DBKpagetotal}
-\newcommand{\DBKpageannexe}{0~(zéro)}
-\newcommand{\DBKsite}{Elancourt}
+\newcommand{\DBKsite}{}
 \newcommand{\DBKedition}{}
-\newcommand{\DBKreleaseinfo}{Document de Travail}
+\newcommand{\DBKreleaseinfo}{Working Paper}
+\newcommand{\DBKpubdate}{}
+\newcommand{\DBKlegalblock}{}
+\newcommand{\DBKlegaltitle}{}
+\newcommand{\DBKcopyright}{}
+
+\@ifundefined{DBKlocale}{\def\DBKlocale{en}}
+
+% Local commands
+\newcommand{\DBKprojet}{}
 \newcommand{\DBKtoclof}{true}
+\newcommand{\DBKauthor}{}
 
 % Adaptation...
-\setlength\parskip{\medskipamount}
-\setlength\parindent{0pt}
-
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
-% On veut des paragraphes + sousparagraphes avec le texte en dessous
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+
+% We want paragraph + subparagraph headers like the others
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
                                      {-3.25ex\@plus -1ex \@minus -.2ex}%
                                      {1ex \@plus .2ex}%
@@ -57,7 +55,7 @@
                                      {1ex \@plus .2ex}%
                                      {\normalfont\normalsize\bfseries}}
 
-% Inclusion ici pour qu'il modifie la représentation des titres
+% To have title rendering changed
 \usepackage[sf,bf]{titlesec}
 
 % pour la date, mais définition réduite
@@ -103,7 +101,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 
-% Pour faire des calculs sur les compteurs
+% Miscellaneous
 \usepackage{calc}
 \usepackage{multirow}
 \usepackage{subfigure}
@@ -161,14 +159,33 @@
 
 }
 
-% Redefinitions pour affecter les variables du style
+% ##############################################################################
+% ### Title and Bookinfo display
+% ##############################################################################
 \def\title#1{\renewcommand{\DBKtitle}{#1}}
 
-% Redefinition de la création de titre pour avoir la page de garde+domitete
+% Redefine author so that it can be used by the domitete
+\def\author#1{\renewcommand{\DBKauthor}{#1}}
+
+% Redefine how to print the cover page and book infos
 \def\maketitle{\DBKcover \DBKdomitete}
 
-% Redéfinition de author pour affecter une variable du style
-\def\author#1{\renewcommand{\DBKredacteur}{#1}}
+% How to render a <legalnotice>
+\newenvironment{DBKlegalnotice}{
+  \if@twocolumn
+    \noindent\small\textit{\DBKlegaltitle}
+    \/\bfseries---$\!$
+  \else
+    \noindent\begin{center}\small\bfseries\DBKlegaltitle
+    \end{center}\begin{quote}\small
+  \fi
+}{
+  \vspace{0.6em}\par\if@twocolumn\else\end{quote}\fi
+}
+
+% ##############################################################################
+% ### Index redefinition
+% ##############################################################################
 
 % Redéfinition de index, pour avoir l'entete+pied de page et le nombre total
 % de pages
@@ -212,21 +229,6 @@
 % ##############################################################################
 % ### Commands and environments
 % ##############################################################################
-
-\newcounter{totalminutes}
-\newcounter{hours}
-\newcounter{minutes}
-
-% Macro-commandes
-\newcommand{\linefeed}{\vspace{4ex}}
-\newcommand{\cqfd}{\mbox{\emph{C.Q.F.D.}} }
-
-% Variables globales du document
-\newcommand{\timecompile}{\setcounter{totalminutes}{\time}%
-    \setcounter{hours}{\value{totalminutes}/60}%
-    \setcounter{minutes}{\value{totalminutes}-\value{hours}*60}%
-    \framebox{Version \today \, \thehours:\theminutes}}
-
 \newcommand{\draft}{\special{!userdict begin /bop-hook{gsave 200 30 translate %
          65 rotate /Times-Roman findfont 216 scalefont setfont %
          0 0 moveto 0.8 setgray (DRAFT) show grestore}def end}}

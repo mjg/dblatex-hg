@@ -6,7 +6,7 @@
 <itemizedlist>
 <listitem><para>The project is end-user oriented, that is it tries to hide as much as possible the latex compiling stuff by providing a single clean script to produce directly DVI, PostScript and PDF output.</para></listitem>
 <listitem><para>The actual output rendering is done not only by the XSL stylesheets transformation, but also by a dedicated LaTeX package. The purpose is to allow a deep LaTeX customisation without changing the XSL stylesheets.</para></listitem>
-<listitem><para>Post-processing is done by Perl, to make publication faster, and to parse things not so easily done by the XSL stylesheets (tables).</para></listitem>
+<listitem><para>Post-processing is done by Perl, to make publication faster, and to parse things not so easily done by the XSL stylesheets like tables.</para></listitem>
 </itemizedlist></sect1>
   <sect1>
    <title>
@@ -82,8 +82,13 @@
   </para>
   </sect1>
   <sect1 id="sec-changes"><title>Changes</title>
+  <sect2 id="sec-changes-015"><title>Changes of version &version;</title>
+  <para>The changes between release &version; and release 0.1.4.1 are:
+  &changes3;
+  </para>
+  </sect2>
   <sect2 id="sec-changes-0141"><title>Changes of version 0.1.4.1</title>
-  <para>The changes between release &version; and release 0.1.4 are:
+  <para>The changes between release 0.1.4.1 and release 0.1.4 are:
   &changes2;
   </para>
   </sect2>

@@ -46,6 +46,7 @@ sub specs2option
       chomp $p;
       if (($key =~ /TexInputs/) ||
           ($key =~ /PdfInputs/) ||
+          ($key =~ /XslParam/) ||
           ($key =~ /TexPost/)){
         if (not($p =~ /^\//)) {
           $p = "$dirspecs/$p";

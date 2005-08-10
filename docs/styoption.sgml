@@ -16,10 +16,6 @@
 <entry align="center" valign="top">article, book</entry>
 <entry align="center" valign="top">The document is an <sgmltag>article</sgmltag> or a <sgmltag>book</sgmltag></entry>
 </row>
-<row>
-<entry align="center" valign="top">en, fr, nl</entry>
-<entry align="center" valign="top">Lang attribute of the document</entry>
-</row>
 </tbody>
 </tgroup>
 </informaltable>

@@ -1,12 +1,10 @@
 #!/bin/sh
-
+#set -x
 scriptpath=`dirname $0`
 upwd=`pwd`
 
-# Absolute script path
-if [ -d $upwd/$scriptpath ]; then
-  scriptpath=$upwd/$scriptpath
-fi
+# Absolute top package path
+toppath=`cd $scriptpath/.. && pwd`
 
 # Default Options
 ext=pdf
@@ -19,8 +17,9 @@ debug=0
 version=0
 paritems=""
 texstyle=docbook
-xsl=$scriptpath/../xsl/latex_book_fast.xsl
-btexpath=$scriptpath/../latex/scripts
+xsl=$toppath/xsl/latex_book_fast.xsl
+btexpath=$toppath/latex/scripts
+tgetpath=$toppath/latex/specs
 
 get_options() {
   while true
@@ -32,11 +31,12 @@ get_options() {
     -b) btex=$2; shift ;;
     -x) xopt=$2; shift ;;
     -d) debug=1;;
-    -s) xsl=$scriptpath/../xsl/latex_book.xsl;;
+    -s) xsl=$toppath/xsl/latex_book.xsl;;
     -p) param=$2; shift ;;
     -I) xpath=$2; shift ;;
     -S) specs=$2; shift ;;
     -P) paritems="$paritems $2"; shift ;;
+    -T) target=$2; shift ;;
     -v) version=1;;
     --style) texstyle=$2; shift ;;
     --texinputs) texinputs=$2; shift ;;
@@ -59,7 +59,21 @@ get_options() {
   file=$1
 }
 
+show_target() {
+  tgets=""
+  for i in $tgetpath/*.specs; do
+    j=`basename $i .specs`
+    if [ "$tgets" = "" ]; then
+      tgets="$j"
+    else
+      tgets="$tgets, $j"
+    fi
+  done
+  echo $tgets
+}
+
 usage() {
+  tgets=`show_target`
   cat <<eof
 `basename $0` [options] file.{sgml|xml}
 Options:
@@ -75,6 +89,7 @@ Options:
 -S spec_file           : specification file for behaviour customization
 -x option              : option passed to the XSLT
 -I "path1 path2 ..."   : extra files paths
+-T style               : available latex styles ($tgets)
 eof
   exit 1
 }
@@ -84,9 +99,9 @@ build_param() {
   paritems="$2"
   if [ "$param" != "" ]; then
     # Absolute path expected
-    if [ -f $upwd/$param ]; then
-      param=$upwd/$param
-    fi
+    bfile=`basename $param`
+    path=`dirname $param`
+    param=`cd $path && pwd`/$bfile
     param_import="<xsl:import href=\"$param\"/>"
   else
     param_import=""
@@ -113,7 +128,7 @@ eof
 
 print_version()
 {
-  ver=`cat $scriptpath/../xsl/version.xsl|grep variable|sed 's/<[^>]*>\([^<]*\)<.*$/\1/'`
+  ver=`cat $toppath/xsl/version.xsl|grep variable|sed 's/<[^>]*>\([^<]*\)<.*$/\1/'`
   echo "dblatex version $ver"
 }
 
@@ -121,8 +136,16 @@ args="$*"
 
 get_options $args
 
+if [ "$specs" = "" ] && [ "$target" != "" ]; then
+  if [ -f $tgetpath/$target.specs ]; then
+    specs="$tgetpath/$target.specs" 
+  else
+    echo "Warning: unknown $target specs"
+  fi
+fi
+
 if [ "$specs" != "" ]; then
-  specs_opt=`$scriptpath/specsread $specs`;
+  specs_opt=`$toppath/scripts/specsread $specs`;
   get_options $specs_opt $args
 fi
 
@@ -131,12 +154,13 @@ if [ "$version" = "1" ]; then
   print_version
 fi
 
+# Which make is used? If nothing said gmake is used
+[ "$GMAKE" = "" ]  && GMAKE=gmake
+
 # Is there some extra path to add to TEXINPUTS?
 if [ "$texinputs" != "" ]; then
-  if [ -d $upwd/$texinputs ]; then
-    texinputs=$upwd/$texinputs
-  fi
-  TEXINPUTS=":$texinputs:$TEXINPUTS"
+  texinputs=`cd $texinputs && pwd`
+  TEXINPUTS=":$texinputs//:$TEXINPUTS"
   export TEXINPUTS
 fi
 
@@ -153,7 +177,7 @@ case "$btex" in
 pdftex) btexrun=$btexpath/runpdflatex ;
         if [ "$pdfinputs" != "" ]; then
           if [ -d $upwd/$pdfinputs ]; then
-            pdfinputs=$upwd/$pdfinputs
+            pdfinputs=`cd $pdfinputs && pwd`
           fi
           btexrun="$btexrun --graphpath $pdfinputs"
         fi;;
@@ -173,21 +197,19 @@ basefile=`basename $file`
 sgmlfile=`basename $file .sgml`
 where=`dirname $file`
 
+# We want the absolute path
+where=`cd $where && pwd`
+file=$where/$basefile
+
 # Work in a temporary directory
 tmpdir=/tmp/tpub-$LOGNAME-$$
 mkdir $tmpdir
 cd $tmpdir
 
-# We want the absolute path
-if [ -f $upwd/$file ]; then
-  where=$upwd/$where
-  file=$upwd/$file
-fi
-
 # Let's convert to XML first if needed
 is_xml=`file $file| grep -c "XML"`
 if [ $is_xml -eq 0 ]; then
-  $scriptpath/sgml2xml.pl - $file $sgmlfile.xml
+  $toppath/scripts/sgml2xml.pl - $file $sgmlfile.xml
   file=${sgmlfile}.xml
 fi
 
@@ -198,7 +220,9 @@ out="`basename $file .xml`.${ext}"
 if [ "$dst" = "" ]; then
   dst=$where/$out
 elif [ -d `dirname $upwd/$dst` ]; then
-  dst=$upwd/$dst
+  path=`dirname $upwd/$dst`
+  bfile=`basename $dst`
+  dst=`cd $path && pwd`/$bfile
 fi
 
 # XML production only
@@ -219,14 +243,20 @@ if [ "$ifig" != "" ]; then
   fig2dev=$ifig
 fi
 
+# For easy debug
+if [ $debug -ne 0 ]; then
+  echo "TEXINPUTS=$TEXINPUTS" > $tmpdir/env_tex
+  echo "export TEXINPUTS"    >> $tmpdir/env_tex
+fi
+
 # PDF/DVI/Postscript production
-gmake -s -C $tmpdir -f $scriptpath/make.build \
+$GMAKE -s -C $tmpdir -f $toppath/scripts/make.build \
         SRCDIR=$where \
         XPATH="$xpath" \
         XSL=$xsl \
         XOPT=$xopt \
         XMLFILE=$file \
-        TEXCLEAN=$scriptpath/texclean \
+        TEXCLEAN=$toppath/scripts/texclean \
         FIG2DEV=$fig2dev \
         TEXRUN="$btexrun" TEXDRV=$btex $out
 
@@ -240,9 +270,6 @@ cd $upwd
 if [ $debug -eq 0 ]; then
   rm -r $tmpdir
 else
-  # For easy debug
-  echo "TEXINPUTS=$TEXINPUTS" > $tmpdir/env_tex
-  echo "export TEXINPUTS"    >> $tmpdir/env_tex
   echo "$tmpdir is not removed"
 fi
 exit $rc
