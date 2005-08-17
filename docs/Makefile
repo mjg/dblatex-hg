@@ -12,11 +12,9 @@ all: manual.pdf $(FIGURES) $(EQUATIONS)
 clean:
 	$(RM) manual.pdf $(EQUATIONS) $(FIGURES)
 
-#        ../scripts/dblatex -T db2latex $(OPT) -o $@ $<
-
 %.pdf: %.sgml $(TABLES) $(FIGURES) $(EQUATIONS) $(SPECS) $(CHANGES)
 	TEXINPUTS=:$(PWD)/../latex//:$(TEXIN) \
-        ../scripts/dblatex -b pdftex $(OPT) -o $@ $<
+        ../scripts/dblatex -S manual.specs $(OPT) -o $@ $<
 
 $(SPECS): manual.specs
 	echo "<programlisting><![CDATA[" > $@

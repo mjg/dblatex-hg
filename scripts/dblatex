@@ -98,10 +98,7 @@ build_param() {
   param="$1"
   paritems="$2"
   if [ "$param" != "" ]; then
-    # Absolute path expected
-    bfile=`basename $param`
-    path=`dirname $param`
-    param=`cd $path && pwd`/$bfile
+    # Suppose we have absolute path
     param_import="<xsl:import href=\"$param\"/>"
   else
     param_import=""
@@ -200,6 +197,12 @@ where=`dirname $file`
 # We want the absolute path
 where=`cd $where && pwd`
 file=$where/$basefile
+
+if [ "$param" != "" ]; then
+  bfile=`basename $param`
+  path=`dirname $param`
+  param=`cd $path && pwd`/$bfile
+fi
 
 # Work in a temporary directory
 tmpdir=/tmp/tpub-$LOGNAME-$$
