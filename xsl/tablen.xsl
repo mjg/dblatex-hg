@@ -15,6 +15,8 @@
 <xsl:param name="newtbl.default.colsep" select="'1'"/>
 <xsl:param name="newtbl.default.rowsep" select="'1'"/>
 <xsl:param name="newtbl.use" select="'0'"/>
+<xsl:param name="table.title.top" select="'0'"/>
+
 
 <xsl:template match="table">
   <!-- do we need to change text size? -->
@@ -33,6 +35,9 @@
     <xsl:text>\begin{landscape}&#10;</xsl:text>
   </xsl:if>
   <xsl:text>\begin{table}[htbp]&#10;</xsl:text>
+  <xsl:if test="$table.title.top='1'">
+    <xsl:apply-templates select="title"/>
+  </xsl:if>
   <xsl:if test="$size!='normal'">
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$size"/>
@@ -47,7 +52,7 @@
     </xsl:apply-templates>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="*[not(self::title)]"/>
   </xsl:otherwise>
   </xsl:choose>
   <xsl:text>&#10;\end{center}&#10;</xsl:text>
@@ -56,26 +61,25 @@
     <xsl:value-of select="$size"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:text>&#10;\caption{</xsl:text>
-  <xsl:choose> 
-    <xsl:when test="title">
-      <xsl:call-template name="normalize-scape">
-        <xsl:with-param name="string" select="title"/>
-      </xsl:call-template>
-    </xsl:when> 
-    <xsl:otherwise>
-      <xsl:text>*** Title expected</xsl:text>
-    </xsl:otherwise> 
-  </xsl:choose>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
+  <xsl:if test="$table.title.top='0'">
+    <xsl:apply-templates select="title"/>
+  </xsl:if>
   <xsl:text>\end{table}&#10;</xsl:text>
   <xsl:if test="@orient='land'">
     <xsl:text>\end{landscape}&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="table/title"/>
+<xsl:template match="table/title">
+  <xsl:text>&#10;\caption{</xsl:text>
+  <xsl:call-template name="normalize-scape">
+    <xsl:with-param name="string" select="."/>
+  </xsl:call-template>
+  <xsl:text>}&#10;</xsl:text>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select="parent::table"/>
+  </xsl:call-template>
+</xsl:template>
 
 <xsl:template match="informaltable">
   <!-- do we need to change text size? -->

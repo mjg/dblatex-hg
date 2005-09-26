@@ -36,20 +36,11 @@
 %   #1: number of '*' factors. Must not be zero.
 %   #2: total number of columns
 %   #3: cumulated fixed size for all the columns
-%   #4: orientation
+%   #4: orientation (no more used)
 
 \def\resizetable#1#2#3#4{ %
-  \ifthenelse{\equal{#3}{}}{%
-    \setlength{\fixwidth}{0cm}%
-  }{
-    \setlength{\fixwidth}{#3}%
-  }
-  \ifthenelse{\equal{#4}{land}}{%
-    \setlength{\colwidth}{\textheight}%
-  }{%
-    \setlength{\colwidth}{\textwidth}%
-  }%
-  \setlength{\colwidth}{\colwidth-\fixwidth-#2\mcellsz}%-\mcellsz}%
+  \setlength{\fixwidth}{#3}%
+  \setlength{\colwidth}{\linewidth-\fixwidth-#2\mcellsz}%-\mcellsz}%
   \setcounter{colnb}{#1}%
   \divide\colwidth\value{colnb}%
 }

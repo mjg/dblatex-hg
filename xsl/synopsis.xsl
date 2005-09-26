@@ -106,16 +106,16 @@
 </xsl:template>
 
 <xsl:template match="sbr">
-	<xsl:text>\newline&#10;</xsl:text>
+  <xsl:text>\newline&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="synopfragmentref">
-	<xsl:variable name="target" select="id(@linkend)"/>
-	<xsl:variable name="snum">
+  <xsl:variable name="target" select="id(@linkend)"/>
+  <xsl:variable name="snum">
     <xsl:apply-templates select="$target" mode="synopfragment.number"/>
-	</xsl:variable>
+  </xsl:variable>
 
-	<xsl:text>{\em (</xsl:text>
+  <xsl:text>{\em (</xsl:text>
   <xsl:value-of select="$snum"/>
   <xsl:text>)</xsl:text>
   <xsl:apply-templates/>
@@ -123,13 +123,13 @@
 </xsl:template>
 
 <xsl:template match="synopfragment" mode="synopfragment.number">
-	<xsl:number format="1"/>
+  <xsl:number format="1"/>
 </xsl:template>
 
 <xsl:template match="synopfragment">
-	<xsl:variable name="snum">
+  <xsl:variable name="snum">
     <xsl:apply-templates select="." mode="synopfragment.number"/>
-	</xsl:variable>
+  </xsl:variable>
 
   <xsl:if test="$snum=1"><xsl:text>&#10;</xsl:text></xsl:if>
   <xsl:text>&#10;(</xsl:text>
@@ -196,7 +196,9 @@
 </xsl:template>
 
 <xsl:template match="paramdef">
-  <xsl:variable name="paramnum"> <xsl:number count="paramdef" format="1"/> </xsl:variable>
+  <xsl:variable name="paramnum">
+    <xsl:number count="paramdef" format="1"/>
+  </xsl:variable>
   
   <xsl:if test="$paramnum=1">(</xsl:if>
   <xsl:choose>

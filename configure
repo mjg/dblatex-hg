@@ -135,6 +135,7 @@ $shel
 # Let's install the package
 #
 echo "install the package in $share..."
+rm -rf $share/$package
 mkdir -p $share
 mkdir -p $bin
 cp -r . $share/$package

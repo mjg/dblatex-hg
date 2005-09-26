@@ -10,6 +10,51 @@
 </thead>
 <tbody>
 <row>
+<entry>figure.note</entry>
+<entry>Figure to use to render a <sgmltag>note</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>figure.tip</entry>
+<entry>Figure to use to render a <sgmltag>tip</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>figure.important</entry>
+<entry>Figure to use to render a <sgmltag>important</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<row>
+<entry>figure.warning</entry>
+<entry>Figure to use to render a <sgmltag>warning</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<row>
+<entry>figure.caution</entry>
+<entry>Figure to use to render a <sgmltag>caution</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<row>
+<entry>figure.title.top</entry>
+<entry>Set to 1 the <sgmltag>figure</sgmltag> float title position is above the
+image. Set to 0 the title is under the image.</entry>
+<entry>0</entry>
+</row>
+<row>
+<entry>imagedata.default.scale</entry>
+<entry>Default scale to apply to every <sgmltag>imagedata</sgmltag> that does not
+contain any scaling attribute. By default this parameter is set to `pagebound`
+so that the included images keep their natural size up to the page boundaries.
+Except the special reserved 'pagebound' value, the expected value of the parameter
+must be some valid options passed to the \includegraphics command.</entry>
+<entry>pagebound</entry>
+</row>
+<row>
 <entry>latex.hyperparam</entry>
 <entry>cf. <xref  linkend="sec-hyperparam"></entry>
 <entry>empty</entry>
@@ -36,6 +81,26 @@ language whatever the document language is.</entry>
 <entry>latex.class.options</entry>
 <entry>Options passed to the \documentclass command.</entry>
 <entry>Empty</entry>
+</row>
+<row>
+<entry>literal.layout.options</entry>
+<entry>Overwrite the default options passed to the \lstset command.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>literal.width.ignore</entry>
+<entry>When set to 1 the programlisting and screen width attribute is ignored.
+In this case all the verbatim environment widths are equal to the enclosing
+environment width.
+</entry>
+<entry>0</entry>
+</row>
+<row>
+<entry>mediaobject.caption.style</entry>
+<entry>Font style of the mediaobject caption text. Its value can be any valid
+latex font style command combinations. By default this parameter put the caption
+text to italics.</entry>
+<entry>\slshape</entry>
 </row>
 <row>
 <entry>newtbl.use</entry>
@@ -70,34 +135,16 @@ language whatever the document language is.</entry>
 <entry>1</entry>
 </row>
 <row>
-<entry>figure.note</entry>
-<entry>Figure to use to render a <sgmltag>note</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>Empty</entry>
+<entry>seg.item.separator</entry>
+<entry>Defines the separator to use between several
+<sgmltag>segitem</sgmltag>s.</entry>
+<entry>", "</entry>
 </row>
 <row>
-<entry>figure.tip</entry>
-<entry>Figure to use to render a <sgmltag>tip</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>Empty</entry>
-</row>
-<row>
-<entry>figure.important</entry>
-<entry>Figure to use to render a <sgmltag>important</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>"warning"</entry>
-</row>
-<row>
-<entry>figure.warning</entry>
-<entry>Figure to use to render a <sgmltag>warning</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>"warning"</entry>
-</row>
-<row>
-<entry>figure.caution</entry>
-<entry>Figure to use to render a <sgmltag>caution</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>"warning"</entry>
+<entry>table.title.top</entry>
+<entry>Set to 1 the <sgmltag>table</sgmltag> float title position is above the
+table. Set to 0 the title is under the table.</entry>
+<entry>0</entry>
 </row>
 </tbody>
 </tgroup>

@@ -64,7 +64,7 @@
     <varlistentry>
     <term>
 <option>-d</option>
-</term><listitem><para>Debug mode. It only keeps the temporary directory in which dblatex actually works. <xref link="sec-debug"> explains how you can use it.
+</term><listitem><para>Debug mode. It only keeps the temporary directory in which dblatex actually works. <xref linkend="sec-debug"> explains how you can use it.
     </para>
    </listitem>
    </varlistentry>

@@ -666,9 +666,16 @@
       <xsl:text>}{</xsl:text>
       <xsl:value-of select="@cols"/>
       <xsl:text>}{</xsl:text>
-      <xsl:value-of select="$fixedwidth"/>
+      <xsl:choose>
+      <xsl:when test="$fixedwidth=''">
+        <xsl:text>0cm</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$fixedwidth"/>
+      </xsl:otherwise>
+      </xsl:choose>
       <xsl:text>}{</xsl:text>
-      <xsl:if test="@orient='land'">
+      <xsl:if test="ancestor::*[@orient='land']">
         <xsl:text>land</xsl:text>
       </xsl:if>
       <xsl:text>}&#10;</xsl:text>

@@ -5,12 +5,17 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<!-- Lists parameters -->
+<xsl:param name="seg.item.separator">, </xsl:param>
+
 
 <xsl:template match="variablelist/title|
                      orderedlist/title | itemizedlist/title | simplelist/title">
   <xsl:text>&#10;{\sc </xsl:text>
   <xsl:apply-templates/>
   <xsl:text>}&#10;</xsl:text>
+  <!-- Ask to latex to let the title with its list -->
+  <xsl:text>\nopagebreak&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="itemizedlist">
@@ -67,6 +72,12 @@
 </xsl:template>
 
 <xsl:template match="varlistentry/listitem">
+  <!-- add a space to force linebreaks for immediate following lists -->
+  <xsl:if test="child::*[1][self::itemizedlist or
+                            self::orderedlist or
+                            self::variablelist]">
+    <xsl:text>~</xsl:text>
+  </xsl:if>
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -208,10 +219,13 @@
 
 <xsl:template match="seg">
   <xsl:variable name="p" select="position()"/>
-  <xsl:text> \emph{</xsl:text>
+  <xsl:text>\emph{</xsl:text>
   <xsl:apply-templates select="../../segtitle[position()=$p]"/>
   <xsl:text>:} </xsl:text>
   <xsl:apply-templates/>
+  <xsl:if test="$p!=last()">
+    <xsl:value-of select="$seg.item.separator"/>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

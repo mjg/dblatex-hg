@@ -349,6 +349,10 @@
   <xsl:call-template name="inline.boldseq"/>
 </xsl:template>
 
+<xsl:template match="errortext">
+  <xsl:call-template name="inline.charseq"/>
+</xsl:template>
+
 <xsl:template match="foreignphrase">
   <xsl:call-template name="inline.italicseq"/>
 </xsl:template>
@@ -444,7 +448,7 @@
     <xsl:if test="position() > 1">
       <xsl:choose>
         <xsl:when test="self::guimenuitem or self::guisubmenu">
-          <xsl:text>-&gt;</xsl:text>
+          <xsl:text>\hspace{2pt}\ensuremath{\to{}}</xsl:text>
         </xsl:when>
         <xsl:otherwise>+</xsl:otherwise>
       </xsl:choose>

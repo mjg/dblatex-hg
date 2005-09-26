@@ -20,7 +20,7 @@ $istable = 0;
 $tblparse = 0;
 
 #
-# Mémorisation d'infos de l'entete : la taille des colonnes et leur alignement
+# Table header parsed to know the column sizes and alignments
 #
 sub prepare_table
 {
@@ -28,7 +28,7 @@ sub prepare_table
   my $i = 0;
   my @a = ();
   
-  @a = split(/(p{[^\|]*)/, $line);
+  @a = split(/(p{[^}]*})/, $line);
   foreach (@a) {
     if (/p{/) {
       ($sizes[$i] = $_) =~ s/p{(.*)}/$1/;
@@ -234,13 +234,13 @@ sub translate
     $line =~ s/([^ \t])([^ \t\n])/$1<cut>$2/g;
     $line =~ s/<cut>([^ \t])([^ \t\n])/<cut>$1<cut>$2/g;
   }
-  $line =~ s/^[\s\n]*$//g;
+  $line =~ s/^[\s\n]*$/ /g;
   $line =~ s/\\/\\textbackslash/g;
   $line =~ s/_/\\_/g;
   $line =~ s/{/\\{/g;
   $line =~ s/}/\\}/g;
   $line =~ s/%/\\%/g;
-  $line =~ s/\^/\\\^/g;
+  $line =~ s/\^/\\\^{}/g;
   $line =~ s/&#732;/\\textasciitilde{}/g;
   $line =~ s/&#8211;/\\textendash{}/g;
   $line =~ s/&#8212;/\\textemdash{}/g;
@@ -347,7 +347,7 @@ sub figconvert
     if (exists $figdone{"$fig"}) {
       $newfig = $figdone{"$fig"};
       print "already done with $newfig\n";
-      $line =~ s/$f/$newfig/;
+      $line =~ s/$f/$newfig/g;
 
     # Convert the figure
     } elsif (-f $fig) {
@@ -370,7 +370,7 @@ sub figconvert
         $figdone{"$fig"} = $newfig;
         print "$dofig\n";
         system("$dofig");
-        $line =~ s/$f/$newfig/;
+        $line =~ s/$f/$newfig/g;
       }
     }
   }

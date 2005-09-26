@@ -5,6 +5,10 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<!-- Mediaobject/imagedata parameters -->
+<xsl:param name="imagedata.default.scale">pagebound</xsl:param>
+<xsl:param name="mediaobject.caption.style">\slshape</xsl:param>
+
 
 <xsl:template match="videoobject">
   <xsl:apply-templates select="videodata"/>
@@ -18,8 +22,20 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="mediaobject/caption">
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$mediaobject.caption.style"/>
+  <xsl:text> </xsl:text>
+  <xsl:call-template name="normalize-scape">
+    <xsl:with-param name="string" select="."/>
+  </xsl:call-template>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template match="mediaobject|inlinemediaobject">
-<!--
+  <xsl:variable name="figcount"
+                select="count(ancestor::figure/mediaobject[imageobject])"/>
+  <!--
   within a figure don't put each mediaobject into a separate paragraph, 
   to let the subfigures correctly displayed.
   -->
@@ -36,15 +52,13 @@
       <xsl:apply-templates select="textobject[1]"/>
     </xsl:otherwise>
   </xsl:choose>
+  <!-- print the caption if not in a float, or is single -->
+  <xsl:if test="caption and ($figcount &lt;= 1)">
+    <xsl:text>\begin{center}&#10;</xsl:text>
+    <xsl:apply-templates select="caption"/>
+    <xsl:text>\end{center}&#10;</xsl:text>
+  </xsl:if> 
   <xsl:if test="self::mediaobject and not(parent::figure)">
-    <!-- print the caption even if not in a float -->
-    <xsl:if test="caption">
-      <xsl:text>\begin{center}&#10;</xsl:text>
-      <xsl:call-template name="normalize-scape">
-        <xsl:with-param name="string" select="caption"/>
-      </xsl:call-template>
-      <xsl:text>\end{center}&#10;</xsl:text>
-    </xsl:if> 
     <xsl:text>\end{center}&#10;</xsl:text>
     <xsl:text>\end{minipage}&#10;</xsl:text>
     <xsl:text>&#10;</xsl:text>
@@ -58,7 +72,7 @@
     <!-- space before subfigure to prevent from strange behaviour with other
          subfigures -->
     <xsl:text> \subfigure[</xsl:text>
-    <xsl:value-of select="../caption"/>
+    <xsl:apply-templates select="../caption"/>
     <xsl:text>]{</xsl:text>
   </xsl:if>
   <xsl:if test="$latex.figure.boxed = '1'">
@@ -101,6 +115,19 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="image.default.set">
+  <xsl:choose>
+  <xsl:when test="$imagedata.default.scale='pagebound'">
+    <!-- use the natural size up to the page boundaries -->
+    <xsl:text>width=\imgwidth,height=\imgheight,keepaspectratio=true</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- put the parameter value as is -->
+    <xsl:value-of select="$imagedata.default.scale"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="imagedata" name="imagedata">
   <xsl:variable name="filename">
     <xsl:choose>
@@ -129,7 +156,8 @@
        is ignored. -->
   <xsl:variable name="viewport">
     <xsl:choose>
-    <xsl:when test="(@width or @depth) and (@contentwidth or @contentdepth or @scale)">
+    <xsl:when test="(@width or @depth) and
+                    (@contentwidth or @contentdepth or @scale)">
       <xsl:value-of select="1"/>
     </xsl:when>
     <xsl:otherwise>
@@ -193,6 +221,13 @@
     <xsl:text>\raggedleft </xsl:text>
   </xsl:when>
   </xsl:choose>
+
+  <!-- find out the natural image size -->
+  <xsl:if test="$imagedata.default.scale='pagebound'">
+    <xsl:text>\imgevalsize{</xsl:text>
+    <xsl:value-of select="$filename"/>
+    <xsl:text>}</xsl:text>
+  </xsl:if>
   <xsl:text>{\includegraphics[</xsl:text>
   <!-- TDG says that content, scale and scalefit are mutually exclusive -->
   <xsl:choose>
@@ -232,7 +267,7 @@
       <xsl:value-of select="number(@scale) div 100"/>
     </xsl:when>
     <!-- only viewport area spec with scalefit -->
-    <xsl:when test="not(@scalefit) or @scalefit='1'">
+    <xsl:when test="(not(@scalefit) or @scalefit='1') and (@width or @depth)">
       <xsl:if test="@width">
         <xsl:text>width=</xsl:text>
         <xsl:value-of select="$width"/>
@@ -246,6 +281,10 @@
       <!-- TDG says that scale to fit cannot be anamorphic -->
       <xsl:text>keepaspectratio=true</xsl:text>
     </xsl:when>
+    <!-- default scaling (if any) -->
+    <xsl:otherwise>
+      <xsl:call-template name="image.default.set"/>
+    </xsl:otherwise>
   </xsl:choose>
   <xsl:if test="@format = 'PRN'">
     <xsl:text>,angle=270</xsl:text>

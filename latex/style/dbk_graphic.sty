@@ -1,0 +1,20 @@
+%
+% The macro measures the image natural size up to the page boundaries
+%
+\newlength{\imgwidth}
+\newlength{\imgheight}
+\setlength{\imgwidth}{\textwidth}%
+\setlength{\imgheight}{\textheight}%
+
+\def\imgevalsize#1{
+  \sbox{\z@}{\includegraphics{#1}}%
+  \settowidth{\imgwidth}{\usebox{\z@}}%
+  \settoheight{\imgheight}{\usebox{\z@}}%
+  \ifnum\imgwidth>\textwidth%
+    \setlength{\imgwidth}{\textwidth}%
+  \fi%
+  \ifnum\imgheight>\textheight%
+    \setlength{\imgwidth}{\textheight}%
+  \fi%
+}
+

@@ -82,8 +82,13 @@
   </para>
   </sect1>
   <sect1 id="sec-changes"><title>Changes</title>
-  <sect2 id="sec-changes-015"><title>Changes of version &version;</title>
-  <para>The changes between release &version; and release 0.1.4.1 are:
+  <sect2 id="sec-changes-016"><title>Changes of version &version;</title>
+  <para>The changes between release &version; and release 0.1.5 are:
+  &changes4;
+  </para>
+  </sect2>
+  <sect2 id="sec-changes-015"><title>Changes of version 0.1.5</title>
+  <para>The changes between release 0.1.5 and release 0.1.4.1 are:
   &changes3;
   </para>
   </sect2>
@@ -108,7 +113,7 @@
    <para>
     <xref linkend="fig-processus"> explains the process applied. It shows the tools used and the steps. The emphasized tools are provided by the package.
    </para>
-<figure id="fig-processus">
+<figure id="fig-processus" float="0">
 <title>Transforming Process</title>
 <mediaobject><imageobject> 
 <imagedata fileref="processus" align="center" width="60%">

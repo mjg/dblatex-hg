@@ -325,7 +325,7 @@
 
 
 <!-- to manage entities correctly (such as &amp;) -->
-<xsl:template match="holder|publishername" mode="bibliography.mode">
+<xsl:template match="holder|publishername|edition" mode="bibliography.mode">
   <xsl:apply-templates/>
 </xsl:template>
 

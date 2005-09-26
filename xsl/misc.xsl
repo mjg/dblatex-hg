@@ -23,7 +23,7 @@
   <xsl:text>{report}&#10;</xsl:text>
   <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
   <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
-  <xsl:text>\usepackage{a4wide}&#10;</xsl:text>
+  <xsl:text>%\usepackage{a4wide}&#10;</xsl:text>
   <xsl:text>\setcounter{secnumdepth}{5}&#10;</xsl:text>
   <xsl:text>\usepackage{fancybox}&#10;</xsl:text>
   <xsl:text>\usepackage{makeidx}&#10;</xsl:text>
@@ -42,7 +42,7 @@
   <xsl:text>{article}&#10;</xsl:text>
   <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
   <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
-  <xsl:text>\usepackage{a4wide}&#10;</xsl:text>
+  <xsl:text>%\usepackage{a4wide}&#10;</xsl:text>
   <xsl:text>\setcounter{secnumdepth}{5}&#10;</xsl:text>
   <xsl:text>\usepackage{fancybox}&#10;</xsl:text>
   <xsl:text>\usepackage{makeidx}&#10;</xsl:text>
@@ -118,62 +118,74 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="docinfo">
-  <xsl:param name="info" select="."/>
-  <xsl:if test="$info/releaseinfo">
+<xsl:template match="releaseinfo">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="bookinfo|articleinfo" mode="docinfo">
+  <xsl:if test="releaseinfo">
     <xsl:text>\renewcommand{\DBKreleaseinfo}{</xsl:text>
-    <xsl:value-of select="normalize-space($info/releaseinfo)"/>
-    <xsltext>}&#10;</xsltext>
+    <xsl:apply-templates select="releaseinfo"/>
+    <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$info/pubsnumber">
+  <xsl:if test="pubsnumber">
     <xsl:text>\renewcommand{\DBKreference}{</xsl:text>
-    <xsl:value-of select="normalize-space($info/pubsnumber)"/>
+    <xsl:value-of select="normalize-space(pubsnumber)"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$info/pubdate">
+  <xsl:if test="pubdate">
     <xsl:text>\renewcommand{\DBKpubdate}{</xsl:text>
-    <xsl:value-of select="normalize-space($info/pubdate)"/>
+    <xsl:value-of select="normalize-space(pubdate)"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$info/address">
+  <xsl:if test="address">
     <xsl:text>\renewcommand{\DBKsite}{</xsl:text>
-    <xsl:value-of select="normalize-space($info/address)"/>
+    <xsl:value-of select="normalize-space(address)"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$info/edition">
+  <xsl:if test="edition">
     <xsl:text>\renewcommand{\DBKedition}{</xsl:text>
     <xsl:call-template name="normalize-scape">
-      <xsl:with-param name="string" select="$info/edition"/>
+      <xsl:with-param name="string" select="edition"/>
     </xsl:call-template>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$info/copyright">
+  <xsl:if test="copyright">
     <xsl:text>\renewcommand{\DBKcopyright}{</xsl:text>
-    <xsl:apply-templates select="$info/copyright" mode="bibliography.mode"/>
+    <xsl:apply-templates select="copyright" mode="bibliography.mode"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$info/subtitle">
+  <xsl:if test="subtitle">
     <xsl:text>\renewcommand{\DBKsubtitle}{</xsl:text>
     <xsl:call-template name="normalize-scape">
-      <xsl:with-param name="string" select="$info/subtitle"/>
+      <xsl:with-param name="string" select="subtitle"/>
     </xsl:call-template>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <!-- Override the date definition if specified -->
-  <xsl:if test="$info/date">
+  <xsl:if test="date">
     <xsl:text>\renewcommand{\DBKdate}{</xsl:text>
-    <xsl:value-of select="normalize-space($info/date)"/>
+    <xsl:value-of select="normalize-space(date)"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="user.params.set">
+  <xsl:if test="$latex.hyperparam">
+    <xsl:text>\def\hyperparam{</xsl:text>
+    <xsl:value-of select="$latex.hyperparam"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$literal.layout.options">
+    <xsl:text>\def\lstparam{</xsl:text>
+    <xsl:value-of select="$literal.layout.options"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
 <xsl:template match="book">
   <xsl:value-of select="$latex.book.preamblestart"/>
-  <xsl:if test="$latex.hyperparam">
-    <xsl:text>\def\hyperparam{</xsl:text>
-    <xsl:value-of select="$latex.hyperparam"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
+  <xsl:call-template name="user.params.set"/>
   <xsl:if test="@lang">
     <xsl:text>\def\DBKlocale{</xsl:text>
     <xsl:value-of select="@lang"/>
@@ -187,9 +199,7 @@
     <xsl:call-template name="use.babel"/>
   </xsl:if>
 
-  <xsl:call-template name="docinfo">
-    <xsl:with-param name="info" select="bookinfo"/>
-  </xsl:call-template>
+  <xsl:apply-templates select="bookinfo" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
   <xsl:if test="subtitle">
@@ -294,11 +304,7 @@
 
 <xsl:template match="article">
   <xsl:value-of select="$latex.article.preamblestart"/>
-  <xsl:if test="$latex.hyperparam">
-    <xsl:text>\def\hyperparam{</xsl:text>
-    <xsl:value-of select="$latex.hyperparam"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
+  <xsl:call-template name="user.params.set"/>
   <xsl:if test="@lang">
     <xsl:text>\def\DBKlocale{</xsl:text>
     <xsl:value-of select="@lang"/>
@@ -312,9 +318,7 @@
     <xsl:call-template name="use.babel"/>
   </xsl:if>
 
-  <xsl:call-template name="docinfo">
-    <xsl:with-param name="info" select="articleinfo"/>
-  </xsl:call-template>
+  <xsl:apply-templates select="articleinfo" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
   <xsl:if test="subtitle">
@@ -406,8 +410,8 @@
 
 <xsl:template match="book/title"/>
 <xsl:template match="article/title"/>
-<xsl:template match="book/bookinfo"/>
-<xsl:template match="article/articleinfo"/>
+<xsl:template match="bookinfo"/>
+<xsl:template match="articleinfo"/>
 
 <!-- what to do with set? -->
 <xsl:template match="set">
