@@ -1,5 +1,6 @@
 <!doctype book public "-//OASIS//DTD DocBook V3.1//EN"
  [
+<!ENTITY edition "8">
 <!ENTITY intro SYSTEM "introduction.sgml">
 <!ENTITY install SYSTEM "install.sgml">
 <!ENTITY table SYSTEM "table.sgml">
@@ -54,7 +55,7 @@
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
 <address>Toulon</address>
-<edition>7</edition>
+<edition>&edition;</edition>
 <releaseinfo>Working Paper</releaseinfo>
 <othercredit>
 <firstname>Jean-Yves</firstname><surname>Le Ruyet</surname>
@@ -164,7 +165,7 @@
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
 <revision>
-<revnumber>8</revnumber><date>25/09/05</date>
+<revnumber>&edition;</revnumber><date>25/09/05</date>
 <revdescription>
  <para>
   Changes: see <xref linkend="sec-changes-016">
