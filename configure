@@ -101,7 +101,7 @@ deps_sty=`perl -e 'while(<>) {
                    }' latex/style/*.sty`
 for sty_name in $deps_sty ;do
   sty_file=$sty_name.sty
-  if [ -f latex/style/$sty_file ]; then
+  if [ -f latex/style/$sty_file ] || [ -f latex/misc/$sty_file ]; then
     # This file is provided by this package...
     echo "+checking $sty_file... found in package"
   else
