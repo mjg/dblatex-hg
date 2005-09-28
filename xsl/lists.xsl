@@ -57,9 +57,9 @@
 </xsl:template>
 
 <xsl:template match="varlistentry">
-  <xsl:text>\item[</xsl:text>
+  <xsl:text>\item[{</xsl:text>
   <xsl:apply-templates select="term"/>
-  <xsl:text>] </xsl:text>
+  <xsl:text>}] </xsl:text>
   <xsl:apply-templates select="term" mode="foottext"/>
   <xsl:apply-templates select="listitem"/>
 </xsl:template>

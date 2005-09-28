@@ -1,4 +1,0 @@
-#
-# Actually, nothing to do
-#
-echo "Post treatment for $1"

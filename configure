@@ -135,7 +135,12 @@ $shel
 # Let's install the package
 #
 echo "install the package in $share..."
-rm -rf $share/$package
+rm -rf $share/$package/scripts
+rm -rf $share/$package/xsl
+rm -rf $share/$package/docs
+# Maintain the latex/contrib directory
+rm -rf $share/$package/latex/example
+rm -rf $share/$package/latex/style
 mkdir -p $share
 mkdir -p $bin
 cp -r . $share/$package

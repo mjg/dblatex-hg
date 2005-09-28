@@ -37,6 +37,7 @@
 <!ENTITY changes2 SYSTEM "changes-0.1.4.1.sgml">
 <!ENTITY changes3 SYSTEM "changes-0.1.5.sgml">
 <!ENTITY changes4 SYSTEM "changes-0.1.6.sgml">
+<!ENTITY faq SYSTEM "faq.sgml">
 ]>
 
 <book lang="en">
@@ -376,15 +377,14 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
   </sect1>
  </chapter>
  &custom;
- <!--
  &faq;
- -->
  <chapter>
   <title>
   Thanks
  </title>
  <para>
-  Thanks to the people who contribute to the project: Jean-Yves Le Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help, and all the users for their remarks to improve the product, like the KDE documentation team, or Vincent Hottier who asked for the embedded LaTeX equations support. 
+  Thanks to the people who contributed to the project at its early age: Jean-Yves Le Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help, Vincent Hottier who asked for the embedded LaTeX equations support.</para>
+  <para>Special thanks to the KDE documentation team and Kai Brommann for their feedbacks, encouragements, and advice.
  </para>
  </chapter>
 

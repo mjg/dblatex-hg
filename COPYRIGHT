@@ -59,6 +59,15 @@ NEW TABLE SUPPORT
   One can switch to this very good implementation by setting the parameter
   newtbl.use='1'. 
 
+LATEX PACKAGES
+--------------------------------------------------------------------------------
+  The following latex packages are provided for convenience because they are
+  missing in some Debian or Fedora Core default LaTeX distributions. Dblatex
+  does not ensure that the package versions given here are compatible with your
+  latex distribution.
+
+  * bibtopic.sty 
+
 MISCELLANEOUS
 --------------------------------------------------------------------------------
   * string-replace by David Carlisle http://www.jclark.com

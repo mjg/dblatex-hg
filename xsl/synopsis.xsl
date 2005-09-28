@@ -28,9 +28,10 @@
      ############### -->
 
 <xsl:template match="cmdsynopsis">
+  <xsl:text>&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
-  <xsl:text>&#10;&#10;</xsl:text>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="cmdsynopsis/command">
