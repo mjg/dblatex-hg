@@ -47,7 +47,15 @@ release=$package-$version
 
 echo "building version $version"
 
-cd /tmp; cvs -z3 -q export -r $tag -d $release $cvspackage; rc=$?
+tmpdir=`mktemp -d /tmp/dblatex.XXXX`
+if ! [ -d "$tmpdir" ]; then
+  echo "Cannot create temporary directory $tmpdir"
+  exit 1
+fi
+
+tmpbuild=$tmpdir/$release
+
+cd $tmpdir; cvs -z3 -q export -r $tag -d $release $cvspackage; rc=$?
 cd -
 
 if [ $rc -ne 0 ]; then
@@ -56,26 +64,27 @@ if [ $rc -ne 0 ]; then
 fi
 
 # Remove the devel only files
-rm /tmp/$release/build_package
-rm /tmp/$release/xsl/common/.cvsignore
-rm /tmp/$release/xsl/common/Makefile
-rm -r /tmp/$release/tests/mathml/build
-rm /tmp/$release/tests/mathml/excluded*
+rm -f $tmpbuild/build_package
+rm -f $tmpbuild/xsl/common/.cvsignore
+rm -f $tmpbuild/xsl/common/Makefile
+rm -r $tmpbuild/tests/mathml/build
+rm -f $tmpbuild/tests/mathml/excluded*
 
 # Temporary manual cleanup
-rm -r /tmp/$release/xsl/latex-0.5.1
-rm -r /tmp/$release/latex/example
+rm -rf $tmpbuild/xsl/latex-0.5.1
+rm -rf $tmpbuild/latex/example
 
 # Make the package version file
-sed "s/devel/$version/" /tmp/$release/xsl/version.xsl > \
-     /tmp/$release/xsl/version2.xsl
-mv /tmp/$release/xsl/version2.xsl /tmp/$release/xsl/version.xsl
+sed "s/devel/$version/" $tmpbuild/xsl/version.xsl > \
+     $tmpbuild/xsl/version2.xsl
+mv $tmpbuild/xsl/version2.xsl $tmpbuild/xsl/version.xsl
 
 # Make the package doc
-echo "$version" > /tmp/$release/docs/version.sgml
-gmake -C /tmp/$release/docs
+echo "$version" > $tmpbuild/docs/version.sgml
+rm -f $tmpbuild/docs/*.pdf
+gmake -C $tmpbuild/docs
 
 # Make the ball
-tar cvf - -C /tmp $release | bzip2 > $release.tar.bz2
-rm -r /tmp/$release
+tar cvf - -C $tmpdir $release | bzip2 > $release.tar.bz2
+rm -r $tmpbuild
 
