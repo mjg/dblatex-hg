@@ -177,9 +177,9 @@
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:if test="$literal.layout.options">
-    <xsl:text>\def\lstparam{</xsl:text>
+    <xsl:text>\def\lstparamset{\lstset{</xsl:text>
     <xsl:value-of select="$literal.layout.options"/>
-    <xsl:text>}&#10;</xsl:text>
+    <xsl:text>}}&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 

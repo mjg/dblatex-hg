@@ -12,9 +12,9 @@
 \newcommand{\wrapsign}{\hbox{\rm\ensuremath\hookleftarrow}}
 
 %
-% Default verbatim layout used if \lstparam not defined
+% Default verbatim layout used if \lstparamset not defined
 %
-\@ifundefined{lstparam}{
+\@ifundefined{lstparamset}{
 \lstset{%
     basicstyle=\ttfamily\small, %
     identifierstyle=\color{colIdentifier}, %
@@ -23,18 +23,20 @@
     commentstyle=\color{colComments}, %
     tabsize=2, %
     frame=single, %
+    framerule=0pt, %
     extendedchars=true, %
     showspaces=false, %
     showstringspaces=false, %
     numberstyle=\tiny, %
     breaklines=true, %
     prebreak={\space\wrapsign}, %
-    backgroundcolor=\color{hellgelb}, %
+    backgroundcolor=\color[gray]{0.95}, %
     breakautoindent=true, %
     captionpos=b%
 }
 }{
-\lstset{\lstparam}
+% Call the user macro that defines the layout
+\lstparamset
 }
 
 %
