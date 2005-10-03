@@ -51,7 +51,8 @@
 </xsl:template>
 
 <xsl:template match="listitem">
-  <xsl:text>&#10;\item </xsl:text>
+  <!-- Add {} to avoid some mess with following square brackets [...] -->
+  <xsl:text>&#10;\item{}</xsl:text>
   <xsl:apply-templates/>
   <xsl:text>&#10;</xsl:text>
 </xsl:template>
