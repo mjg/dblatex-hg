@@ -1,0 +1,12 @@
+% Counters for cross-referencing callouts
+\newcounter{cocnt}
+\newcounter{colref}
+
+% How to représent a <co> embedded in a listing
+\def\co#1{\refstepcounter{cocnt}\textcircled{\tiny\rm{#1}}}
+
+% Make the <co> text and the label to link to
+\def\coref#1#2{\co{#1}\label{#2}}
+
+% Make the <callout> label to link to
+\def\collabel#1{\refstepcounter{colref}\label{#1}}
