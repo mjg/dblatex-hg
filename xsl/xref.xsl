@@ -266,9 +266,9 @@
   <xsl:apply-templates select="." mode="callout-bug"/>
 </xsl:template>
 
-<xsl:template match="co" mode="conumber">
-  <xsl:number from="literallayout|programlisting|screen|synopsis"
-              level="single"
+<xsl:template match="co|callout" mode="conumber">
+  <xsl:number from="literallayout|programlisting|screen|synopsis|calloutlist"
+              level="any"
               format="1"/>
 </xsl:template>
 

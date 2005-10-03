@@ -24,6 +24,7 @@
 <xsl:include href="inlined.xsl"/>
 <xsl:include href="format.xsl"/>
 <xsl:include href="verbatim.xsl"/>
+<xsl:include href="verbatimco.xsl"/>
 <xsl:include href="refentry.xsl"/>
 <xsl:include href="biblio.xsl"/>
 <xsl:include href="index.xsl"/>

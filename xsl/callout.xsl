@@ -5,25 +5,132 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<!-- Callout parameters -->
+<xsl:param name="co.tagout" select="':&gt;'"/>
+<xsl:param name="co.linkends.show" select="'1'"/>
 
-<xsl:template match="programlistingco|screenco">
-	<xsl:apply-templates/>
-</xsl:template>
+<!-- Prerequesite: the following latex macros are defined:
+     * \co{text}
+     * \coref{text}{label}
+     * \collabel{label}
+-->
 
-<xsl:template match="areaspec|areaset|area"/>
 
-<xsl:template match="co">
-    <xsl:apply-templates select="." mode="callout-bug"/>
-</xsl:template>
+<!-- Generate the enter TeX escape sequence for <co>. The principle is to
+     find the first sequence of the form "<[try]:" that is not contained in
+     the listing, to ensure that no conflict will occur with lslisting -->
 
-<xsl:template match="co" mode="callout-bug">
-  <xsl:variable name="conum">
-    <xsl:number count="co" format="1"/>
+<xsl:template name="co-tagin-gen">
+  <xsl:param name="text" select="."/>
+  <xsl:param name="try" select="'0'"/>
+  <xsl:variable name="tag">
+    <xsl:text>&lt;</xsl:text>
+    <xsl:if test="$try &gt; 0">
+      <xsl:value-of select="$try"/>
+    </xsl:if>
+    <xsl:text>:</xsl:text>
   </xsl:variable>
 
-  <xsl:text>(</xsl:text>
-  <xsl:value-of select="$conum"/>
-  <xsl:text>)</xsl:text>
+  <xsl:choose>
+  <xsl:when test="contains($text, $tag)">
+    <xsl:message>Try another escape sequence for &lt;co&gt;</xsl:message> 
+    <xsl:call-template name="co-tagin-gen">
+      <xsl:with-param name="text" select="$text"/>
+      <xsl:with-param name="try" select="$try+1"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- Ok, this sequence can be used safely -->
+    <xsl:value-of select="$tag"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Split and make the references of the arearefs/linkends list -->
+<xsl:template name="corefs.split">
+  <xsl:param name="refs"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:choose>
+  <xsl:when test="contains($refs, ' ')">
+    <xsl:variable name="ref" select="substring-before($refs, ' ')"/>
+    <xsl:text>\hyperref[</xsl:text>
+    <xsl:value-of select="$ref"/>
+    <xsl:text>]{</xsl:text>
+    <xsl:apply-templates select="$rnode//*[@id=$ref]" mode="conumber"/>
+    <xsl:text>}, </xsl:text>
+    <xsl:call-template name="corefs.split">
+      <xsl:with-param name="refs" select="substring-after($refs, ' ')"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\hyperref[</xsl:text>
+    <xsl:value-of select="$refs"/>
+    <xsl:text>]{</xsl:text>
+    <!-- Cannot use directly id() because it must work on several RTF -->
+    <xsl:apply-templates select="$rnode//*[@id=$refs]" mode="conumber"/>
+    <xsl:text>}</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<xsl:template match="co" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:variable name="conum">
+    <xsl:apply-templates select="." mode="conumber"/>
+  </xsl:variable>
+
+  <xsl:value-of select="$co-tagin"/>
+  <xsl:choose>
+  <xsl:when test="@id">
+    <xsl:text>\coref{</xsl:text>
+    <xsl:value-of select="$conum"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="@id"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\co{</xsl:text>
+    <xsl:value-of select="$conum"/>
+    <xsl:text>}</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+  <xsl:if test="@linkends and $co.linkends.show='1'">
+    <xsl:text>[</xsl:text>
+    <xsl:call-template name="corefs.split">
+      <xsl:with-param name="refs" select="normalize-space(@linkends)"/>
+    </xsl:call-template>
+    <xsl:text>]</xsl:text>
+  </xsl:if>
+  <xsl:value-of select="$co.tagout"/>
+</xsl:template>
+
+<!-- List of the callouts descriptions -->
+<xsl:template match="calloutlist">
+  <xsl:param name="rnode" select="/"/>
+  <xsl:apply-templates select="title"/>
+  <xsl:text>&#10;\begin{description}&#10;</xsl:text>
+  <xsl:apply-templates select="callout">
+    <xsl:with-param name="rnode" select="$rnode"/>
+  </xsl:apply-templates>
+  <xsl:text>\end{description}&#10;</xsl:text>
+</xsl:template>
+
+<!-- Callout Description -->
+<xsl:template match="callout">
+  <xsl:param name="rnode" select="/"/>
+  <xsl:text>\item[{</xsl:text>
+  <xsl:call-template name="corefs.split">
+    <xsl:with-param name="refs" select="normalize-space(@arearefs)"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
+  </xsl:call-template>
+  <xsl:text>}]</xsl:text>
+  <xsl:if test="@id and $co.linkends.show='1'">
+    <xsl:text>\collabel{</xsl:text>
+    <xsl:value-of select="@id"/>
+    <xsl:text>}</xsl:text>
+  </xsl:if>
+  <xsl:apply-templates/>
 </xsl:template>
 
 </xsl:stylesheet>

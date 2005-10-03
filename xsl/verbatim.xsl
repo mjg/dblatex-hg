@@ -29,6 +29,14 @@
       <xsl:text>\lstcharwidth+2\lstframesep}</xsl:text>
     </xsl:if>
   </xsl:variable>
+
+  <!-- get the listing co escape sequence if needed -->
+  <xsl:variable name="co-tagin">
+    <xsl:if test="descendant::co">
+      <xsl:call-template name="co-tagin-gen"/>
+    </xsl:if>
+  </xsl:variable>
+
   <xsl:variable name="opt">
     <!-- language option is only for programlisting -->
     <xsl:if test="@language">
@@ -62,6 +70,14 @@
       <xsl:text>,</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
+    <!-- TeX delimiters if <co>s are embedded -->
+    <xsl:if test="$co-tagin!=''">
+      <xsl:text>escapeinside={</xsl:text>
+      <xsl:value-of select="$co-tagin"/>
+      <xsl:text>}{</xsl:text>
+      <xsl:value-of select="$co.tagout"/>
+      <xsl:text>},</xsl:text>
+    </xsl:if>
   </xsl:variable>
 
   <!-- put the listing with formula here -->
@@ -83,7 +99,9 @@
                 string-length(normalize-space(substring-before(.,'&#10;')))&gt;0">
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
-  <xsl:apply-templates mode="latex.programlisting"/>
+  <xsl:apply-templates mode="latex.programlisting">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
+  </xsl:apply-templates>
   <xsl:text>\end{</xsl:text>
   <xsl:value-of select="$env"/>
   <xsl:text>}&#10;</xsl:text>
