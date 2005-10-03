@@ -18,6 +18,16 @@
   \expandafter[\expandafter3\expandafter]\expandafter{%
   \multicolumn{#1}{#2}{#3}}
 
+% Make \@xmultirow long
+\expandafter\long\expandafter\def%
+\expandafter\@xmultirow%
+\expandafter#\expandafter1%
+\expandafter[\expandafter#\expandafter2\expandafter]%
+\expandafter#\expandafter3%
+\expandafter[\expandafter#\expandafter4\expandafter]%
+\expandafter#\expandafter5%
+\expandafter{\@xmultirow{#1}[#2]{#3}[#4]{#5}}
+
 % For the newtbl code
 \newdimen\newtblstarfactor%
 \newdimen\newtblsparewidth%
@@ -49,7 +59,7 @@
 \def\tsize{\colwidth}
 
 % Shortcut to use multirow, so that it works with tsize
-\def\mrow#1#2#3{ %
+\long\def\mrow#1#2#3{ %
   \setlength{\cellsz}{#2}%
   \multirow{#1}{\cellsz}{#3}%
 }
