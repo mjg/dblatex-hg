@@ -77,7 +77,9 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{</xsl:text>
+  <xsl:text>%% texclean(hyphenon)&#10;</xsl:text>
   <xsl:copy-of select="$content"/>
+  <xsl:text>%% texclean(hyphenoff)&#10;</xsl:text>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -85,9 +87,11 @@
   <xsl:param name="content">
     <xsl:apply-templates/>
   </xsl:param>
-  <xsl:text>\texttt{\emph{</xsl:text>
+  <xsl:text>\texttt{\emph{\small{</xsl:text>
+  <xsl:text>%% texclean(hyphenon)&#10;</xsl:text>
   <xsl:copy-of select="$content"/>
-  <xsl:text>}}</xsl:text>
+  <xsl:text>%% texclean(hyphenoff)&#10;</xsl:text>
+  <xsl:text>}}}</xsl:text>
 </xsl:template>
 
 <!-- ==================================================================== -->
