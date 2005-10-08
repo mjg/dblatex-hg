@@ -18,8 +18,37 @@
 
 <!-- The following templates now works only with the listings package -->
 
-<xsl:template match="programlisting|screen">
+<!-- The listing content is internal to the element, and is not a reference
+     to an external file -->
+
+<xsl:template match="programlisting|screen" mode="internal">
+  <xsl:param name="opt"/>
+  <xsl:param name="co-tagin"/>
+
   <xsl:variable name="env" select="'lstlisting'"/>
+
+  <xsl:text>&#10;\begin{</xsl:text>
+  <xsl:value-of select="$env"/>
+  <xsl:text>}</xsl:text>
+  <xsl:if test="$opt!=''">
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$opt"/>
+    <xsl:text>]</xsl:text>
+  </xsl:if>
+  <!-- some text just after the open tag must be put on a new line -->
+  <xsl:if test="not(contains(.,'&#10;')) or
+                string-length(normalize-space(substring-before(.,'&#10;')))&gt;0">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
+  <xsl:apply-templates mode="latex.programlisting">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
+  </xsl:apply-templates>
+  <xsl:text>\end{</xsl:text>
+  <xsl:value-of select="$env"/>
+  <xsl:text>}&#10;</xsl:text>
+</xsl:template>
+ 
+<xsl:template match="programlisting|screen">
   <!-- formula to compute the listing width -->
   <xsl:variable name="width">
     <xsl:if test="$literal.width.ignore='0' and
@@ -86,25 +115,29 @@
     <xsl:value-of select="$width"/>
   </xsl:if>
 
-  <xsl:text>&#10;\begin{</xsl:text>
-  <xsl:value-of select="$env"/>
-  <xsl:text>}</xsl:text>
-  <xsl:if test="$opt!=''">
-    <xsl:text>[</xsl:text>
-    <xsl:value-of select="$opt"/>
-    <xsl:text>]</xsl:text>
-  </xsl:if>
-  <!-- some text just after the open tag must be put on a new line -->
-  <xsl:if test="not(contains(.,'&#10;')) or
-                string-length(normalize-space(substring-before(.,'&#10;')))&gt;0">
-    <xsl:text>&#10;</xsl:text>
-  </xsl:if>
-  <xsl:apply-templates mode="latex.programlisting">
-    <xsl:with-param name="co-tagin" select="$co-tagin"/>
-  </xsl:apply-templates>
-  <xsl:text>\end{</xsl:text>
-  <xsl:value-of select="$env"/>
-  <xsl:text>}&#10;</xsl:text>
+  <xsl:choose>
+  <xsl:when test="descendant::imagedata[@format='linespecific']|
+                  descendant::textdata">
+    <!-- the listing content is in an external file -->
+    <xsl:text>&#10;\lstinputlisting</xsl:text>
+    <xsl:if test="$opt!=''">
+      <xsl:text>[</xsl:text>
+      <xsl:value-of select="$opt"/>
+      <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="descendant::imagedata/@fileref|
+                          descendant::textdata/@fileref"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- the listing content is internal -->
+    <xsl:apply-templates select="." mode="internal">
+      <xsl:with-param name="co-tagin" select="$co-tagin"/>
+      <xsl:with-param name="opt" select="$opt"/>
+    </xsl:apply-templates>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
