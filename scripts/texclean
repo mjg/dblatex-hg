@@ -226,10 +226,33 @@ sub table_parse
 $keyon = '\\\\xt';
 $keyoff = '/xt';
 
+# Known embedded commands
+$do_hyphen = 0;
+
+sub command_update
+{
+  local($line) = $_[0];
+  my $cmd;
+
+  if ($line =~ /%% texclean\(/) {
+    ($cmd = $line) =~ s/.*texclean\(([^\)]*)\).*\n/$1/;
+    if ($cmd eq "hyphenon") {
+      $do_hyphen = 1;
+    } elsif ($cmd eq "hyphenoff") {
+      $do_hyphen = 0;
+    }
+  }
+}
+
 sub translate
 {
   local($line) = $_[0];
-  if ($istable && $force_hyphen) {
+  my $hyphenize = 0;
+
+  if (($istable && $force_hyphen) || $do_hyphen) {
+    $hyphenize = 1;
+  }
+  if ($hyphenize) {
     # Two passes, to cut every letter (not every two letters)
     $line =~ s/([^ \t])([^ \t\n])/$1<cut>$2/g;
     $line =~ s/<cut>([^ \t])([^ \t\n])/<cut>$1<cut>$2/g;
@@ -260,8 +283,8 @@ sub translate
   $line =~ s/°/\\ensuremath{°}/g;
   $line =~ s/-/-{}/g;
 
-  # force hyphenation in table cells
-  if ($istable && $force_hyphen) {
+  # force hyphenation if asked
+  if ($hyphenize) {
     $line =~ s/<cut>/\\-/g;
   }
   return $line;
@@ -432,6 +455,9 @@ sub parse_sgml
 
     # Convert the figures if needed
     $line = figconvert($line);
+
+    # Update the embedded commands
+    command_update($line);
 
     if (/$keyon\n/) {
       $line =~ s/$keyon\n//;
