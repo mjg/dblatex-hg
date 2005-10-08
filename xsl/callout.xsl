@@ -8,6 +8,7 @@
 <!-- Callout parameters -->
 <xsl:param name="co.tagout" select="':&gt;'"/>
 <xsl:param name="co.linkends.show" select="'1'"/>
+<xsl:param name="callout.markup.circled" select="'1'"/>
 
 <!-- Prerequesite: the following latex macros are defined:
      * \co{text}
@@ -18,7 +19,7 @@
 
 <!-- Generate the enter TeX escape sequence for <co>. The principle is to
      find the first sequence of the form "<[try]:" that is not contained in
-     the listing, to ensure that no conflict will occur with lslisting -->
+     the listing, to ensure that no conflict will occur with lstlisting -->
 
 <xsl:template name="co-tagin-gen">
   <xsl:param name="text" select="."/>
@@ -46,29 +47,55 @@
   </xsl:choose>
 </xsl:template>
 
+
+<!-- Create the link to a <co> or a <callout> -->
+<xsl:template name="coref.link.create">
+  <xsl:param name="ref"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:variable name="coval">
+    <!-- Cannot use directly id() because it must work on several RTF -->
+    <xsl:apply-templates select="$rnode//*[@id=$ref]" mode="conumber"/>
+  </xsl:variable>
+
+  <xsl:text>\hyperref[</xsl:text>
+  <xsl:value-of select="$ref"/>
+  <xsl:text>]{</xsl:text>
+  <xsl:choose>
+  <!-- Want the same bubbles markup -->
+  <xsl:when test="$callout.markup.circled='1' and self::callout">
+    <xsl:text>\conum{</xsl:text>
+    <xsl:value-of select="$coval"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$coval"/>
+  </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+
 <!-- Split and make the references of the arearefs/linkends list -->
 <xsl:template name="corefs.split">
   <xsl:param name="refs"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:choose>
   <xsl:when test="contains($refs, ' ')">
-    <xsl:variable name="ref" select="substring-before($refs, ' ')"/>
-    <xsl:text>\hyperref[</xsl:text>
-    <xsl:value-of select="$ref"/>
-    <xsl:text>]{</xsl:text>
-    <xsl:apply-templates select="$rnode//*[@id=$ref]" mode="conumber"/>
-    <xsl:text>}, </xsl:text>
+    <xsl:call-template name="coref.link.create">
+      <xsl:with-param name="ref" select="substring-before($refs, ' ')"/>
+      <xsl:with-param name="rnode" select="$rnode"/>
+    </xsl:call-template>
+    <xsl:text>, </xsl:text>
     <xsl:call-template name="corefs.split">
       <xsl:with-param name="refs" select="substring-after($refs, ' ')"/>
+      <xsl:with-param name="rnode" select="$rnode"/>
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>\hyperref[</xsl:text>
-    <xsl:value-of select="$refs"/>
-    <xsl:text>]{</xsl:text>
-    <!-- Cannot use directly id() because it must work on several RTF -->
-    <xsl:apply-templates select="$rnode//*[@id=$refs]" mode="conumber"/>
-    <xsl:text>}</xsl:text>
+    <xsl:call-template name="coref.link.create">
+      <xsl:with-param name="ref" select="$refs"/>
+      <xsl:with-param name="rnode" select="$rnode"/>
+    </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -104,6 +131,7 @@
   </xsl:if>
   <xsl:value-of select="$co.tagout"/>
 </xsl:template>
+
 
 <!-- List of the callouts descriptions -->
 <xsl:template match="calloutlist">

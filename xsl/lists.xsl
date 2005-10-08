@@ -7,6 +7,7 @@
 
 <!-- Lists parameters -->
 <xsl:param name="seg.item.separator">, </xsl:param>
+<xsl:param name="term.breakline">0</xsl:param>
 
 
 <xsl:template match="variablelist/title|
@@ -73,12 +74,18 @@
 </xsl:template>
 
 <xsl:template match="varlistentry/listitem">
+  <xsl:choose>
   <!-- add a space to force linebreaks for immediate following lists -->
-  <xsl:if test="child::*[1][self::itemizedlist or
-                            self::orderedlist or
-                            self::variablelist]">
+  <xsl:when test="child::*[1][self::itemizedlist or
+                              self::orderedlist or
+                              self::variablelist]">
     <xsl:text>~</xsl:text>
-  </xsl:if>
+  </xsl:when>
+  <!-- force linebreak after the term -->
+  <xsl:when test="$term.breakline='1'">
+    <xsl:text>\hspace{0em}\\&#10;</xsl:text>
+  </xsl:when>
+  </xsl:choose>
   <xsl:apply-templates/>
 </xsl:template>
 
