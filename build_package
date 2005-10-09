@@ -80,9 +80,8 @@ sed "s/devel/$version/" $tmpbuild/xsl/version.xsl > \
 mv $tmpbuild/xsl/version2.xsl $tmpbuild/xsl/version.xsl
 
 # Make the package doc
-echo "$version" > $tmpbuild/docs/version.sgml
 rm -f $tmpbuild/docs/*.pdf
-gmake -C $tmpbuild/docs
+gmake -C $tmpbuild/docs VERSION=$version
 
 # Make the ball
 tar cvf - -C $tmpdir $release | bzip2 > $release.tar.bz2
