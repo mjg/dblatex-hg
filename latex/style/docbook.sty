@@ -168,7 +168,16 @@
 \def\author#1{\renewcommand{\DBKauthor}{#1}}
 
 % Redefine how to print the cover page and book infos
-\def\maketitle{\DBKcover \DBKdomitete}
+\def\maketitle{
+  \DBKcover
+  \if\DBKlegalblock\@empty\else
+    \if\DBKcopyright\@empty\else
+      \DBKcopyright \\
+    \fi
+    \DBKlegalblock\newpage
+  \fi
+  \DBKdomitete
+}
 
 % How to render a <legalnotice>
 \newenvironment{DBKlegalnotice}{
@@ -176,8 +185,10 @@
     \noindent\small\textit{\DBKlegaltitle}
     \/\bfseries---$\!$
   \else
-    \noindent\begin{center}\small\bfseries\DBKlegaltitle
-    \end{center}\begin{quote}\small
+    \if\DBKlegaltitle\@empty\else
+      \noindent\begin{center}\small\bfseries\DBKlegaltitle\end{center}%
+    \fi
+    \begin{quote}\small
   \fi
 }{
   \vspace{0.6em}\par\if@twocolumn\else\end{quote}\fi

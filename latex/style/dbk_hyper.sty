@@ -10,11 +10,14 @@
   \@ifundefined{hyperparam}{
     \def\hyperparam{linktocpage,colorlinks,citecolor=blue,pdfstartview=FitH}
   }{}
+  \@ifundefined{hyperparamadd}{
+    \def\hyperparamadd{}
+  }{}
   \@ifundefined{pdfoutput}{
-    \usepackage[dvips,\hyperparam]{hyperref}
+    \usepackage[dvips,\hyperparam,\hyperparamadd]{hyperref}
     \def\hyperlabel#1{\Hy@raisedlink{\hyper@anchorstart{#1}\hyper@anchorend}}
   }{
-    \usepackage[pdftex,\hyperparam]{hyperref}
+    \usepackage[pdftex,\hyperparam,\hyperparamadd]{hyperref}
     \def\hyperlabel#1{\hypertarget{#1}{}}
   }
 }{
