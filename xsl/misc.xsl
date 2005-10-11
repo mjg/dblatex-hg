@@ -9,6 +9,8 @@
 <xsl:variable name="doc.section.depth">5</xsl:variable>
 <xsl:variable name="toc.section.depth">5</xsl:variable>
 <xsl:variable name="latex.use.hyperref">0</xsl:variable>
+<xsl:param name="doc.pdfcreator.show">1</xsl:param>
+<xsl:param name="doc.alignment"/>
 
 <xsl:variable name="latex.book.preamblestart">
   <xsl:text>% -----------------------------------------  &#10;</xsl:text>
@@ -171,15 +173,39 @@
 </xsl:template>
 
 <xsl:template name="user.params.set">
-  <xsl:if test="$latex.hyperparam">
+  <xsl:if test="$latex.hyperparam!=''">
     <xsl:text>\def\hyperparam{</xsl:text>
     <xsl:value-of select="$latex.hyperparam"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$doc.pdfcreator.show='1'">
+    <xsl:text>\def\hyperparamadd{</xsl:text>
+    <xsl:text>pdfcreator=DBLaTeX-</xsl:text>
+    <xsl:value-of select="$version"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:if test="$literal.layout.options">
     <xsl:text>\def\lstparamset{\lstset{</xsl:text>
     <xsl:value-of select="$literal.layout.options"/>
     <xsl:text>}}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$doc.alignment!='' and $doc.alignment!='justify'">
+    <xsl:text>\usepackage{ragged2e}&#10;</xsl:text>
+    <xsl:choose>
+    <xsl:when test="$doc.alignment='center'">
+      <xsl:text>\Centering&#10;</xsl:text>
+    </xsl:when>
+    <xsl:when test="$doc.alignment='left'">
+      <xsl:text>\RaggedRight&#10;</xsl:text>
+    </xsl:when>
+    <xsl:when test="$doc.alignment='right'">
+      <xsl:text>\RaggedLeft&#10;</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>Unknown doc.alignment='<xsl:value-of
+      select="$doc.alignment"/>'</xsl:message>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:if>
 </xsl:template>
 
@@ -390,6 +416,11 @@
   <xsl:if test="articleinfo/revhistory">
     <xsl:apply-templates select="articleinfo/revhistory"/>
   </xsl:if>
+
+  <!-- Apply the legalnotices here -->
+  <xsl:call-template name="print.legalnotice">
+    <xsl:with-param name="nodes" select="articleinfo/legalnotice"/>
+  </xsl:call-template>
 
   <xsl:value-of select="$latex.book.begindocument"/>
   <xsl:text>\long\def\hyper@section@backref#1#2#3{%&#10;</xsl:text>

@@ -180,6 +180,22 @@
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="title-link-to">
+  <xsl:param name="target" select="."/>
+  <xsl:text>\hyperlink{</xsl:text>
+  <xsl:value-of select="$target/@id"/>
+  <xsl:text>}{</xsl:text>
+  <xsl:choose>
+  <xsl:when test="$target/title">
+    <xsl:apply-templates select="$target/title" mode="xref"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>[no title]</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template match="*" mode="xref-to">
   <xsl:param name="target" select="."/>
   <xsl:param name="refelem" select="local-name($target)"/>
@@ -224,6 +240,11 @@
 
 <xsl:template match="figure|example|table|equation" mode="xref-to">
   <xsl:call-template name="cross-reference"/>
+</xsl:template>
+
+<xsl:template match="variablelist|orderedlist|orderedlist|simplelist|
+                     itemizedlist" mode="xref-to">
+  <xsl:call-template name="title-link-to"/>
 </xsl:template>
 
 <xsl:template match="biblioentry" mode="xref-to">

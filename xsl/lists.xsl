@@ -15,6 +15,9 @@
   <xsl:text>&#10;{\sc </xsl:text>
   <xsl:apply-templates/>
   <xsl:text>}&#10;</xsl:text>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
   <!-- Ask to latex to let the title with its list -->
   <xsl:text>\nopagebreak&#10;</xsl:text>
 </xsl:template>
@@ -78,7 +81,7 @@
   <!-- add a space to force linebreaks for immediate following lists -->
   <xsl:when test="child::*[1][self::itemizedlist or
                               self::orderedlist or
-                              self::variablelist]">
+                              self::variablelist][not(child::title)]">
     <xsl:text>~</xsl:text>
   </xsl:when>
   <!-- force linebreak after the term -->
@@ -220,7 +223,10 @@
 
 <xsl:template match="seglistitem">
   <xsl:apply-templates/>
-  <xsl:text> \\&#10;</xsl:text>
+  <xsl:if test="position()!=last()">
+    <xsl:text> \\</xsl:text>
+  </xsl:if>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <!-- We trust in the right count of segtitle declarations -->

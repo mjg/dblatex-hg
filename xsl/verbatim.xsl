@@ -8,6 +8,7 @@
 <!-- Literal parameters -->
 <xsl:param name="literal.width.ignore">0</xsl:param>
 <xsl:param name="literal.layout.options"/>
+<xsl:param name="literal.lines.showall">1</xsl:param>
 
 
 <xsl:template match="address|literallayout|literallayout[@class='monospaced']">
@@ -24,6 +25,7 @@
 <xsl:template match="programlisting|screen" mode="internal">
   <xsl:param name="opt"/>
   <xsl:param name="co-tagin"/>
+  <xsl:param name="rnode" select="/"/>
 
   <xsl:variable name="env" select="'lstlisting'"/>
 
@@ -42,6 +44,7 @@
   </xsl:if>
   <xsl:apply-templates mode="latex.programlisting">
     <xsl:with-param name="co-tagin" select="$co-tagin"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
   </xsl:apply-templates>
   <xsl:text>\end{</xsl:text>
   <xsl:value-of select="$env"/>
@@ -49,6 +52,8 @@
 </xsl:template>
  
 <xsl:template match="programlisting|screen">
+  <xsl:param name="rnode" select="/"/>
+
   <!-- formula to compute the listing width -->
   <xsl:variable name="width">
     <xsl:if test="$literal.width.ignore='0' and
@@ -67,6 +72,10 @@
   </xsl:variable>
 
   <xsl:variable name="opt">
+    <!-- skip empty endlines -->
+    <xsl:if test="$literal.lines.showall='0'">
+      <xsl:text>showlines=false,</xsl:text>
+    </xsl:if>
     <!-- language option is only for programlisting -->
     <xsl:if test="@language">
       <xsl:text>language=</xsl:text>
@@ -133,6 +142,7 @@
   <xsl:otherwise>
     <!-- the listing content is internal -->
     <xsl:apply-templates select="." mode="internal">
+      <xsl:with-param name="rnode" select="$rnode"/>
       <xsl:with-param name="co-tagin" select="$co-tagin"/>
       <xsl:with-param name="opt" select="$opt"/>
     </xsl:apply-templates>

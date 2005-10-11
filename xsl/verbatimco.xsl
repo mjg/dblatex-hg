@@ -159,7 +159,9 @@
       <xsl:with-param name="areas" select="areaspec//area"/>
     </xsl:apply-templates>
   </xsl:variable>
-  <xsl:apply-templates select="exsl:node-set($newlisting)/*"/>
+  <xsl:apply-templates select="exsl:node-set($newlisting)/*">
+    <xsl:with-param name="rnode" select="calloutlist"/>
+  </xsl:apply-templates>
   <xsl:apply-templates select="calloutlist">
     <xsl:with-param name="rnode" select="exsl:node-set($newlisting)"/>
   </xsl:apply-templates>

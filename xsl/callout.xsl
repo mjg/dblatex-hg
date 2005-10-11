@@ -9,6 +9,7 @@
 <xsl:param name="co.tagout" select="':&gt;'"/>
 <xsl:param name="co.linkends.show" select="'1'"/>
 <xsl:param name="callout.markup.circled" select="'1'"/>
+<xsl:param name="callout.linkends.hot" select="'1'"/>
 
 <!-- Prerequesite: the following latex macros are defined:
      * \co{text}
@@ -57,21 +58,33 @@
     <xsl:apply-templates select="$rnode//*[@id=$ref]" mode="conumber"/>
   </xsl:variable>
 
-  <xsl:text>\hyperref[</xsl:text>
-  <xsl:value-of select="$ref"/>
-  <xsl:text>]{</xsl:text>
+  <!-- The markup can be a bubble or a simple number -->
+  <xsl:variable name="markup">
+    <xsl:choose>
+    <xsl:when test="$callout.markup.circled='1' and self::callout">
+      <xsl:text>\conum{</xsl:text>
+      <xsl:value-of select="$coval"/>
+      <xsl:text>}</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$coval"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- In <callout> the markup can be not hot -->
   <xsl:choose>
-  <!-- Want the same bubbles markup -->
-  <xsl:when test="$callout.markup.circled='1' and self::callout">
-    <xsl:text>\conum{</xsl:text>
-    <xsl:value-of select="$coval"/>
-    <xsl:text>}</xsl:text>
+  <xsl:when test="$callout.linkends.hot='0' and self::callout">
+    <xsl:value-of select="$markup"/>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:value-of select="$coval"/>
+    <xsl:text>\hyperref[</xsl:text>
+    <xsl:value-of select="$ref"/>
+    <xsl:text>]{</xsl:text>
+    <xsl:value-of select="$markup"/>
+    <xsl:text>}</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
-  <xsl:text>}</xsl:text>
 </xsl:template>
 
 
@@ -101,7 +114,21 @@
 </xsl:template>
 
 
+<xsl:template match="co" mode="linkends.create">
+  <xsl:param name="rnode" select="/"/>
+  <xsl:if test="@linkends and $co.linkends.show='1'">
+    <xsl:text>[</xsl:text>
+    <xsl:call-template name="corefs.split">
+      <xsl:with-param name="refs" select="normalize-space(@linkends)"/>
+      <xsl:with-param name="rnode" select="$rnode"/>
+    </xsl:call-template>
+    <xsl:text>]</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+
 <xsl:template match="co" mode="latex.programlisting">
+  <xsl:param name="rnode" select="/"/>
   <xsl:param name="co-tagin" select="'&lt;:'"/>
   <xsl:variable name="conum">
     <xsl:apply-templates select="." mode="conumber"/>
@@ -122,14 +149,44 @@
     <xsl:text>}</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
-  <xsl:if test="@linkends and $co.linkends.show='1'">
-    <xsl:text>[</xsl:text>
-    <xsl:call-template name="corefs.split">
-      <xsl:with-param name="refs" select="normalize-space(@linkends)"/>
-    </xsl:call-template>
-    <xsl:text>]</xsl:text>
-  </xsl:if>
+  <xsl:apply-templates select="." mode="linkends.create">
+    <xsl:with-param name="rnode" select="$rnode"/>
+  </xsl:apply-templates>
   <xsl:value-of select="$co.tagout"/>
+</xsl:template>
+
+
+<!-- Print the markup of the co referenced by coref -->
+<xsl:template match="coref" mode="latex.programlisting">
+  <xsl:param name="rnode" select="/"/>
+  <xsl:variable name="co" select="id(@linkend)"/>
+
+  <xsl:choose>
+  <xsl:when test="$co">
+    <xsl:variable name="conum">
+      <xsl:apply-templates select="$co" mode="conumber"/>
+    </xsl:variable>
+    <!-- Entry tex sequence -->
+    <xsl:value-of select="$co-tagin"/>
+    <!-- The same number mark than the pointed <co> -->
+    <xsl:text>\conum{</xsl:text>
+    <xsl:value-of select="$conum"/>
+    <xsl:text>}</xsl:text>
+    <!-- Display also the <co> linkends -->
+    <xsl:apply-templates select="$co" mode="linkends.create">
+      <xsl:with-param name="rnode" select="$rnode"/>
+    </xsl:apply-templates>
+    <!-- Exit tex sequence -->
+    <xsl:value-of select="$co.tagout"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:message>
+      <xsl:text>*** Invalid co/@linkend='</xsl:text>
+      <xsl:value-of select="@linkend"/>
+      <xsl:text>'</xsl:text>
+    </xsl:message>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
