@@ -15,6 +15,7 @@ use File::Basename;
   "graphic"       => '',
   "imagedata"     => '',
   "inlinegraphic" => '',
+  "textdata"      => '',
   "xref"          => ''
   );
 

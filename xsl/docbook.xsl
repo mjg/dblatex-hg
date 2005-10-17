@@ -41,6 +41,7 @@
 <xsl:include href="equation.xsl"/>
 <xsl:include href="figure.xsl"/>
 <xsl:include href="mediaobject.xsl"/>
+<xsl:include href="mediaobjectco.xsl"/>
 <xsl:include href="callout.xsl"/>
 <xsl:include href="sections.xsl"/>
 <xsl:include href="labelid.xsl"/>

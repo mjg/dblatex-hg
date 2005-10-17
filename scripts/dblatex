@@ -18,6 +18,7 @@ version=0
 paritems=""
 texstyle=docbook
 xsl=$toppath/xsl/latex_book_fast.xsl
+xsllst=$toppath/xsl/common/mklistings.xsl
 btexpath=$toppath/latex/scripts
 tgetpath=$toppath/latex/specs
 
@@ -29,7 +30,7 @@ get_options() {
     -f) ifig=$2; shift ;;
     -t) ext=$2; shift ;;
     -b) btex=$2; shift ;;
-    -x) xopt=$2; shift ;;
+    -x) xopt="$xopt $2"; shift ;;
     -d) debug=1;;
     -s) xsl=$toppath/xsl/latex_book.xsl;;
     -p) param=$2; shift ;;
@@ -37,6 +38,7 @@ get_options() {
     -S) specs=$2; shift ;;
     -P) paritems="$paritems $2"; shift ;;
     -T) target=$2; shift ;;
+    -X) xsllst="";;
     -v) version=1;;
     --style) texstyle=$2; shift ;;
     --texinputs) texinputs=$2; shift ;;
@@ -88,6 +90,7 @@ Options:
 -s                     : strict latex output (slower)
 -S spec_file           : specification file for behaviour customization
 -x option              : option passed to the XSLT
+-X                     : no external text file support
 -I "path1 path2 ..."   : extra files paths
 -T style               : available latex styles ($tgets)
 eof
@@ -258,7 +261,8 @@ $GMAKE -s -C $tmpdir -f $toppath/scripts/make.build \
         SRCDIR=$where \
         XPATH="$xpath" \
         XSL=$xsl \
-        XOPT=$xopt \
+        XSLLST=$xsllst \
+        XOPT="$xopt" \
         XMLFILE=$file \
         TEXCLEAN=$toppath/scripts/texclean \
         FIG2DEV=$fig2dev \

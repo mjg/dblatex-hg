@@ -293,4 +293,10 @@
               format="1"/>
 </xsl:template>
 
+<xsl:template match="area" mode="conumber">
+  <xsl:number from="areaspec"
+              level="any"
+              format="1"/>
+</xsl:template>
+
 </xsl:stylesheet>

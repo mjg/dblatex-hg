@@ -44,6 +44,18 @@
 \setlength\parskip{\medskipamount}
 \setlength\parindent{0pt}
 
+% Don't want paragraph indentation in abstract
+\let\stdabstract=\abstract
+\let\endstdabstract=\endabstract
+\renewenvironment{abstract}{
+  \begin{stdabstract}%
+  \noindent%
+  \setlength\parskip{\medskipamount}%
+  \setlength\parindent{0pt}%
+}{
+  \end{stdabstract}
+}
+
 % We want paragraph + subparagraph headers like the others
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
                                      {-3.25ex\@plus -1ex \@minus -.2ex}%

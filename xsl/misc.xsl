@@ -10,6 +10,7 @@
 <xsl:variable name="toc.section.depth">5</xsl:variable>
 <xsl:variable name="latex.use.hyperref">0</xsl:variable>
 <xsl:param name="doc.pdfcreator.show">1</xsl:param>
+<xsl:param name="doc.publisher.show">0</xsl:param>
 <xsl:param name="doc.alignment"/>
 
 <xsl:variable name="latex.book.preamblestart">
@@ -184,6 +185,11 @@
     <xsl:value-of select="$version"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
+  <xsl:if test="$doc.publisher.show='1'">
+    <xsl:text>\def\DBKpublisher{</xsl:text>
+    <xsl:text>\includegraphics{dblatex}</xsl:text>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
   <xsl:if test="$literal.layout.options">
     <xsl:text>\def\lstparamset{\lstset{</xsl:text>
     <xsl:value-of select="$literal.layout.options"/>
@@ -303,6 +309,7 @@
   <xsl:text>\tableofcontents&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
 
+  <!-- Print the abstract -->
   <xsl:apply-templates select="bookinfo/abstract"/>
 
   <!-- Apply templates -->
@@ -430,6 +437,9 @@
   <xsl:text>\maketitle&#10;</xsl:text>
   <xsl:text>\tableofcontents&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
+
+  <!-- Print the abstract -->
+  <xsl:apply-templates select="(abstract|articleinfo/abstract)[1]"/>
 
   <!-- Apply templates -->
   <xsl:apply-templates/>

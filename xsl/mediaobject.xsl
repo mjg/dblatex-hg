@@ -128,7 +128,32 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- the latex macro to use to include a graphic depends on the environment -->
+<xsl:template name="graphic.begin.get">
+  <xsl:choose>
+  <xsl:when test="ancestor::imageobjectco">
+    <xsl:apply-templates select="ancestor::imageobjectco" mode="graphic.begin"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\includegraphics</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="graphic.end.get">
+  <xsl:if test="ancestor::imageobjectco">
+    <xsl:apply-templates select="ancestor::imageobjectco" mode="graphic.end"/>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="imagedata" name="imagedata">
+  <xsl:variable name="graphic.begin">
+    <xsl:call-template name="graphic.begin.get"/>
+  </xsl:variable>
+  <xsl:variable name="graphic.end">
+    <xsl:call-template name="graphic.end.get"/>
+  </xsl:variable>
+
   <xsl:variable name="filename">
     <xsl:choose>
     <xsl:when test="@fileref">
@@ -228,7 +253,9 @@
     <xsl:value-of select="$filename"/>
     <xsl:text>}</xsl:text>
   </xsl:if>
-  <xsl:text>{\includegraphics[</xsl:text>
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$graphic.begin"/>
+  <xsl:text>[</xsl:text>
   <!-- TDG says that content, scale and scalefit are mutually exclusive -->
   <xsl:choose>
     <!-- content area spec -->
@@ -291,7 +318,9 @@
   </xsl:if>
   <xsl:text>]{</xsl:text>
   <xsl:value-of select="$filename"/>
-  <xsl:text>}}\quad&#10;</xsl:text>
+  <xsl:text>}</xsl:text>
+  <xsl:value-of select="$graphic.end"/>
+  <xsl:text>}\quad&#10;</xsl:text>
   <xsl:if test="$viewport=1">
     <xsl:text>\end{minipage}&#10;</xsl:text>
   </xsl:if>

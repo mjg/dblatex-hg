@@ -101,7 +101,7 @@
   \ifthenelse{\equal{\DBKpubdate}{}}{}{\\ Published \DBKpubdate}
   \ifthenelse{\equal{\DBKcopyright}{}}{}{\\ \DBKcopyright}
   \\
-  % Now the legalnotice block
+ % Now the legalnotice block
   \DBKlegalblock
   \newpage
 }
@@ -131,12 +131,6 @@
 % --------------------------------------------
 % Load graphicx package with pdf if needed 
 % --------------------------------------------
-\ifpdf
-\usepackage[pdftex]{graphicx}
-\pdfcompresslevel=9
-\else
-\usepackage{graphicx}
-\fi
 \usepackage{anysize}
 \marginsize{3cm}{2cm}{1.25cm}{1.25cm}
 

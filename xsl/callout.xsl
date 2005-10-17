@@ -114,7 +114,7 @@
 </xsl:template>
 
 
-<xsl:template match="co" mode="linkends.create">
+<xsl:template match="co|area" mode="linkends.create">
   <xsl:param name="rnode" select="/"/>
   <xsl:if test="@linkends and $co.linkends.show='1'">
     <xsl:text>[</xsl:text>
@@ -127,9 +127,10 @@
 </xsl:template>
 
 
-<xsl:template match="co" mode="latex.programlisting">
+<xsl:template match="co|area" mode="latex.programlisting">
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagout" select="$co.tagout"/>
   <xsl:variable name="conum">
     <xsl:apply-templates select="." mode="conumber"/>
   </xsl:variable>
@@ -152,7 +153,7 @@
   <xsl:apply-templates select="." mode="linkends.create">
     <xsl:with-param name="rnode" select="$rnode"/>
   </xsl:apply-templates>
-  <xsl:value-of select="$co.tagout"/>
+  <xsl:value-of select="$co-tagout"/>
 </xsl:template>
 
 

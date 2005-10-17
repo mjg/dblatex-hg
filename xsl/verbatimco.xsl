@@ -8,6 +8,9 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:param name="listings.xml"/>
+
+
 <xsl:template name="line.pad">
   <xsl:param name="count"/>
   <xsl:if test="$count &gt; 0">
@@ -136,6 +139,10 @@
   <xsl:param name="listing"/>
   <xsl:param name="areas"/>
 
+  <xsl:variable name="content">
+    <xsl:apply-templates mode="latex.programlisting"/>
+  </xsl:variable>
+
   <xsl:element name="{local-name($listing)}">
     <!-- Inherit the original attributes -->
     <xsl:for-each select="$listing/@*">
@@ -143,7 +150,7 @@
     </xsl:for-each>
 
     <xsl:call-template name="insert.co">
-      <xsl:with-param name="text" select="$listing"/>
+      <xsl:with-param name="text" select="$content"/>
       <xsl:with-param name="areas" select="$areas"/>
     </xsl:call-template>
   </xsl:element>
@@ -168,5 +175,40 @@
 </xsl:template>
 
 <xsl:template match="areaspec|areaset|area"/>
+
+
+<!-- Process the external files referenced in a programlistingco or screenco
+     environment. Since in XSLT 1.0 you cannot directly include text files, the
+     workaround is to load the data from a listings database file. -->
+
+<xsl:template match="textdata|imagedata[@format='linespecific']"
+              mode="latex.programlisting">
+
+  <xsl:variable name="name" select="name(.)"/>
+  <xsl:variable name="lst.doc" select="document($listings.xml)"/>
+  <xsl:variable name="lst.id">
+    <xsl:apply-templates select="." mode="lstid"/>
+  </xsl:variable>
+  <xsl:variable name="lst.ext"
+      select="$lst.doc/listings/listing[@type=$name][position()=$lst.id]"/>
+
+  <xsl:message><xsl:text>Load external file </xsl:text>
+    <xsl:value-of select="$name"/>
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$lst.id"/>
+    <xsl:text>]</xsl:text>
+    <xsl:if test="not($lst.ext)">
+      <xsl:text>(failed)</xsl:text> 
+    </xsl:if>
+  </xsl:message>
+
+  <xsl:apply-templates mode="latex.programlisting" select="$lst.ext"/>
+</xsl:template>
+
+<xsl:template match="textdata|imagedata[@format='linespecific']" mode="lstid">
+  <xsl:number from="/"
+              level="any"
+              format="1"/>
+</xsl:template>
 
 </xsl:stylesheet>

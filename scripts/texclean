@@ -353,48 +353,56 @@ sub figconvert
 {
   local($line) = $_[0];
   my $dofig = "";
+  my $figcmd = "";
 
-  if (/\\includegraphics/) {
-    ($f = $line) =~ s/.*\\includegraphics[^{]*{([^}]*)}.*\n/$1/;
+  # Is there a graphic included here
+  if (/\\includegraphics[\[{]/) {
+    $figcmd = "\\includegraphics" ;
+  } elsif (/"\\begin{overpic}"/) {
+    $figcmd = "\\begin{overpic}" ;
+  } else {
+    return $line;
+  }
 
-    # Get the full filename and the suffix
-    ($fig, $ext) = scanformat($f);
+  ($f = $line) =~ s/.*$figcmd[^{]*{([^}]*)}.*\n/$1/;
 
-    # If no suffix, use the default one
-    if ($ext eq "") {
-      print "Use default figure format\n";
-      $ext = $figin;
+  # Get the full filename and the suffix
+  ($fig, $ext) = scanformat($f);
+
+  # If no suffix, use the default one
+  if ($ext eq "") {
+    print "Use default figure format\n";
+    $ext = $figin;
+  }
+
+  # Check if this figure has been already converted
+  if (exists $figdone{"$fig"}) {
+    $newfig = $figdone{"$fig"};
+    print "already done with $newfig\n";
+    $line =~ s/$f/$newfig/g;
+
+  # Convert the figure
+  } elsif (-f $fig) {
+    $fig2dev = $ext."2".$figout;
+    $newfig = "fig".$figcount++.".$figout";
+    for ($fig2dev) {
+      /fig2eps/ && do{
+        $dofig = "fig2dev -L $figout $fig > $newfig"; last;
+      };
+      (/fig2pdf/ || /fig2png/) && do{
+        $dofig = "fig2dev -L eps $fig > tmp_fig.eps";
+        $dofig .= "; ".eps2xxx("tmp_fig.eps", $newfig, $figout);
+        last;
+      };
+      /eps2pdf/ && do{
+        $dofig = eps2xxx($fig, $newfig, $figout); last;
+      };
     }
-
-    # Check if this figure has been already converted
-    if (exists $figdone{"$fig"}) {
-      $newfig = $figdone{"$fig"};
-      print "already done with $newfig\n";
+    if ($dofig ne "") {
+      $figdone{"$fig"} = $newfig;
+      print "$dofig\n";
+      system("$dofig");
       $line =~ s/$f/$newfig/g;
-
-    # Convert the figure
-    } elsif (-f $fig) {
-      $fig2dev = $ext."2".$figout;
-      $newfig = "fig".$figcount++.".$figout";
-      for ($fig2dev) {
-        /fig2eps/ && do{
-          $dofig = "fig2dev -L $figout $fig > $newfig"; last;
-        };
-        (/fig2pdf/ || /fig2png/) && do{
-          $dofig = "fig2dev -L eps $fig > tmp_fig.eps";
-          $dofig .= "; ".eps2xxx("tmp_fig.eps", $newfig, $figout);
-          last;
-        };
-        /eps2pdf/ && do{
-          $dofig = eps2xxx($fig, $newfig, $figout); last;
-        };
-      }
-      if ($dofig ne "") {
-        $figdone{"$fig"} = $newfig;
-        print "$dofig\n";
-        system("$dofig");
-        $line =~ s/$f/$newfig/g;
-      }
     }
   }
   return $line

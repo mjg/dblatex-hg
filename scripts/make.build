@@ -1,10 +1,16 @@
+#
+# Core building rules and dependencies to produce DVI/PostScript/PDF output
+#
 XSLT = xsltproc
 XOPT = 
 XSL = ../xsl/latex_book.xsl
+XSLLST = ../xsl/common/mklistings.xsl
 TEXRUN = ../../latex/scripts/runlatex
 TEXDRV = dvips
 XPATH = 
 FIG2DEV = 
+
+HERE = $(shell pwd)
 
 vpath %.xml $(SRCDIR)
 
@@ -39,15 +45,23 @@ endif
 %.tex: %.rtex FORCE
 	@$(TEXCLEAN) -b $(TEXDRV) -p $(SRCDIR) -f "$(FIG2DEV)" $< $@
 
-%.rtex: $(XMLFILE) FORCE
+%.rtex: %.lxml $(XMLFILE) FORCE
 ifeq ($(XSLT),xt)
 	java com.jclark.xsl.sax.Driver $< $(XSL) > $@
 else
 ifeq ($(XSLT),xsltproc)
-	xsltproc --catalogs $(XOPT) $(XSL) $< > $@
-#	xsltproc --catalogs --novalid $(XOPT) $(XSL) $< > $@
-#	xsltproc --catalogs --novalid --timing --profile $(XSL) $< > $@
+	xsltproc --xinclude --catalogs --param listings.xml "'$(HERE)/$<'" \
+                 $(XOPT) $(XSL) $(XMLFILE) > $@
 endif
+endif
+
+%.lxml: $(XMLFILE)
+ifeq ($(XSLLST),)
+	@echo "No external file support"
+	echo "<listings/>" > $@
+else
+	xsltproc --catalogs --param current.dir "'$(SRCDIR)'" \
+                 $(XSLLST) $< > $@ 2>/dev/null
 endif
 
 FORCE:

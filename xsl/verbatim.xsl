@@ -17,6 +17,18 @@
   <xsl:text>\end{verbatim}&#10;</xsl:text>
 </xsl:template>
 
+<!-- Returns the filename from @fileref or @entityref attribute -->
+<xsl:template match="*" mode="filename.get">
+  <xsl:choose>
+  <xsl:when test="@entityref">
+    <xsl:value-of select="unparsed-entity-uri(@entityref)"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="@fileref"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- The following templates now works only with the listings package -->
 
 <!-- The listing content is internal to the element, and is not a reference
@@ -123,7 +135,6 @@
     <xsl:text>&#10;</xsl:text>
     <xsl:value-of select="$width"/>
   </xsl:if>
-
   <xsl:choose>
   <xsl:when test="descendant::imagedata[@format='linespecific']|
                   descendant::textdata">
@@ -135,8 +146,9 @@
       <xsl:text>]</xsl:text>
     </xsl:if>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="descendant::imagedata/@fileref|
-                          descendant::textdata/@fileref"/>
+    <xsl:apply-templates
+        select="descendant::imagedata|descendant::textdata"
+        mode="filename.get"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>

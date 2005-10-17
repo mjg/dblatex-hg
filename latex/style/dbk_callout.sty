@@ -1,3 +1,47 @@
+\usepackage{overpic}
+
+%********************
+%* Graphic callouts *
+%********************
+
+% Where to put the <co> in the graphic
+\newdimen\picfactorx
+\newdimen\picfactory
+\newdimen\picx
+\newdimen\picy
+
+% Evaluates the percent factors for x and y dimensions. The principle is that
+% overpic gives a 100% for the biggest length (width or height).
+% The coordonates given to \calspair being in percentage of the graphic dimension
+% itself, the picfactors translate them to overpic percentages.
+% 
+% Variables set by overpic:
+% \@tempcnta = width
+% \@tempcntb = height
+
+\def\picfactoreval{%
+  \ifnum\@tempcnta>\@tempcntb%
+    \picfactorx=1pt%
+    \picfactory=\@tempcntb pt%
+    \divide\picfactory by \@tempcnta%
+  \else%
+    \picfactory=1pt%
+    \picfactorx=\@tempcnta pt%
+    \divide\picfactorx by \@tempcntb%
+  \fi%
+}
+
+\newcommand{\calspair}[3]{
+  \sbox{\z@}{#3}%
+  \picx=#1\picfactorx%
+  \picy=#2\picfactory%
+  \put(\strip@pt\picx,\strip@pt\picy){\makebox(0,0){\usebox{\z@}}}
+}
+
+%*********************
+%* Verbatim callouts *
+%*********************
+
 % Counters for cross-referencing callouts
 \newcounter{cocnt}
 \newcounter{colref}
@@ -31,7 +75,7 @@
   \end{picture}%
 }
 
-% How to représent a <co> embedded in a listing
+% How to represent a <co> embedded in a listing
 \def\co#1{\refstepcounter{cocnt}\conum{#1}}
 
 % Make the <co> text and the label to link to
