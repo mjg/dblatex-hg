@@ -60,8 +60,8 @@ ifeq ($(XSLLST),)
 	@echo "No external file support"
 	echo "<listings/>" > $@
 else
-	xsltproc --catalogs --param current.dir "'$(SRCDIR)'" \
-                 $(XSLLST) $< > $@ 2>/dev/null
+	xsltproc --param current.dir "'$(SRCDIR)'" \
+                 $(XSLLST) $< > $@
 endif
 
 FORCE:
