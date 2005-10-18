@@ -54,8 +54,8 @@ more details about this parameter.
 
 <simplesect><title>How can I have all the PDF hyperlinks in blue color?</title>
 <para>Same answer than for the previous question.</para>
-<para>For this particular case set the parameter with the options
-"linktocpage,colorlinks,linkcolor=blue,urlcolor=blue".</para>
+<para>For this particular case, set the parameter with the options
+"linktocpage,colorlinks,linkcolor=blue,citecolor=blue,urlcolor=blue".</para>
 </simplesect>
 
 <simplesect><title>How can I remove that stupid float rules?</title>

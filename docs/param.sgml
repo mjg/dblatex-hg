@@ -9,6 +9,47 @@
 </row>
 </thead>
 <tbody>
+<!-- -->
+<row>
+<entry>callout.markup.circled</entry>
+<entry>Set to 1 the callouts references in a <sgmltag>calloutlist</sgmltag>
+are white numbers in black circles, like the markups in the listing (or graphic).
+Set to 0 the references are simple numbers.
+</entry>
+<entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>callout.linkends.hot</entry>
+<entry>The callouts referenced in a callout list are hot links if the
+parameter is set to 1. Then, the references are in red such like any
+other cross-reference link in the document.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>co.linkends.show</entry>
+<entry>Next to a callout markup the links to the corresponding calloutlist
+items are shown when the parameter is set to 1.
+Set to 0 the links are not shown.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>doc.pdfcreator.show</entry>
+<entry>Fill the Creator field of the PDF document information section with
+"DBLaTeX-&lt;version&gt;" if the parameter is set to 1. Set to 0 this field is
+keep untouched.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>doc.publisher.show</entry>
+<entry>Print the dblatex logo on the cover page for the native docbook style
+if the parameter is set to 1.</entry>
+<entry>0</entry>
+</row>
+<!-- -->
 <row>
 <entry>figure.note</entry>
 <entry>Figure to use to render a <sgmltag>note</sgmltag> block. This parameter is
@@ -87,6 +128,15 @@ language whatever the document language is.</entry>
 <entry>Overwrite the default options passed to the \lstset command.</entry>
 <entry>Empty</entry>
 </row>
+<!-- -->
+<row>
+<entry>literal.lines.showall</entry>
+<entry>Set to 1, all the lines in a verbatim environment like programlisting or
+  screen are printed, even if they are empty. Set to 0, the last empty lines are
+  not printed. It is set to 1 by default.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
 <row>
 <entry>literal.width.ignore</entry>
 <entry>When set to 1 the programlisting and screen width attribute is ignored.
@@ -144,6 +194,13 @@ text to italics.</entry>
 <entry>table.title.top</entry>
 <entry>Set to 1 the <sgmltag>table</sgmltag> float title position is above the
 table. Set to 0 the title is under the table.</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
+<entry>term.breakline</entry>
+<entry>Set to 1 the item following a term in a variable list is put on the next
+line.</entry>
 <entry>0</entry>
 </row>
 </tbody>

@@ -212,7 +212,8 @@
    Here is the specification file used for this manual.
   </para>
 <example><title>Specification file example</title>
-&specmanual;
+<programlisting><textobject><textdata fileref="manual.specs"></textobject>
+</programlisting>
 </example>
   </sect1>
   <sect1>

@@ -107,6 +107,18 @@ LaTeX style) are provided by default. See <xref linkend="sec-style">.
 <![CDATA[dblatex -x "--timing --profile" file.sgml]]></programlisting>
    </listitem>
    </varlistentry>
+    <varlistentry>
+    <term>
+<option>-X</option>
+</term><listitem><para>Disable the external text file support. This support is
+needed for callouts on external files referenced by <sgmltag>textdata</sgmltag>
+or <sgmltag>imagedata</sgmltag>, but it can be disabled if the document does not
+contain such callouts. Disabling
+this support can improve the processing performance for big
+documents.
+    </para>
+   </listitem>
+   </varlistentry>
    </variablelist>
    </sect2>
    <sect2>

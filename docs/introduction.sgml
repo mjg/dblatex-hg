@@ -82,7 +82,12 @@
   </para>
   </sect1>
   <sect1 id="sec-changes"><title>Changes</title>
-  <sect2 id="sec-changes-016"><title>Changes of version &version;</title>
+  <sect2 id="sec-changes-017"><title>Changes of version &version;</title>
+  <para>The changes between release &version; and release 0.1.6 are:
+  &changes5;
+  </para>
+  </sect2>
+  <sect2 id="sec-changes-016"><title>Changes of version 0.1.6</title>
   <para>The changes between release &version; and release 0.1.5 are:
   &changes4;
   </para>
@@ -128,12 +133,13 @@
    <itemizedlist>
     <listitem>
     <para>
-    The &ldquo;dvips&rdquo; driver calls <command>latex</command>, and produces DVI, Postscript and at the end PDF files. The drawback is that converting to PDF can take a while. 
+    The &ldquo;dvips&rdquo; driver calls <command>latex</command>, and produces DVI, Postscript and at the end PDF files. Latex natively accepts only EPS graphics. The drawback is that converting to PDF can take a while. 
     </para>
    </listitem>
     <listitem>
     <para>
-    The &ldquo;pdftex&rdquo; driver calls <command>pdflatex</command>, to produce directly PDF files. The conversion is fast, the file size is smaller, but only PDF graphics are accepted.
+    The &ldquo;pdftex&rdquo; driver calls <command>pdflatex</command>, to produce directly PDF files. The conversion is fast, the file size is smaller. Pdflatex natively
+accepts PDF, PNG, JPEG, and TIFF graphics.
     </para>
    </listitem>
    </itemizedlist>
