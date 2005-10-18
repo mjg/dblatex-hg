@@ -242,6 +242,15 @@
   <xsl:call-template name="cross-reference"/>
 </xsl:template>
 
+<xsl:template match="refentry" mode="xref-to">
+  <xsl:text>\hyperlink{</xsl:text>
+  <xsl:value-of select="@id"/>
+  <xsl:text>}{</xsl:text>
+  <xsl:value-of select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"/>
+  <xsl:apply-templates select="refmeta/manvolnum"/>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template match="variablelist|orderedlist|orderedlist|simplelist|
                      itemizedlist" mode="xref-to">
   <xsl:call-template name="title-link-to"/>
