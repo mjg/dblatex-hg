@@ -181,7 +181,9 @@
      environment. Since in XSLT 1.0 you cannot directly include text files, the
      workaround is to load the data from a listings database file. -->
 
-<xsl:template match="textdata|imagedata[@format='linespecific']"
+<xsl:template match="textdata|
+                     imagedata[@format='linespecific']|
+                     inlinegraphic[@format='linespecific']"
               mode="latex.programlisting">
 
   <xsl:variable name="name" select="name(.)"/>
@@ -205,7 +207,9 @@
   <xsl:apply-templates mode="latex.programlisting" select="$lst.ext"/>
 </xsl:template>
 
-<xsl:template match="textdata|imagedata[@format='linespecific']" mode="lstid">
+<xsl:template match="textdata|
+                     imagedata[@format='linespecific']|
+                     inlinegraphic[@format='linespecific']" mode="lstid">
   <xsl:number from="/"
               level="any"
               format="1"/>

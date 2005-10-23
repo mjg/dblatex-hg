@@ -137,6 +137,7 @@
   </xsl:if>
   <xsl:choose>
   <xsl:when test="descendant::imagedata[@format='linespecific']|
+                  descendant::inlinegraphic[@format='linespecific']|
                   descendant::textdata">
     <!-- the listing content is in an external file -->
     <xsl:text>&#10;\lstinputlisting</xsl:text>
@@ -147,7 +148,8 @@
     </xsl:if>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates
-        select="descendant::imagedata|descendant::textdata"
+        select="descendant::imagedata|descendant::inlinegraphic|
+                descendant::textdata"
         mode="filename.get"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:when>
