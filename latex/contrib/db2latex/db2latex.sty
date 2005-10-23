@@ -94,14 +94,14 @@
 \def\maketitle{
   \stdmaketitle
   \noindent
-  \textbf{\DBKtitle}
-  \ifthenelse{\equal{\DBKauthor}{}}{}{\\ by \DBKauthor}
-  \\
-  \ifthenelse{\equal{\DBKedition}{}}{}{\\ Edition \DBKedition}
-  \ifthenelse{\equal{\DBKpubdate}{}}{}{\\ Published \DBKpubdate}
-  \ifthenelse{\equal{\DBKcopyright}{}}{}{\\ \DBKcopyright}
-  \\
- % Now the legalnotice block
+  \textbf{\DBKtitle \\}
+  \ifthenelse{\equal{\DBKauthor}{}}{}{by \DBKauthor \\}
+  \hspace{0pt}\\
+  \ifthenelse{\equal{\DBKedition}{}}{}{Edition \DBKedition \\}
+  \ifthenelse{\equal{\DBKpubdate}{}}{}{Published \DBKpubdate \\}
+  \ifthenelse{\equal{\DBKcopyright}{}}{}{\DBKcopyright \\}
+  \hspace{0pt}\\
+  % Now the legalnotice block
   \DBKlegalblock
   \newpage
 }
@@ -273,7 +273,7 @@
   \addtolength{\admlength}{-10\fboxrule}
   \admminipage{\admlength}
   {\bfseries \sc\large{#2}} \newline
-  \\[1mm]
+  ~\\[1mm]
   \sffamily
   \ifthenelse{\equal{#1}{}}{
     \def\admgraph{false}
