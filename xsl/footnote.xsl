@@ -39,11 +39,6 @@
   </xsl:if>
 </xsl:template>
 
-<!-- in this mode the footnotes must vanish -->
-<xsl:template match="*" mode="footskip">
-  <xsl:apply-templates mode="footskip"/>
-</xsl:template>
-
 <xsl:template match="footnote" mode="foottext">
   <xsl:text>\stepcounter{footnote}&#10;</xsl:text>
   <xsl:text>\footnotetext{</xsl:text>
@@ -51,6 +46,11 @@
   <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="footnote" mode="footskip"/>
+<xsl:template match="*" mode="toc.skip">
+  <xsl:apply-templates mode="toc.skip"/>
+</xsl:template>
+
+<!-- in this mode the footnotes must vanish -->
+<xsl:template match="footnote" mode="toc.skip"/>
 
 </xsl:stylesheet>

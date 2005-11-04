@@ -5,6 +5,10 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<!-- Title parameters -->
+<xsl:param name="titleabbrev.in.toc">1</xsl:param>
+
+
 <xsl:template name="element.and.label">
   <xsl:call-template name="label.id">
     <xsl:with-param name="string">
@@ -56,16 +60,57 @@
 </xsl:template>
 
 <!-- optionally the TOC entry text can be different from the actual
-     title if the title contains unsupported things -->
+     title if the title contains unsupported things like hot links
+     or graphics, or if some titleabbrev is provided and should be used
+     for the TOC.
+ -->
 <xsl:template match="title" mode="toc">
-  <xsl:variable name="foot" select="descendant::footnote"/>
-  <xsl:if test="count($foot)&gt;0">
-    <xsl:text>[</xsl:text> 
-    <xsl:variable name="s">
-      <xsl:apply-templates mode="footskip"/>
-    </xsl:variable>
-    <xsl:value-of select="normalize-space($s)"/>
-    <xsl:text>]</xsl:text> 
+  <!-- Use the titleabbrev for the TOC (if possible) -->
+  <xsl:variable name="abbrev">
+    <xsl:if test="$titleabbrev.in.toc='1'">
+      <xsl:apply-templates
+        mode="toc.skip"
+        select="(../titleabbrev
+                |../sect1info/titleabbrev
+                |../sect2info/titleabbrev
+                |../sect3info/titleabbrev
+                |../sect4info/titleabbrev
+                |../sect5info/titleabbrev
+                |../sectioninfo/titleabbrev
+                |../chapterinfo/titleabbrev
+                |../partinfo/titleabbrev
+                |../refsect1info/titleabbrev
+                |../refsect2info/titleabbrev
+                |../refsect3info/titleabbrev
+                |../refsectioninfo/titleabbrev
+                |../referenceinfo/titleabbrev
+                )[1]"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:if test="$abbrev!='' or
+                (descendant::footnote|
+                descendant::xref|
+                descendant::link|
+                descendant::ulink|
+                descendant::anchor|
+                descendant::inlinegraphic|
+                descendant::inlinemediaobject)">
+    <xsl:text>[{</xsl:text> 
+    <xsl:choose>
+    <xsl:when test="$abbrev!=''">
+      <!-- The TOC contains the titleabbrev content -->
+      <xsl:value-of select="normalize-space($abbrev)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- The TOC contains the toc-safe title -->
+      <xsl:variable name="s">
+        <xsl:apply-templates mode="toc.skip"/>
+      </xsl:variable>
+      <xsl:value-of select="normalize-space($s)"/>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}]</xsl:text> 
   </xsl:if>
 </xsl:template>
 

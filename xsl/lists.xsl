@@ -22,23 +22,51 @@
   <xsl:text>\nopagebreak&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="itemizedlist">
+<!-- In latex, the list nesting depth is limited. The depths are checked in
+     order to prevent from compilation crash. If the depth is correct
+     the templates that actually do the work are called.
+ -->
+<xsl:template match="itemizedlist|orderedlist|variablelist">
+  <xsl:variable name="ditem" select="count(ancestor-or-self::itemizedlist)"/>
+  <xsl:variable name="dorder" select="count(ancestor-or-self::orderedlist)"/>
+  <xsl:variable name="dvar" select="count(ancestor-or-self::variablelist)"/>
+  <xsl:choose>
+  <xsl:when test="$ditem &gt; 4">
+    <xsl:message>*** Error: itemizedlist too deeply nested (&gt; 4)</xsl:message>
+    <xsl:text>[Error: itemizedlist too deeply nested]</xsl:text>
+  </xsl:when>
+  <xsl:when test="$dorder &gt; 4">
+    <xsl:message>*** Error: orderedlist too deeply nested (&gt; 4)</xsl:message>
+    <xsl:text>[Error: orderedlist too deeply nested]</xsl:text>
+  </xsl:when>
+  <xsl:when test="($ditem+$dorder+$dvar) &gt; 6">
+    <xsl:message>*** Error: lists too deeply nested (&gt; 6)</xsl:message>
+    <xsl:text>[Error: lists too deeply nested]</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- Ok, can print the list -->
+    <xsl:apply-templates select="." mode="print"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="itemizedlist" mode="print">
   <xsl:apply-templates select="title"/>
   <xsl:text>\begin{itemize}&#10;</xsl:text>
   <xsl:apply-templates select="listitem"/>
   <xsl:text>\end{itemize}&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="orderedlist">
+<xsl:template match="orderedlist" mode="print">
   <xsl:apply-templates select="title"/>
   <xsl:text>\begin{enumerate}</xsl:text>
   <xsl:if test="@numeration">
     <xsl:choose>
-    <xsl:when test="@numeration='arabic'">    <xsl:text>[1]</xsl:text>&#10;</xsl:when>
-    <xsl:when test="@numeration='upperalpha'"><xsl:text>[A]</xsl:text>&#10;</xsl:when>
-    <xsl:when test="@numeration='loweralpha'"><xsl:text>[a]</xsl:text>&#10;</xsl:when>
-    <xsl:when test="@numeration='upperroman'"><xsl:text>[I]</xsl:text>&#10;</xsl:when>
-    <xsl:when test="@numeration='lowerroman'"><xsl:text>[i]</xsl:text>&#10;</xsl:when>
+    <xsl:when test="@numeration='arabic'"><xsl:text>[1.]</xsl:text></xsl:when>
+    <xsl:when test="@numeration='upperalpha'"><xsl:text>[A.]</xsl:text></xsl:when>
+    <xsl:when test="@numeration='loweralpha'"><xsl:text>[a.]</xsl:text></xsl:when>
+    <xsl:when test="@numeration='upperroman'"><xsl:text>[I.]</xsl:text></xsl:when>
+    <xsl:when test="@numeration='lowerroman'"><xsl:text>[i.]</xsl:text></xsl:when>
     </xsl:choose>
   </xsl:if>
   <xsl:text>&#10;</xsl:text>
@@ -46,7 +74,7 @@
   <xsl:text>\end{enumerate}&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="variablelist">
+<xsl:template match="variablelist" mode="print">
   <xsl:apply-templates select="title"/>
   <xsl:text>&#10;\noindent&#10;</xsl:text> 
   <xsl:text>\begin{description}&#10;</xsl:text>
@@ -57,6 +85,7 @@
 <xsl:template match="listitem">
   <!-- Add {} to avoid some mess with following square brackets [...] -->
   <xsl:text>&#10;\item{}</xsl:text>
+  <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
   <xsl:text>&#10;</xsl:text>
 </xsl:template>
@@ -65,6 +94,9 @@
   <xsl:text>\item[{</xsl:text>
   <xsl:apply-templates select="term"/>
   <xsl:text>}] </xsl:text>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select="term"/>
+  </xsl:call-template>
   <xsl:apply-templates select="term" mode="foottext"/>
   <xsl:apply-templates select="listitem"/>
 </xsl:template>
@@ -121,12 +153,11 @@
 
 <xsl:template match="simplelist[@type='inline']/member">
   <xsl:apply-templates/>
-  <xsl:text>, </xsl:text>
+  <xsl:if test="position()!=last()">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
-<xsl:template match="simplelist[@type='inline']/member[position()=last()]">
-  <xsl:apply-templates/>
-</xsl:template>
 
 <!-- Horizontal simplelist, is actually a tabular -->
 
@@ -172,8 +203,7 @@
       <xsl:otherwise>1</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:text>&#10;\vspace{1cm}&#10;</xsl:text>
-  <xsl:text>\begin{tabular*}{\linewidth}{</xsl:text>
+  <xsl:text>&#10;\begin{tabular*}{\linewidth}{</xsl:text>
   <xsl:call-template name="tabular.string">
     <xsl:with-param name="cols" select="$cols"/>
   </xsl:call-template>
@@ -184,7 +214,6 @@
     <xsl:with-param name="rows" select="floor((count(member)+$cols - 1) div $cols)"/>
   </xsl:call-template>
   <xsl:text>&#10;\end{tabular*}&#10;</xsl:text>
-  <xsl:text>\vspace{1cm}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template name="simplelist.vert.row">

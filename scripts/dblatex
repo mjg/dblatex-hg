@@ -171,6 +171,7 @@ ps | dvi) if [ "$btex" != "dvips" ]; then
             btex="dvips"
             echo "TeX Backend Driver forced to $btex"
           fi ;;
+tex) btex="none" ;;
 esac
 
 # Let's check the backend driver and do the appropriate actions
@@ -183,6 +184,7 @@ pdftex) btexrun=$btexpath/runpdflatex ;
           btexrun="$btexrun --graphpath $pdfinputs"
         fi;;
 dvips)  btexrun=$btexpath/runlatex ;;
+none)   btexrun="" ;;
 *)      echo "$btex: unknown TeX Backend Driver"; usage ;;
 esac
 

@@ -9,6 +9,37 @@
   <xsl:call-template name="label.id"/>
 </xsl:template>
 
+<xsl:template match="xref" mode="label.get">
+  <xsl:variable name="target" select="id(@linkend)[1]"/>
+  <xsl:choose>
+  <!-- If there is an endterm -->
+  <xsl:when test="@endterm">
+    <xsl:variable name="etarget" select="id(@endterm)[1]"/>
+    <xsl:choose>
+    <xsl:when test="count($etarget) = 0">
+      <xsl:message>
+        <xsl:value-of select="count($etargets)"/>
+        <xsl:text>*** Error: endterm points to nonexistent ID: </xsl:text>
+        <xsl:value-of select="@endterm"/>
+      </xsl:message>
+      <xsl:text>[NONEXISTENT ID]</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="$etarget" mode="xref.text"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <!-- If an xreflabel has been specified for the target -->
+  <xsl:when test="$target/@xreflabel">
+    <xsl:text>"</xsl:text>
+    <xsl:value-of select="$target/@xreflabel"/>
+    <xsl:text>"</xsl:text>
+  </xsl:when>
+  <!-- nothing specified -->
+  <xsl:otherwise/>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="xref">
   <xsl:variable name="target" select="id(@linkend)[1]"/>
   <xsl:call-template name="check.id.unique">
@@ -25,33 +56,7 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:variable name="text">
-      <xsl:choose>
-      <!-- If there is an endterm -->
-      <xsl:when test="@endterm">
-        <xsl:variable name="etarget" select="id(@endterm)[1]"/>
-        <xsl:choose>
-        <xsl:when test="count($etarget) = 0">
-          <xsl:message>
-            <xsl:value-of select="count($etargets)"/>
-            <xsl:text>*** Error: endterm points to nonexistent ID: </xsl:text>
-            <xsl:value-of select="@endterm"/>
-          </xsl:message>
-          <xsl:text>[NONEXISTENT ID]</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="$etarget" mode="xref.text"/>
-        </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <!-- If an xreflabel has been specified for the target -->
-      <xsl:when test="$target/@xreflabel">
-        <xsl:text>"</xsl:text>
-        <xsl:value-of select="$target/@xreflabel"/>
-        <xsl:text>"</xsl:text>
-      </xsl:when>
-      <!-- nothing specified -->
-      <xsl:otherwise/>
-      </xsl:choose>
+      <xsl:apply-templates select="." mode="label.get"/>
     </xsl:variable>
 
     <!-- how to print it -->
@@ -91,10 +96,7 @@
 
 <!-- it now works thanks to "hyperlabel" -->
 
-<xsl:template match="link">
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@linkend"/> 
-  <xsl:text>}{</xsl:text>
+<xsl:template match="link" mode="label.get">
   <xsl:choose>
   <xsl:when test=".!=''">
     <xsl:call-template name="normalize-scape">
@@ -107,6 +109,13 @@
     <xsl:copy-of select="id(@endterm)[1]"/>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="link">
+  <xsl:text>\hyperlink{</xsl:text>
+  <xsl:value-of select="@linkend"/> 
+  <xsl:text>}{</xsl:text>
+  <xsl:apply-templates select="." mode="label.get"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -120,6 +129,24 @@
 <xsl:template match="*" mode="xref.text">
   <xsl:apply-templates/>
 </xsl:template>
+
+<!-- No reference must be made, but the label should be printed, if any -->
+<xsl:template match="xref|link" mode="toc.skip">
+  <xsl:apply-templates select="." mode="label.get"/>
+</xsl:template>
+
+<xsl:template match="ulink" mode="toc.skip">
+  <xsl:choose>
+  <xsl:when test=".=''">
+    <xsl:value-of select="@url"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
+    <xsl:apply-templates mode="slash.hyphen"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <!-- ###########################
      # Format display (%n, %t) #
@@ -248,6 +275,14 @@
   <xsl:text>}{</xsl:text>
   <xsl:value-of select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"/>
   <xsl:apply-templates select="refmeta/manvolnum"/>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="refnamediv" mode="xref-to">
+  <xsl:text>\hyperlink{</xsl:text>
+  <xsl:value-of select="@id"/>
+  <xsl:text>}{</xsl:text>
+  <xsl:apply-templates select="refname[1]" mode="xref.text"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 

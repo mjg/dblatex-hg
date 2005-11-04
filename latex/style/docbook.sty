@@ -213,38 +213,43 @@
 % Redéfinition de index, pour avoir l'entete+pied de page et le nombre total
 % de pages
 \renewenvironment{theindex}
-  {\if@twocolumn
-     \@restonecolfalse
-   \else
-     \@restonecoltrue
-   \fi
-   \columnseprule \z@
-   \columnsep 35\p@
-   \pagebreak
-   \refstepcounter{chapter}
-   % Pour ne pas avoir le numéro, remplacer makechapterhead par
-   % makeschapterhead
-   \twocolumn[\@makechapterhead{\indexname}]%
-   % \chapter{\indexname}{%
-   % \@mkboth{\MakeUppercase\indexname}%
-   %        {\MakeUppercase\indexname}
-   % }%
-   \thispagestyle{plain}\parindent\z@
-   \parskip\z@ \@plus .3\p@\relax
-   \let\item\@idxitem}
-  {\if@restonecol\onecolumn\else\clearpage\fi}
+{ 
+  \if@twocolumn
+    \@restonecolfalse
+  \else
+    \@restonecoltrue
+  \fi
+  \columnseprule \z@
+  \columnsep 35\p@
+  \pagebreak
+  \@ifundefined{chapter}{
+    \twocolumn[\section{\indexname}]%
+  }{
+    % To not have the number, replace makechapterhead by
+    % makeschapterhead
+    % \chapter{\indexname}{%
+    % \@mkboth{\MakeUppercase\indexname}%
+    %        {\MakeUppercase\indexname}
+    % }%
+    \refstepcounter{chapter}
+    \twocolumn[\@makechapterhead{\indexname}]%
+  }
+  \thispagestyle{plain}\parindent\z@
+  \parskip\z@ \@plus .3\p@\relax
+  \let\item\@idxitem
+}{\if@restonecol\onecolumn\else\clearpage\fi}
 
 \let\stdindex=\theindex
 \let\endstdindex=\endtheindex
 \renewenvironment{theindex}{
   \begin{stdindex}
-  % Pour ne pas avoir le numéro, remplacer par:
-  %  \addcontentsline{toc}{chapter}{\numberline{}\indexname}
-  \addcontentsline{toc}{chapter}{\numberline{\thechapter}\indexname}
-  \thispagestyle{fancy}
+  \@ifundefined{chapter}{}{
+    % To not have the number, replace by:
+    % \addcontentsline{toc}{chapter}{\numberline{}\indexname}
+    \addcontentsline{toc}{chapter}{\numberline{\thechapter}\indexname}
+  }
 }{
-  \label{LastPage}
-  \label{LastPageLetter}
+  \label{LastPage}%
   \end{stdindex}
 }
 
@@ -257,8 +262,7 @@
          0 0 moveto 0.8 setgray (DRAFT) show grestore}def end}}
 
 \AtEndDocument{%
-  \label{LastPage}
-  \label{LastPageLetter}
+  \label{LastPage}%
 }
 \usepackage{refcount}
 

@@ -307,6 +307,16 @@ sub eps2xxx
   return $action;
 }
 
+sub gif2xxx
+{
+  local($in) = $_[0];
+  local($out) = $_[1];
+  local($format) = $_[2];
+
+  my $action = "convert $in $out";
+  return $action;
+}
+
 sub scanformat
 {
   my $f = $_[0];
@@ -318,9 +328,9 @@ sub scanformat
 
   # The prefered format depends on the expected output
   if ($figout eq "eps") {
-    @formats = (".eps", ".fig", ".pdf", ".png", "");
+    @formats = (".eps", ".fig", ".pdf", ".png", "gif", "");
   } else {
-    @formats = (".pdf", ".png", ".eps", ".fig", "");
+    @formats = (".pdf", ".png", ".eps", "gif", ".fig", "");
   }
 
   if ($ext ne "") {
@@ -358,8 +368,10 @@ sub figconvert
   # Is there a graphic included here
   if (/\\includegraphics[\[{]/) {
     $figcmd = "\\includegraphics" ;
-  } elsif (/"\\begin{overpic}"/) {
+  } elsif (/\\begin{overpic}/) {
     $figcmd = "\\begin{overpic}" ;
+  } elsif (/\\imgexists{/) {
+    $figcmd = "\\imgexists" ;
   } else {
     return $line;
   }
@@ -396,6 +408,9 @@ sub figconvert
       };
       /eps2pdf/ && do{
         $dofig = eps2xxx($fig, $newfig, $figout); last;
+      };
+      /gif2/ && do{
+        $dofig = gif2xxx($fig, $newfig, $figout); last;
       };
     }
     if ($dofig ne "") {
@@ -462,7 +477,7 @@ sub parse_sgml
     $line = $_;
 
     # Convert the figures if needed
-    $line = figconvert($line);
+    $line = figconvert($line) if ($figout ne "");
 
     # Update the embedded commands
     command_update($line);
@@ -480,7 +495,7 @@ sub parse_sgml
       $mode = 0;
       chomp $line;
     } elsif (/$keyon /) {
-      # Cas plus complexe, 'xt' est dans la ligne
+      # More tricky, 'xt' is in the line
       $line = parse_inlined($line);
     }
     table_parse($line, $CTEX);
@@ -508,6 +523,7 @@ if ($opt_p) {
 for ($backend) {
   /dvips/ && do{ $figout = "eps"; last; };
   /pdftex/ && do{ $figout = "pdf"; last; };
+  /none/ && do{ $figout = ""; last };
 }
 
 $rawtex = $ARGV[0];

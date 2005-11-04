@@ -8,6 +8,7 @@
 <!-- Mediaobject/imagedata parameters -->
 <xsl:param name="imagedata.default.scale">pagebound</xsl:param>
 <xsl:param name="mediaobject.caption.style">\slshape</xsl:param>
+<xsl:param name="imagedata.file.check">1</xsl:param>
 
 
 <xsl:template match="videoobject">
@@ -45,8 +46,20 @@
     <xsl:text>\begin{center}&#10;</xsl:text>
   </xsl:if>
   <xsl:choose>
-    <xsl:when test="imageobject">
-      <xsl:apply-templates select="imageobject[1]"/>
+    <xsl:when test="imageobject|imageobjectco">
+      <xsl:if test="$imagedata.file.check='1'">
+        <xsl:text>\imgexists{</xsl:text>
+        <xsl:apply-templates
+            select="(imageobject|imageobjectco)[1]/descendant::imagedata"
+            mode="filename.get"/>
+        <xsl:text>}{</xsl:text>
+      </xsl:if>
+      <xsl:apply-templates select="(imageobject|imageobjectco)[1]"/>
+      <xsl:if test="$imagedata.file.check='1'">
+        <xsl:text>}{</xsl:text>
+        <xsl:apply-templates select="textobject[1]"/>
+        <xsl:text>}</xsl:text>
+      </xsl:if>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="textobject[1]"/>
@@ -146,6 +159,20 @@
   </xsl:if>
 </xsl:template>
 
+<!-- Image filename to use -->
+<xsl:template match="imagedata" mode="filename.get">
+  <xsl:choose>
+  <xsl:when test="@entityref">
+    <xsl:value-of select="unparsed-entity-uri(@entityref)"/>
+  </xsl:when>
+  <xsl:when test="@fileref">
+    <xsl:value-of select="@fileref"/>
+  </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Process an imagedata -->
+
 <xsl:template match="imagedata" name="imagedata">
   <xsl:variable name="graphic.begin">
     <xsl:call-template name="graphic.begin.get"/>
@@ -155,14 +182,7 @@
   </xsl:variable>
 
   <xsl:variable name="filename">
-    <xsl:choose>
-    <xsl:when test="@fileref">
-      <xsl:value-of select="@fileref"/>
-    </xsl:when>
-    <xsl:when test="@entityref">
-      <xsl:value-of select="unparsed-entity-uri(@entityref)"/>
-    </xsl:when>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="filename.get"/>
   </xsl:variable>
   <xsl:variable name="width">
     <xsl:call-template name="unit.eval">
@@ -182,8 +202,32 @@
   <xsl:variable name="viewport">
     <xsl:choose>
     <xsl:when test="(@width or @depth) and
-                    (@contentwidth or @contentdepth or @scale)">
+                    (@contentwidth or @contentdepth or @scale or
+                    (@scalefit and @scalefit='0'))">
       <xsl:value-of select="1"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="0"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- check if some percentage is applied to the content -->
+  <xsl:variable name="widthperct">
+    <xsl:choose>
+    <xsl:when test="@contentwidth and contains(@contentwidth, '%') and
+                    substring-after(@contentwidth, '%')=''">
+      <xsl:value-of select="number(substring-before(@contentwidth, '%')) div 100"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="0"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="depthperct">
+    <xsl:choose>
+    <xsl:when test="@contentdepth and contains(@contentdepth, '%') and
+                    substring-after(@contentdepth, '%')=''">
+      <xsl:value-of select="number(substring-before(@contentdepth, '%')) div 100"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="0"/>
@@ -248,7 +292,8 @@
   </xsl:choose>
 
   <!-- find out the natural image size -->
-  <xsl:if test="$imagedata.default.scale='pagebound'">
+  <xsl:if test="$imagedata.default.scale='pagebound' or
+               $widthperct!=0 or $depthperct!=0">
     <xsl:text>\imgevalsize{</xsl:text>
     <xsl:value-of select="$filename"/>
     <xsl:text>}</xsl:text>
@@ -261,21 +306,17 @@
     <!-- content area spec -->
     <xsl:when test="@contentwidth or @contentdepth"> 
       <xsl:choose>
-      <xsl:when test="contains(@contentwidth, '%') and
-                      substring-after(@contentwidth, '%')=''">
+      <!-- special case where both content percentages are the same -->
+      <xsl:when test="$widthperct!=0 and $widthperct=$depthperct">
         <xsl:text>scale=</xsl:text>
-        <xsl:value-of select="number(substring-before(@contentwidth, '%')) div 100"/>
-      </xsl:when>
-      <xsl:when test="contains(@contentdepth, '%') and
-                      substring-after(@contentdepth, '%')=''">
-        <xsl:text>scale=</xsl:text>
-        <xsl:value-of select="number(substring-before(@contentdepth, '%')) div 100"/>
+        <xsl:value-of select="$widthperct"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="@contentwidth">
           <xsl:text>width=</xsl:text>
           <xsl:call-template name="unit.eval">
             <xsl:with-param name="length" select="@contentwidth"/>
+            <xsl:with-param name="prop" select="'\imgrwidth'"/>
           </xsl:call-template>
           <xsl:text>,</xsl:text>
         </xsl:if>
@@ -283,6 +324,7 @@
           <xsl:text>height=</xsl:text>
           <xsl:call-template name="unit.eval">
             <xsl:with-param name="length" select="@contentdepth"/>
+            <xsl:with-param name="prop" select="'\imgrheight'"/>
           </xsl:call-template>
         </xsl:if>
       </xsl:otherwise>

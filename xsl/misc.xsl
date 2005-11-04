@@ -12,6 +12,7 @@
 <xsl:param name="doc.pdfcreator.show">1</xsl:param>
 <xsl:param name="doc.publisher.show">0</xsl:param>
 <xsl:param name="doc.alignment"/>
+<xsl:param name="set.book.num">1</xsl:param>
 
 <xsl:variable name="latex.book.preamblestart">
   <xsl:text>% -----------------------------------------  &#10;</xsl:text>
@@ -454,10 +455,14 @@
 <xsl:template match="bookinfo"/>
 <xsl:template match="articleinfo"/>
 
-<!-- what to do with set? -->
+<!-- Only one book from the set is printed -->
 <xsl:template match="set">
-  <xsl:call-template name="label.id"/>
-  <xsl:apply-templates/>
+  <xsl:message>
+    <xsl:text>*** Warning: only print the book [</xsl:text>
+    <xsl:value-of select="$set.book.num"/>
+    <xsl:text>]</xsl:text>
+  </xsl:message>
+  <xsl:apply-templates select="//book[position()=$set.book.num]"/>
 </xsl:template>
 
 <xsl:template match="set/setinfo"></xsl:template>

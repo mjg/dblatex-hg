@@ -60,8 +60,18 @@
 </xsl:template>
 
 <xsl:template match="section">
+  <xsl:variable name="min">
+    <xsl:choose>
+    <xsl:when test="ancestor::appendix and ancestor::article">
+      <xsl:value-of select="'2'"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="'1'"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="level" select="count(ancestor::section)+1"/>
+    <xsl:with-param name="level" select="count(ancestor::section)+$min"/>
   </xsl:call-template>
   <xsl:call-template name="title.and.label"/>
   <xsl:apply-templates/>
@@ -115,5 +125,7 @@
 <xsl:template match="sect3info"/>
 <xsl:template match="sect4info"/>
 <xsl:template match="sect5info"/>
+
+<xsl:template match="titleabbrev"/>
 
 </xsl:stylesheet>

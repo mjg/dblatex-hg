@@ -5,18 +5,28 @@
 use File::Basename;
 
 %empty_tags = (
-  "area"          => '',
-  "audiodata"     => '',
-  "beginpage"     => '',
-  "co"            => '',
-  "colspec"       => '',
-  "constraint"    => '',
-  "footnoteref"   => '',
-  "graphic"       => '',
-  "imagedata"     => '',
-  "inlinegraphic" => '',
-  "textdata"      => '',
-  "xref"          => ''
+  "anchor"          => '',
+  "area"            => '',
+  "audiodata"       => '',
+  "beginpage"       => '',
+  "biblioref"       => '',
+  "co"              => '',
+  "col"             => '',
+  "colspec"         => '',
+  "constraint"      => '',
+  "coref"           => '',
+  "footnoteref"     => '',
+  "graphic"         => '',
+  "imagedata"       => '',
+  "inlinegraphic"   => '',
+  "productionrecap" => '',
+  "sbr"             => '',
+  "spanspec"        => '',
+  "textdata"        => '',
+  "varargs"         => '',
+  "videodata"       => '',
+  "void"            => '',
+  "xref"            => ''
   );
 
 sub parse_entities

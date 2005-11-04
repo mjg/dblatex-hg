@@ -51,7 +51,7 @@
   </xsl:param>
   <xsl:text>{\bf {\tt </xsl:text>
   <xsl:copy-of select="$content"/>
-  <xsl:text> }}</xsl:text>
+  <xsl:text>}}</xsl:text>
 </xsl:template>
 
 <xsl:template name="inline.superscriptseq">
@@ -92,6 +92,15 @@
   <xsl:copy-of select="$content"/>
   <xsl:text>%% texclean(hyphenoff)&#10;</xsl:text>
   <xsl:text>}}}</xsl:text>
+</xsl:template>
+
+<xsl:template name="inline.underlineseq">
+  <xsl:param name="content">
+    <xsl:apply-templates/>
+  </xsl:param>
+  <xsl:text>\underline{</xsl:text>
+  <xsl:copy-of select="$content"/>
+  <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -349,8 +358,12 @@
   <xsl:call-template name="inline.italicseq"/>
 </xsl:template>
 
-<xsl:template match="emphasis[@role='bold']">
+<xsl:template match="emphasis[@role='bold' or @role='strong']">
   <xsl:call-template name="inline.boldseq"/>
+</xsl:template>
+
+<xsl:template match="emphasis[@role='underline']">
+  <xsl:call-template name="inline.underlineseq"/>
 </xsl:template>
 
 <xsl:template match="errortext">

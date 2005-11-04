@@ -76,6 +76,67 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- This template extracts the fixed part of a colwidth specification.
+     It should be able to do this:
+       a+b+c+d*+e+f -> a+b+c+e+f
+       a+b+c+d*     -> a+b+c
+       d*+e+f       -> e+f      
+-->
+<xsl:template name="colfixed.get">
+  <xsl:param name="width" select="@colwidth"/>
+  <xsl:param name="stared" select="'0'"/>
+
+  <xsl:choose>
+  <xsl:when test="contains($width, '*')">
+    <xsl:variable name="after"
+        select="substring-after(substring-after($width, '*'), '+')"/>
+    <xsl:if test="contains(substring-before($width, '*'), '+')">
+      <xsl:call-template name="colfixed.get">
+        <xsl:with-param name="width" select="substring-before($width, '*')"/>
+        <xsl:with-param name="stared" select="'1'"/>
+      </xsl:call-template>
+      <xsl:if test="$after!=''">
+        <xsl:text>+</xsl:text>
+      </xsl:if>
+    </xsl:if>
+    <xsl:value-of select="$after"/>
+  </xsl:when>
+  <xsl:when test="$stared='1'">
+    <xsl:value-of select="substring-before($width, '+')"/>
+    <xsl:if test="contains(substring-after($width, '+'), '+')">
+      <xsl:text>+</xsl:text>
+      <xsl:call-template name="colfixed.get">
+        <xsl:with-param name="width" select="substring-after($width, '+')"/>
+        <xsl:with-param name="stared" select="'1'"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$width"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+<xsl:template name="colstar.get">
+  <xsl:param name="width"/>
+  <xsl:choose>
+  <xsl:when test="contains($width, '+')">
+    <xsl:call-template name="colstar.get">
+      <xsl:with-param name="width" select="substring-after($width, '+')"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:choose>
+    <xsl:when test="string(number($width))='NaN'">1</xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="number($width)"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 
 <!-- Ensure each column has a colspec and each colspec has a valid column -->
@@ -92,9 +153,15 @@
       <xsl:attribute name="colnum"><xsl:value-of select="$colnum"/>
       </xsl:attribute>
     </xsl:if>
-    <!-- Find out if the column width has been specified absolutely -->
-    <xsl:if test="string(@colwidth) and not(contains(@colwidth,'*'))">
-      <xsl:attribute name="colwidthspecified">1</xsl:attribute>
+    <!-- Find out if the column width contains fixed width -->
+    <xsl:variable name="fixed">
+      <xsl:call-template name="colfixed.get"/>
+    </xsl:variable>
+
+    <xsl:if test="$fixed!=''">
+      <xsl:attribute name="fixedwidth">
+        <xsl:value-of select="$fixed"/>
+      </xsl:attribute>
     </xsl:if>
     <!-- Replace '*' with our to-be-computed factor -->
     <xsl:if test="contains(@colwidth,'*')">
@@ -106,15 +173,9 @@
         </xsl:call-template>
       </xsl:attribute>
       <xsl:attribute name="star">
-        <xsl:choose>
-          <xsl:when test="string(number(substring-before(@colwidth, '*')))=
-              'NaN'">
-            1
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="number(substring-before(@colwidth,'*'))"/>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="colstar.get">
+          <xsl:with-param name="width" select="substring-before(@colwidth, '*')"/>
+        </xsl:call-template>
       </xsl:attribute>
     </xsl:if>
     <!-- No colwidth specified? Assume '*' -->
@@ -829,9 +890,9 @@
   <xsl:text>\setlength{\newtblsparewidth}{</xsl:text>
   <xsl:value-of select="$width"/>
   <xsl:for-each select="exsl:node-set($colspec)/*">
-    <xsl:if test="@colwidthspecified">
+    <xsl:if test="@fixedwidth">
       <xsl:text>-</xsl:text>
-      <xsl:value-of select="@colwidth"/>
+      <xsl:value-of select="translate(@fixedwidth,'+','-')"/>
     </xsl:if>
     <xsl:text>-2\tabcolsep</xsl:text>
   </xsl:for-each>

@@ -37,6 +37,11 @@
   </xsl:message>
 
   <xsl:element name="{$root}">
+    <!-- Get the node attributes -->
+    <xsl:for-each select="node()/@*[not(id)]">
+      <xsl:copy-of select="."/>
+    </xsl:for-each>
+
     <!-- Get titles from the node -->
     <xsl:for-each select="node()/title|node()/subtitle|node()/titleabbrev">
       <xsl:copy-of select="."/>
@@ -84,7 +89,7 @@
   </xsl:message>
   <xsl:message>===================================================</xsl:message>
   <xsl:choose>
-  <xsl:when test="book|article">
+  <xsl:when test="set|book|article">
     <xsl:apply-templates/>
   </xsl:when>
   <xsl:otherwise>

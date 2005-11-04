@@ -10,6 +10,17 @@
      # biblio section #
      ################## -->
 
+<xsl:template name="biblio.title">
+  <xsl:choose>
+  <xsl:when test="title|bibliographyinfo/title">
+    <xsl:value-of select="(title|bibliographyinfo/title)[1]"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\bibname</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="biblioentry.process">
   <xsl:param name="level"/>
 
@@ -20,7 +31,7 @@
     <xsl:with-param name="level" select="$level"/>
   </xsl:call-template>
   <xsl:text>{</xsl:text>
-  <xsl:value-of select="title"/>
+  <xsl:call-template name="biblio.title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
 
@@ -61,7 +72,7 @@
 
 <xsl:template match="bibliography">
   <xsl:message>Processing Bibliography</xsl:message>
-  <xsl:message>Output Mode:  <xsl:value-of select="$latex.biblio.output"/></xsl:message>
+  <xsl:message>Output Mode: <xsl:value-of select="$latex.biblio.output"/></xsl:message>
   <xsl:text>% ------------------------------------------- &#10;</xsl:text>
   <xsl:text>% Bibliography&#10;</xsl:text>
   <xsl:text>% -------------------------------------------  &#10;</xsl:text>
@@ -87,7 +98,7 @@
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
     <xsl:text>{</xsl:text>
-    <xsl:value-of select="(title|bibliographyinfo/title)[1]"/>
+    <xsl:call-template name="biblio.title"/>
     <xsl:text>}&#10;</xsl:text>
     <xsl:call-template name="label.id"/>
   </xsl:otherwise>
