@@ -56,7 +56,7 @@ if [ $# -lt 2 ]; then
   exit 1
 fi
 
-# Moteur (la)tex à utiliser, avec l'extension du fichier associé.
+# (la)tex engine to use, and the expected output extension.
 xtex=latex
 oxt=dvi
 if [ $# -ge 4 ]; then
@@ -78,7 +78,7 @@ outfile=$pathfile/$basefile.$oxt
 verbose=1
 
 
-# Construction du fichier tex avec le input@path
+# Build the tex file with input@path set
 add_inputpath $srcfile "$srcpath" $file
 
 run=1
@@ -86,21 +86,25 @@ while [ $run -ne 0 ]
 do 
   echo "latex $file"
   $xtex -interaction=batchmode $file
-	if [ $? -ne 0 ]; then
-	  echo "*** latex error"
+  if [ $? -ne 0 ]; then
+    echo "*** latex error"
     if [ $verbose -ne 0 ]; then
       log_dump $logfile
     fi
     clean
-		exit 1
+    exit 1
   fi
-	run=`grep -s Rerun $logfile|wc -l`
+  run=`grep -s Rerun $logfile|wc -l`
 done
 
 # Make the index if needed
 if [ -f $basefile.idx ]; then
-  makeindex -s $scriptpath/doc.ist $basefile.idx
-  $xtex -interaction=batchmode $file
+  sz=`cat $basefile.idx|wc -l`
+  if [ $sz -ne 0 ]; then
+    makeindex -s $scriptpath/doc.ist $basefile.idx
+    $xtex -interaction=batchmode $file
+    $xtex -interaction=batchmode $file
+  fi
 fi
 
 # Execute post-action if needed
@@ -114,7 +118,7 @@ fi
 # Remove the temporary files
 clean
 
-# Le fichier temporaire devient le fichier de sortie
+# The temporary file becomes the output file
 mv $outfile $srcout
 
 exit 0
