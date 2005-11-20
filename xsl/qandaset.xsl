@@ -5,6 +5,10 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<!-- qandaset parameters -->
+<xsl:param name="qandaset.defaultlabel">number</xsl:param>
+
+
 <xsl:template match="qandaset">
   <!-- is it displayed as a section? -->
   <xsl:variable name="title">
@@ -32,10 +36,11 @@
     <xsl:call-template name="label.id"/>
   </xsl:if>
 
-  <xsl:apply-templates select="qandaentry|qandadiv"/>
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="qandaset/title"/>
+<xsl:template match="qandaset/blockinfo"/>
 
 
 <!-- ############
@@ -72,19 +77,7 @@
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
 
-  <!-- if default label is a number, display the quandaentries
-       like an enumerate list
-    -->
-  <xsl:apply-templates select="*[not(self::qandaentry)]"/>
-  <xsl:if test="qandaentry">
-    <xsl:if test="ancestor::qandaset[@defaultlabel='number']">
-      <xsl:text>&#10;\begin{enumerate}&#10;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="qandaentry"/>
-    <xsl:if test="ancestor::qandaset[@defaultlabel='number']">
-      <xsl:text>&#10;\end{enumerate}</xsl:text>
-    </xsl:if>
-  </xsl:if>
+  <xsl:apply-templates/>
 </xsl:template>
 
 
@@ -96,26 +89,57 @@
 <xsl:template match="label"/>
 
 <xsl:template match="qandaentry">
-  <xsl:apply-templates select="question"/>
-  <xsl:apply-templates select="answer"/>
+  <xsl:variable name="defaultlabel">
+    <xsl:choose>
+    <xsl:when test="ancestor::qandaset[@defaultlabel]">
+      <xsl:value-of select="ancestor::qandaset/@defaultlabel"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$qandaset.defaultlabel"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- if default label is a number, display the quandaentries
+       like an enumerate list
+    -->
+  <xsl:if test="not(preceding-sibling::qandaentry) and
+                $defaultlabel='number'">
+    <xsl:text>&#10;\begin{enumerate}&#10;</xsl:text>
+  </xsl:if>
+
+  <xsl:apply-templates select="question">
+    <xsl:with-param name="defaultlabel" select="$defaultlabel"/>
+  </xsl:apply-templates>
+  <xsl:apply-templates select="answer">
+    <xsl:with-param name="defaultlabel" select="$defaultlabel"/>
+  </xsl:apply-templates>
+
+  <xsl:if test="position()=last() and $defaultlabel='number'">
+    <xsl:text>&#10;\end{enumerate}</xsl:text>
+  </xsl:if>
 </xsl:template>
 
-<!--
-     Here @defaultlabel='number' has priority on label use. It is not
-     conformant to the docbook reference
-  -->
-
 <xsl:template match="question">
+  <xsl:param name="defaultlabel"/>
+
   <xsl:choose>
-  <xsl:when test="ancestor::qandaset[@defaultlabel='number']">
-    <xsl:text>\item </xsl:text>
+  <xsl:when test="$defaultlabel='number'">
+    <xsl:text>\item</xsl:text>
+    <xsl:if test="label">
+      <!-- label has priority on defaultlabel -->
+      <xsl:text>[\textbf{</xsl:text>
+      <xsl:value-of select="label"/>
+      <xsl:text>}]</xsl:text>
+    </xsl:if>
+    <xsl:text>{}</xsl:text>
   </xsl:when>
   <xsl:when test="label">
     <xsl:text>\textbf{</xsl:text>
     <xsl:value-of select="label"/>
     <xsl:text>}~</xsl:text>
   </xsl:when>
-  <xsl:when test="ancestor::qandaset[@defaultlabel='qanda']">
+  <xsl:when test="$defaultlabel='qanda'">
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="gentext">
       <xsl:with-param name="key" select="'question'"/>
@@ -133,18 +157,20 @@
 </xsl:template>
 
 <xsl:template match="answer">
+  <xsl:param name="defaultlabel"/>
+
   <xsl:choose>
-  <xsl:when test="ancestor::qandaset[@defaultlabel='number']">
+  <xsl:when test="$defaultlabel='number'">
     <!-- answers are other paragraphs of the enumerated entry -->
     <xsl:text>&#10;</xsl:text>
   </xsl:when>
   <xsl:when test="label">
-    <xsl:text>&#10;\textbf{</xsl:text>
+    <xsl:text>&#10;\noindent\textbf{</xsl:text>
     <xsl:value-of select="label"/>
     <xsl:text>}~</xsl:text>
   </xsl:when>
-  <xsl:when test="ancestor::qandaset[@defaultlabel='qanda']">
-    <xsl:text>&#10;\textbf{</xsl:text>
+  <xsl:when test="$defaultlabel='qanda'">
+    <xsl:text>&#10;\noindent\textbf{</xsl:text>
     <xsl:call-template name="gentext">
       <xsl:with-param name="key" select="'answer'"/>
     </xsl:call-template>
