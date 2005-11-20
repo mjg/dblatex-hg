@@ -72,7 +72,20 @@
 \newfloat{dbequation}{ht}{loe}[section]
 \floatname{dbequation}{{\scshape Equation }}
 
+%
+% Nothing special for <note>, <caution>, <warning>
+%
 \newenvironment{DBKadmonition}[2] {
 }{
+}
+
+%
+% <sidebar> environment
+%
+\newenvironment{sidebar}[1][\textwidth]{
+  \hspace{0mm}\newline%
+  \noindent\begin{Sbox}\begin{minipage}{#1}
+}{
+  \end{minipage}\end{Sbox}\shadowbox{\TheSbox}%
 }
 

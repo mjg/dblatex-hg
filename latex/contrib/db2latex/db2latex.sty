@@ -139,7 +139,7 @@
 % is printed whenever there are figures or tables from that chapter. encourage
 % pagebreak prior to the name of the chapter (discourage orphans).
 \let\save@@chapter\@chapter
-%\let\save@@l@figure\l@figure
+\let\save@@l@figure\l@figure
 \let\the@l@figure@leader\relax
 \def\@chapter[#1]#2{\save@@chapter[{#1}]{#2}%
 \addtocontents{lof}{\protect\def\the@l@figure@leader{\protect\pagebreak[0]\protect\contentsline{chapter}{\protect\numberline{\thechapter}#1}{}{\thepage}}}%
@@ -260,7 +260,7 @@
 % ----------------------------------------------
 % Define a new LaTeX environment (admonition)
 % With 2 parameters:
-% #1 The file (e.g. note.pdf)
+% #1 The image (e.g. note.pdf)
 % #2 The caption
 % ----------------------------------------------
 \newenvironment{DBKadmonition}[2] {
@@ -294,6 +294,13 @@
   \endadmminipage
   \vspace{.5em}
   \par
+}
+
+\newenvironment{sidebar}[1][\textwidth]{
+  \hspace{0mm}\newline%
+  \noindent\begin{Sbox}\begin{minipage}{#1}
+}{
+  \end{minipage}\end{Sbox}\shadowbox{\TheSbox}%
 }
 
 % --------------------------------------------
@@ -400,14 +407,16 @@
 \let\dbtolatex@@endtheindex\endtheindex
 \renewenvironment{theindex}{
   \if@openright\cleardoublepage\else\clearpage\fi
-  \def\dbtolatex@indexlabel{%
-    \ifnum \c@secnumdepth >\m@ne \refstepcounter{chapter}\fi%
-    \global\docbooktolatexprintindexfalse%
-  }
   \dbtolatex@@theindex
+  % To have the index in the TOC
+  \@ifundefined{chapter}{
+    \addcontentsline{toc}{section}{\numberline{}\indexname}
+  }{
+    \refstepcounter{chapter}
+    \addcontentsline{toc}{chapter}{\numberline{}\indexname}
+  }
 }{
   \dbtolatex@@endtheindex%
-  \let\indexname\dbtolatex@@indexname
 }
 
 \newlength\saveparskip \newlength\saveparindent

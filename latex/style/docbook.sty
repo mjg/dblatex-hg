@@ -128,7 +128,7 @@
 \usepackage{fancyvrb}
 
 % ##############################################################################
-% ### Redéfinition/Ajout de commandes pour cette trame
+% ### Some DocBook floats and environments
 % ##############################################################################
 
 %% Inclusion of float package after hyperref to have its definitions!
@@ -137,39 +137,38 @@
 \ifthenelse{\equal{\DBKisarticle}{yes}}{
 
 \floatstyle{ruled}
-\newfloat{example}{ht}{loe}[section]
+\newfloat{example}{htb}{loe}[section]
 \floatname{example}{Exemple}
 
 \floatstyle{plain}
-\newfloat{dbequation}{ht}{loe}[section]
+\newfloat{dbequation}{htb}{loe}[section]
 \floatname{dbequation}{{\scshape Equation }}
 
-% Redefinition de tableofcontent, pour l'avoir sur des pages séparées
+% Redefinition of tableofcontent, to have it in separate pages
 \let\stdtoc=\tableofcontents
 \def\tableofcontents{ \newpage \stdtoc{} \newpage} 
 
 }{
 
 \floatstyle{ruled}
-\newfloat{example}{ht}{loe}[chapter]
+\newfloat{example}{htb}{loe}[chapter]
 \floatname{example}{\examplename}
 
 \floatstyle{plain}
-\newfloat{dbequation}{ht}{loe}[chapter]
+\newfloat{dbequation}{htb}{loe}[chapter]
 \floatname{dbequation}{{\scshape Equation }}
 
-% Redéfinition de la table des matières, pour avoir une page fancy
-\addtocontents{toc}{\protect\thispagestyle{fancy}}
-
-% Redefinition de listoffigures, pour avoir les bas de page
-\let\stdlistoffigures=\listoffigures
-\def\listoffigures{ \stdlistoffigures{} \thispagestyle{fancy}} 
-
-% Redefinition de listoftables, pour avoir les bas de page
-\let\stdlistoftables=\listoftables
-\def\listoftables{ \stdlistoftables{} \thispagestyle{fancy}} 
-
 }
+
+% Sidebar is a boxed minipage that can contain verbatim
+\newenvironment{sidebar}[1][0.95\textwidth]{
+  \hspace{0mm}\newline%
+  \noindent\begin{Sbox}\begin{minipage}{#1}%
+  \setlength\parskip{\medskipamount}%
+}{
+  \end{minipage}\end{Sbox}\shadowbox{\TheSbox}%
+}
+
 
 % ##############################################################################
 % ### Title and Bookinfo display
@@ -210,8 +209,8 @@
 % ### Index redefinition
 % ##############################################################################
 
-% Redéfinition de index, pour avoir l'entete+pied de page et le nombre total
-% de pages
+% Index is redefined to have the section numbered, and to have a correct page
+% count
 \renewenvironment{theindex}
 { 
   \if@twocolumn
