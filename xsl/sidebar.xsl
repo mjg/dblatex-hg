@@ -5,13 +5,14 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
-
+<!-- The sidebar block must be a latex environment where verbatim
+     stuff is correctly handled
+  -->
 <xsl:template match="sidebar">
-  <xsl:text>&#10;&#10;\framebox[\textwidth]{&#10;</xsl:text>
-  <xsl:text>\begin{minipage}{\textwidth}&#10;</xsl:text>
+  <xsl:text>&#10;&#10;\begin{sidebar}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
-  <xsl:text>\end{minipage}&#10;}&#10;</xsl:text>
+  <xsl:text>\end{sidebar}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="sidebar/title">
