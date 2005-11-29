@@ -160,7 +160,7 @@
    <dingbat key="startquote" text="&#171;"/>
    <dingbat key="endquote" text="&#187;"/>
    <dingbat key="nestedstartquote" text="{``}"/>
-	 <dingbat key="nestedendquote" text="{''}"/>
+   <dingbat key="nestedendquote" text="{''}"/>
    <dingbat key="singlestartquote" text="\guilsinglleft{}"/>
    <dingbat key="singleendquote" text="\guilsinglright{}"/>
    <dingbat key="urlstartquote" text="{\textless}"/>

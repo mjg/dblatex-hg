@@ -151,15 +151,15 @@
    <gentext key="nav-home" text="Home"/>
    <gentext key="sectioncalled" text="the section called"/>
    <gentext key="index symbols" text="Symbols"/>
-	 <dingbat key="startquote" text="{``}"/>
-	 <dingbat key="endquote" text="{''}"/>
-	 <dingbat key="nestedstartquote" text="{`}"/>
-	 <dingbat key="nestedendquote" text="{'}"/>
-	 <dingbat key="singlestartquote" text="{`}"/>
-	 <dingbat key="singleendquote" text="{'}"/>
-	 <dingbat key="urlstartquote" text="{\textless}"/>
-	 <dingbat key="urlendquote" text="{\textgreater}"/>
-	 <dingbat key="bullet" text="\textbullet{}"/>
+   <dingbat key="startquote" text="{``}"/>
+   <dingbat key="endquote" text="{''}"/>
+   <dingbat key="nestedstartquote" text="{`}"/>
+   <dingbat key="nestedendquote" text="{'}"/>
+   <dingbat key="singlestartquote" text="{`}"/>
+   <dingbat key="singleendquote" text="{'}"/>
+   <dingbat key="urlstartquote" text="{\textless}"/>
+   <dingbat key="urlendquote" text="{\textgreater}"/>
+   <dingbat key="bullet" text="\textbullet{}"/>
 
    <context name="title">
       <template name="abstract" text="%t"/>

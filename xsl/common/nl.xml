@@ -153,8 +153,8 @@
    <gentext key="sectioncalled" text="de sectie genaamd"/>
    <dingbat key="startquote" text="&#8220;"/>
    <dingbat key="endquote" text="&#8221;"/>
-   <dingbat key="nestedstartquote" text="&#8216;"/>
-   <dingbat key="nestedendquote" text="&#8217;"/>
+   <dingbat key="nestedstartquote" text="{`}"/>
+   <dingbat key="nestedendquote" text="{'}"/>
    <dingbat key="bullet" text="&#8226;"/>
 
    <context name="title">
