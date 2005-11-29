@@ -36,6 +36,23 @@ Set to 0 the links are not shown.</entry>
 </row>
 <!-- -->
 <row>
+<entry>doc.alignment</entry>
+<entry>Defines the text alignment for the whole document. The valid values
+are: "left", "center", "right", "justify". An empty string is equivalent to
+"justify".</entry>
+<entry>Empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>doc.lot.show</entry>
+<entry>Specifies which Lists of Titles should be printed after the  
+Table of Content. The value is a comma separated list of the LoTs to 
+show. The supported LoTs are "figure", "table", "equation", and "example".
+The list order represents the LoTs order in the output document.</entry>
+<entry>"figure,table"</entry>
+</row>
+<!-- -->
+<row>
 <entry>doc.pdfcreator.show</entry>
 <entry>Fill the Creator field of the PDF document information section with
 "DBLaTeX-&lt;version&gt;" if the parameter is set to 1. Set to 0 this field is
@@ -184,12 +201,29 @@ text to italics.</entry>
 <sgmltag>rowspec</sgmltag> attribute is specified.</entry>
 <entry>1</entry>
 </row>
+<!-- -->
+<row>
+<entry>qandaset.defaultlabel</entry>
+<entry>Defines the default label to use in a <sgmltag>qandadet</sgmltag>
+when the defaultlabel attribute is not specified.</entry>
+<entry>"number"</entry>
+</row>
+<!-- -->
 <row>
 <entry>seg.item.separator</entry>
 <entry>Defines the separator to use between several
 <sgmltag>segitem</sgmltag>s.</entry>
 <entry>", "</entry>
 </row>
+<!-- -->
+<row>
+<entry>set.book.num</entry>
+<entry>When the document root element is a <sgmltag>set</sgmltag> this parameter
+can be used to select the book to print, because
+<command>dblatex</command> can output only one book from the set.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
 <row>
 <entry>table.title.top</entry>
 <entry>Set to 1 the <sgmltag>table</sgmltag> float title position is above the
@@ -202,6 +236,13 @@ table. Set to 0 the title is under the table.</entry>
 <entry>Set to 1 the item following a term in a variable list is put on the next
 line.</entry>
 <entry>0</entry>
+</row>
+<!-- -->
+<row>
+<entry>titleabbrev.in.toc</entry>
+<entry>Set to 1 the titleabbrev content is put in the TOC instead of the 
+        title.</entry>
+<entry>1</entry>
 </row>
 </tbody>
 </tgroup>

@@ -1,6 +1,6 @@
 <!doctype book public "-//OASIS//DTD DocBook V3.1//EN"
  [
-<!ENTITY edition "9">
+<!ENTITY edition "10">
 <!ENTITY intro SYSTEM "introduction.sgml">
 <!ENTITY install SYSTEM "install.sgml">
 <!ENTITY table SYSTEM "table.sgml">
@@ -36,6 +36,7 @@
 <!ENTITY changes3 SYSTEM "changes-0.1.5.sgml">
 <!ENTITY changes4 SYSTEM "changes-0.1.6.sgml">
 <!ENTITY changes5 SYSTEM "changes-0.1.7.sgml">
+<!ENTITY changes6 SYSTEM "changes-0.1.8.sgml">
 <!ENTITY faq SYSTEM "faq.sgml">
 ]>
 
@@ -48,7 +49,7 @@
   <firstname>Benoît</firstname><surname>Guillon</surname>
  </author>
  <date>
-  20 October 2005
+  28 November 2005
  </date>
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
@@ -171,10 +172,18 @@
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>20/10/05</date>
+<revnumber>9</revnumber><date>20/10/05</date>
 <revdescription>
  <para>
   Changes: see <xref linkend="sec-changes-017">
+ </para>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>28/11/05</date>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes-018">
  </para>
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
@@ -383,8 +392,12 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
   Thanks
  </title>
  <para>
-  Thanks to the people who contributed to the project at its early age: Jean-Yves Le Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help, Vincent Hottier who asked for the embedded LaTeX equations support.</para>
-  <para>Special thanks to the KDE documentation team and Kai Brommann for their feedbacks, encouragements, and advice.
+  Thanks to the people who contributed to the project at its early age: Jean-Yves Le
+  Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help,
+  Vincent Hottier who asked for the embedded LaTeX equations support.</para>
+  <para>Special thanks to the KDE documentation team, especially Philip Rodrigues,
+  Michael Smith from the DocBook Project, Andreas Hoenen, and Kai Brommann, for their
+  feedbacks, encouragements, and advice.
  </para>
  </chapter>
 

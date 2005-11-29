@@ -82,30 +82,24 @@
   </para>
   </sect1>
   <sect1 id="sec-changes"><title>Changes</title>
-  <sect2 id="sec-changes-017"><title>Changes of version &version;</title>
-  <para>The changes between release &version; and release 0.1.6 are:
+  <sect2 id="sec-changes-018"><title>Release &version;</title>
+  <para>This is mainly a bug fix release.</para>
+  &changes6;
+  </sect2>
+  <sect2 id="sec-changes-017"><title>Release 0.1.7</title>
   &changes5;
-  </para>
   </sect2>
-  <sect2 id="sec-changes-016"><title>Changes of version 0.1.6</title>
-  <para>The changes between release &version; and release 0.1.5 are:
+  <sect2 id="sec-changes-016"><title>Release 0.1.6</title>
   &changes4;
-  </para>
   </sect2>
-  <sect2 id="sec-changes-015"><title>Changes of version 0.1.5</title>
-  <para>The changes between release 0.1.5 and release 0.1.4.1 are:
+  <sect2 id="sec-changes-015"><title>Release 0.1.5</title>
   &changes3;
-  </para>
   </sect2>
-  <sect2 id="sec-changes-0141"><title>Changes of version 0.1.4.1</title>
-  <para>The changes between release 0.1.4.1 and release 0.1.4 are:
+  <sect2 id="sec-changes-0141"><title>Release 0.1.4.1</title>
   &changes2;
-  </para>
   </sect2>
-  <sect2 id="sec-changes-014"><title>Changes of version 0.1.4</title>
-  <para>The changes between release 0.1.4 and release 0.1.3 are:
+  <sect2 id="sec-changes-014"><title>Release 0.1.4</title>
   &changes;
-  </para>
   </sect2>
   </sect1>
   <sect1>

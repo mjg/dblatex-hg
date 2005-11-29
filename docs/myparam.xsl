@@ -5,4 +5,7 @@
  -->
 <xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue,pdfstartview=FitH</xsl:param>
 
+<!-- Put the dblatex logo -->
+<xsl:param name="doc.publisher.show">1</xsl:param>
+
 </xsl:stylesheet>
