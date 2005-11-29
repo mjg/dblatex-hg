@@ -293,7 +293,14 @@
 
 <xsl:template match="biblioentry" mode="xref-to">
   <xsl:text>\cite{</xsl:text>
-  <xsl:value-of select="abbrev[1]"/>
+    <xsl:choose>
+    <xsl:when test="abbrev">
+      <xsl:value-of select="abbrev[1]"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@id"/>
+    </xsl:otherwise>
+    </xsl:choose>
   <xsl:text>}</xsl:text>
 </xsl:template>
 

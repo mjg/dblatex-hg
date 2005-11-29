@@ -27,13 +27,15 @@
   <xsl:text>\begin{btSect}{}&#10;</xsl:text>
 
   <!-- display the heading -->
-  <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="level" select="$level"/>
-  </xsl:call-template>
-  <xsl:text>{</xsl:text>
-  <xsl:call-template name="biblio.title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
+  <xsl:if test="$level &gt;= 0">
+    <xsl:call-template name="map.sect.level">
+      <xsl:with-param name="level" select="$level"/>
+    </xsl:call-template>
+    <xsl:text>{</xsl:text>
+    <xsl:call-template name="biblio.title"/>
+    <xsl:text>}&#10;</xsl:text>
+    <xsl:call-template name="label.id"/>
+  </xsl:if>
 
   <xsl:text>\begin{bibgroup}&#10;</xsl:text>
   <xsl:text>\begin{thebibliography}{</xsl:text>
@@ -86,7 +88,7 @@
   </xsl:variable>
 
   <xsl:choose>
-  <xsl:when test="biblioentry">
+  <xsl:when test="biblioentry|bibliomixed">
     <!-- process the entries -->
     <xsl:call-template name="biblioentry.process">
       <xsl:with-param name="level" select="$level"/>
@@ -129,6 +131,18 @@
 <xsl:template match="bibliodiv/title"/>
 
 <!-- ###############
+     #  bibliolist #
+     ############### -->
+
+<xsl:template match="bibliolist">
+  <xsl:call-template name="biblioentry.process">
+    <xsl:with-param name="level" select="'-1'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="bibliodiv/title"/>
+
+<!-- ###############
      # biblioentry #
      ############### -->
 
@@ -152,14 +166,14 @@
 
 <xsl:template match="biblioentry/title">
   <xsl:text>\emph{</xsl:text>
-  <xsl:apply-templates select="text()"/>
+  <xsl:apply-templates/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- biblioentry engine -->
 
-<xsl:template name="biblioentry.output">
-  <xsl:variable name="biblioentry.tag">
+<xsl:template name="bibitem">
+  <xsl:variable name="tag">
     <xsl:choose>
     <xsl:when test="@xreflabel">
       <xsl:value-of select="normalize-space(@xreflabel)"/> 
@@ -176,14 +190,21 @@
     </xsl:choose>
   </xsl:variable>
   <xsl:text>&#10;</xsl:text>
-  <xsl:text>\bibitem[</xsl:text>
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="$biblioentry.tag"/>
-  </xsl:call-template>
-  <xsl:text>]</xsl:text> 
+  <xsl:text>\bibitem</xsl:text>
+  <xsl:if test="$tag!='UNKNOWN'">
+    <xsl:text>[</xsl:text>
+    <xsl:call-template name="normalize-scape">
+      <xsl:with-param name="string" select="$tag"/>
+    </xsl:call-template>
+    <xsl:text>]</xsl:text> 
+  </xsl:if>
   <xsl:text>{</xsl:text>
-  <xsl:value-of select="$biblioentry.tag"/>
+  <xsl:value-of select="$tag"/>
   <xsl:text>}&#10;</xsl:text> 
+</xsl:template>
+
+<xsl:template name="biblioentry.output">
+  <xsl:call-template name="bibitem"/>
   <!-- first, biblioentry information (if any) -->
   <xsl:variable name="data" select="subtitle|
                                     volumenum|
@@ -197,7 +218,9 @@
                                     pubsnumber"/>
   <xsl:apply-templates select="author|authorgroup" mode="bibliography.mode"/>
   <xsl:if test="title">
-    <xsl:value-of select="$biblioentry.item.separator"/>
+    <xsl:if test="author|authorgroup">
+      <xsl:value-of select="$biblioentry.item.separator"/>
+    </xsl:if>
     <xsl:apply-templates select="title"/>
   </xsl:if>
   <xsl:if test="$data">
@@ -217,31 +240,7 @@
 </xsl:template>
 
 <xsl:template match="bibliomixed">
-  <xsl:variable name="tag">
-    <xsl:choose>
-    <xsl:when test="@xreflabel">
-      <xsl:value-of select="normalize-space(@xreflabel)"/> 
-    </xsl:when>
-    <xsl:when test="abbrev">
-      <xsl:apply-templates select="abbrev" mode="bibliography.mode"/> 
-    </xsl:when>
-    <xsl:when test="@id">
-      <xsl:value-of select="normalize-space(@id)"/> 
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>UNKNOWN</xsl:text>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:text>&#10;</xsl:text>
-  <xsl:text>\bibitem[</xsl:text>
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="$tag"/>
-  </xsl:call-template>
-  <xsl:text>]</xsl:text> 
-  <xsl:text>{</xsl:text>
-  <xsl:value-of select="$tag"/>
-  <xsl:text>}&#10;</xsl:text> 
+  <xsl:call-template name="bibitem"/>
   <xsl:apply-templates select="." mode="bibliography.mode"/>
   <xsl:text>&#10;</xsl:text>
 </xsl:template>

@@ -160,7 +160,7 @@
 </xsl:template>
 
 <!-- Image filename to use -->
-<xsl:template match="imagedata" mode="filename.get">
+<xsl:template match="imagedata|graphic|inlinegraphic" mode="filename.get">
   <xsl:choose>
   <xsl:when test="@entityref">
     <xsl:value-of select="unparsed-entity-uri(@entityref)"/>

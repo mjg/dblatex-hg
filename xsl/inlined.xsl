@@ -415,17 +415,18 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="trademark[@class='copyright']">
+<xsl:template match="trademark[@class='copyright' or
+                               @class='registered']">
   <xsl:call-template name="inline.charseq"/>
   <xsl:call-template name="dingbat">
-    <xsl:with-param name="dingbat">copyright</xsl:with-param>
+    <xsl:with-param name="dingbat" select="@class"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="trademark[@class='registered']">
+<xsl:template match="trademark[@class='service']">
   <xsl:call-template name="inline.charseq"/>
-  <xsl:call-template name="dingbat">
-    <xsl:with-param name="dingbat">registered</xsl:with-param>
+  <xsl:call-template name="inline.superscriptseq">
+    <xsl:with-param name="content" select="'SM'"/>
   </xsl:call-template>
 </xsl:template>
 

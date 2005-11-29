@@ -216,6 +216,7 @@
   </xsl:if>
 </xsl:template>
 
+
 <xsl:template match="book">
   <xsl:value-of select="$latex.book.preamblestart"/>
   <xsl:call-template name="user.params.set"/>
@@ -308,6 +309,10 @@
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\maketitle&#10;</xsl:text>
   <xsl:text>\tableofcontents&#10;</xsl:text>
+
+  <!-- Print the LOTs -->
+  <xsl:apply-templates select="." mode="lots"/>
+
   <xsl:call-template name="label.id"/>
 
   <!-- Print the abstract -->
@@ -437,6 +442,9 @@
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\maketitle&#10;</xsl:text>
   <xsl:text>\tableofcontents&#10;</xsl:text>
+
+  <!-- Print the LOTs -->
+  <xsl:apply-templates select="." mode="lots"/>
   <xsl:call-template name="label.id"/>
 
   <!-- Print the abstract -->

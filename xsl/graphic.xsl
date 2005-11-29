@@ -12,7 +12,23 @@
 <xsl:template match="screeninfo"/>
 
 <xsl:template match="inlinegraphic|graphic">
-  <xsl:call-template name="imagedata"/>
+  <xsl:choose>
+  <xsl:when test="$imagedata.file.check='1'">
+    <xsl:variable name="filename">
+      <xsl:apply-templates select="." mode="filename.get"/>
+    </xsl:variable>
+    <xsl:text>\imgexists{</xsl:text>
+    <xsl:value-of select="$filename"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:call-template name="imagedata"/>
+    <xsl:text>}{[</xsl:text>
+    <xsl:value-of select="$filename"/>
+    <xsl:text> not found]}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="imagedata"/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>
