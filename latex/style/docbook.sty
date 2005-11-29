@@ -33,7 +33,7 @@
 \@ifundefined{DBKlocale}{\def\DBKlocale{en}}
 
 % Local commands
-\newcommand{\DBKprojet}{}
+%\newcommand{\DBKprojet}{}
 \newcommand{\DBKtoclof}{true}
 \newcommand{\DBKauthor}{}
 
@@ -70,16 +70,16 @@
 % To have title rendering changed
 \usepackage[sf,bf]{titlesec}
 
-% pour la date, mais définition réduite
-\def\ier{\textsuperscript{\lowercase{er}}}
-
-\def\today{\number\day
-     \ifnum1=\day \ier\fi
-     \space \ifcase\month
-     \or janvier\or f\'evrier\or mars\or avril\or mai\or juin\or
-     juillet\or ao\^ut\or septembre\or octobre\or novembre\or
-     d\'ecembre\fi
-     \space \number\year}
+% Obsolete french date definition
+%\def\ier{\textsuperscript{\lowercase{er}}}
+%
+%\def\today{\number\day
+%     \ifnum1=\day \ier\fi
+%     \space \ifcase\month
+%     \or janvier\or f\'evrier\or mars\or avril\or mai\or juin\or
+%     juillet\or ao\^ut\or septembre\or octobre\or novembre\or
+%     d\'ecembre\fi
+%     \space \number\year}
 
 
 % ##############################################################################

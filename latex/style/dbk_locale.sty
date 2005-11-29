@@ -1,5 +1,34 @@
+\ifthenelse{\equal{\DBKlocale}{de}}{
+\def\refname{Referenzen}%
+\def\abstractname{Zusammenfassung}%
+\def\bibname{Bibliographie}%
+\def\prefacename{Vorwort}%
+\def\chaptername{Kapitel}%
+\def\appendixname{Anhang}%
+\def\contentsname{Inhaltsverzeichnis}%
+\def\listfigurename{Abbildungsverzeichnis}%
+\def\listtablename{Tabellenverzeichnis}%
+\def\indexname{Index}%
+\def\figurename{{\scshape Abbildung }}%
+\def\tablename{{\scshape Tabelle }}%
+ 
+\def\examplename{Beispiel}
+\def\ondate{am}
+\renewcommand{\DBKreleaseinfo}{Arbeitspapier}
+\def\writtenby{VERFASST DURCH}
+\def\projname{PROJEKT}
+\def\titlename{TITEL}
+\def\DBKindname{NAME}
+\def\DBKindtitle{MITWIRKENDE}
+\def\DBKrevtitle{VERSIONSGESCHICHTE}
+\def\DBKrevdesc{BESCHREIBUNG}
+\def\DBKrevnumber{NUMMER}
+\def\DBKrevname{NAME}
+\def\DBKrevdate{DATUM}
+\def\DBKcontrib{AKTION}
+\def\DBKsignature{UNTERSCHRIFT}
+}{
 \ifthenelse{\equal{\DBKlocale}{fr}}{
-
 \def\refname{R\'ef\'erences}%
 \def\abstractname{R\'esum\'e}%
 \def\bibname{Bibliographie}%
@@ -28,7 +57,8 @@
 \def\DBKrevdate{DATE}
 \def\DBKcontrib{ACTION}
 \def\DBKsignature{SIGNATURE}
-}{\ifthenelse{\equal{\DBKlocale}{nl}}{
+}{
+\ifthenelse{\equal{\DBKlocale}{nl}}{
 \def\refname{Referenties}%
 \def\abstractname{Samenvatting}%
 \def\bibname{Bibliografie}%
@@ -73,4 +103,4 @@
 \def\DBKrevdate{DATE}
 \def\DBKcontrib{ACTION}
 \def\DBKsignature{SIGNATURE}
-}}
+}}}

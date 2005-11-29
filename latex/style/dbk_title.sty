@@ -5,6 +5,8 @@
 \newlength{\oldbaselineskip}
 
 \def\DBKcover{
+\ifthenelse{\equal{\DBKedition}{}}{\def\edhead{}}{\def\edhead{Ed. \DBKedition}}
+
 % interligne double
 \setlength{\oldbaselineskip}{\baselineskip}
 \setlength{\baselineskip}{2\oldbaselineskip}
@@ -25,13 +27,12 @@
 \vspace{1cm}
 \begin{center}
 \begin{tabular}{p{7cm} p{7cm}}
-\Large{\DBKreference{} Ed. \DBKedition} & \Large{\textit{\DBKsite}%
-\ifthenelse{\equal{\DBKsite}{}}{}{,} \ondate{ }\DBKdate}\\
+\Large{\DBKreference{} \edhead} & \\
 \end{tabular}
 \end{center}
 }
 
-% Format pour les autres pages
+% Format for the other pages
 \newpage
 \textnormal{}
 \setlength{\baselineskip}{\oldbaselineskip}
