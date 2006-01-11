@@ -291,6 +291,21 @@
   <xsl:call-template name="title-link-to"/>
 </xsl:template>
 
+<xsl:template match="varlistentry|term" mode="xref-to">
+  <xsl:text>\hyperlink{</xsl:text>
+  <xsl:value-of select="@id"/>
+  <xsl:text>}{</xsl:text>
+  <xsl:choose>
+  <xsl:when test="local-name(.)='term'">
+    <xsl:apply-templates select="." mode="xref.text"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:apply-templates select="term" mode="xref.text"/>
+  </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template match="biblioentry" mode="xref-to">
   <xsl:text>\cite{</xsl:text>
     <xsl:choose>

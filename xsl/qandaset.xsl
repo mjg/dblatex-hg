@@ -115,7 +115,8 @@
     <xsl:with-param name="defaultlabel" select="$defaultlabel"/>
   </xsl:apply-templates>
 
-  <xsl:if test="position()=last() and $defaultlabel='number'">
+  <xsl:if test="not(following-sibling::qandaentry) and
+                $defaultlabel='number'">
     <xsl:text>&#10;\end{enumerate}</xsl:text>
   </xsl:if>
 </xsl:template>

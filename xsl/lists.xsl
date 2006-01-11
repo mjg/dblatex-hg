@@ -95,6 +95,9 @@
   <xsl:apply-templates select="term"/>
   <xsl:text>}] </xsl:text>
   <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select="."/>
+  </xsl:call-template>
+  <xsl:call-template name="label.id">
     <xsl:with-param name="object" select="term"/>
   </xsl:call-template>
   <xsl:apply-templates select="term" mode="foottext"/>
