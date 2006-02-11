@@ -23,7 +23,11 @@
     <xsl:text>&#10;\end{dbequation}&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>
+    <!-- This is an actual LaTeX equation -->
+    <xsl:text>&#10;\begin{equation}&#10;</xsl:text>
+    <xsl:call-template name="label.id"/>
     <xsl:apply-templates/>
+    <xsl:text>&#10;\end{equation}&#10;</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -37,7 +41,30 @@
 <!-- Direct copy of the content -->
 
 <xsl:template match="alt">
-  <xsl:copy-of select="."/>
+  <xsl:choose>
+  <xsl:when test="ancestor::equation[not(child::title)]">
+    <!-- Remove any math mode in an equation environment -->
+    <xsl:variable name="text" select="normalize-space(.)"/>
+    <xsl:variable name="len" select="string-length($text)"/>
+    <xsl:choose>
+    <xsl:when test="starts-with($text,'$') and substring($text,$len,$len)='$'">
+      <xsl:copy-of select="substring($text, 2, $len - 2)"/>
+    </xsl:when>
+    <xsl:when test="(starts-with($text,'\[') and
+                     substring($text,$len - 1,$len)='\]') or
+                    (starts-with($text,'\(') and
+                     substring($text,$len - 1,$len)='\)')">
+      <xsl:copy-of select="substring($text, 3, $len - 4)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy-of select="."/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:copy-of select="."/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

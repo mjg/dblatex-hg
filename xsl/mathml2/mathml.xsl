@@ -24,6 +24,18 @@
      MML TeX patches or missing templates
      ==================================== -->
 
+<!-- to put mathml in a latex equation environment -->
+<xsl:template match="m:math">
+  <xsl:choose>
+  <xsl:when test="ancestor::equation[not(child::title)]">
+    <xsl:apply-templates/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:apply-imports/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- don't know how to render this -->
 <xsl:template match="m:maligngroup"/>
 
