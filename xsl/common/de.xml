@@ -152,8 +152,8 @@
    <gentext key="nav-home" text="Anfang"/>
    <dingbat key="startquote" text="&#8220;"/>
    <dingbat key="endquote" text="&#8221;"/>
-   <dingbat key="nestedstartquote" text="{`}"/>
-   <dingbat key="nestedendquote" text="{'}"/>
+   <dingbat key="nestedstartquote" text="&#34;`"/>
+   <dingbat key="nestedendquote" text="&#34;'"/>
    <dingbat key="bullet" text="&#8226;"/>
 
    <context name="title">
