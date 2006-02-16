@@ -426,6 +426,7 @@ sub figconvert
 sub parse_inlined
 {
   local($line) = $_[0];
+  local($lmode) = $_[1];
   my @texts = split("$keyon ", $line);
   my $mode = 0;
   my $nline = "";
@@ -435,14 +436,18 @@ sub parse_inlined
     $l = $texts[$i];
     @blks = split("$keyoff ", $l);
 
-    # Cas particulier du dernier /xt à enlever, qui est sans espace
+    # Special case of the last /xt to remove, that is not followed by a space
     if ($#blks == 0) { @blks = split($keyoff, $l); }
     
-    if ($i > 0) { $mode = 1; }
+    if ($i > 0) { $mode = 1; } else { $mode = $lmode }
 
-    # Seule la première partie est à convertir
+    # The first part to convert
     if ($mode == 1) {
       $blks[0] = translate($blks[0]);
+    }
+    # The second part to convert if global mode set
+    if ($#blks > 0 and $lmode == 1) {
+      $blks[1] = translate($blks[1]);
     }
     $nline = "$nline$blks[0]";
     if ($#blks > 0) {
@@ -458,6 +463,7 @@ sub parse_sgml
   local($rawtex) = $_[0];
   local($cleantex) = $_[1];
   my $mode = 0;
+  my $next_mode = 0;
   my $line = "";
   my $file = "";
   my $RTEX = "f$rawtex";
@@ -482,22 +488,29 @@ sub parse_sgml
     # Update the embedded commands
     command_update($line);
 
-    if (/$keyon\n/) {
+    # Update the translation mode for the next line
+    if ($line =~ /$keyon\n/) {
       $line =~ s/$keyon\n//;
-      $mode = 1;
+      $next_mode = 1;
       chomp $line;
+    } elsif ($line =~ /$keyoff\n/) {
+      $line =~ s/$keyoff\n/\n/;
+      $next_mode = 0;
+      chomp $line;
+    } else {
+      $next_mode = $mode;
+    }
+
+    # Translate the current line if necessary
+    if ($line =~ /$keyon /) {
+      # More tricky, 'xt' is in the line
+      $line = parse_inlined($line, $mode);
     } elsif ($mode == 1) {
-      $line =~ s/$keyoff//;
+      # Translate the entire line
       $line = translate($line);
     }
-    if (/$keyoff\n/) {
-      $line =~ s/$keyoff//;
-      $mode = 0;
-      chomp $line;
-    } elsif (/$keyon /) {
-      # More tricky, 'xt' is in the line
-      $line = parse_inlined($line);
-    }
+    $mode = $next_mode;
+
     table_parse($line, $CTEX);
   }
   close($RTEX);
