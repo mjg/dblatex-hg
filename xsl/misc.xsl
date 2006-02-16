@@ -126,6 +126,29 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="holder" mode="titlepage.mode">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="copyright" mode="titlepage.mode">
+  <xsl:call-template name="gentext">
+    <xsl:with-param name="key" select="'Copyright'"/>
+  </xsl:call-template>
+  <xsl:call-template name="gentext.space"/>
+  <xsl:call-template name="dingbat">
+    <xsl:with-param name="dingbat">copyright</xsl:with-param>
+  </xsl:call-template>
+  <xsl:call-template name="gentext.space"/>
+  <xsl:call-template name="copyright.years">
+    <xsl:with-param name="years" select="year"/>
+    <xsl:with-param name="print.ranges" select="$make.year.ranges"/>
+    <xsl:with-param name="single.year.ranges"
+                    select="$make.single.year.ranges"/>
+  </xsl:call-template>
+  <xsl:call-template name="gentext.space"/>
+  <xsl:apply-templates select="holder" mode="titlepage.mode"/>
+</xsl:template>
+
 <xsl:template match="bookinfo|articleinfo" mode="docinfo">
   <xsl:if test="releaseinfo">
     <xsl:text>\renewcommand{\DBKreleaseinfo}{</xsl:text>
@@ -156,7 +179,7 @@
   </xsl:if>
   <xsl:if test="copyright">
     <xsl:text>\renewcommand{\DBKcopyright}{</xsl:text>
-    <xsl:apply-templates select="copyright" mode="bibliography.mode"/>
+    <xsl:apply-templates select="copyright" mode="titlepage.mode"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:if test="subtitle">

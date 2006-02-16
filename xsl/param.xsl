@@ -29,16 +29,18 @@
 
 <!-- "Common" parameters -->
 
-<xsl:variable name="author.othername.in.middle" select="1"/>
-<xsl:variable name="section.autolabel" select="1"/>
-<xsl:variable name="section.label.includes.component.label" select="0"/>
-<xsl:variable name="chapter.autolabel" select="1"/>
-<xsl:variable name="preface.autolabel" select="0"/>
-<xsl:variable name="part.autolabel" select="1"/>
-<xsl:variable name="qandadiv.autolabel" select="1"/>
-<xsl:variable name="qanda.inherit.numeration" select="1"/>
-<xsl:variable name="qanda.defaultlabel">number</xsl:variable>
-<xsl:variable name="graphic.default.extension"></xsl:variable>
+<xsl:param name="author.othername.in.middle" select="1"/>
+<xsl:param name="section.autolabel" select="1"/>
+<xsl:param name="section.label.includes.component.label" select="0"/>
+<xsl:param name="chapter.autolabel" select="1"/>
+<xsl:param name="preface.autolabel" select="0"/>
+<xsl:param name="part.autolabel" select="1"/>
+<xsl:param name="qandadiv.autolabel" select="1"/>
+<xsl:param name="qanda.inherit.numeration" select="1"/>
+<xsl:param name="qanda.defaultlabel">number</xsl:param>
+<xsl:param name="graphic.default.extension"/>
+<xsl:param name="make.single.year.ranges" select="0"/>
+<xsl:param name="make.year.ranges" select="0"/>
 
 
 <xsl:variable name="latex.book.afterauthor">
