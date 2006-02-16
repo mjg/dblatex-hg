@@ -307,22 +307,39 @@
 % Commands to manage/style/create floats      
 % figures, tables, algorithms, examples, eqn  
 % --------------------------------------------
+\makeatletter
 \floatstyle{ruled}
 \restylefloat{figure}
 \floatstyle{ruled}
 \restylefloat{table}
-\floatstyle{ruled}
-\newfloat{program}{ht}{lop}[section]
-\floatstyle{ruled}
-\newfloat{example}{ht}{loe}[section]
-\floatname{example}{Example}
-\floatstyle{ruled}
-\newfloat{dbequation}{ht}{loe}[section]
-\makeatletter\def\toclevel@dbequation{0}\makeatother
-\floatname{dbequation}{Equation}
-\floatstyle{boxed}
-\newfloat{algorithm}{ht}{loa}[section]
-\floatname{algorithm}{Algorithm}
+\@ifundefined{chapter}{
+  \floatstyle{ruled}
+  \newfloat{program}{ht}{lop}[section]
+  \floatstyle{ruled}
+  \newfloat{example}{ht}{loe}[section]
+  \floatname{example}{Example}
+  \floatstyle{ruled}
+  \newfloat{dbequation}{ht}{loe}[section]
+  \def\toclevel@dbequation{0}
+  \floatname{dbequation}{Equation}
+  \floatstyle{boxed}
+  \newfloat{algorithm}{ht}{loa}[section]
+  \floatname{algorithm}{Algorithm}
+}{
+  \floatstyle{ruled}
+  \newfloat{program}{ht}{lop}[chapter]
+  \floatstyle{ruled}
+  \newfloat{example}{ht}{loe}[chapter]
+  \floatname{example}{Example}
+  \floatstyle{ruled}
+  \newfloat{dbequation}{ht}{loe}[chapter]
+  \def\toclevel@dbequation{0}
+  \floatname{dbequation}{Equation}
+  \floatstyle{boxed}
+  \newfloat{algorithm}{ht}{loa}[chapter]
+  \floatname{algorithm}{Algorithm}
+}
+\makeatother
 \ifpdf
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 \else
