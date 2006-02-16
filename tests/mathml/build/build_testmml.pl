@@ -59,7 +59,7 @@ sub parse
   return $line;
 }
 
-getopts("e:");
+getopts("e:E");
 
 print_head_mml($opt_e);
 
@@ -103,7 +103,9 @@ while (@ARGV) {
   print "<![CDATA[$mml]]>\n";
   print "</programlisting>\n";
   print "<para>is rendered as:</para>\n";
+  print "<equation>\n" if ($opt_E);
   print $mml;
+  print "</equation>\n" if ($opt_E);
 #  print "</para>\n";
 
   shift;

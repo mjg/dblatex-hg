@@ -8,6 +8,8 @@ TOP = ../..
 PWD = $(shell pwd)
 TEXIN = $(shell echo ${TEXINPUTS})
 TSTFILE = mmltest
+TSTBASE = .
+OPT =
 
 all: full2
 
@@ -29,9 +31,9 @@ test2: $(TSTFILE)2.tex $(TSTFILE)2.dvi $(TSTFILE)2.xml
 	$(TOP)/scripts/dblatex -t tex -o $@ $<
 
 %1.xml:
-	./build/make_testmml --exclude excluded1 suite1/testsuite/ > $@
+	./build/make_testmml $(OPT) --exclude excluded1 $(TSTBASE)/suite1/testsuite/ > $@
 
 %2.xml:
-	./build/make_testmml --exclude excluded2 suite2/testsuite/ > $@
+	./build/make_testmml $(OPT) --exclude excluded2 $(TSTBASE)/suite2/testsuite/ > $@
 
 FORCE:

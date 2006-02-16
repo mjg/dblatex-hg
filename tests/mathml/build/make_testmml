@@ -13,6 +13,8 @@ mkstriplist()
 
 split=0
 only_count=0
+equation=0
+opts=""
 
 while true
 do
@@ -21,6 +23,7 @@ do
   --exclude) exclfile="$2"; shift ;;
   --split) split=1 ;;
   --count) only_count=1 ;;
+  --equation) opts="$opts -E" ;;
   *) break ;;
   esac
   shift
@@ -35,12 +38,11 @@ if [ $# -lt 1 ]; then
 fi
 
 testsuite=$1
-opt=
 
 if [ "$exclfile" != "" ]; then
   l=`cat $exclfile|xargs`
   exclude="$exclude $l"
-  opt="-e $exclfile"
+  opts="$opts -e $exclfile"
 fi
 
 if [ "$exclude" != "" ]; then
@@ -62,8 +64,8 @@ fi
 
 if [ $split -eq 1 ]; then
   for i in $list; do
-    $where/build_testmml.pl $opt $i > `basename $i .mml`.xml
+    $where/build_testmml.pl $opts $i > `basename $i .mml`.xml
   done
 else
-  $where/build_testmml.pl $opt $list
+  $where/build_testmml.pl $opts $list
 fi
