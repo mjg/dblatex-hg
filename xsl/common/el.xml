@@ -31,6 +31,7 @@
    <gentext key="edition" text="&#184;&#234;&#228;&#239;&#243;&#231;"/>
    <gentext key="Equation" text="&#197;&#238;&#223;&#243;&#249;&#243;&#231;"/>
    <gentext key="equation" text="&#197;&#238;&#223;&#243;&#249;&#243;&#231;"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="&#208;&#225;&#241;&#220;&#228;&#229;&#233;&#227;&#236;&#225;"/>
    <gentext key="example" text="&#208;&#225;&#241;&#220;&#228;&#229;&#233;&#227;&#236;&#225;"/>
    <gentext key="Figure" text="&#211;&#247;&#222;&#236;&#225;"/>

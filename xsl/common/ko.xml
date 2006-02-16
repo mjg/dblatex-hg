@@ -31,6 +31,7 @@
    <gentext key="edition" text="&#44060;&#51221;&#54032;"/>
    <gentext key="Equation" text="&#49688;&#49885;"/>
    <gentext key="equation" text="&#49688;&#49885;"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="&#50696;"/>
    <gentext key="example" text="&#50696;"/>
    <gentext key="Figure" text="&#44536;&#47548;"/>

@@ -31,6 +31,7 @@
    <gentext key="edition" text="Utg&#229;va"/>
    <gentext key="Equation" text="Ekvation"/>
    <gentext key="equation" text="Ekvation"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Exempel"/>
    <gentext key="example" text="Exempel"/>
    <gentext key="Figure" text="Figur"/>

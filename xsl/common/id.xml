@@ -31,6 +31,7 @@
    <gentext key="edition" text="Edisi"/>
    <gentext key="Equation" text="Persamaan"/>
    <gentext key="equation" text="Persamaan"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Teladan"/>
    <gentext key="example" text="Teladan"/>
    <gentext key="Figure" text="Gambar"/>

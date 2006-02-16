@@ -31,6 +31,7 @@
    <gentext key="edition" text="Vydanie"/>
    <gentext key="Equation" text="Rovnice"/>
    <gentext key="equation" text="Rovnice"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Pr&#237;klad"/>
    <gentext key="example" text="Pr&#237;klad"/>
    <gentext key="Figure" text="Obr&#225;zok"/>

@@ -37,6 +37,7 @@
    <gentext key="edition" text="&#1056;&#1077;&#1076;&#1072;&#1082;&#1094;&#1080;&#1103;"/>
    <gentext key="Equation" text="&#1060;&#1086;&#1088;&#1084;&#1091;&#1083;&#1072;"/>
    <gentext key="equation" text="&#1060;&#1086;&#1088;&#1084;&#1091;&#1083;&#1072;"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Equation.abr" text="&#1060;."/>
    <gentext key="equation.abr" text="&#1060;."/>
    <gentext key="Example" text="&#1055;&#1088;&#1080;&#1084;&#1077;&#1088;"/>

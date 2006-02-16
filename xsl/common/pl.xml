@@ -32,6 +32,7 @@
    <gentext key="edition" text="Wydanie"/>
    <gentext key="Equation" text="R&#243;wnanie"/>
    <gentext key="equation" text="R&#243;wnanie"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Przyk&#322;ad"/>
    <gentext key="example" text="Przyk&#322;ad"/>
    <gentext key="Figure" text="Rysunek"/>

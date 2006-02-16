@@ -31,6 +31,7 @@
    <gentext key="edition" text="Kiad&#225;s"/>
    <gentext key="Equation" text="Egyenlet"/>
    <gentext key="equation" text="Egyenlet"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="P&#233;lda"/>
    <gentext key="example" text="P&#233;lda"/>
    <gentext key="Figure" text="&#193;bra"/>

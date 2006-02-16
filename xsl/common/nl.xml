@@ -31,6 +31,7 @@
    <gentext key="edition" text="Uitgave"/>
    <gentext key="Equation" text="Vergelijking"/>
    <gentext key="equation" text="Vergelijking"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Voorbeeld"/>
    <gentext key="example" text="Voorbeeld"/>
    <gentext key="Figure" text="Figuur"/>

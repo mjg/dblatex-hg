@@ -31,6 +31,7 @@
    <gentext key="edition" text="Edition"/>
    <gentext key="Equation" text="Kaava"/>
    <gentext key="equation" text="Kaava"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Esimerkki"/>
    <gentext key="example" text="Esimerkki"/>
    <gentext key="Figure" text="Kuva"/>

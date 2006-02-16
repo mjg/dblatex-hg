@@ -31,6 +31,7 @@
    <gentext key="edition" text="Ausgabe"/>
    <gentext key="Equation" text="Gleichung"/>
    <gentext key="equation" text="Gleichung"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Beispiel"/>
    <gentext key="example" text="Beispiel"/>
    <gentext key="Figure" text="Abbildung"/>

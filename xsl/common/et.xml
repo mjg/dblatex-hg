@@ -31,6 +31,7 @@
    <gentext key="edition" text="V&#228;ljaanne"/>
    <gentext key="Equation" text="Valem"/>
    <gentext key="equation" text="Valem"/>
+   <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="N&#228;ide"/>
    <gentext key="example" text="N&#228;ide"/>
    <gentext key="Figure" text="Joonis"/>
