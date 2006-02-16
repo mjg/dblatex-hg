@@ -282,15 +282,15 @@
   <xsl:call-template name="inline.italicseq"/>
 </xsl:template>
 
-<xsl:template match="shortcut">
-  <xsl:call-template name="inline.boldseq"/>
-</xsl:template>
-
 <xsl:template match="mousebutton">
   <xsl:call-template name="inline.charseq"/>
 </xsl:template>
 
 <xsl:template match="option">
+  <xsl:call-template name="inline.monoseq"/>
+</xsl:template>
+
+<xsl:template match="package">
   <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
 
@@ -308,6 +308,10 @@
 
 <xsl:template match="returnvalue">
   <xsl:call-template name="inline.charseq"/>
+</xsl:template>
+
+<xsl:template match="shortcut">
+  <xsl:call-template name="inline.boldseq"/>
 </xsl:template>
 
 <xsl:template match="structfield">
