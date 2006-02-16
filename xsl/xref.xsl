@@ -130,12 +130,16 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="term" mode="xref.text">
+  <xsl:apply-templates mode="xref.text"/>
+</xsl:template>
+
 <!-- No reference must be made, but the label should be printed, if any -->
-<xsl:template match="xref|link" mode="toc.skip">
+<xsl:template match="xref|link" mode="toc.skip|xref.text">
   <xsl:apply-templates select="." mode="label.get"/>
 </xsl:template>
 
-<xsl:template match="ulink" mode="toc.skip">
+<xsl:template match="ulink" mode="toc.skip|xref.text">
   <xsl:choose>
   <xsl:when test=".=''">
     <xsl:value-of select="@url"/>
@@ -265,8 +269,31 @@
   <xsl:call-template name="cross-reference"/>
 </xsl:template>
 
-<xsl:template match="figure|example|table|equation" mode="xref-to">
+<xsl:template match="figure|example|table" mode="xref-to">
   <xsl:call-template name="cross-reference"/>
+</xsl:template>
+
+<!-- Equation have two reference counters, one for titled and one
+     for untitled equations. So, the cross reference label must be
+     different if a title is given or not.
+ -->
+<xsl:template match="equation" mode="xref-to">
+  <xsl:choose>
+  <xsl:when test="title">
+    <!-- default titled template -->
+    <xsl:call-template name="cross-reference"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="cross-reference">
+      <xsl:with-param name="xref.text">
+        <xsl:call-template name="gentext.element.name">
+          <xsl:with-param name="element.name" select="'equation-untitled'"/>
+        </xsl:call-template>
+        <xsl:text> %n</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="refentry" mode="xref-to">
