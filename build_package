@@ -65,6 +65,7 @@ fi
 
 # Remove the devel only files
 rm -f $tmpbuild/build_package
+rm -f $tmpbuild/changes.txt
 rm -f $tmpbuild/xsl/common/.cvsignore
 rm -f $tmpbuild/xsl/common/Makefile
 rm -r $tmpbuild/tests/mathml/build
@@ -85,5 +86,5 @@ gmake -C $tmpbuild/docs VERSION=$version
 
 # Make the ball
 tar cvf - -C $tmpdir $release | bzip2 > $release.tar.bz2
-rm -r $tmpbuild
+rm -rf $tmpdir
 
