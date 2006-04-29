@@ -1,8 +1,0 @@
-<programlisting><![CDATA[
-<para>The formula 
-  <inlineequation>
-    <alt>$C = \alpha + \beta Y^{\gamma} + \epsilon$</alt>
-    <graphic fileref="figures/eq1"/>
-  </inlineequation>
-is inlined in the paragraph. Its SGML source is:</para>
-]]></programlisting>
