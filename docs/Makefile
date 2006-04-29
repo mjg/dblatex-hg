@@ -11,12 +11,12 @@ all: manual.pdf $(FIGURES)
 allstyle: all native db2latex simple
 
 clean:
-	$(RM) manual.pdf $(EQUATIONS) $(FIGURES)
+	$(RM) manual.pdf $(FIGURES)
 
 native db2latex simple: version.sgml
 	../scripts/dblatex -T $@ -o manual-$@.pdf manual.sgml
 
-%.pdf: %.sgml version.sgml $(TABLES) $(FIGURES) $(EQUATIONS) $(CHANGES)
+%.pdf: %.sgml version.sgml $(TABLES) $(FIGURES) $(CHANGES)
 	TEXINPUTS=:$(PWD)/../latex//:$(TEXIN) \
         ../scripts/dblatex -S manual.specs $(OPTS) -o $@ $<
 
