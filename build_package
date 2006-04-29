@@ -83,6 +83,12 @@ mv $tmpbuild/xsl/version2.xsl $tmpbuild/xsl/version.xsl
 # Make the package doc
 rm -f $tmpbuild/docs/*.pdf
 gmake -C $tmpbuild/docs VERSION=$version
+rc=$?
+
+if [ $rc -ne 0 ]; then
+  echo "Manual building failed"
+  exit 1
+fi
 
 # Make the ball
 tar cvf - -C $tmpdir $release | bzip2 > $release.tar.bz2
