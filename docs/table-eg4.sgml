@@ -16,23 +16,23 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top" morerows="3">cell on 4 lines
-</entry><entry align="center" valign="top">simple cell
-</entry><entry align="center" valign="top" morerows="1">cell on 2 lines
-</entry><entry align="center" valign="top">cell without morerow attribute
+<entry morerows="3">cell on 4 lines
+</entry><entry>simple cell
+</entry><entry morerows="1">cell on 2 lines
+</entry><entry>cell without morerow attribute
 </entry></row>
 <row>
-<entry align="center" valign="top">cell in column 2
-</entry><entry align="center" valign="top" morerows="1">cell on 2
+<entry>cell in column 2
+</entry><entry morerows="1">cell on 2
 lines
 </entry></row>
 <row>
-<entry align="center" valign="top" morerows="1">left aligned on 2 lines
-</entry><entry align="center" valign="top">cell in line 3, column 3
+<entry morerows="1">left aligned on 2 lines
+</entry><entry>cell in line 3, column 3
 </entry></row>
 <row>
-<entry align="center" valign="top">4 cm column width
-</entry><entry align="center" valign="top">last cell in column 4
+<entry>4 cm column width
+</entry><entry>last cell in column 4
 </entry></row>
 </tbody>
 </tgroup>

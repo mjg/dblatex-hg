@@ -1,0 +1,259 @@
+* Utiliser listings pour faire <funcsynopsis>
+* Mettre <literallayout> avec <programlisting> -> à voir !!
+* Passer la doc en XML + utiliser la manpage
+* Utiliser sgml2xml (osx)
+* Utilisation bibtex
+* Problèmes verbatim in tables
+* Problèmes footnote in tables
+* Problèmes table in example
+* Remark in note
+* Bug #1382511 : &ndash; -> &#8211;
+* Patch biblio à intégrer
+* Bug table
+
+* <subtitles> silently skipped.
+
+* paramètre pour supprimer hyphenation
+
+* envoyer cas de tests :
+  -> informaltable.015.xml    KO  But what does mean colwidth="4in*"?
+
+Release 0.1.9:
+--------------
+
+* Minor improvements:
+  - make.year.ranges and the make.single.year.ranges parameters added.
+  - equations without title are now latex equations (not formula in a float).
+  - xref to <varlistentry> or <term> now works.
+  - newtbl is updated and becomes the default table implementation used.
+    It now handles some tricky cell spanning cases.
+
+* Bug fix:
+  - en.xml: chapter en appendix xref labelling fix.
+  - de.xml: nested quotes fix.
+  - dbk_hyper.sty: PDF compilation test fix (use of the package ifpdf).
+  - texclean: <xt> parsing recoded to make it safer.
+  - texclean: handle entities in table cells.
+  - texclean: \pm added.
+  - db2latex.sty: equation counter level fix (set to chapter instead of article)
+  - bug fix about the text of a link to a <term> containing <ulink> or <link>
+  - qandaset.xsl: wrong test to close a list
+  - verbatimco.xsl, mklistings.xsl: correct identifier to listing
+  - xref.xsl: escape characters of refname cross-reference 
+
+
+Release 0.1.8:
+--------------
+
+* Minor improvements:
+  - doc.alignment parameter added. It defines the text alignment for the whole
+    document.
+  - Better programlisting, screen support:
+    inlinegraphic[@format='linespecific'] is handled.
+  - The book or article wrapper inherits from the root element information.
+  - Better newtbl table support: the case colwidth="1em+5*" is correctly handled.
+  - xref to refnamediv is now possible.
+  - imagedata.file.check parameter added. It checks if the referenced image file
+    exists. If not, the mediaobject alternative (textobject) is used. Set to 1
+    by default. (equation.[001-004])
+  - titleabbrev.in.toc parameter added. When set to 1 the titleabbrev content
+    is put in the TOC instead of the title. Set to 1 by default. (article.[004-005])
+  - dblatex does not convert images when output is latex only.
+  - GIF images are converted on the fly to PDF.
+  - <emphasis role="underline"> is supported.
+  - <trademark class="service"> is supported.
+  - set.book.num parameter added. When the root element is a set, this
+    parameter can be used to select the book to print. Set to 1 by default.
+  - doc.lot.show parameter added, to ask for printing some LoTs. The value is
+    a comma separated list that can contain "figure", "table", "equation",
+    "example". The order of the names is the order of the LoTs.
+    Example:
+    doc.lot.show=figure,table asks for printing only the List of Figures and the
+    List of Tables, in this order.
+  - qandaset.defaultlabel parameter added to define a default label when the
+    attribute is not defined. Default is 'number'.
+  - <bibliolist> support.
+  - Automatic biblioentry abbreviation used if <abbrev> and @id are not defined.
+  - date removed from the native style cover page
+
+* Bug fix:
+  - COPYRIGHT: contains LGPL text to respect the Debian constraints
+  - db2latex.sty: to have \RaggedRight working
+  - dbk_graphic.sty: wrong \imgheight setting
+  - sections.xsl: section level is now correct under an appendix within an
+    article
+  - mediaobject.xsl: imageobjectco is now handled when embedded in a
+    mediaobject.
+  - mediaobject.xsl: having both contentwidth="x%" and contentdepth="y%" is
+    now possible. @entityref used before @fileref.
+  - mediaobject.xsl: having @width or @depth and @scalefit=1 is now considered
+    as if the image with its natural size is in a viewport defined by width
+    and/or depth.
+  - runlatex: compile twice to have the correct number of pages when there is an
+    index.
+  - docbook.sty: an index in an article is correctly handled.
+  - lists.xsl: simplelist[@inline] bug fix. Weird vertical space removed
+  - lists.xsl: list nesting depth is now checked, to prevent latex compilation
+    crash. (orderedlist.004, orderedlist.005)
+  - dbk_item.sty: include enumerate package to handle orderedlist/@numeration.
+  - sgml2xml.pl: empty anchor element supported.
+  - biblio.xsl: a default title bibliography is provided (part.001)
+  - xref.xsl, labelid.xsl: the titles can now contain things like xref, link,
+    anchor, inlinegraphic or inlinemediaobject.
+  - common/<lang>.xml: replace some unicode values by latex equivalent.
+  - qandaset.xsl: the list environment used for numbered <qandaentry>s was
+    not properly used.
+  - db2latex.sty, dbsimple.sty, docbook.sty: sidebar changed to an environment
+    that can contain verbatim stuff. (lot.001)
+  - xref.xsl: xref to a biblioentry is now the same as a citation
+
+Release 0.1.7:
+--------------
+
+* Callout support:
+  - <programlistingco> and <screenco> supported, even for external files.
+  - <mediaobjectco> supported.
+
+* Better <programlisting> or <screen> support:
+  - External files (eg, in <textdata>) are handled.
+  - literal.lines.showall parameter added, to remove the empty last
+    lines, when set to 0. Set by default to 1.
+
+* Legalnotices are printed in the native docbook style.
+
+* An abstract in an article is printed.
+
+* Better <xref> support:
+  - <xref> to a list with a title is possible.
+  - <xref> to a refentry is possible.
+
+* Other improvements:
+  - term.breakline parameter added to have the <listitem> on a new line below
+    the <term>.
+  - Hyphenation forced for text using a typewriter font. Moreover the font is
+    smaller.
+  - doc.publisher.show parameter added, to print the dblatex logo on the cover
+    page.
+  - doc.pdfcreator.show parameter added, to have the fill the Creator field in
+    PDF information section.
+  - Running dblatex on a root element different from article or book does not
+    fail anymore, except for <set>.
+
+* Bug fixes:
+  - dbk_table.sty: make \@xmultirow long.
+  - sgml2xml.pl: empty textdata element handled.
+
+Release 0.1.6:
+--------------
+
+* Better <figure> and <informalfigure> rendering:
+  - consistent behaviour, where captions and title are printed separately.
+  - possibility to ask for title below or above the image (parameter
+    figure.title.top).
+  - possibility to change the caption style (parameter
+    mediaobject.caption.style).
+  - imagedata.default.scale parameter added to have a default scaling rule
+    applied on every imagedata that contains no scaling attribute. In particular
+    when set to 'pagebound' the images keep their natural size up to the page
+    boundaries.
+
+* Better <programlisting> and <screen> rendering, thanks to the listings.sty
+  package possibilities:
+  - all the attributes are supported.
+  - a default rendering layout is proposed.
+  - long lines are wrapped.
+  - literal.width.ignore parameter added.
+  - literal.layout.options parameter added to overwrite the default verbatim
+    style.
+
+* Minor improvements:
+  - seg.item.separator parameter added to let the user choose the separator
+    between several <segitem>s.
+  - a breakline is forced after a <term> when it is followed by a list.
+  - caption position can be choosed for tables (parameter table.title.top).
+  - \nopagebreak put after list titles.
+  - a FAQ section (quite small for the moment) added to the manual.
+  - bibtopic.sty provided for convenience.
+
+* Bug fixes:
+  - texclean: caret ('^') handled correctly
+  - texclean: bug in removing extra breaklines
+  - texclean: table header parsed correctly
+  - dblatex: compilation with some parameters (option -P) on a doc using MathML
+    fails.
+  - biblio.xsl: biblioentry/edition escaping done.
+  - inlined.xsl: <errortext> added.
+  - inlined.xsl: the arrow separating <guimenu> and <guimenuitem> is changed to a
+    real LaTeX arrow.
+  - misc.xsl: removing unexpected latex package inclusion (a4wide).
+  - dbk_biblio.sty: removing unexpected latex package inclusion (fancyhdr).
+  - lists.xsl: <term> is more robust, with the <term> content enclosed by { }.
+
+Release 0.1.5:
+--------------
+
+* dblatex supports the new option -T <target_style>. It specifies which
+  latex style is to be used for format the output. The default available
+  latex styles are:
+  - simple: the rendering is very close to original latex rendering
+  - native: the rendering is the original rendering used to produce the
+    manual (default one)
+  - db2latex: the rendering tries to be as close as possible to the
+    DB2LaTeX formatting.
+
+* The configure script can select the default latex style to use with the
+  option --target:
+  Example:
+  ./configure --prefix=/where/to/install --target=simple
+
+* The use of make instead of gmake is now detected by configure.
+
+* Other changes:
+  - possibility to define the figures to use in admonitions,
+  - \textregistered and \copyright robustness improved,
+  - <legalnotice> support,
+  - <footnote> support improved: it can be used in <term>s and in <title>s,
+  - better <subscript> and <superscript> support,
+  - <caption> in <mediaobject> is displayed (when <figure> not used)
+  - <pubdate> and <copyright> mapped to latex macros
+  - <xref> works in <term>s
+  - parameter latex.class.options added
+  - texclean optimisation, to convert a figure only once
+  - bug fix in specread (XslParam parsing)
+  - native table improvement (support any size units)
+
+Release 0.1.5pre:
+-----------------
+
+* Any document language should be well supported, since babel is now included for the
+  related language.
+
+* Some latex rendering aspects are removed from the XSL stylesheets (they should
+  never have been in these stylesheets): \parindent value, \parskip value,
+  \thispagestyle{fancy} for pages containing chapters.
+
+* The following XSL parameters are added:
+  - latex.babel.use={0|1(default)}: set to 0 the babel package is not included
+    whatever the document language is.
+  - latex.babel.language: empty by default, this parameter forces the use of
+    the specified babel language whatever the document language is.
+  - newtbl.use={0(default)|1}: set to one use the David Hedley table support
+    (very good and no Perl parsing needed).
+
+* New table support, completely re-written by David Hedley. One can use this
+  new XSL table code by setting the parameter newtbl.use=1.
+
+* XML source files with any extension are correctly handled. Previously one
+  needed to give XML files with extension .xml.
+
+* &ndash; and &mdash; entities support (texclean).
+
+* Bug fixes:
+  - <indexterm> were not put under their alphabetical letter.
+  - <indexterm> special characters '@', '!', '|' correctly handled.
+  - <personname> is now supported.
+  - <ulink> URL hyphenation is now correctly handled.
+  - <ulink> without text is correctly handled (use of @url content).
+  - template "scape" was defined twice (it fails with recent xsltproc).
+  - <refentrytitle> and <refname> correctly handled.
+  - patch for colortbl package bug (latex/3797)

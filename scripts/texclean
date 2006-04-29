@@ -244,6 +244,34 @@ sub command_update
   }
 }
 
+#
+# Insert <key> between each letter of <line>, but prevents from
+# cutting entities
+#
+sub line_cut
+{
+  local($line) = $_[0];
+  local($key) = $_[1];
+  my $l;
+  my $nline = "";
+  my @a;
+
+  @a = split(/(&#[^;]*;)/, $line);
+  foreach (@a) {
+    if (/&#/) {
+      # Entities are untouched
+      $nline .= $_;
+    } else {
+      # Two passes, to cut every letter (not every two letters)
+      $l = $_;
+      $l =~ s/([^ \t])([^ \t\n])/$1$key$2/g;
+      $l =~ s/$key([^ \t])([^ \t\n])/$key$1$key$2/g;
+      $nline .= $l;
+    }
+  }
+  return $nline;
+}
+
 sub translate
 {
   local($line) = $_[0];
@@ -252,10 +280,9 @@ sub translate
   if (($istable && $force_hyphen) || $do_hyphen) {
     $hyphenize = 1;
   }
+
   if ($hyphenize) {
-    # Two passes, to cut every letter (not every two letters)
-    $line =~ s/([^ \t])([^ \t\n])/$1<cut>$2/g;
-    $line =~ s/<cut>([^ \t])([^ \t\n])/<cut>$1<cut>$2/g;
+    $line = line_cut($line, "<cut>");
   }
   $line =~ s/^[\s\n]*$/ /g;
   $line =~ s/\\/\\textbackslash/g;
@@ -278,6 +305,7 @@ sub translate
   $line =~ s/#/\\#/g;
   $line =~ s/\$/\\\$/g;
   $line =~ s/\240/~/g;
+  $line =~ s/\xb1/\\ensuremath{\\pm}/g;
   $line =~ s/\\textbackslash/\\textbackslash{}/g;
   $line =~ s/\327/\$\\times\$/g;
   $line =~ s/°/\\ensuremath{°}/g;

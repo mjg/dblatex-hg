@@ -3,13 +3,14 @@
    Creating Tables
   </title>
   <para>
-   DocBook tables can be quite complex. This is why the tool doesn't support all the possibilities.
-  </para>
+   DocBook tables can be quite complex, but dblatex should be able to drive most of
+   cases. </para>
   <para>
-   The tool contains two engines to create tables: the default Perl parsing, and a
-   new excellent implementation by David Hedley completely written in XSL.
-   One can select this new implementation with the parameter <varname>newtbl.use</varname> set to 1.
-  </para>
+   The tool contains two engines to create tables: the excellent newtbl implementation
+   by David Hedley completely written in XSL, and a (obsolete) perl parser.
+   One can select the engine to use with the parameter <varname>newtbl.use</varname>.
+   By default the newtbl engine is used, and the perl parser will be dropped one
+   day.</para>
   <para>
    Here is what is supported:
   </para>
@@ -26,22 +27,15 @@
   </listitem>
    <listitem>
    <para>
-   Fixed column widths are supported (e.g. colwidth=&ldquo;10cm&rdquo;).
+   Fixed column widths are supported (e.g. colwidth=&ldquo;10cm&rdquo;). The
+   unit can be whatever is understood by latex (e.g. cm, em, in, pt).
    </para>
   </listitem>
-   <listitem>
-   <para>
-   Fixed column widths must be declared in centimeters in default implementation (&ldquo;cm&rdquo;). The new XSL table implementation supports any units.
-   </para>
-  </listitem>
-   <listitem>
+  <listitem>
    <para>
    Proportional column widths are supported (e.g. colwidth= &ldquo;5*&rdquo;).
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   Proportional and fixed colum width together is not supported (e.g. colwidth=&ldquo;5*+10cm&rdquo;). The new XSL table implementation has a better support for this, even if it is not (yet) perfect.
+   Combination of fixed and proportional width is supported too 
+   (e.g. colwidth=&ldquo;5*+10cm&rdquo;).
    </para>
   </listitem>
    <listitem>
@@ -56,11 +50,6 @@
   </listitem>
    <listitem>
    <para>
-   Mixing column and row spanning is not supported.
-   </para>
-  </listitem>
-   <listitem>
-   <para>
    The <sgmltag>orient</sgmltag> table attribute is supported (portrait and landscape). 
    </para>
   </listitem>
@@ -70,6 +59,17 @@
    </para>
   </listitem>
   </itemizedlist>
+   <sect2> <title> Limitations </title>
+   <para>Currently the following things are known to fail with tables:
+  <itemizedlist>
+   <listitem><para>Verbatim text in table cells is not
+   possible.</para></listitem>
+   <listitem><para>Footnotes in table cells can fail, especially if the footnote
+   contains several paragraph. Moreover they are lost is a float like a table.
+   </para></listitem>
+  </itemizedlist>
+   </para>
+   </sect2>
    <sect2>
     <title>
     Tables without colwidth
@@ -90,17 +90,17 @@
    </para>
    <programlisting>
 <![CDATA[<informaltable>
-]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left">
-]]><![CDATA[    <colspec colname="c1"/>
-]]><![CDATA[    <colspec align="left" colwidth="4cm"/>
-]]><![CDATA[    <colspec align="right" colwidth="5cm"/>
-]]><![CDATA[    <colspec align="center"/>
-]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
-]]><![CDATA[    <tbody>
-]]><![CDATA[    ...
-]]><![CDATA[    </tbody>
-]]><![CDATA[  </tgroup>
-]]><![CDATA[</informaltable>
+  <tgroup cols="5" colsep="1" rowsep="1" align="left">
+    <colspec colname="c1"/>
+    <colspec align="left" colwidth="4cm"/>
+    <colspec align="right" colwidth="5cm"/>
+    <colspec align="center"/>
+    <colspec align="center" colwidth="3cm"/>
+    <tbody>
+    ...
+    </tbody>
+  </tgroup>
+</informaltable>
 ]]>   </programlisting>
    <para>
     is rendered like this:
@@ -116,17 +116,17 @@
    </para>
    <programlisting>
 <![CDATA[<informaltable>
-]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
-]]><![CDATA[    <colspec colname="c1" colwidth="*"/> 
-]]><![CDATA[    <colspec align="left" colwidth="2*"/> 
-]]><![CDATA[    <colspec align="right" colwidth="3*"/> 
-]]><![CDATA[    <colspec align="center"/>
-]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
-]]><![CDATA[    <tbody>
-]]><![CDATA[    ...
-]]><![CDATA[    </tbody>
-]]><![CDATA[  </tgroup>
-]]><![CDATA[</informaltable>
+  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+    <colspec colname="c1" colwidth="*"/> 
+    <colspec align="left" colwidth="2*"/> 
+    <colspec align="right" colwidth="3*"/> 
+    <colspec align="center"/>
+    <colspec align="center" colwidth="3cm"/>
+    <tbody>
+    ...
+    </tbody>
+  </tgroup>
+</informaltable>
 ]]>   </programlisting>
    <para>
     gives this table:
@@ -142,16 +142,16 @@
    </para>
    <programlisting>
 <![CDATA[<informaltable>
-]]><![CDATA[  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
-]]><![CDATA[    <colspec colname="c1" colwidth="2cm"/> 
-]]><![CDATA[    <colspec align="left" colwidth="2.5cm"/> 
-]]><![CDATA[    <colspec align="right" colwidth="5cm"/> 
-]]><![CDATA[    <colspec align="center" colwidth="3cm"/>
-]]><![CDATA[    <tbody>
-]]><![CDATA[    ...
-]]><![CDATA[    </tbody>
-]]><![CDATA[  </tgroup>
-]]><![CDATA[</informaltable>
+  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+    <colspec colname="c1" colwidth="2cm"/> 
+    <colspec align="left" colwidth="2.5cm"/> 
+    <colspec align="right" colwidth="5cm"/> 
+    <colspec align="center" colwidth="3cm"/>
+    <tbody>
+    ...
+    </tbody>
+  </tgroup>
+</informaltable>
 ]]>   </programlisting>
    <para>
     It gives the following table:
@@ -167,15 +167,15 @@
    </para>
    <programlisting>
 <![CDATA[<informaltable>
-]]><![CDATA[  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
-]]><![CDATA[    <colspec colname="c1" colwidth="*"/>
-]]><![CDATA[    ...
-]]><![CDATA[    <tbody>
-]]><![CDATA[    <entry morerows="3">it covers 4 lines</entry>
-]]><![CDATA[    ...
-]]><![CDATA[    </tbody>
-]]><![CDATA[  </tgroup>
-]]><![CDATA[</informaltable>
+  <tgroup cols="4" colsep="1" rowsep="1" align="left"> 
+    <colspec colname="c1" colwidth="*"/>
+    ...
+    <tbody>
+    <entry morerows="3">it covers 4 lines</entry>
+    ...
+    </tbody>
+  </tgroup>
+</informaltable>
 ]]>   </programlisting>
    <para>
     Here is an example of table containing several entries with morerows attribute:
@@ -191,14 +191,14 @@
    </para>
    <programlisting>
 <![CDATA[<informaltable orient="land">
-]]><![CDATA[  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
-]]><![CDATA[    <colspec colname="c1" colwidth="*"/>
-]]><![CDATA[    ...
-]]><![CDATA[    <tbody>
-]]><![CDATA[    ...
-]]><![CDATA[    </tbody>
-]]><![CDATA[  </tgroup>
-]]><![CDATA[</informaltable>
+  <tgroup cols="5" colsep="1" rowsep="1" align="left"> 
+    <colspec colname="c1" colwidth="*"/>
+    ...
+    <tbody>
+    ...
+    </tbody>
+  </tgroup>
+</informaltable>
 ]]>   </programlisting>
    <para>
     Here is how it is displayed.

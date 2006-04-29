@@ -1,5 +1,5 @@
 #!/bin/sh
-
+#set -x
 where=`dirname $0`
 
 mkstriplist()
@@ -12,28 +12,39 @@ mkstriplist()
 }
 
 split=0
+image=0
 only_count=0
 equation=0
+nolisting=0
 opts=""
+splitdir="."
 
 while true
 do
   case "$1" in
+  -h | --help) ;;
   --no) exclude="$2"; shift ;;
   --exclude) exclfile="$2"; shift ;;
   --split) split=1 ;;
   --count) only_count=1 ;;
   --equation) opts="$opts -E" ;;
+  --splitdir) splitdir="$2" ; shift ;;
+  --no-listing) nolisting=1 ;;
+  --image) image=1 ;;
   *) break ;;
   esac
   shift
 done
 
 if [ $# -lt 1 ]; then
-  echo "$0 [options] testsuite [> outfile]"
-  echo "Options:"
-  echo "--no \"id1 id2...\""
-  echo "--split"
+  cat <<eof
+  $0 [options] testsuite [> outfile]
+  Options:
+  --no "id1 id2..."
+  --split
+  --count
+  --equation
+eof
   exit 1
 fi
 
@@ -43,6 +54,14 @@ if [ "$exclfile" != "" ]; then
   l=`cat $exclfile|xargs`
   exclude="$exclude $l"
   opts="$opts -e $exclfile"
+fi
+
+if [ $image -eq 1 ]; then
+  opts="$opts -i"
+fi
+
+if [ $nolisting -eq 0 ]; then
+  opts="$opts -l"
 fi
 
 if [ "$exclude" != "" ]; then
@@ -63,8 +82,19 @@ else
 fi
 
 if [ $split -eq 1 ]; then
+  count=0
+  mkdir -p $splitdir
+  # Don't show the introduction
+  opts="$opts -s"
   for i in $list; do
-    $where/build_testmml.pl $opts $i > `basename $i .mml`.xml
+    utest=`basename $i .mml`
+    count=$((count+1))
+    echo "[$count] Build test $utest"
+    # Don't overwrite existing files
+    if [ -f $splitdir/$utest.xml ]; then
+      utest="$utest.$count"
+    fi
+    $where/build_testmml.pl $opts $i > $splitdir/$utest.xml
   done
 else
   $where/build_testmml.pl $opts $list

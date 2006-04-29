@@ -1,6 +1,6 @@
 <!doctype book public "-//OASIS//DTD DocBook V3.1//EN"
  [
-<!ENTITY edition "10">
+<!ENTITY edition "11">
 <!ENTITY intro SYSTEM "introduction.sgml">
 <!ENTITY install SYSTEM "install.sgml">
 <!ENTITY table SYSTEM "table.sgml">
@@ -20,6 +20,7 @@
 <!ENTITY equation.eg1 SYSTEM "equation-eg1.sgml">
 <!ENTITY equation.eg2 SYSTEM "equation-eg2.sgml">
 <!ENTITY equation.eg3 SYSTEM "equation-eg3.sgml">
+<!ENTITY equation.eg4 SYSTEM "equation-eg4.sgml">
 <!ENTITY mathml SYSTEM "mathml.sgml">
 <!ENTITY param SYSTEM "param.sgml">
 <!ENTITY stycommand SYSTEM "stycommand.sgml">
@@ -37,6 +38,7 @@
 <!ENTITY changes4 SYSTEM "changes-0.1.6.sgml">
 <!ENTITY changes5 SYSTEM "changes-0.1.7.sgml">
 <!ENTITY changes6 SYSTEM "changes-0.1.8.sgml">
+<!ENTITY changes7 SYSTEM "changes-0.1.9.sgml">
 <!ENTITY faq SYSTEM "faq.sgml">
 ]>
 
@@ -180,10 +182,18 @@
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>28/11/05</date>
+<revnumber>10</revnumber><date>28/11/05</date>
 <revdescription>
  <para>
   Changes: see <xref linkend="sec-changes-018">
+ </para>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>28/04/06</date>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes-019">
  </para>
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
@@ -315,6 +325,11 @@
 <programlisting><textobject><textdata entityref="equation.eg3"></textobject>
 </programlisting>
 </example>
+<example><title>Equation without a title</title>
+&equation.eg4;
+<programlisting><textobject><textdata entityref="equation.eg4"></textobject>
+</programlisting>
+</example>
    </sect2>
   </sect1>
 &mathml;
@@ -349,24 +364,24 @@
 <example><title>A Bibliography</title>
   <programlisting>
 <![CDATA[<bibliography><title>Bibliography Example</title> 
-]]><![CDATA[  <bibliodiv><title>References</title>
-]]><![CDATA[    <biblioentry>
-]]><![CDATA[      <title>Document title</title>
-]]><![CDATA[      <author><firstname>J.</firstname><surname>Duval</surname></author>
-]]><![CDATA[      <pubsnumber>DEX000567325</pubsnumber>
-]]><![CDATA[    </biblioentry>
-]]><![CDATA[  </bibliodiv>
-]]><![CDATA[  <bibliodiv><title>White papers</title>
-]]><![CDATA[    <biblioentry>
-]]><![CDATA[      <title>Technical notes</title>
-]]><![CDATA[      <authorgroup>
-]]><![CDATA[        <author><firstname>J.</firstname><surname>Duval</surname></author>
-]]><![CDATA[        <author><firstname>R.</firstname><surname>Marion</surname></author>
-]]><![CDATA[      </authorgroup>
-]]><![CDATA[      <pubsnumber>DEX000704520</pubsnumber>
-]]><![CDATA[    </biblioentry>
-]]><![CDATA[  </bibliodiv>
-]]><![CDATA[</bibliography>
+  <bibliodiv><title>References</title>
+    <biblioentry>
+      <title>Document title</title>
+      <author><firstname>J.</firstname><surname>Duval</surname></author>
+      <pubsnumber>DEX000567325</pubsnumber>
+    </biblioentry>
+  </bibliodiv>
+  <bibliodiv><title>White papers</title>
+    <biblioentry>
+      <title>Technical notes</title>
+      <authorgroup>
+        <author><firstname>J.</firstname><surname>Duval</surname></author>
+        <author><firstname>R.</firstname><surname>Marion</surname></author>
+      </authorgroup>
+      <pubsnumber>DEX000704520</pubsnumber>
+    </biblioentry>
+  </bibliodiv>
+</bibliography>
 ]]>  </programlisting>
 </example>
   </sect1>
@@ -395,8 +410,10 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
   Thanks to the people who contributed to the project at its early age: Jean-Yves Le
   Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help,
   Vincent Hottier who asked for the embedded LaTeX equations support.</para>
+  <para>Thanks also to the current contributors, David Hedley (newtbl)
+  and Andreas Hoenen (Debian maintainer).</para>
   <para>Special thanks to the KDE documentation team, especially Philip Rodrigues,
-  Michael Smith from the DocBook Project, Andreas Hoenen, and Kai Brommann, for their
+  Michael Smith from the DocBook Project, and Kai Brommann, for their
   feedbacks, encouragements, and advice.
  </para>
  </chapter>

@@ -102,7 +102,9 @@
 </xsl:template>
 
 <xsl:template match="group/arg">
-  <xsl:if test="position()>1"><xsl:value-of select="$arg.or.sep"/></xsl:if>
+  <xsl:if test="position()>1">
+    <xsl:value-of select="$arg.or.sep"/>
+  </xsl:if>
   <xsl:apply-templates/>
 </xsl:template>
 

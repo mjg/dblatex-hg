@@ -2,11 +2,11 @@
  </title>
 <sect1>
 <title>Why a DB2LaTeX clone?</title>
-<para>dblatex is actually a <ulink url="http://db2latex.sourceforge.net">DB2LaTeX</ulink> clone, since it takes the major part of its XSL stylesheets. So, why this project? The purpose is a bit different on these points:</para>
+<para>dblatex is actually a <ulink url="http://db2latex.sourceforge.net">DB2LaTeX</ulink> clone. So, why this project? The purpose is a bit different on these points:</para>
 <itemizedlist>
 <listitem><para>The project is end-user oriented, that is it tries to hide as much as possible the latex compiling stuff by providing a single clean script to produce directly DVI, PostScript and PDF output.</para></listitem>
 <listitem><para>The actual output rendering is done not only by the XSL stylesheets transformation, but also by a dedicated LaTeX package. The purpose is to allow a deep LaTeX customisation without changing the XSL stylesheets.</para></listitem>
-<listitem><para>Post-processing is done by Perl, to make publication faster, and to parse things not so easily done by the XSL stylesheets like tables.</para></listitem>
+<listitem><para>Post-processing is done by Perl, to make publication faster, and to convert images if needed.</para></listitem>
 </itemizedlist></sect1>
   <sect1>
    <title>
@@ -17,59 +17,40 @@
   </para>
   <itemizedlist>
    <listitem>
-   <para>
-   transform a DocBook XML/SGML book or article to pure LaTeX,
-   </para>
+   <para> transform a DocBook XML/SGML book or article to pure LaTeX, </para>
   </listitem>
    <listitem>
-   <para>
-   compile the temporary LaTeX file with latex or pdflatex, to produce DVI, PostScript and PDF files,
-   </para>
+   <para> compile the temporary LaTeX file with latex or pdflatex, to produce DVI, PostScript and PDF files, </para>
   </listitem>
    <listitem>
-   <para>
-   convert on the fly the figures included in the document,
-   </para>
+   <para> convert on the fly the figures included in the document, </para>
   </listitem>
    <listitem>
-   <para>
-   write complex tables,
-   </para>
+   <para> write complex tables, </para>
   </listitem>
    <listitem>
-   <para>
-   write several bibliographies,
-   </para>
+   <para> write several bibliographies, </para>
   </listitem>
    <listitem>
-   <para>
-   create an index,
-   </para>
+   <para> use callouts on program listings or on images, </para>
   </listitem>
    <listitem>
-   <para>
-   write mathematical equations in LaTeX,
-   </para>
+   <para> create an index, </para>
   </listitem>
    <listitem>
-   <para>
-   write mathematical equation in MathML,
-   </para>
+   <para> write mathematical equations in LaTeX, </para>
   </listitem>
    <listitem>
-   <para>
-   have revision bars,
-   </para>
+   <para> write mathematical equation in MathML, </para>
   </listitem>
    <listitem>
-   <para>
-   customise the output rendering with an XSL configuration file,
-   </para>
+   <para> have revision bars, </para>
   </listitem>
    <listitem>
-   <para>
-   use your own LaTeX style package.
-   </para>
+   <para> customise the output rendering with an XSL configuration file, </para>
+  </listitem>
+   <listitem>
+   <para> use your own LaTeX style package.  </para>
   </listitem>
   </itemizedlist>
   </sect1>
@@ -82,7 +63,11 @@
   </para>
   </sect1>
   <sect1 id="sec-changes"><title>Changes</title>
-  <sect2 id="sec-changes-018"><title>Release &version;</title>
+  <sect2 id="sec-changes-019"><title>Release &version;</title>
+  <para>Few changes.</para>
+  &changes7;
+  </sect2>
+  <sect2 id="sec-changes-018"><title>Release 0.1.8</title>
   <para>This is mainly a bug fix release.</para>
   &changes6;
   </sect2>
@@ -103,11 +88,10 @@
   </sect2>
   </sect1>
   <sect1>
-   <title>
-   Publishing Principles
-  </title>
+   <title> Publishing Principles </title>
   <para>
-   Dblatex transforms a DocBook XML/SGML document to LaTeX. Once transformed into LaTeX, standard LaTeX tools are used to produce DVI, Postcript or PDF files.
+   Dblatex transforms a DocBook XML/SGML document to LaTeX. Once transformed into
+   LaTeX, standard LaTeX tools are used to produce DVI, Postcript or PDF files.
   </para>
    <para>
     <xref linkend="fig-processus"> explains the process applied. It shows the tools used and the steps. The emphasized tools are provided by the package.
@@ -155,19 +139,14 @@ accepts PDF, PNG, JPEG, and TIFF graphics.
    <itemizedlist>
     <listitem>
    <para>Transform the entities to valid LaTeX characters (e.g. &amp;nbsp; is
-   transformed to '~'). Perl is suited and performant for this
-   task.</para>
-   </listitem>
-    <listitem>
-   <para>Build the tables. DocBook Tables can be hard to translate into LaTeX
-   (ConTeXt tables are far easier). This is why Perl is really helpfull to
-   implement some algorithms not so easy to do by XSL programming. The main
-   difficulties are about the missing cells, or cells spanned on several columns
-   and/or rows.</para>
+   transformed to '~'). Perl is suited and performant for this task.</para>
    </listitem>
    <listitem>
    <para>Convert the figures to be compatible with the backend driver. See <xref
    linkend="sec-figinclude"> for more detail.</para>
+   </listitem>
+   <listitem>
+   <para>Force some hyphenation in tables or for typed words.</para>
    </listitem>
    </itemizedlist>
    </sect2>

@@ -1,4 +1,4 @@
-<!-- Exemple de table avec des tailles fixées (et d'autres non) -->
+<!-- Table with fixed and unspecified column widths -->
 
 <informaltable>
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
@@ -18,18 +18,18 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top">left aligned (tgroup order)
-</entry><entry align="center" valign="top">left aligned
-</entry><entry align="center" valign="top">right aligned
-</entry><entry align="center" valign="top">centered cell
-</entry><entry align="center" valign="top">in the centre
+<entry>left aligned (tgroup order)
+</entry><entry>left aligned
+</entry><entry>right aligned
+</entry><entry>centered cell
+</entry><entry>in the centre
 </entry></row>
 <row>
-<entry align="center" valign="top">no specified width
-</entry><entry align="center" valign="top">4 cm column width
-</entry><entry align="center" valign="top">5 cm column width
-</entry><entry align="center" valign="top">no width
-</entry><entry align="center" valign="top">3 cm column width
+<entry>no specified width
+</entry><entry>4 cm column width
+</entry><entry>5 cm column width
+</entry><entry>no width
+</entry><entry>3 cm column width
 </entry></row>
 </tbody>
 </tgroup>

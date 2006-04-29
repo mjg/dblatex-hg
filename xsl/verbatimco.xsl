@@ -192,7 +192,7 @@
     <xsl:apply-templates select="." mode="lstid"/>
   </xsl:variable>
   <xsl:variable name="lst.ext"
-      select="$lst.doc/listings/listing[@type=$name][position()=$lst.id]"/>
+      select="$lst.doc/listings/listing[@type=$name][@lstid=$lst.id]"/>
 
   <xsl:message><xsl:text>Load external file </xsl:text>
     <xsl:value-of select="$name"/>

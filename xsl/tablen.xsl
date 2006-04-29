@@ -14,7 +14,7 @@
 <xsl:param name="newtbl.format.tfoot"/>
 <xsl:param name="newtbl.default.colsep" select="'1'"/>
 <xsl:param name="newtbl.default.rowsep" select="'1'"/>
-<xsl:param name="newtbl.use" select="'0'"/>
+<xsl:param name="newtbl.use" select="'1'"/>
 <xsl:param name="table.title.top" select="'0'"/>
 
 
@@ -123,6 +123,14 @@
   <xsl:if test="@orient='land'">
     <xsl:text>\end{landscape}&#10;</xsl:text>
   </xsl:if>
+</xsl:template>
+
+<!-- Hook for the newtbl to decide what to do after the table head,
+     depending on the type of table used.
+-->
+<xsl:template match="table|informaltable" mode="newtbl.endhead">
+  <!-- longtable endhead -->
+  <xsl:text>\endhead&#10;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

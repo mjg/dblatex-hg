@@ -300,7 +300,8 @@
   <xsl:text>\hyperlink{</xsl:text>
   <xsl:value-of select="@id"/>
   <xsl:text>}{</xsl:text>
-  <xsl:value-of select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"/>
+  <xsl:apply-templates select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"
+                       mode="xref.text"/>
   <xsl:apply-templates select="refmeta/manvolnum"/>
   <xsl:text>}</xsl:text>
 </xsl:template>

@@ -12,13 +12,11 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top">left aligned
-</entry><entry align="center" valign="top">centered cell
-</entry></row>
+<entry>left aligned</entry>
+<entry>centered cell</entry></row>
 <row>
-<entry align="center" valign="top">no specified width
-</entry><entry align="center" valign="top">idem
-</entry></row>
+<entry>no specified width</entry>
+<entry>idem</entry></row>
 </tbody>
 </tgroup>
 </informaltable>

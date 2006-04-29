@@ -13,6 +13,9 @@
 \usepackage{multirow}
 \usepackage{calc}
 
+% Multirow changed, used by newtbl
+\usepackage{multirow2}
+
 % Temporary latex/3797 bug fix (colortbl) by Morten Hoegholm
 \expandafter\renewcommand\expandafter\multicolumn
   \expandafter[\expandafter3\expandafter]\expandafter{%
@@ -33,6 +36,7 @@
 \newdimen\newtblsparewidth%
 \newdimen\newtblcolwidth%
 
+% Native table support, to remove soon
 \newdimen\colwidth
 \newdimen\fixwidth
 \newdimen\mcellsz

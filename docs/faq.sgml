@@ -75,4 +75,17 @@ always put the title at the bottom of the float.</para>
 </itemizedlist>
 </simplesect>
 
+<simplesect><title>My long tables don't split in several pages. Why?</title>
+<para>A formal table (<sgmltag>table</sgmltag> element) is put in a float, so
+that it can have a numbered caption and placed by tex at the best place. The
+limitation is that a float cannot split over several pages.</para>
+<para>For long tables that need to split, use <sgmltag>informaltable</sgmltag>
+instead.</para>
+</simplesect>
+
+<simplesect><title>I cannot put a table in an example.</title>
+<para>A formal table (<sgmltag>table</sgmltag> element) is put in a float, and 
+cannot be put in another float like an example. You can use an <sgmltag>informaltable</sgmltag> instead.</para>
+</simplesect>
+
 </chapter>

@@ -59,7 +59,7 @@ if [ "$target" != "" ]; then
 fi
 
 notfound=""
-for util in perl xsltproc latex pdflatex kpsewhich; do
+for util in perl xsltproc latex pdflatex kpsewhich file; do
   path=`which $util 2>/dev/null|sed 's/^no //'`
   if [ "$path" = "" ]; then
     status="no"

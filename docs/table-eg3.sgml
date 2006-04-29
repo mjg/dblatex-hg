@@ -16,16 +16,16 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top">left aligned (tgroup level)
-</entry><entry align="center" valign="top">left aligned
-</entry><entry align="center" valign="top">right aligned
-</entry><entry align="center" valign="top">centered cell
+<entry>left aligned (tgroup level)
+</entry><entry>left aligned
+</entry><entry>right aligned
+</entry><entry>centered cell
 </entry></row>
 <row>
-<entry align="center" valign="top">2 cm column width
-</entry><entry align="center" valign="top">2,5 cm column width
-</entry><entry align="center" valign="top">5 cm column width
-</entry><entry align="center" valign="top">4 cm column width
+<entry>2 cm column width
+</entry><entry>2,5 cm column width
+</entry><entry>5 cm column width
+</entry><entry>4 cm column width
 </entry></row>
 </tbody>
 </tgroup>

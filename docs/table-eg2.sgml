@@ -18,18 +18,18 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top">left aligned (tgroup level)
-</entry><entry align="center" valign="top">left aligned
-</entry><entry align="center" valign="top">right aligned
-</entry><entry align="center" valign="top">centered cell
-</entry><entry align="center" valign="top">in the centre
+<entry>left aligned (tgroup level)
+</entry><entry>left aligned
+</entry><entry>right aligned
+</entry><entry>centered cell
+</entry><entry>in the centre
 </entry></row>
 <row>
-<entry align="center" valign="top">proportional column (*)
-</entry><entry align="center" valign="top">proportional column (2*)
-</entry><entry align="center" valign="top">proportional column (3*)
-</entry><entry align="center" valign="top">no specified width
-</entry><entry align="center" valign="top">3 cm column width
+<entry>proportional column (*)
+</entry><entry>proportional column (2*)
+</entry><entry>proportional column (3*)
+</entry><entry>no specified width
+</entry><entry>3 cm column width
 </entry></row>
 </tbody>
 </tgroup>

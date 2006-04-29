@@ -4,7 +4,7 @@ PWD = $(shell pwd)
 TEXIN = $(shell echo ${TEXINPUTS})
 CHANGES = $(notdir $(wildcard change*.sgml))
 VERSION = devel
-OPT=
+OPTS=
 
 all: manual.pdf $(FIGURES)
 
@@ -18,7 +18,7 @@ native db2latex simple: version.sgml
 
 %.pdf: %.sgml version.sgml $(TABLES) $(FIGURES) $(EQUATIONS) $(CHANGES)
 	TEXINPUTS=:$(PWD)/../latex//:$(TEXIN) \
-        ../scripts/dblatex -S manual.specs $(OPT) -o $@ $<
+        ../scripts/dblatex -S manual.specs $(OPTS) -o $@ $<
 
 # Actual version of the release
 version.sgml: FORCE

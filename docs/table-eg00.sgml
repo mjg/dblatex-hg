@@ -9,12 +9,9 @@
 </thead>
 <tbody>
 <row>
-<entry align="center" valign="top">left aligned
-</entry></row>
+<entry>left aligned</entry></row>
 <row>
-<entry align="center" valign="top">
-no specified width, so it takes all the page
-</entry></row>
+<entry>no specified width, so it takes all the page</entry></row>
 </tbody>
 </tgroup>
 </informaltable>
