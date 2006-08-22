@@ -19,29 +19,32 @@
 }
 
 %
-% The macro measures the image natural size up to the page boundaries
+% The image keeps its natural size if lower than the max boundaries
+% Now it's fully based on internal graphics macros
 %
-% In page image sizes
-\newlength{\imgwidth}
-\newlength{\imgheight}
+% Macros defining the maximum lengths
+\def\imgmaxwidth{\textwidth}
+\def\imgmaxheight{\textheight}
 
 % Real image sizes
-\newlength{\imgrwidth}
-\newlength{\imgrheight}
+\def\imgrwidth{\Gin@nat@width}
+\def\imgrheight{\Gin@nat@height}
+\def\imgevalsize#1{}%
 
-\def\imgevalsize#1{%
-  \sbox{\z@}{\includegraphics{#1}}%
-  \settowidth{\imgrwidth}{\usebox{\z@}}%
-  \settoheight{\imgrheight}{\usebox{\z@}}%
-  \ifnum\imgrwidth>\textwidth%
-    \setlength{\imgwidth}{\textwidth}%
-  \else%
-    \setlength{\imgwidth}{\imgrwidth}%
-  \fi%
-  \ifnum\imgrheight>\textheight%
-    \setlength{\imgheight}{\textheight}%
-  \else%
-    \setlength{\imgheight}{\imgrheight}%
-  \fi%
+% Use the maximum possible size
+\def\imgwidth{%
+  \ifdim\Gin@nat@width>\imgmaxwidth
+    \imgmaxwidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+
+\def\imgheight{%
+  \ifdim\Gin@nat@height>\imgmaxheight
+    \imgmaxheight
+  \else
+    \Gin@nat@height
+  \fi
 }
 

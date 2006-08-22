@@ -18,6 +18,40 @@
 * envoyer cas de tests :
   -> informaltable.015.xml    KO  But what does mean colwidth="4in*"?
 
+<xsl:template match="authorgroup">
+<!--
+    <xsl:variable name="string">
+      <xsl:call-template name="person.name.list"/>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($string)"/>
+  -->
+</xsl:template>
+
+
+Release 0.1.10:
+---------------
+
+* Minor improvements:
+  - Special 'maxwidth' and 'maxheight' imagedata.default.scale setup added.
+  - glossterm.auto.link={0|1} parameter added.
+  - Add bookinfo spanish locale.
+
+* Bug fixes:
+  - Scripts handle correctly spaces in file paths (Debian bug [1]).
+  - Itemize fix, to be compatible with french babel (Debian bug [2]).
+  - Multiple copyrights correctly handled (Debian bug [3])
+  - Latex files cleanup (remove pslatex, epsfig, etc. Debian bug [4]).
+  - Several paragraphs correctly handled in table cells. 
+  - Cross-references, like <xref> or <link>, correctly handled in table cells. 
+  - <ulink> with URL containing the character '#' correctly handled in table cells. 
+
+
+[1] http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=366721
+[2] http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374215
+[3] http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374212
+[4] http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=376418
+
+
 Release 0.1.9:
 --------------
 

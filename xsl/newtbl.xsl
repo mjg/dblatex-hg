@@ -474,8 +474,11 @@
         <xsl:attribute name="align">
           <xsl:value-of select="$align"/>
         </xsl:attribute>
-        <!-- Copy all children -->
-        <xsl:copy-of select="child::node()"/>
+        <!-- Process the output here, to stay in the document context. -->
+        <!-- In RTF entries the document links/refs are lost -->
+        <xsl:element name="output">
+          <xsl:apply-templates select="." mode="output"/>
+        </xsl:element>
       </xsl:copy>
       
       <!-- See if we've run out of entries for the current row -->
@@ -615,7 +618,14 @@
     
     <!-- Dump out the entry contents -->
     <xsl:text>%&#10;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:choose>
+      <xsl:when test="output">
+        <xsl:value-of select="output"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="." mode="output"/>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>%&#10;</xsl:text>
     
     <!-- Close off multirow if required -->
@@ -640,6 +650,15 @@
   
 </xsl:template>
 
+
+<!-- Process the entry content, and remove spurious empty lines -->
+<xsl:template match="entry" mode="output">
+  <xsl:call-template name="normalize-border">
+    <xsl:with-param name="string">
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
 
 
 <!-- Process each row in turn -->

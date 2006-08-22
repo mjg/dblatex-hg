@@ -6,9 +6,7 @@ clean()
   for suffix in log lof lot glo idx ind ilg toc out aux cb
   do
     temp=$basefile.$suffix
-    if [ -f $temp ]; then
-      rm $temp*
-    fi
+    rm -f $temp*
   done
 }
 
@@ -25,48 +23,63 @@ log_dump()
   }'
 }
 
-add_inputpath()
+# Inputpath setting
+inputpath=""
+
+# Beware, blank spaces in the path are forbidden
+add_inputpath_one()
 {
-  path=""
-  for i in $2; do
-    path="$path{$i//}"
+  if [ $# -gt 1 ]; then
+    echo "Warning: '$*': invalid input path (contains blank); skipped"
+  else
+    inputpath="$inputpath{$1//}"
+  fi
+}
+
+add_inputpath_range()
+{
+  for i in $1; do
+    add_inputpath_one "$i"
   done
-  cat <<eof > $3
+}
+
+add_inputpath_tex()
+{
+  cat <<eof > $2
 \makeatletter
-\def\input@path{$path}
+\def\input@path{$inputpath}
 \makeatother
 eof
-cat $1 >> $3
+cat $1 >> $2
 }
 
 scriptpath=`dirname $0`;
+
+# (la)tex engine to use, and the expected output extension.
+xtex=latex
+oxt=dvi
 
 while true
 do
   case "$1" in
   --texpost) execpost="$2"; shift;;
-  -*) echo "$1: Unknown option"; exit 1;;
-  *) break;;
+  --tex) xtex="$2"; shift;;
+  --oxt) oxt="$2"; shift;;
+  --src) add_inputpath_one $2; shift;;
+  --xpath) add_inputpath_range "$2"; shift;;
+  -*) shift;; # ignore silently the unknown option
+  *)  break;;
   esac
   shift
 done
 
-if [ $# -lt 2 ]; then
-  echo "`basename $0` file.tex inputpath [texengine extension]"
+if [ $# -lt 1 ]; then
+  echo "`basename $0` [options] file.tex"
   exit 1
 fi
 
-# (la)tex engine to use, and the expected output extension.
-xtex=latex
-oxt=dvi
-if [ $# -ge 4 ]; then
-  xtex=$3
-  oxt=$4
-fi
-
-srcfile=$1
-srcpath=$2
-file=`basename $srcfile .tex`
+srcfile="$1"
+file=`basename "$srcfile" .tex`
 srcout=$file.$oxt
 file=${file}_tmp
 basefile=$file
@@ -79,12 +92,12 @@ verbose=1
 
 
 # Build the tex file with input@path set
-add_inputpath $srcfile "$srcpath" $file
+add_inputpath_tex "$srcfile" $file
 
 run=1
 while [ $run -ne 0 ]
 do 
-  echo "latex $file"
+  echo "$xtex $file"
   $xtex -interaction=batchmode $file
   if [ $? -ne 0 ]; then
     echo "*** latex error"

@@ -1,3 +1,6 @@
+%%
+%% Locale for some float labels and articleinfo/bookinfo stuff
+%%
 \ifthenelse{\equal{\DBKlocale}{de}}{
 \def\refname{Referenzen}%
 \def\abstractname{Zusammenfassung}%
@@ -88,6 +91,36 @@
 \def\DBKcontrib{ACTIE}
 \def\DBKsignature{Handtekening}
 }{
+\ifthenelse{\equal{\DBKlocale}{es}}{
+\def\refname{Referencia}%
+\def\abstractname{Resumen}%
+\def\bibname{Bibliografía}%
+\def\prefacename{Prefacio}%
+\def\chaptername{Capítulo}%
+\def\appendixname{Apéndice}%
+\def\contentsname{Índice de contenido}%
+\def\listfigurename{Índice de ilustraciones}%
+\def\listtablename{Índice de tablas}%
+\def\indexname{Índice de palabras clave}%
+\def\figurename{{\scshape Ilustración }}%
+\def\tablename{{\scshape Tabla }}%
+ 
+\def\examplename{Ejemplo}
+\def\ondate{}
+\renewcommand{\DBKreleaseinfo}{Documento de trabajo}
+\def\writtenby{ESCRITO POR}
+\def\projname{PROYECTO}
+\def\titlename{TÍTULO}
+\def\DBKindname{NOMBRE}
+\def\DBKindtitle{COLABORADORES}
+\def\DBKrevtitle{HISTORIAL DE REVISIONES}
+\def\DBKrevdesc{MODIFICACIONES}
+\def\DBKrevnumber{NÚMERO}
+\def\DBKrevname{NOMBRE}
+\def\DBKrevdate{FECHA}
+\def\DBKcontrib{ACCIÓN}
+\def\DBKsignature{FIRMA}
+}{
 \def\examplename{Example}
 \def\ondate{on}
 \renewcommand{\DBKreleaseinfo}{Working Paper}
@@ -103,4 +136,4 @@
 \def\DBKrevdate{DATE}
 \def\DBKcontrib{ACTION}
 \def\DBKsignature{SIGNATURE}
-}}}
+}}}}

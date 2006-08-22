@@ -38,6 +38,26 @@
    The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p <replaceable>custom.xsl</replaceable></option>. The available configuration parameters are the following:
   </para>
 &param;
+   <sect2 id="sec-defaultscale">
+    <title>imagedata.default.scale</title>
+    <para>Default scale to apply to every <sgmltag>imagedata</sgmltag> that does not
+contain any scaling attribute.</para>
+<para>By default this parameter is set to `pagebound`
+so that the included images keep their natural size up to the page
+boundaries.</para>
+<para>Two other special parameters are available:
+'maxwidth=<replaceable>width</replaceable>' and
+'maxheight=<replaceable>height</replaceable>' where <replaceable>width</replaceable>
+and <replaceable>height</replaceable> define the maximum image
+dimensions, i.e. the image keeps its natural size up to the specified
+maximum dimension. Both 'maxwidth' and 'maxheight' settings can be combined in a
+comma separated list.</para>
+<para>Example:
+<programlisting>dblatex -P imagedata.default.scale=maxwidth=10cm,maxheight=8cm file.xml</programlisting>
+</para>
+<para>Except these special reserved values, the expected value of the parameter
+must be some valid options passed to the \includegraphics command.</para>
+</sect2>
    <sect2 id="sec-hyperparam">
     <title>
     latex.hyperparam
@@ -60,7 +80,7 @@
 ]]><![CDATA[</xsl:stylesheet>
 ]]>   </programlisting>
 </example>
-   </sect2>
+  </sect2>
   </sect1>
   <sect1 id="sec-param-value"><title>Setting Parameter values</title>
   <para>It is possible to set some XSL parameter values directly from the command

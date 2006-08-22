@@ -434,12 +434,51 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="firstterm">
-  <xsl:call-template name="inline.italicseq"/>
-</xsl:template>
-
-<xsl:template match="glossterm">
-  <xsl:call-template name="inline.charseq"/>
+<xsl:template match="firstterm|glossterm">
+  <xsl:choose>
+  <xsl:when test="@linkend">
+    <xsl:text>\hyperlink{</xsl:text>
+    <xsl:value-of select="@linkend"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:call-template name="inline.italicseq"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:when test="$glossterm.auto.link != 0">
+    <xsl:variable name="term">
+      <xsl:choose>
+        <xsl:when test="@baseform">
+          <xsl:value-of select="normalize-space(@baseform)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="normalize-space(.)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="glossentry"
+       select="(//glossentry[normalize-space(glossterm)=$term or
+                             normalize-space(glossterm/@baseform)=$term][@id])[1]"/>
+    <xsl:choose>
+    <xsl:when test="$glossentry">
+      <xsl:text>\hyperlink{</xsl:text>
+      <xsl:value-of select="$glossentry/@id"/>
+      <xsl:text>}{</xsl:text>
+      <xsl:call-template name="inline.italicseq"/>
+      <xsl:text>}</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+        <xsl:text>Error: no ID glossentry for glossterm: </xsl:text>
+        <xsl:value-of select="."/>
+        <xsl:text>.</xsl:text>
+      </xsl:message>
+      <xsl:call-template name="inline.italicseq"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="inline.italicseq"/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="keycombo">

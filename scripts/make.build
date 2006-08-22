@@ -12,19 +12,19 @@ FIG2DEV =
 
 HERE = $(shell pwd)
 
-vpath %.xml $(SRCDIR)
+vpath %.xml "$(SRCDIR)"
 
 ifeq ($(TEXDRV),dvips)
 
 %.pdf: %.ps FORCE
-	ps2pdf -sPAPERSIZE=a4 $<
+	ps2pdf -sPAPERSIZE=a4 "$<"
 
 %.ps: %.dvi FORCE
-	dvips -o $@ $<
+	dvips -o "$@" "$<"
 
 %.dvi: %.tex FORCE
 	@echo "Compiling $< ..."
-	@$(TEXRUN) $< "$(SRCDIR) $(XPATH)"
+	@$(TEXRUN) --src "$(SRCDIR)" --xpath "$(XPATH)" "$<"
 
 else
 ifeq ($(TEXDRV),pdftex)
@@ -37,31 +37,31 @@ ifeq ($(TEXDRV),pdftex)
 
 %.pdf: %.tex FORCE
 	@echo "Compiling $< ..."
-	@$(TEXRUN) $< "$(SRCDIR) $(XPATH)"
+	@$(TEXRUN) --src "$(SRCDIR)" --xpath "$(XPATH)" "$<"
 
 endif
 endif
 
 %.tex: %.rtex FORCE
-	@$(TEXCLEAN) -b $(TEXDRV) -p $(SRCDIR) -f "$(FIG2DEV)" $< $@
+	@$(TEXCLEAN) -b $(TEXDRV) -p "$(SRCDIR)" -f "$(FIG2DEV)" "$<" "$@"
 
-%.rtex: %.lxml $(XMLFILE) FORCE
+%.rtex: %.lxml FORCE
 ifeq ($(XSLT),xt)
-	java com.jclark.xsl.sax.Driver $< $(XSL) > $@
+	java com.jclark.xsl.sax.Driver "$<" $(XSL) > "$@"
 else
 ifeq ($(XSLT),xsltproc)
 	xsltproc --xinclude --catalogs --param listings.xml "'$(HERE)/$<'" \
-                 $(XOPT) $(XSL) $(XMLFILE) > $@
+                 $(XOPT) $(XSL) "$(XMLFILE)" > "$@"
 endif
 endif
 
-%.lxml: $(XMLFILE)
+%.lxml:
 ifeq ($(XSLLST),)
 	@echo "No external file support"
-	echo "<listings/>" > $@
+	echo "<listings/>" > "$@"
 else
 	xsltproc --param current.dir "'$(SRCDIR)'" \
-                 $(XSLLST) $< > $@
+                 $(XSLLST) "$(XMLFILE)" > "$@"
 endif
 
 FORCE:

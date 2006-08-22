@@ -131,6 +131,7 @@
 </xsl:template>
 
 <xsl:template match="copyright" mode="titlepage.mode">
+  <xsl:text>\noindent </xsl:text>
   <xsl:call-template name="gentext">
     <xsl:with-param name="key" select="'Copyright'"/>
   </xsl:call-template>
@@ -147,6 +148,9 @@
   </xsl:call-template>
   <xsl:call-template name="gentext.space"/>
   <xsl:apply-templates select="holder" mode="titlepage.mode"/>
+  <xsl:if test="following-sibling::copyright">
+    <xsl:text>\par&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="bookinfo|articleinfo" mode="docinfo">

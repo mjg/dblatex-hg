@@ -44,7 +44,6 @@
 
 <xsl:template match="textobject/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="step/para"> <xsl:apply-templates/> </xsl:template>
-<xsl:template match="entry/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="question/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="answer/para"> <xsl:apply-templates/> </xsl:template>
 

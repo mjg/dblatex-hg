@@ -103,13 +103,17 @@ added to allow new latex styles to use their own figures in admonitions.</entry>
 image. Set to 0 the title is under the image.</entry>
 <entry>0</entry>
 </row>
+<!-- -->
+<row>
+<entry>glossterm.auto.link</entry>
+<entry>When set to 1, the glossterms in the document are linked to their
+definition in the glossary.</entry>
+<entry>0</entry>
+</row>
+<!-- -->
 <row>
 <entry>imagedata.default.scale</entry>
-<entry>Default scale to apply to every <sgmltag>imagedata</sgmltag> that does not
-contain any scaling attribute. By default this parameter is set to `pagebound`
-so that the included images keep their natural size up to the page boundaries.
-Except the special reserved 'pagebound' value, the expected value of the parameter
-must be some valid options passed to the \includegraphics command.</entry>
+<entry>cf. <xref  linkend="sec-defaultscale"></entry>
 <entry>pagebound</entry>
 </row>
 <!-- -->

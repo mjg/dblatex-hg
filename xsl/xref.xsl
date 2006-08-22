@@ -77,15 +77,31 @@
 </xsl:template>
 
 <xsl:template match="ulink">
+  <!-- messy sharp (#) in newtbl table cells, so escape it -->
+  <xsl:variable name="url">
+    <xsl:choose>
+    <xsl:when test="ancestor::entry">
+      <xsl:call-template name="string-replace">
+        <xsl:with-param name="string" select="@url"/>
+        <xsl:with-param name="from" select="'#'"/>
+        <xsl:with-param name="to" select="'\#'"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@url"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:choose>
   <xsl:when test=".=''">
     <xsl:text>\url{</xsl:text>
-    <xsl:value-of select="@url"/>
+    <xsl:value-of select="$url"/>
     <xsl:text>}</xsl:text>
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>\href{</xsl:text>
-    <xsl:value-of select="@url"/>
+    <xsl:value-of select="$url"/>
     <xsl:text>}{</xsl:text>
     <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
     <xsl:apply-templates mode="slash.hyphen"/>

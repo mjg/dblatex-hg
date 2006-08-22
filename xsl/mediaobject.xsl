@@ -11,6 +11,62 @@
 <xsl:param name="imagedata.file.check">1</xsl:param>
 
 
+<!-- Initial image macro setting, depending on the parameter value -->
+<xsl:template name="opt.extract">
+  <xsl:param name="optgroup"/>
+  <xsl:param name="opt"/>
+  <xsl:if test="contains($optgroup,$opt)">
+    <xsl:variable name="s" select="substring-after($optgroup,$opt)"/>
+    <xsl:choose>
+    <xsl:when test="contains($s,',')">
+      <xsl:value-of select="normalize-space(substring-before($s,','))"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="normalize-space($s)"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="image.setup">
+  <xsl:variable name="maxwidth">
+    <xsl:call-template name="opt.extract">
+      <xsl:with-param name="optgroup" select="$imagedata.default.scale"/>
+      <xsl:with-param name="opt" select="'maxwidth='"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:variable name="maxheight">
+    <xsl:call-template name="opt.extract">
+      <xsl:with-param name="optgroup" select="$imagedata.default.scale"/>
+      <xsl:with-param name="opt" select="'maxheight='"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:if test="$maxwidth!=''">
+    <xsl:text>\def\imgmaxwidth{</xsl:text>
+    <xsl:value-of select="$maxwidth"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$maxheight!=''">
+    <xsl:text>\def\imgmaxheight{</xsl:text>
+    <xsl:value-of select="$maxheight"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="image.autosize">
+  <xsl:choose>
+  <xsl:when test="$imagedata.default.scale='pagebound' or
+                  contains($imagedata.default.scale,'maxwidth=') or
+                  contains($imagedata.default.scale,'maxheight=')">
+    <xsl:value-of select="1"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="0"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 <xsl:template match="videoobject">
   <xsl:apply-templates select="videodata"/>
 </xsl:template>
@@ -129,9 +185,12 @@
 </xsl:template>
 
 <xsl:template name="image.default.set">
+  <xsl:variable name="auto">
+    <xsl:call-template name="image.autosize"/>
+  </xsl:variable>
   <xsl:choose>
-  <xsl:when test="$imagedata.default.scale='pagebound'">
-    <!-- use the natural size up to the page boundaries -->
+  <xsl:when test="$auto=1">
+    <!-- use the natural size up to the specified boundaries -->
     <xsl:text>width=\imgwidth,height=\imgheight,keepaspectratio=true</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -292,8 +351,10 @@
   </xsl:choose>
 
   <!-- find out the natural image size -->
-  <xsl:if test="$imagedata.default.scale='pagebound' or
-               $widthperct!=0 or $depthperct!=0">
+  <xsl:variable name="auto">
+    <xsl:call-template name="image.autosize"/>
+  </xsl:variable>
+  <xsl:if test="$auto=1 or $widthperct!=0 or $depthperct!=0">
     <xsl:text>\imgevalsize{</xsl:text>
     <xsl:value-of select="$filename"/>
     <xsl:text>}</xsl:text>

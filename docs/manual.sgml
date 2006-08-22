@@ -1,6 +1,6 @@
 <!doctype book public "-//OASIS//DTD DocBook V3.1//EN"
  [
-<!ENTITY edition "11">
+<!ENTITY edition "12">
 <!ENTITY intro SYSTEM "introduction.sgml">
 <!ENTITY install SYSTEM "install.sgml">
 <!ENTITY table SYSTEM "table.sgml">
@@ -39,6 +39,7 @@
 <!ENTITY changes5 SYSTEM "changes-0.1.7.sgml">
 <!ENTITY changes6 SYSTEM "changes-0.1.8.sgml">
 <!ENTITY changes7 SYSTEM "changes-0.1.9.sgml">
+<!ENTITY changes8 SYSTEM "changes-0.1.10.sgml">
 <!ENTITY faq SYSTEM "faq.sgml">
 ]>
 
@@ -51,7 +52,7 @@
   <firstname>Benoît</firstname><surname>Guillon</surname>
  </author>
  <date>
-  28 April 2006
+  22 July 2006
  </date>
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
@@ -190,10 +191,18 @@
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>28/04/06</date>
+<revnumber>11</revnumber><date>28/04/06</date>
 <revdescription>
  <para>
   Changes: see <xref linkend="sec-changes-019">
+ </para>
+</revdescription><authorinitials>B. Guillon</authorinitials>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>21/07/06</date>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes-0110">
  </para>
 </revdescription><authorinitials>B. Guillon</authorinitials>
 </revision>

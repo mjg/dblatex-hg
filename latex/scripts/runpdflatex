@@ -22,25 +22,23 @@ graphics_link()
 
 scriptpath=`dirname $0`;
 
-while true
-do
-  case "$1" in
-  --graphpath) graphpath="$2"; shift;;
-  --*)         opt="$opt $1 $2"; shift;;
-  *) break;;
-  esac
-  shift
-done
+# Grab the graphpath option
+get_graphpath()
+{
+  while true
+  do
+    case "$1" in
+    --graphpath) graphpath="$2"; shift;;
+    *) break;;
+    esac
+    shift
+  done
+}
 
+get_graphpath "$@"
+graphics_link "$graphpath" $scriptpath/../graphics
 
-if [ $# -ne 2 ]; then
-  echo "`basename $0` [--graphpath path] file.tex inputpath"
-  exit 1
-fi
-
-graphics_link $graphpath $scriptpath/../graphics
-
-$scriptpath/runlatex $opt $1 "$2" pdflatex pdf
+$scriptpath/runlatex --tex pdflatex --oxt pdf "$@"
 rc=$?
 
 # Remove the temporary links

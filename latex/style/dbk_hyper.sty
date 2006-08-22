@@ -4,7 +4,11 @@
 %
 \@ifundefined{DBKhyperlink}{ \def\DBKhyperlink{no} }{}
 
-\usepackage{pslatex}
+% Use PostScript fonts (to put somewhere else)
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+
 \usepackage{ifpdf}
 
 \ifthenelse{\equal{\DBKhyperlink}{yes}}{

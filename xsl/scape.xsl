@@ -92,6 +92,52 @@
   </xsl:call-template>
 </xsl:template>
 
+
+<!-- So many lines to do so little: removing spurious blank lines
+     before and after actual text, but keeping in-between blank lines.
+-->
+<xsl:template name="normalize-border" >
+  <xsl:param name="string"/>
+  <xsl:param name="step" select="'start'"/>
+  <xsl:variable name="left" select="substring-before($string,'&#10;')"/>
+
+  <xsl:choose>
+  <xsl:when test="not(contains($string,'&#10;'))">
+    <xsl:value-of select="$string"/>
+  </xsl:when>
+  <xsl:when test="$step='start'">
+    <xsl:choose>
+    <xsl:when test="string-length(normalize-space($left))=0">
+      <xsl:call-template name="normalize-border">
+        <xsl:with-param name="string" select="substring-after($string,'&#10;')"/>
+        <xsl:with-param name="step" select="$step"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$left"/>
+      <xsl:text>&#10;</xsl:text>
+      <xsl:call-template name="normalize-border">
+        <xsl:with-param name="string" select="substring-after($string,'&#10;')"/>
+        <xsl:with-param name="step" select="'cont'"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$left"/>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:variable name="right" select="substring-after($string,'&#10;')"/>
+    <xsl:if test="string-length(normalize-space($right))!=0">
+      <xsl:call-template name="normalize-border">
+        <xsl:with-param name="string" select="$right"/>
+        <xsl:with-param name="step" select="'cont'"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 <!-- Old "scape" routine replaced by a cleaner engine -->
 <xsl:template name="scape2" >
   <xsl:param name="string"/>

@@ -5,16 +5,16 @@
 % Resize the alignment for each level
 %
 \renewenvironment{itemize}{%
-  \advance\@itemdepth\@ne
+  \advance\@itemdepth\@ne%
   \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
-  \begin{list}{\csname\@itemitem\endcsname}{%
-    % on fixe la taille de la puce à exactement la place que ça prend
+  \list{\csname\@itemitem\endcsname}{%
+    % Set the size to be exactly the bullet size
     \settowidth{\labelwidth}{\csname\@itemitem\endcsname}%
-    % le décalage selon la profondeur vaut :
+    % The margin is:
     % leftmargin = labelwidth + labelsep
     \setlength{\leftmargin}{\labelwidth}%
     \addtolength{\leftmargin}{\labelsep}%
   }%
 }%
-{\end{list}}%
+{\endlist}%
 

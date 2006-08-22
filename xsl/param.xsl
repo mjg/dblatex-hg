@@ -26,6 +26,7 @@
 <xsl:param name="function.parens">0</xsl:param>
 <xsl:param name="classsynopsis.default.language">java</xsl:param>
 <xsl:param name="show.comments" select="1"/>
+<xsl:param name="glossterm.auto.link" select="0"/>
 
 <!-- "Common" parameters -->
 

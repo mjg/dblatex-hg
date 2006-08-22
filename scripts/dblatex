@@ -26,7 +26,7 @@ get_options() {
   while true
   do
     case "$1" in
-    -o) dst=$2; shift ;;
+    -o) dst="$2"; shift ;;
     -f) ifig=$2; shift ;;
     -t) ext=$2; shift ;;
     -b) btex=$2; shift ;;
@@ -34,7 +34,7 @@ get_options() {
     -d) debug=1;;
     -s) xsl=$toppath/xsl/latex_book.xsl;;
     -p) param=$2; shift ;;
-    -I) xpath=$2; shift ;;
+    -I) xpath="$2"; shift ;;
     -S) specs=$2; shift ;;
     -P) paritems="$paritems $2"; shift ;;
     -T) target=$2; shift ;;
@@ -58,13 +58,13 @@ get_options() {
       exit 0
     fi
   fi
-  file=$1
+  file="$1"
 }
 
 show_target() {
   tgets=""
   for i in $tgetpath/*.specs; do
-    j=`basename $i .specs`
+    j=`basename "$i" .specs`
     if [ "$tgets" = "" ]; then
       tgets="$j"
     else
@@ -133,9 +133,7 @@ print_version()
   echo "dblatex version $ver"
 }
 
-args="$*"
-
-get_options $args
+get_options "$@"
 
 if [ "$specs" = "" ] && [ "$target" != "" ]; then
   if [ -f $tgetpath/$target.specs ]; then
@@ -147,7 +145,7 @@ fi
 
 if [ "$specs" != "" ]; then
   specs_opt=`$toppath/scripts/specsread $specs`;
-  get_options $specs_opt $args
+  get_options $specs_opt "$@"
 fi
 
 # Should we print version number?
@@ -178,8 +176,8 @@ esac
 case "$btex" in
 pdftex) btexrun=$btexpath/runpdflatex ;
         if [ "$pdfinputs" != "" ]; then
-          if [ -d $upwd/$pdfinputs ]; then
-            pdfinputs=`cd $pdfinputs && pwd`
+          if [ -d "$upwd/$pdfinputs" ]; then
+            pdfinputs=`cd "$pdfinputs" && pwd`
           fi
           btexrun="$btexrun --graphpath $pdfinputs"
         fi;;
@@ -190,19 +188,19 @@ esac
 
 # Extra TeX handler to use
 if [ "$texpost" != "" ]; then
-  if [ -f $upwd/$texpost ]; then
-    texpost=$upwd/$texpost
+  if [ -f "$upwd/$texpost" ]; then
+    texpost="$upwd/$texpost"
   fi
   btexrun="$btexrun --texpost $texpost"
 fi;
 
-basefile=`basename $file`
-sgmlfile=`basename $file .sgml`
-where=`dirname $file`
+basefile=`basename "$file"`
+sgmlfile=`basename "$file" .sgml`
+where=`dirname "$file"`
 
 # We want the absolute path
-where=`cd $where && pwd`
-file=$where/$basefile
+where=`cd "$where" && pwd`
+file="$where/$basefile"
 
 if [ "$param" != "" ]; then
   bfile=`basename $param`
@@ -216,28 +214,28 @@ mkdir $tmpdir
 cd $tmpdir
 
 # Let's convert to XML first if needed
-is_xml=`file $file| grep -c "XML"`
+is_xml=`file "$file"| grep -c "XML"`
 if [ $is_xml -eq 0 ]; then
-  $toppath/scripts/sgml2xml.pl - $file $sgmlfile.xml
-  file=${sgmlfile}.xml
+  $toppath/scripts/sgml2xml.pl - "$file" "$sgmlfile".xml
+  file="${sgmlfile}.xml"
 fi
 
 # No path specified, because it's given to gmake via -C
-out="`basename $file .xml`.${ext}"
+out=`basename "$file" .xml`.${ext}
 
 # Where to put the output file
 if [ "$dst" = "" ]; then
-  dst=$where/$out
-elif [ -d `dirname $upwd/$dst` ]; then
-  path=`dirname $upwd/$dst`
-  bfile=`basename $dst`
-  dst=`cd $path && pwd`/$bfile
+  dst="$where/$out"
+elif [ -d "`dirname \"$upwd/$dst\"`" ]; then
+  path=`dirname "$upwd/$dst"`
+  bfile=`basename "$dst"`
+  dst=`cd "$path" && pwd`/"$bfile"
 fi
 
 # XML production only
 if [ "$ext" = "xml" ]; then
   if [ "$file" != "$dst" ]; then
-    cp $file $dst
+    cp "$file" "$dst"
   fi
 fi
     
@@ -258,25 +256,28 @@ if [ $debug -ne 0 ]; then
   echo "export TEXINPUTS"    >> $tmpdir/env_tex
 fi
 
+# Replace spaces by undercores
+out=`echo "$out"|tr " \t" "__"`
+
 # PDF/DVI/Postscript production
 $GMAKE -s -C $tmpdir -f $toppath/scripts/make.build \
-        SRCDIR=$where \
+        SRCDIR="$where" \
         XPATH="$xpath" \
         XSL=$xsl \
         XSLLST=$xsllst \
         XOPT="$xopt" \
-        XMLFILE=$file \
+        XMLFILE="$file" \
         TEXCLEAN=$toppath/scripts/texclean \
         FIG2DEV=$fig2dev \
-        TEXRUN="$btexrun" TEXDRV=$btex $out
+        TEXRUN="$btexrun" TEXDRV=$btex "$out"
 
 rc=$?
 
-if [ $rc -eq 0 ] && [ "$dst" != "$out" ]; then
-  mv $out $dst
+if [ $rc -eq 0 ]; then
+  mv "$out" "$dst"
 fi
 
-cd $upwd
+cd "$upwd"
 if [ $debug -eq 0 ]; then
   rm -r $tmpdir
 else
