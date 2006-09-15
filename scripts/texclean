@@ -294,13 +294,17 @@ sub translate
   $line =~ s/&#732;/\\textasciitilde{}/g;
   $line =~ s/&#8211;/\\textendash{}/g;
   $line =~ s/&#8212;/\\textemdash{}/g;
+  $line =~ s/&#8217;/'/g;
   $line =~ s/&#8220;/{}``/g;
   $line =~ s/&#8221;/{}''/g;
+  $line =~ s/&#8230;/\\ldots /g;
   $line =~ s/&#x2DC;/\\textasciitilde{}/g;
   $line =~ s/&#x2013;/\\textendash{}/g;
   $line =~ s/&#x2014;/\\textemdash{}/g;
+  $line =~ s/&#x2019;/'/g;
   $line =~ s/&#x201C;/{}``/g;
   $line =~ s/&#x201D;/{}''/g;
+  $line =~ s/&#x2026;/\\ldots /g;
   $line =~ s/&/\\&/g;
   $line =~ s/#/\\#/g;
   $line =~ s/\$/\\\$/g;
