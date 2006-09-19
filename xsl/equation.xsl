@@ -61,9 +61,13 @@
     </xsl:otherwise>
     </xsl:choose>
   </xsl:when>
-  <xsl:otherwise>
+  <!-- Test to be DB5 compatible, where <alt> can be in other elements -->
+  <xsl:when test="ancestor::equation or
+                  ancestor::informalequation or
+                  ancestor::inlineequation">
     <xsl:copy-of select="."/>
-  </xsl:otherwise>
+  </xsl:when>
+  <xsl:otherwise/>
   </xsl:choose>
 </xsl:template>
 

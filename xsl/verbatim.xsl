@@ -17,6 +17,9 @@
   <xsl:text>\end{verbatim}&#10;</xsl:text>
 </xsl:template>
 
+<!-- Special cases where nothing to output in verbatim mode -->
+<xsl:template match="alt" mode="latex.verbatim"/>
+
 <!-- Returns the filename from @fileref or @entityref attribute -->
 <xsl:template match="*" mode="filename.get">
   <xsl:choose>
