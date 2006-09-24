@@ -1,7 +1,7 @@
 #
 # Core building rules and dependencies to produce DVI/PostScript/PDF output
 #
-XSLT = xsltproc
+DBLATEX_XSLT = xsltproc
 XOPT = 
 XSL = ../xsl/latex_book.xsl
 XSLLST = ../xsl/common/mklistings.xsl
@@ -46,10 +46,10 @@ endif
 	@$(TEXCLEAN) -b $(TEXDRV) -p "$(SRCDIR)" -f "$(FIG2DEV)" "$<" "$@"
 
 %.rtex: %.lxml FORCE
-ifeq ($(XSLT),xt)
+ifeq ($(DBLATEX_XSLT),xt)
 	java com.jclark.xsl.sax.Driver "$<" $(XSL) > "$@"
 else
-ifeq ($(XSLT),xsltproc)
+ifeq ($(DBLATEX_XSLT),xsltproc)
 	xsltproc --xinclude --catalogs --param listings.xml "'$(HERE)/$<'" \
                  $(XOPT) $(XSL) "$(XMLFILE)" > "$@"
 endif
