@@ -8,7 +8,7 @@ import re
 import tempfile
 from optparse import OptionParser
 
-from dbtexmf.core.confparser import DbtexConfig
+from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
 
 
 def suffix_replace(path, oldext, newext=""):
@@ -33,6 +33,7 @@ class DbTex:
         self.xsluser = ""
         self.flags = self.USE_MKLISTINGS
         self.input = ""
+        self.input_format = "xml"
         self.output = ""
         self.format = "pdf"
         self.tmpdir = ""
@@ -59,6 +60,7 @@ class DbTex:
         self.xslmain = "%s/xsl/docbook.xsl" % self.topdir
         self.xsllist = "%s/xsl/common/mklistings.xsl" % self.topdir
         self.texdir = "%s/texstyle" % self.topdir
+        self.confdir = "%s/confstyle" % self.topdir
 
     def update_texinputs(self):
         # Systematically put the package style in TEXINPUTS
@@ -119,6 +121,12 @@ class DbTex:
         f.close()
         self.xslbuild = wrapper
 
+    def make_xml(self):
+        print "Build the XML file..."
+        xmlfile = self.basefile + ".xml"
+        self.sgmlxml.run(self.input, xmlfile)
+        self.input = xmlfile
+
     def make_listings(self):
         self.listings = "listings.xml"
         if (self.flags & self.USE_MKLISTINGS):
@@ -176,13 +184,15 @@ class DbTex:
                 print "%s not removed" % self.tmpdir
 
     def _compile(self):
-        # TODO: Convert SGML to XML first if needed
-
         # The temporary output file
         tmpout = os.path.basename(self.input)
         for s in (" ", "\t"):
             tmpout = tmpout.replace(s, "_")
-        self.basefile = suffix_replace(tmpout, ".xml")
+        self.basefile = suffix_replace(tmpout, "." + self.input_format)
+
+        # Convert SGML to XML if needed
+        if self.input_format == "sgml":
+            self.make_xml()
 
         # Build the user XSL stylesheet if needed
         self.build_stylesheet()
@@ -237,8 +247,10 @@ class DbTexCommand:
         parser.add_option("-f", "--fig-format",
                           help="Input figure format, used when not deduced from "
                                "figure extension")
+        parser.add_option("-F", "--input-format",
+                          help="Input file format: sgml, xml. (default=xml)")
         parser.add_option("-i", "--texinputs", action="append",
-                          help="Ath added to TEXINPUTS")
+                          help="Path added to TEXINPUTS")
         parser.add_option("-I", "--fig-path", action="append",
                           dest="fig_paths", metavar="FIG_PATH",
                           help="Additional lookup path of the figures")
@@ -274,6 +286,7 @@ class DbTexCommand:
 
         self.parser = parser
         self.base = base
+        self.prog = prog
         # The actual engine to use is unknown
         self.run = None
 
@@ -290,11 +303,9 @@ class DbTexCommand:
 
         if options.format:
             try:
-                print "format=%s" % options.format
                 run.set_format(options.format)
             except Exception, e:
-                print "Error: %s" % e
-                sys.exit(1)
+                failed_exit("Error: %s" % e)
 
         if options.xslopts:
             run.xslopts = options.xslopts
@@ -309,10 +320,14 @@ class DbTexCommand:
             run.fig_paths += [os.path.realpath(p) for p in options.fig_paths]
 
         if options.texinputs:
-            run.texinputs += [os.path.realpath(p) for p in options.texinputs]
+            for texinputs in options.texinputs:
+                run.texinputs += texinputs_parse(texinputs)
 
         if options.fig_format:
             run.fig_format = options.fig_format
+
+        if options.input_format:
+            run.input_format = options.input_format
 
         if options.no_batch:
             run.texbatch = 0
@@ -340,22 +355,13 @@ class DbTexCommand:
 
         if options.version:
             version = run.get_version()
-            print "%s version %s" % (prog, version)
+            print "%s version %s" % (self.prog, version)
             if not(args):
                 sys.exit(0)
 
         # At least the input file is expected
         if not(args):
             parser.parse_args(args=["-h"])
-
-        input = os.path.realpath(args[0])
-
-        # The output name can be deduced from the input one:
-        # /path/to/input.xml -> /path/to/input.{tex|pdf|dvi|ps}
-        if not(options.output):
-            output = suffix_replace(input, ".xml", ".%s" % run.format)
-        else:
-            output = os.path.realpath(options.output)
 
         # Load the specified configurations
         conf = DbtexConfig()
@@ -373,11 +379,19 @@ class DbTexCommand:
 
         if conf.options:
             options2, args2 = parser.parse_args(conf.options)
-            print "options2=%s" % options2
             self.run_setup(options2)
          
         # Now apply the command line setup
         self.run_setup(options)
+
+        input = os.path.realpath(args[0])
+
+        # The output name can be deduced from the input one:
+        # /path/to/input.xml -> /path/to/input.{tex|pdf|dvi|ps}
+        if not(options.output):
+            output = suffix_replace(input, "."+run.input_format, ".%s" % run.format)
+        else:
+            output = os.path.realpath(options.output)
 
         run.input = input
         run.output = output

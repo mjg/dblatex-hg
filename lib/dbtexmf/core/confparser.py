@@ -4,23 +4,59 @@
 import os
 import re
 
+def texinputs_parse(strpath, basedir=None):
+    """
+    Transform the TEXINPUTS string to absolute normalized paths,
+    but keep intact the '//' suffix if any. The absolute paths are
+    computed from current one or from <basedir> when specified.
+    """
+    paths = []
+    for p in strpath.split(":"):
+        if not(os.path.isabs(p)):
+            if not(basedir):
+                d = os.path.realpath(p)
+            else:
+                d = os.path.normpath(os.path.join(basedir, p))
+        else:
+            d = os.path.normpath(p)
+        if p.endswith("//"):
+            d += "//"
+        paths.append(d)
+    return paths
+
 
 class OptMap:
-    def __init__(self, option, isdir=1, ext=""):
+    def __init__(self, option):
         self.option = option
-        self.isdir = isdir
-        self.ext = ext
-        self.paths = []
+
+    def format(self, dir, value):
+        return ["%s=%s" % (self.option, value)]
+
+class PathMap(OptMap):
+    def format(self, dir, value):
+        if not(os.path.isabs(value)):
+            value = os.path.normpath(os.path.join(dir, value))
+        return OptMap.format(self, dir, value)
+
+class TexMap(OptMap):
+    def format(self, dir, value):
+        paths = texinputs_parse(value, basedir=dir)
+        return OptMap.format(self, dir, ":".join(paths))
+
+class NoneMap(OptMap):
+    def format(self, dir, value):
+        return value.split()
+
 
 class DbtexConfig:
     conf_mapping = {
-        'TexInputs' : OptMap('--texinputs', ext="//"),
+        'TexInputs' : TexMap('--texinputs'),
         #'PdfInputs' : OptMap('--pdfinputs'),
-        'TexPost'   : OptMap('--texpost'),
-        'FigPath'   : OptMap('--fig-path'),
-        'XslParam'  : OptMap('--xsl-user'),
-        'TexStyle'  : OptMap('--param=latex.style', isdir=0),
-        'Options'   : OptMap('', isdir=0)
+        'TexPost'   : PathMap('--texpost'),
+        'FigPath'   : PathMap('--fig-path'),
+        'XslParam'  : PathMap('--xsl-user'),
+        'TexStyle'  : OptMap('--param=latex.style'),
+        'Options'   : NoneMap('')
     }
 
     def __init__(self):
@@ -49,13 +85,7 @@ class DbtexConfig:
             o = self.conf_mapping[key]
 
             # The paths can be relative to the config file
-            if o.isdir and not(os.path.isabs(value)):
-                value = os.path.normpath(os.path.join(dir, value)) + o.ext
-
-            if o.option:
-                self.options.append("%s=%s" % (o.option, value))
-            else:
-                self.options += value.split()
+            self.options += o.format(dir, value)
 
     def fromstyle(self, style, paths=None):
         # First, find the related config file

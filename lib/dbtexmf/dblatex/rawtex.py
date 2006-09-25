@@ -25,7 +25,7 @@ class RawLatexParser:
               )
     charmap = (
               ("\240", r"~"),
-              ("\xb0", r"\ensuremath{°}"),
+              ("\xb0", "\\ensuremath{\xb0}"),
               ("\xb1", r"\ensuremath{\pm}"),
               ("\327", r"$\times$")
               )
@@ -131,7 +131,7 @@ class RawLatex:
         self.figre = \
             re.compile(r"(\\includegraphics[\[]?|"\
                        r"\\begin{overpic}|"\
-                       r"\\imgexits)[^{]*{([^\]]*)}")
+                       r"\\imgexits)[^{]*{([^}]*)}")
         self.image = Imagedata()
         self.parser = RawLatexParser()
         self.format = None

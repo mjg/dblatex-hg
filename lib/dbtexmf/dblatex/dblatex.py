@@ -9,6 +9,7 @@ import tempfile
 from optparse import OptionParser
 
 from dbtexmf.core.xsltproc import XsltProc
+from dbtexmf.core.sgmlxml import Osx
 from dbtexmf.core.dbtex import DbTex, DbTexCommand
 
 from rawtex import RawLatex
@@ -25,6 +26,7 @@ class DbLatex(DbTex):
         self.runtex = RunLatex()
         self.rawtex = RawLatex()
         self.xsltproc = XsltProc()
+        self.sgmlxml = Osx()
 
     def set_base(self, topdir):
         DbTex.set_base(self, topdir)
