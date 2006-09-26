@@ -13,6 +13,9 @@ class Osx:
         rc= os.system("osx %s -f%s %s > %s" % (self.opts, errfile,
                                                sgmlfile, xmlfile))
         if rc != 0:
+            i = 0
             for line in open(errfile):
-                print >>sys.stderr, line
+                sys.stderr.write(line)
+                i += 1
+                if i == 10: break
             raise OSError("osx failed")

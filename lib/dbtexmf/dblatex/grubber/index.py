@@ -117,7 +117,7 @@ class Index(TexModule):
             cmd.extend(["-t", self.transcript])
             if self.style:
                 cmd.extend(["-s", self.style])
-            cmd.append(self.pbase)
+            cmd.append(self.source)
             path_var = "INDEXSTYLE"
 
         elif self.tool == "xindy":
@@ -150,6 +150,7 @@ class Index(TexModule):
 #        if self.doc.env.execute(cmd, env):
 #            msg.error(_("could not make index %s") % self.target)
 #            return 1
+        msg.debug(" ".join(cmd))
         rc = os.system(" ".join(cmd))
         if (rc != 0):
             msg.error(_("could not make index %s") % self.target)

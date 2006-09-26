@@ -128,7 +128,7 @@ class DbTex:
         self.input = xmlfile
 
     def make_listings(self):
-        self.listings = "listings.xml"
+        self.listings = os.path.join(self.tmpdir, "listings.xml")
         if (self.flags & self.USE_MKLISTINGS):
             print "Build the listings..."
             param = ("current.dir", self.inputdir)
@@ -173,7 +173,7 @@ class DbTex:
         os.chdir(self.tmpdir)
         try:
             donefile = self._compile()
-            rc = os.system("mv %s %s" % (donefile, self.output))
+            rc = os.system("mv %s \"%s\"" % (donefile, self.output))
             if rc == 0:
                 print "'%s' successfully built" % os.path.basename(self.output)
         finally:

@@ -7,6 +7,7 @@ by the modules for various tasks.
 
 import md5
 import os
+from msg import _, msg
 
 
 def md5_file(fname):
@@ -39,12 +40,14 @@ class Watcher:
         Update the MD5 sums of all files watched, and return the name of one
         of the files that changed, or None of they didn't change.
         """
-        changed = None
+        changed = []
         for file in self.files.keys():
             if os.path.exists(file):
                 new = md5_file(file)
                 if self.files[file] != new:
-                    changed = file
+                    msg.debug(_("%s MD5 checksum changed") % \
+                              os.path.basename(file))
+                    changed.append(file)
                 self.files[file] = new
         return changed
 

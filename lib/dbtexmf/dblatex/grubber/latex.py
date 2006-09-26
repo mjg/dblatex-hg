@@ -78,7 +78,7 @@ class Latex(Depend):
         Returns true if another compilation is needed. This method is used
         when a compilation has already been done.
         """
-        suffix = self.watcher.update()
+        changed = self.watcher.update()
         if self.must_compile:
             return 1
         if self.log.errors():
@@ -87,12 +87,12 @@ class Latex(Depend):
 #        if self.deps_modified(os.path.getmtime(self.outfile)):
 #            msg.debug(_("dependencies were modified"))
 #            return 1
-        if suffix and suffix != self.auxfile:
-            msg.debug(_("the %s file has changed") % suffix)
+        if changed and (len(changed) > 1 or changed[0] != self.auxfile):
+            msg.debug(_("the %s file has changed") % changed[0])
             return 1
         if self.log.run_needed():
             msg.debug(_("LaTeX asks to run again"))
-            if (suffix != self.auxfile):
+            if (changed):
                 msg.debug(_("but the aux files are unchanged"))
                 return 0
             return 1
@@ -144,7 +144,7 @@ class Latex(Depend):
         because it may avoid some unnecessary preprocessing (e.g. BibTeXing).
         """
         # Watch for the changes of these working files
-        for ext in ("aux", "toc" "lot", "lof"):
+        for ext in ("aux", "toc", "lot", "lof"):
             self.watcher.watch(self.srcbase + "." + ext)
 
         msg.log(_("building additional files..."))

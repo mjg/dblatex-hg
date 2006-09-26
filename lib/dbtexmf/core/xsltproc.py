@@ -18,7 +18,7 @@ class XsltProc:
             cmd += "--param %s \"'%s'\" " % (param[0], param[1])
         if opts:
             cmd += " ".join(opts) + " "
-        cmd += "%s %s" % (xslfile, xmlfile)
+        cmd += "%s \"%s\"" % (xslfile, xmlfile)
         self.system(cmd)
 
     def system(self, cmd):
