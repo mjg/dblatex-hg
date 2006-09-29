@@ -1,8 +1,8 @@
 <sect1 id="sec-changes"><title>Changes</title>
-  <sect2 id="sec-changes-020"><title>Release 0.2</title>
+  <sect2 id="sec-changes-020"><title>Release &version;</title>
   &changes9;
   </sect2>
-  <sect2 id="sec-changes-0110"><title>Release &version;</title>
+  <sect2 id="sec-changes-0110"><title>Release 0.1.10</title>
   <para>Bug fix release.</para>
   &changes8;
   </sect2>
