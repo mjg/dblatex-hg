@@ -5,7 +5,7 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
-<xsl:template match="sgmltag">
+<xsl:template match="sgmltag|tag">
   <xsl:param name="class">
     <xsl:choose>
       <xsl:when test="@class">

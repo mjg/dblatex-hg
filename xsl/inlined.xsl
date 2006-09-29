@@ -350,6 +350,10 @@
   <xsl:call-template name="inline.charseq"/>
 </xsl:template>
 
+<xsl:template match="uri">
+  <xsl:call-template name="inline.monoseq"/>
+</xsl:template>
+
 <xsl:template match="userinput">
   <xsl:call-template name="inline.boldmonoseq"/>
 </xsl:template>
