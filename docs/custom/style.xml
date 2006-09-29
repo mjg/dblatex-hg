@@ -8,7 +8,7 @@ rendering styles are provided, that one can choose by using the option
 <listitem>
 <para>The rendering uses the default LaTeX stylesheets. It is the style used by
 default if dblatex has been configured without using the option
-<option>--target</option>.</para>
+<option>--style</option>.</para>
 </listitem>
 </varlistentry>
 <varlistentry><term>simple</term>
