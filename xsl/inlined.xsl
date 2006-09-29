@@ -5,6 +5,8 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:param name="filename.as.url">1</xsl:param>
+
 
 <xsl:template name="inline.boldseq">
   <xsl:param name="content">
@@ -77,9 +79,9 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{</xsl:text>
-  <xsl:text>%% texclean(hyphenon)&#10;</xsl:text>
+  <xsl:text>&lt;h&gt;</xsl:text>
   <xsl:copy-of select="$content"/>
-  <xsl:text>%% texclean(hyphenoff)&#10;</xsl:text>
+  <xsl:text>&lt;/h&gt;</xsl:text>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -88,9 +90,9 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{\emph{\small{</xsl:text>
-  <xsl:text>%% texclean(hyphenon)&#10;</xsl:text>
+  <xsl:text>&lt;h&gt;</xsl:text>
   <xsl:copy-of select="$content"/>
-  <xsl:text>%% texclean(hyphenoff)&#10;</xsl:text>
+  <xsl:text>&lt;/h&gt;</xsl:text>
   <xsl:text>}}}</xsl:text>
 </xsl:template>
 
@@ -185,7 +187,17 @@
 </xsl:template>
 
 <xsl:template match="filename">
-  <xsl:call-template name="inline.monoseq"/>
+  <xsl:choose>
+  <xsl:when test="$filename.as.url='1'">
+    <!-- Guess hyperref is always used now. No escaping needed here -->
+    <xsl:text>\nolinkurl{</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="inline.monoseq"/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="function">

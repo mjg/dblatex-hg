@@ -239,7 +239,7 @@ class DbTexCommand:
                                "'pdftex' and 'dvips'.")
         parser.add_option("-B", "--no-batch", action="store_true",
                           help="All the tex output is printed")
-        parser.add_option("-c", "--config",
+        parser.add_option("-c", "-S", "--config",
                           help="Configuration file")
         parser.add_option("-d", "--debug", action="store_true",
                           help="Debug mode. Keep the temporary directory in "

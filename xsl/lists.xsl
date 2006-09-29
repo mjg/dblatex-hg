@@ -52,7 +52,13 @@
 
 <xsl:template match="itemizedlist" mode="print">
   <xsl:apply-templates select="title"/>
-  <xsl:text>\begin{itemize}&#10;</xsl:text>
+  <xsl:text>\begin{itemize}</xsl:text>
+  <!-- Process the option -->
+  <xsl:call-template name="opt.group">
+    <xsl:with-param name="opts" select="@spacing"/>
+    <xsl:with-param name="mode" select="'enumitem'"/>
+  </xsl:call-template>
+  <xsl:text>&#10;</xsl:text>
   <xsl:apply-templates select="listitem"/>
   <xsl:text>\end{itemize}&#10;</xsl:text>
 </xsl:template>
@@ -60,15 +66,11 @@
 <xsl:template match="orderedlist" mode="print">
   <xsl:apply-templates select="title"/>
   <xsl:text>\begin{enumerate}</xsl:text>
-  <xsl:if test="@numeration">
-    <xsl:choose>
-    <xsl:when test="@numeration='arabic'"><xsl:text>[1.]</xsl:text></xsl:when>
-    <xsl:when test="@numeration='upperalpha'"><xsl:text>[A.]</xsl:text></xsl:when>
-    <xsl:when test="@numeration='loweralpha'"><xsl:text>[a.]</xsl:text></xsl:when>
-    <xsl:when test="@numeration='upperroman'"><xsl:text>[I.]</xsl:text></xsl:when>
-    <xsl:when test="@numeration='lowerroman'"><xsl:text>[i.]</xsl:text></xsl:when>
-    </xsl:choose>
-  </xsl:if>
+  <!-- Process the options -->
+  <xsl:call-template name="opt.group">
+    <xsl:with-param name="opts" select="@numeration|@continuation|@spacing"/>
+    <xsl:with-param name="mode" select="'enumitem'"/>
+  </xsl:call-template>
   <xsl:text>&#10;</xsl:text>
   <xsl:apply-templates select="listitem"/>
   <xsl:text>\end{enumerate}&#10;</xsl:text>
@@ -126,6 +128,71 @@
   </xsl:choose>
   <xsl:apply-templates/>
 </xsl:template>
+
+
+<!-- ################
+     # List Options #
+     ################ -->
+
+<!-- Process a group of options (reusable) -->
+<xsl:template name="opt.group">
+  <xsl:param name="opts"/>
+  <xsl:param name="mode" select="'opt'"/>
+  <xsl:param name="left" select="'['"/>
+  <xsl:param name="right" select="']'"/>
+
+  <xsl:variable name="result">
+    <xsl:for-each select="$opts">
+      <xsl:variable name="str">
+        <xsl:apply-templates select="." mode="enumitem"/>
+      </xsl:variable>
+      <!-- Put a separator only if something really printed -->
+      <xsl:if test="$str!='' and position()!=1">
+        <xsl:text>,</xsl:text>
+      </xsl:if>
+      <xsl:value-of select="$str"/>
+    </xsl:for-each>
+  </xsl:variable>
+
+  <xsl:if test="$result != ''">
+    <xsl:value-of select="$left"/>
+    <!-- Remove spurious first comma -->
+    <xsl:choose>
+      <xsl:when test="starts-with($result, ',')">
+        <xsl:value-of select="substring-after($result, ',')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$result"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="$right"/>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="@numeration" mode="enumitem">
+  <xsl:text>label=</xsl:text>
+  <xsl:choose>
+    <xsl:when test=".='arabic'">\arabic*.</xsl:when>
+    <xsl:when test=".='upperalpha'">\Alph*.</xsl:when>
+    <xsl:when test=".='loweralpha'">\alph*.</xsl:when>
+    <xsl:when test=".='upperroman'">\Roman*.</xsl:when>
+    <xsl:when test=".='lowerroman'">\roman*.</xsl:when>
+    <xsl:otherwise>\arabic*.</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="@continuation" mode="enumitem">
+  <xsl:if test=". = 'continues'">
+    <xsl:text>resume</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="@spacing" mode="enumitem">
+  <xsl:if test=". = 'compact'">
+    <xsl:text>itemsep=0pt</xsl:text>
+  </xsl:if>
+</xsl:template>
+
 
 <!-- ##############
      # Simplelist #

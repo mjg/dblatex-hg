@@ -3,6 +3,7 @@
 import os
 import sys
 import re
+import glob
 
 from distutils.core import setup
 from distutils.command.build_scripts import build_scripts
@@ -114,18 +115,82 @@ os.environ["SGML_CATALOG_FILES"] = cat
 class Install(install):
 
     user_options = install.user_options + \
-                   [('catalogs=', None, 'default SGML catalogs')]
+                   [('catalogs=', None, 'default SGML catalogs'),
+                    ('nodeps', None, 'don\'t check the dependencies')]
 
     def initialize_options(self):
         install.initialize_options(self)
         self.catalogs = None
+        self.nodeps = None
+
+    def check_latex_dependencies(self):
+        # Find the Latex files from the package
+        stys = []
+        for root, dirs, files in os.walk('latex/'):
+            stys += glob.glob(os.path.join(root, "*.sty"))
+        if stys:
+            own_stys = [os.path.basename(s)[:-4] for s in stys]
+        else:
+            own_stys = []
+
+        # Find the used packages
+        used_stys = []
+        re_sty = re.compile(r"\\usepackage\s*\[?.*\]?{(\w+)}")
+        for sty in stys:
+            f = open(sty)
+            for line in f:
+                line = line.split("%")[0]
+                m = re_sty.search(line)
+                if m: used_stys.append(m.group(1))
+            f.close()
+
+        # Now look if they are found
+        found_stys = []
+        mis_stys = []
+        used_stys.sort()
+
+        # Dirty...
+        try:
+            used_stys.remove("truncate")
+        except:
+            pass
+
+        for sty in used_stys:
+            if sty in found_stys:
+                continue
+            status = "+checking %s... " % sty
+            if sty in own_stys:
+                status += "found in package"
+                found_stys.append(sty)
+                print status
+                continue
+            ios = os.popen2("kpsewhich %s.sty" % sty)
+            if ios[1].readlines():
+                status += "yes"
+                found_stys.append(sty)
+            else:
+                status += "no"
+                mis_stys.append(sty)
+            print status
+            
+        if mis_stys:
+            print "Error: %s not found" % ", ".join(mis_stys)
+            return -1
+        else:
+            return 0
+
+    def run(self):
+        if not(self.nodeps):
+            rc = self.check_latex_dependencies()
+            if rc != 0:
+                sys.exit(1)
+        install.run(self)
 
 
 class InstallData(install_data):
 
     def run(self):
         self.mkpath(self.install_dir)
-        print self.data_files
         for install_base, dirs in self.data_files:
             basedir = os.path.join(self.install_dir, install_base)
             for dir in dirs:
@@ -139,7 +204,8 @@ def get_version():
     sys.path.remove("lib")
     return d.get_version()
 
-setup(name="dblatex",
+if __name__ == "__main__":
+    setup(name="dblatex",
       version=get_version(),
       description='DocBook to LaTeX/ConTeXt Publishing',
       author='Benoît Guillon',

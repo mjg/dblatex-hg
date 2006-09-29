@@ -25,6 +25,7 @@ class LatexBuilder:
         # What to do
         self.backend = "pdftex"
         self.format = "pdf"
+        self.index_style = ""
 
     def set_format(self, format):
         # Just record it
@@ -33,9 +34,17 @@ class LatexBuilder:
     def set_backend(self, backend):
         self.backend = backend
 
+    def set_index_style(self, index_style):
+        self.index_style = index_style
+
     def compile(self, source):
         self.tex.set_source(source)
         self.tex.prepare()
+
+        # Set the index style
+        if self.index_style and self.tex.modules.has_key("makeidx"):
+            idx = self.tex.modules["makeidx"]
+            idx.style = self.index_style
 
         # Adapt the modules to load, depending on the output format
         if (self.format == "pdf" and self.backend == "pdftex"):

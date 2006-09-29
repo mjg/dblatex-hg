@@ -7,24 +7,24 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
-<!-- Ces parties accelerent la conversion du texte, mais cela necessite un
-     remaniement ulterieur pour avoir du vrai latex. -->
+<!-- These templates boost the text processing but needs some post-parsing
+     to escape the TeX characters. -->
 
 <xsl:template name="scape" >
   <xsl:param name="string"/>
-  <xsl:text>\xt&#10;</xsl:text>
+  <xsl:text>&lt;t&gt;</xsl:text>
   <xsl:value-of select="$string"/>
-  <xsl:text>/xt&#10;</xsl:text>
+  <xsl:text>&lt;/t&gt;</xsl:text>
 </xsl:template>
 
 <!-- tag the text for the perl script -->
 <xsl:template match="text()">
-  <xsl:text>\xt&#10;</xsl:text>
+  <xsl:text>&lt;t&gt;</xsl:text>
   <xsl:value-of select="."/>
   <!--
   <xsl:value-of select="normalize-space(.)"/>
   -->
-  <xsl:text>/xt&#10;</xsl:text>
+  <xsl:text>&lt;/t&gt;</xsl:text>
 </xsl:template>
 
 <!-- specific behaviour for MML -->

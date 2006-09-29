@@ -7,7 +7,7 @@
 * Problèmes footnote in tables
 * Problèmes table in example
 * Remark in note
-* Bug #1382511 : &ndash; -> &#8211;
+x * Bug #1382511 : &ndash; -> &#8211;
 * Patch biblio à intégrer
 * Bug table
 
@@ -26,6 +26,17 @@
     <xsl:value-of select="normalize-space($string)"/>
   -->
 </xsl:template>
+
+
+* Minor improvements:
+  - list @continuation, @numeration, @spacing attributes now handled.
+  - filename.as.url parameter added to avoid forced hyphenation with spurious
+    '-' characters.
+
+* Bug fixes:
+  - <alt> not printed in verbatim mode, and only in <*equation> elements.
+  - Entities &#8217; and &#8230; correctly mapped.
+  - db2latex.sty, docbook.sty: uses \examplename (locale).
 
 
 Release 0.1.10:

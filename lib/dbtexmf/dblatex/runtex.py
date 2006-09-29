@@ -11,6 +11,7 @@ class RunLatex:
     def __init__(self):
         self.fig_paths = []
         self.verbose = 1
+        self.index_style = ""
         self.backend = "pdftex"
         self.texer = LatexBuilder()
 
@@ -48,6 +49,8 @@ class RunLatex:
         try:
             self.texer.set_format(format)
             self.texer.set_backend(self.backend)
+            if self.index_style:
+                self.texer.set_index_style(self.index_style)
             self.texer.compile(tmptex)
         except:
             # On error, dump the log errors and raise again

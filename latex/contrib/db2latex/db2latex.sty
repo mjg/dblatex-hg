@@ -20,6 +20,8 @@
 \usepackage{ifthen}
 \usepackage{float}       
 
+\newcommand{\DBKreleaseinfo}{Working Paper}
+
 \usepackage{dbk_hyper}
 \usepackage{dbk_biblio}
 \usepackage{dbk_table}
@@ -27,6 +29,7 @@
 \usepackage{dbk_graphic}
 \usepackage{dbk_verbatim}
 \usepackage{dbk_callout}
+\usepackage{dbk_locale}
 
 % LaTeX <othercredit> commands to define
 %
@@ -60,7 +63,6 @@
   \end{longtable}
 }
 
-\newcommand{\DBKreleaseinfo}{Working Paper}
 \newcommand{\DBKreference}{}
 \newcommand{\DBKsite}{}
 \newcommand{\DBKedition}{}
@@ -121,16 +123,7 @@
 % --------------------------------------------
 % Check for PDFLaTeX/LaTeX 
 % --------------------------------------------
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-\pdffalse % we are not running PDFLaTeX
-\else
-\pdfoutput=1 % we are running PDFLaTeX
-\pdftrue
-\fi
-% --------------------------------------------
-% Load graphicx package with pdf if needed 
-% --------------------------------------------
+\usepackage{ifpdf}
 \usepackage{anysize}
 \marginsize{3cm}{2cm}{1.25cm}{1.25cm}
 
@@ -166,11 +159,12 @@
 % ---------------------- 
 % Most Common Packages   
 % ---------------------- 
-\usepackage{latexsym}         
-\usepackage{enumerate}         
-\usepackage{fancybox}      
-\usepackage{ragged2e}       
-\usepackage{fancyvrb}         
+\usepackage{latexsym} 
+% FIXME: enumitem is expected by the stylesheets
+\usepackage{enumitem}
+\usepackage{fancybox} 
+\usepackage{ragged2e} 
+\usepackage{fancyvrb} 
 \makeatletter\@namedef{FV@fontfamily@default}{\def\FV@FontScanPrep{}\def\FV@FontFamily{}}\makeatother
 \fvset{obeytabs=true,tabsize=3}
 \makeatletter
@@ -317,7 +311,7 @@
   \newfloat{program}{ht}{lop}[section]
   \floatstyle{ruled}
   \newfloat{example}{ht}{loe}[section]
-  \floatname{example}{Example}
+  \floatname{example}{\examplename}
   \floatstyle{ruled}
   \newfloat{dbequation}{ht}{loe}[section]
   \def\toclevel@dbequation{0}
@@ -330,7 +324,7 @@
   \newfloat{program}{ht}{lop}[chapter]
   \floatstyle{ruled}
   \newfloat{example}{ht}{loe}[chapter]
-  \floatname{example}{Example}
+  \floatname{example}{\examplename}
   \floatstyle{ruled}
   \newfloat{dbequation}{ht}{loe}[chapter]
   \def\toclevel@dbequation{0}

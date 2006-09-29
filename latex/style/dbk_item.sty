@@ -1,20 +1,8 @@
-% To have other enumerate labelling
-\usepackage{enumerate}
+%
+% This package can handle @continuation, @spacing, and @numeration.
+%
+\usepackage{enumitem}
 
-%
-% Resize the alignment for each level
-%
-\renewenvironment{itemize}{%
-  \advance\@itemdepth\@ne%
-  \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
-  \list{\csname\@itemitem\endcsname}{%
-    % Set the size to be exactly the bullet size
-    \settowidth{\labelwidth}{\csname\@itemitem\endcsname}%
-    % The margin is:
-    % leftmargin = labelwidth + labelsep
-    \setlength{\leftmargin}{\labelwidth}%
-    \addtolength{\leftmargin}{\labelsep}%
-  }%
-}%
-{\endlist}%
+% No extra indentation
+\setitemize{leftmargin=*}
 
