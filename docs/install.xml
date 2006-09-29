@@ -72,7 +72,7 @@
   </listitem>
    <listitem>
    <para>
-   Perl 5.x.
+   Python &gt;= 4.3.
    </para>
   </listitem>
    <listitem>
@@ -96,7 +96,7 @@
    <orderedlist>
     <listitem>
     <para>
-    Install Perl 5.x and GNU make if necessary.
+    Install Python if necessary.
     </para>
    </listitem>
     <listitem>
@@ -127,8 +127,8 @@
     </para>
     <programlisting>
 <![CDATA[% xmlcatalog --noout --create mycatalog
-]]><![CDATA[% xmlcatalog --noout --add 'public' '-//OASIS//DTD DocBook XML V4.1.2//EN' \
-]]><![CDATA[                           'file://path/to/4.1.2/docbookx.dtd' mycatalog
+% xmlcatalog --noout --add 'public' '-//OASIS//DTD DocBook XML V4.1.2//EN' \
+                           'file://path/to/4.1.2/docbookx.dtd' mycatalog
 ]]>    </programlisting>
    </listitem>
     <listitem>
@@ -138,7 +138,7 @@
 <programlisting><![CDATA[export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:/path/to/mycatalog
 ]]></programlisting>
    <para>
-    You can skip this step if you configure the dblatex installation with the <option>--catalog</option> option.
+    You can skip this step if you configure the dblatex installation with the <option>--catalogs</option> option.
    </para>
    </listitem>
    </orderedlist>
@@ -155,30 +155,20 @@
     <para>
     Untar the ball. For a bzipped release, do as follow:
     </para>
-<programlisting><![CDATA[% bzip2 -dc dblatex-x.x.x.tar.bz2 | tar xvf -]]></programlisting>
+    <programlisting><![CDATA[% tar xvfj dblatex-x.x.x.tar.bz2]]></programlisting>
    <para>
     For a gzipped release, do as follow:
    </para>
-    <programlisting>
-<![CDATA[% gunzip -c dblatex-x.x.x.tar.gz | tar xvf -
-]]>    </programlisting>
+    <programlisting><![CDATA[% tar xvfz dblatex-x.x.x.tar.gz]]></programlisting>
    </listitem>
     <listitem>
     <para>
-    Call the <command>configure</command> script, that checks the dependencies and prepares the installation. In the example, the <filename>dblatex</filename> script is installed under <filename>/usr/local/bin</filename> and the other files are installed under <filename>/usr/local/share/dblatex</filename>. Besides, the <option>--catalog</option> option tells where to find the catalog.
+    Install the package. The installation script preliminary checks the dependencies. In the example, the <filename>dblatex</filename> script is installed under <filename>/usr/local/bin</filename> and the other files are installed under <filename>/usr/local/share/dblatex</filename>. Besides, the <option>--catalogs</option> option tells where to find the catalogs.
     </para>
     <programlisting>
 <![CDATA[% cd dblatex-x.x.x
-]]><![CDATA[% ./configure --prefix=/usr/local --catalog=/path/to/mycatalog
-]]>    </programlisting>
-   </listitem>
-    <listitem>
-    <para>
-    Install:
-    </para>
-    <programlisting>
-<![CDATA[% gmake install
-]]>    </programlisting>
+% python ./setup.py install --prefix=/usr/local --catalogs=/path/to/mycatalog
+]]></programlisting>
    </listitem>
    </orderedlist>
    </sect2>

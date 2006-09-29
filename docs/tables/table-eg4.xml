@@ -1,11 +1,11 @@
-<!-- Exemple de table avec des tailles fixes -->
+<!-- Example with fixed column widths -->
 
 <informaltable>
 <tgroup cols="4" colsep="1" rowsep="1" align="left">
-<colspec colname="c1" colwidth="*">
-<colspec align="left" colwidth="2.5cm">
-<colspec align="right" colwidth="5cm">
-<colspec align="center" colwidth="3cm">
+<colspec colname="c1" colwidth="*"/>
+<colspec align="left" colwidth="2.5cm"/>
+<colspec align="right" colwidth="5cm"/>
+<colspec align="center" colwidth="3cm"/>
 <thead>
 <row>
 <entry>Column 1</entry>

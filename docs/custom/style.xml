@@ -1,8 +1,8 @@
 <sect1 id="sec-style"><title>Output Formatting Style</title>
 <para>The output rendering done by <command>dblatex</command> can be widely
-customized like explained in <xref linkend="sec-custom">. By default several
+customized like explained in <xref linkend="sec-custom"/>. By default several
 rendering styles are provided, that one can choose by using the option
-<option>-T</option> (see <xref linkend="eg-style">). The available styles are:</para>
+<option>-T</option> (see <xref linkend="eg-style"/>). The available styles are:</para>
 <variablelist>
 <varlistentry><term>native</term>
 <listitem>
@@ -78,7 +78,7 @@ Options:
 ]]></programlisting>
 The list is built by scanning the specs files found under
 <filename>specs/</filename>. The spec file syntax is described in <xref
-linkend="sec-specs">.
+linkend="sec-specs"/>.
 </para>
 </listitem>
 </varlistentry>
@@ -92,23 +92,23 @@ linkend="sec-specs">.
 <sect2><title>Adding a New Formatting Style</title>
 <para>To add a new formatting style, do the following steps:</para>
 <procedure>
-<step>Create the latex stylesheets you need. It must define the expected DocBook
+<step><para>Create the latex stylesheets you need. It must define the expected DocBook
 interface and include some core definitions from the default latex
-stylesheets (cf. <xref linkend="sec-custom-latex">).</step>
-<step>Put the latex stylesheets under a directory located under
-<filename>contrib/</filename>.
+stylesheets (cf. <xref linkend="sec-custom-latex"/>).</para></step>
+<step><para>Put the latex stylesheets under a directory located under
+<filename>contrib/</filename>.</para>
 <programlisting><![CDATA[
 $ mkdir latex/contrib/mystyle
 $ mv mytexstyle.sty latex/contrib/mystyle
 ]]></programlisting>
 </step>
-<step>If needed, create an XSL parameter file (e.g.
+<step><para>If needed, create an XSL parameter file (e.g.
 <filename>param.xsl</filename>) that tunes the XSL production, and
 put it under <filename>mystyle/</filename>.
-</step>
-<step>Create a specification file under the directory
+</para></step>
+<step><para>Create a specification file under the directory
 <filename>specs/</filename>. The specification file must point to the new latex
-stylesheet, and give the specific parameters. Example:
+stylesheet, and give the specific parameters. Example:</para>
 <programlisting><![CDATA[
 $ cat latex/specs/mystyle.specs
 #
@@ -121,8 +121,8 @@ XslParam: ../contrib/mystyle/param.xsl
 Options:   -b pdftex
 ]]></programlisting>
 </step>
-<step>That's it. Try to compile your document with your style, and check the
-output.
+<step><para>That's it. Try to compile your document with your style, and check the
+output.</para>
 <programlisting><![CDATA[
 $ dblatex -T mystyle file.xml
 ]]></programlisting>

@@ -2,11 +2,11 @@
 
 <informaltable>
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
-<colspec align="left" colwidth="4cm">
-<colspec align="right" colwidth="5cm">
-<colspec align="center">
-<colspec align="center" colwidth="3cm">
+<colspec colname="c1"/>
+<colspec align="left" colwidth="4cm"/>
+<colspec align="right" colwidth="5cm"/>
+<colspec align="center"/>
+<colspec align="center" colwidth="3cm"/>
 <thead>
 <row>
 <entry>Column 1</entry>

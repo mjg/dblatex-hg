@@ -45,7 +45,7 @@ inches. The risk to have an anamorphous result is very high here.</para>
 <simplesect><title>How can I have the PDF fit to height by default?</title>
 <para>The behaviour of the PDF file when opened by a reader like Acrobat Reader
 can be customized with the parameter latex.hyperparam. See <xref
-linkend="sec-hyperparam"> for
+linkend="sec-hyperparam"/> for
 more details about this parameter.
 </para>
 <para>To answer precisely to the question, set the parameter with the option

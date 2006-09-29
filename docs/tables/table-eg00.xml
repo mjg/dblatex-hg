@@ -1,7 +1,7 @@
 <!-- Exemple de table avec une colonne -->
 <informaltable>
 <tgroup cols="1" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
+<colspec colname="c1"/>
 <thead>
 <row>
 <entry>Column 1</entry>

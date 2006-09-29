@@ -1,12 +1,12 @@
-<!-- Exemple de table avec plusieurs colonnes sans largeur definie -->
+<!-- Table example with smaller size -->
 
-<informaltable>
+<informaltable role="small">
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
-<colspec align="left">
-<colspec align="right">
-<colspec align="center">
-<colspec align="center">
+<colspec colname="c1"/>
+<colspec align="left"/>
+<colspec align="right"/>
+<colspec align="center"/>
+<colspec align="center"/>
 <thead>
 <row>
 <entry>Column 1</entry>

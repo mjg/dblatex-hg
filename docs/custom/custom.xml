@@ -28,7 +28,7 @@
  </listitem>
  </itemizedlist>
  <para>
-  All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs">) to create a new tool dedicated to your needs.
+  All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs"/>) to create a new tool dedicated to your needs.
  </para>
   <sect1 id="sec-param">
    <title>
@@ -232,7 +232,7 @@ must be some valid options passed to the \includegraphics command.</para>
    Here is the specification file used for this manual.
   </para>
 <example><title>Specification file example</title>
-<programlisting><textobject><textdata fileref="manual.specs"></textobject>
+<programlisting><textobject><textdata fileref="manual.specs"/></textobject>
 </programlisting>
 </example>
   </sect1>

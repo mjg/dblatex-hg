@@ -1,6 +1,6 @@
 <informaltable>
 <tgroup cols="4" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
+<colspec colname="c1"/>
 <thead>
 <row>
 <entry>Keyword</entry>
@@ -15,13 +15,6 @@
 <entry>Directories</entry>
 <entry>--texinputs</entry>
 <entry>Defines extra path to add to TEXINPUTS</entry>
-</row>
-<row>
-<entry>PdfInputs</entry>
-<entry>Directories</entry>
-<entry>--pdfinputs</entry>
-<entry>Defines paths containing PDF graphics needed to compile the latex file
-with pdflatex.</entry>
 </row>
 <row>
 <entry>TexStyle</entry>

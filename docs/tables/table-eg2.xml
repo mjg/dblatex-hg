@@ -1,12 +1,12 @@
-<!-- Exemple de table avec des tailles relatives + fixes + par défaut -->
+<!-- Example mixing fixed and relative ('*') column widths -->
 
 <informaltable>
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
-<colspec colname="c1" colwidth="*">
-<colspec align="left" colwidth="2*">
-<colspec align="right" colwidth="3*">
-<colspec align="center">
-<colspec align="center" colwidth="3cm">
+<colspec colname="c1" colwidth="*"/>
+<colspec align="left" colwidth="2*"/>
+<colspec align="right" colwidth="3*"/>
+<colspec align="center"/>
+<colspec align="center" colwidth="3cm"/>
 <thead>
 <row>
 <entry>Column 1</entry>

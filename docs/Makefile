@@ -1,30 +1,25 @@
 TABLES = $(wildcard table-eg*)
-FIGURES = $(addsuffix .eps, $(basename $(wildcard *.fig)))
 PWD = $(shell pwd)
-TEXIN = $(shell echo ${TEXINPUTS})
-CHANGES = $(notdir $(wildcard change*.sgml))
+#CHANGES = $(notdir $(wildcard changes/*.xml))
+CHANGES = $(wildcard changes/*.xml)
 VERSION = devel
 OPTS=
 
-all: manual.pdf $(FIGURES)
+all: manual.pdf
 
 allstyle: all native db2latex simple
 
 clean:
 	$(RM) manual.pdf $(FIGURES)
 
-native db2latex simple: version.sgml
-	../scripts/dblatex -T $@ -o manual-$@.pdf manual.sgml
+native db2latex simple: version.xml
+	../scripts/dblatex -T $@ -o manual-$@.pdf manual.xml
 
-%.pdf: %.sgml version.sgml $(TABLES) $(FIGURES) $(CHANGES)
-	TEXINPUTS=:$(PWD)/../latex//:$(TEXIN) \
-        ../scripts/dblatex -S manual.specs $(OPTS) -o $@ $<
+%.pdf: %.xml version.xml $(TABLES) $(CHANGES)
+	../scripts/dblatex -c manual.specs $(OPTS) -o $@ $<
 
 # Actual version of the release
-version.sgml: FORCE
+version.xml: FORCE
 	echo $(VERSION) > $@
-
-%.eps: %.fig
-	fig2dev -L eps $< > $@
 
 FORCE:

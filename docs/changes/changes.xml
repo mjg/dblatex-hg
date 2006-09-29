@@ -1,0 +1,32 @@
+<sect1 id="sec-changes"><title>Changes</title>
+  <sect2 id="sec-changes-020"><title>Release 0.2</title>
+  &changes9;
+  </sect2>
+  <sect2 id="sec-changes-0110"><title>Release &version;</title>
+  <para>Bug fix release.</para>
+  &changes8;
+  </sect2>
+  <sect2 id="sec-changes-019"><title>Release 0.1.9</title>
+  <para>Few changes.</para>
+  &changes7;
+  </sect2>
+  <sect2 id="sec-changes-018"><title>Release 0.1.8</title>
+  <para>This is mainly a bug fix release.</para>
+  &changes6;
+  </sect2>
+  <sect2 id="sec-changes-017"><title>Release 0.1.7</title>
+  &changes5;
+  </sect2>
+  <sect2 id="sec-changes-016"><title>Release 0.1.6</title>
+  &changes4;
+  </sect2>
+  <sect2 id="sec-changes-015"><title>Release 0.1.5</title>
+  &changes3;
+  </sect2>
+  <sect2 id="sec-changes-0141"><title>Release 0.1.4.1</title>
+  &changes2;
+  </sect2>
+  <sect2 id="sec-changes-014"><title>Release 0.1.4</title>
+  &changes1;
+  </sect2>
+</sect1>

@@ -1,9 +1,9 @@
-<!-- Exemple de table avec deux colonnes sans largeur spécifiée -->
+<!-- Basic table with two columns -->
 
 <informaltable>
 <tgroup cols="2" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
-<colspec align="center">
+<colspec colname="c1"/>
+<colspec align="center"/>
 <thead>
 <row>
 <entry>Column 1</entry>

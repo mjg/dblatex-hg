@@ -36,21 +36,21 @@
     <varlistentry>
     <term>
 <option>-b <replaceable>driver</replaceable></option>
-</term><listitem><para>Backend driver to use. The available drivers are &ldquo;dvips&rdquo; (latex) and &ldquo;pdftex&rdquo; (pdflatex). By default the &ldquo;dvips&rdquo; driver is selected. See also <xref linkend="sec-process">.
+</term><listitem><para>Backend driver to use. The available drivers are &ldquo;dvips&rdquo; (latex) and &ldquo;pdftex&rdquo; (pdflatex). By default the &ldquo;dvips&rdquo; driver is selected. See also <xref linkend="sec-process"/>.
     </para>
    </listitem>
    </varlistentry>
     <varlistentry>
     <term>
 <option>-f <replaceable>fig_format</replaceable></option>
-</term><listitem><para>Input figures format, specified to have on the fly conversion. See also <xref linkend="sec-figconv">.
+</term><listitem><para>Input figures format, specified to have on the fly conversion. See also <xref linkend="sec-figconv"/>.
     </para>
    </listitem>
    </varlistentry>
     <varlistentry>
     <term>
 <option>-I <replaceable>fig_path</replaceable></option>
-</term><listitem><para>Additional lookup paths of the figures. See <xref linkend="sec-lookup">.
+</term><listitem><para>Additional lookup paths of the figures. See <xref linkend="sec-lookup"/>.
     </para>
    </listitem>
    </varlistentry>
@@ -64,14 +64,14 @@
     <varlistentry>
     <term>
 <option>-d</option>
-</term><listitem><para>Debug mode. It only keeps the temporary directory in which dblatex actually works. <xref linkend="sec-debug"> explains how you can use it.
+</term><listitem><para>Debug mode. It only keeps the temporary directory in which dblatex actually works. <xref linkend="sec-debug"/> explains how you can use it.
     </para>
    </listitem>
    </varlistentry>
     <varlistentry>
     <term>
 <option>-p <replaceable>config_file</replaceable></option>
-</term><listitem><para>Specify a configuration file. See <xref linkend="sec-param">.
+</term><listitem><para>Specify a configuration file. See <xref linkend="sec-param"/>.
     </para>
    </listitem>
    </varlistentry>
@@ -79,14 +79,14 @@
     <term>
 <option>-P <replaceable>param=value</replaceable></option>
 </term><listitem><para>Set an XSL parameter value from command line.
-See <xref linkend="sec-param-value">.
+See <xref linkend="sec-param-value"/>.
     </para>
    </listitem>
    </varlistentry>
     <varlistentry>
     <term>
 <option>-S <replaceable>spec_file</replaceable></option>
-</term><listitem><para>Specification file. A specification file can be used to group all the options and customizations to apply. See <xref linkend="sec-specs">.
+</term><listitem><para>Specification file. A specification file can be used to group all the options and customizations to apply. See <xref linkend="sec-specs"/>.
     </para>
    </listitem>
    </varlistentry>
@@ -94,7 +94,7 @@ See <xref linkend="sec-param-value">.
     <term>
 <option>-T <replaceable>style</replaceable></option>
 </term><listitem><para>Rendering style to use. Several rendering style (also called
-LaTeX style) are provided by default. See <xref linkend="sec-style">.
+LaTeX style) are provided by default. See <xref linkend="sec-style"/>.
     </para>
    </listitem>
    </varlistentry>
@@ -126,7 +126,7 @@ documents.
     Other options
    </title>
    <para>
-    Other options are defined to customize the tool, but they should be used in exceptional cases, for test or debug purpose. These options are defined in section <xref linkend="sec-specs"> and should normaly be set through a specification file.
+    Other options are defined to customize the tool, but they should be used in exceptional cases, for test or debug purpose. These options are defined in section <xref linkend="sec-specs"/> and should normaly be set through a specification file.
    </para>
    </sect2>
   </sect1>

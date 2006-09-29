@@ -1,6 +1,6 @@
 <informaltable>
 <tgroup cols="3" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
+<colspec colname="c1"/>
 <thead>
 <row>
 <entry>Parameter</entry>
@@ -105,6 +105,13 @@ image. Set to 0 the title is under the image.</entry>
 </row>
 <!-- -->
 <row>
+<entry>filename.as.url</entry>
+<entry>Set to 1 the <sgmltag>filename</sgmltag>s are handled as URLs, with the
+same hyphenation rules. Set to 0 the <sgmltag>filename</sgmltag> hyphenation is forced for each character.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
+<row>
 <entry>glossterm.auto.link</entry>
 <entry>When set to 1, the glossterms in the document are linked to their
 definition in the glossary.</entry>
@@ -113,13 +120,13 @@ definition in the glossary.</entry>
 <!-- -->
 <row>
 <entry>imagedata.default.scale</entry>
-<entry>cf. <xref  linkend="sec-defaultscale"></entry>
+<entry>cf. <xref  linkend="sec-defaultscale"/></entry>
 <entry>pagebound</entry>
 </row>
 <!-- -->
 <row>
 <entry>latex.hyperparam</entry>
-<entry>cf. <xref  linkend="sec-hyperparam"></entry>
+<entry>cf. <xref  linkend="sec-hyperparam"/></entry>
 <entry>empty</entry>
 </row>
 <!-- -->

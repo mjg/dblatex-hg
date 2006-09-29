@@ -1,46 +1,50 @@
-<!doctype book public "-//OASIS//DTD DocBook V3.1//EN"
- [
-<!ENTITY edition "12">
-<!ENTITY intro SYSTEM "introduction.sgml">
-<!ENTITY install SYSTEM "install.sgml">
-<!ENTITY table SYSTEM "table.sgml">
-<!ENTITY figure SYSTEM "figure.sgml">
-<!ENTITY table.eg00 SYSTEM "table-eg00.sgml">
-<!ENTITY table.eg01 SYSTEM "table-eg01.sgml">
-<!ENTITY table.eg02 SYSTEM "table-eg02.sgml">
-<!ENTITY table.eg1  SYSTEM "table-eg1.sgml">
-<!ENTITY table.eg2  SYSTEM "table-eg2.sgml">
-<!ENTITY table.eg3  SYSTEM "table-eg3.sgml">
-<!ENTITY table.eg4  SYSTEM "table-eg4.sgml">
-<!ENTITY table.land SYSTEM "table-land.sgml">
-<!ENTITY table.small1 SYSTEM "table-small1.sgml">
-<!ENTITY table.small2 SYSTEM "table-small2.sgml">
-<!ENTITY table.small3 SYSTEM "table-small3.sgml">
-<!ENTITY table.small4 SYSTEM "table-small4.sgml">
-<!ENTITY equation.eg1 SYSTEM "equation-eg1.sgml">
-<!ENTITY equation.eg2 SYSTEM "equation-eg2.sgml">
-<!ENTITY equation.eg3 SYSTEM "equation-eg3.sgml">
-<!ENTITY equation.eg4 SYSTEM "equation-eg4.sgml">
-<!ENTITY mathml SYSTEM "mathml.sgml">
-<!ENTITY param SYSTEM "param.sgml">
-<!ENTITY stycommand SYSTEM "stycommand.sgml">
-<!ENTITY styoption SYSTEM "styoption.sgml">
-<!ENTITY stypackage SYSTEM "stypackage.sgml">
-<!ENTITY stydebug SYSTEM "stydebug.sgml">
-<!ENTITY specparam SYSTEM "specparam.sgml">
-<!ENTITY version SYSTEM "version.sgml">
-<!ENTITY publish SYSTEM "publish.sgml">
-<!ENTITY style SYSTEM "style.sgml">
-<!ENTITY custom SYSTEM "custom.sgml">
-<!ENTITY changes SYSTEM "changes-0.1.4.sgml">
-<!ENTITY changes2 SYSTEM "changes-0.1.4.1.sgml">
-<!ENTITY changes3 SYSTEM "changes-0.1.5.sgml">
-<!ENTITY changes4 SYSTEM "changes-0.1.6.sgml">
-<!ENTITY changes5 SYSTEM "changes-0.1.7.sgml">
-<!ENTITY changes6 SYSTEM "changes-0.1.8.sgml">
-<!ENTITY changes7 SYSTEM "changes-0.1.9.sgml">
-<!ENTITY changes8 SYSTEM "changes-0.1.10.sgml">
-<!ENTITY faq SYSTEM "faq.sgml">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+                      "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+<!ENTITY edition "13">
+<!ENTITY intro SYSTEM "introduction.xml">
+<!ENTITY install SYSTEM "install.xml">
+<!ENTITY figure SYSTEM "figure.xml">
+<!ENTITY version SYSTEM "version.xml">
+<!ENTITY publish SYSTEM "publish.xml">
+<!ENTITY table SYSTEM "tables/table.xml">
+<!ENTITY table.eg00 SYSTEM "tables/table-eg00.xml">
+<!ENTITY table.eg01 SYSTEM "tables/table-eg01.xml">
+<!ENTITY table.eg02 SYSTEM "tables/table-eg02.xml">
+<!ENTITY table.eg1  SYSTEM "tables/table-eg1.xml">
+<!ENTITY table.eg2  SYSTEM "tables/table-eg2.xml">
+<!ENTITY table.eg3  SYSTEM "tables/table-eg3.xml">
+<!ENTITY table.eg4  SYSTEM "tables/table-eg4.xml">
+<!ENTITY table.land SYSTEM "tables/table-land.xml">
+<!ENTITY table.small1 SYSTEM "tables/table-small1.xml">
+<!ENTITY table.small2 SYSTEM "tables/table-small2.xml">
+<!ENTITY table.small3 SYSTEM "tables/table-small3.xml">
+<!ENTITY table.small4 SYSTEM "tables/table-small4.xml">
+<!ENTITY equation.eg1 SYSTEM "math/equation-eg1.xml">
+<!ENTITY equation.eg2 SYSTEM "math/equation-eg2.xml">
+<!ENTITY equation.eg3 SYSTEM "math/equation-eg3.xml">
+<!ENTITY equation.eg4 SYSTEM "math/equation-eg4.xml">
+<!ENTITY mathml SYSTEM "math/mathml.xml">
+<!ENTITY custom SYSTEM "custom/custom.xml">
+<!ENTITY param SYSTEM "custom/param.xml">
+<!ENTITY specparam SYSTEM "custom/specparam.xml">
+<!ENTITY stycommand SYSTEM "custom/stycommand.xml">
+<!ENTITY styoption SYSTEM "custom/styoption.xml">
+<!ENTITY stypackage SYSTEM "custom/stypackage.xml">
+<!ENTITY stydebug SYSTEM "custom/stydebug.xml">
+<!ENTITY style SYSTEM "custom/style.xml">
+<!ENTITY changes SYSTEM "changes/changes.xml">
+<!ENTITY changes1 SYSTEM "changes/changes-0.1.4.xml">
+<!ENTITY changes2 SYSTEM "changes/changes-0.1.4.1.xml">
+<!ENTITY changes3 SYSTEM "changes/changes-0.1.5.xml">
+<!ENTITY changes4 SYSTEM "changes/changes-0.1.6.xml">
+<!ENTITY changes5 SYSTEM "changes/changes-0.1.7.xml">
+<!ENTITY changes6 SYSTEM "changes/changes-0.1.8.xml">
+<!ENTITY changes7 SYSTEM "changes/changes-0.1.9.xml">
+<!ENTITY changes8 SYSTEM "changes/changes-0.1.10.xml">
+<!ENTITY changes9 SYSTEM "changes/changes-0.2.xml">
+<!ENTITY faq SYSTEM "faq.xml">
 ]>
 
 <book lang="en">
@@ -52,7 +56,7 @@
   <firstname>Benoît</firstname><surname>Guillon</surname>
  </author>
  <date>
-  22 July 2006
+  27 Sep 2006
  </date>
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
@@ -69,14 +73,18 @@
 </othercredit>
 <revhistory>
 <revision>
-<revnumber>1</revnumber><date>20/01/03</date><revdescription>
+<revnumber>1</revnumber>
+<date>20/01/03</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
  <para>
   First release of the package.
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
-</revision>
+</revdescription></revision>
 <revision>
-<revnumber>2</revnumber><date>30/04/03</date><revdescription>
+<revnumber>2</revnumber><date>30/04/03</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
  <para>
   Changes:
  </para>
@@ -88,14 +96,16 @@
  </listitem>
   <listitem>
   <para>
-  The tool can be heavily customized thanks to a specification file and/or new extra options (cf. <xref linkend="sec-custom">).
+  The tool can be heavily customized thanks to a specification file and/or new extra options (cf. <xref linkend="sec-custom"/>).
   </para>
  </listitem>
  </itemizedlist>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
-<revnumber>3</revnumber><date>11/06/03</date><revdescription>
+<revnumber>3</revnumber><date>11/06/03</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
  <para>
   Changes:
  </para>
@@ -111,10 +121,12 @@
   </para>
  </listitem>
  </itemizedlist>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision> 
 <revision>
-<revnumber>4</revnumber><date>03/07/03</date><revdescription>
+<revnumber>4</revnumber><date>03/07/03</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
  <para>
   Changes:
  </para>
@@ -140,71 +152,88 @@
   </para>
  </listitem>
  </itemizedlist>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>5</revnumber><date>03/05/04</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-014">
+  Changes: see <xref linkend="sec-changes-014"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>6</revnumber><date>15/06/04</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-0141">
+  Changes: see <xref linkend="sec-changes-0141"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>7</revnumber><date>15/07/05</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-015">
+  Changes: see <xref linkend="sec-changes-015"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>8</revnumber><date>25/09/05</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-016">
+  Changes: see <xref linkend="sec-changes-016"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>9</revnumber><date>20/10/05</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-017">
+  Changes: see <xref linkend="sec-changes-017"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>10</revnumber><date>28/11/05</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-018">
+  Changes: see <xref linkend="sec-changes-018"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
 <revnumber>11</revnumber><date>28/04/06</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-019">
+  Changes: see <xref linkend="sec-changes-019"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>21/07/06</date>
+<revnumber>12</revnumber><date>21/07/06</date>
+<authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
-  Changes: see <xref linkend="sec-changes-0110">
+  Changes: see <xref linkend="sec-changes-0110"/>
  </para>
-</revdescription><authorinitials>B. Guillon</authorinitials>
+</revdescription>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>27/09/06</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes-020"/>
+ </para>
+</revdescription>
 </revision>
 </revhistory>
 </bookinfo>
@@ -321,22 +350,22 @@
    </para>
 <example><title>Inlined Equation</title>
 &equation.eg1; 
-<programlisting><textobject><textdata entityref="equation.eg1"></textobject>
+<programlisting><textobject><textdata fileref="math/equation-eg1.xml"/></textobject>
 </programlisting>
 </example>
 <example><title>Equation in a block</title>
 &equation.eg2;
-<programlisting><textobject><textdata entityref="equation.eg2"></textobject>
+<programlisting><textobject><textdata fileref="math/equation-eg2.xml"/></textobject>
 </programlisting>
 </example>
 <example><title>Equation in a float</title>
 &equation.eg3;
-<programlisting><textobject><textdata entityref="equation.eg3"></textobject>
+<programlisting><textobject><textdata fileref="math/equation-eg3.xml"/></textobject>
 </programlisting>
 </example>
 <example><title>Equation without a title</title>
 &equation.eg4;
-<programlisting><textobject><textdata entityref="equation.eg4"></textobject>
+<programlisting><textobject><textdata fileref="math/equation-eg4.xml"/></textobject>
 </programlisting>
 </example>
    </sect2>
@@ -404,9 +433,9 @@
   <para>
    Adding the revision flags can be manual, but its is tedious and error prone. The perl script <ulink url="http://www.sun.com/xml/developers/diffmk/">diffmk</ulink> by Norman Walsh can do the work for you. It works fine, but it depends on several Perl modules.
   </para>
-<note>
+<note><para>
 The revision bars only appear when using the "dvips" driver. It seems to be a limitation of the LaTeX macros defined by the changebar package.
-</note>
+</para></note>
   </sect1>
  </chapter>
  &custom;

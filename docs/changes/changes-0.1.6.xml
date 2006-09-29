@@ -53,10 +53,9 @@ their natural size up to the page boundaries.</para>
 <listitem>
 <para>Set to 1 it specifies to put the title above
 the image. By default it is set to 0 (title below).</para>
-
-<note>This parameter has no effect if an explicit float
+<note><para>This parameter has no effect if an explicit float
 style is used for the figures (e.g. ruled style), since the title position is
-then fixed by the chosen style.</note>
+then fixed by the chosen style.</para></note>
 </listitem>
 </varlistentry>
 <varlistentry><term>mediaobject.caption.style</term>

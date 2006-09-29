@@ -1,6 +1,6 @@
 <informaltable>
 <tgroup cols="2" colsep="1" rowsep="1" align="left">
-<colspec colname="c1">
+<colspec colname="c1"/>
 <thead>
 <row>
 <entry>Command</entry>

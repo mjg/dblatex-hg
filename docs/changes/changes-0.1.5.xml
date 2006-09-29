@@ -3,7 +3,7 @@
 <para>
 <command>dblatex</command> supports the new option
 <option>-T <replaceable>target_style</replaceable></option>. It specifies which latex
-style to use for formatting the output. See <xref linkend="sec-style"> for more
+style to use for formatting the output. See <xref linkend="sec-style"/> for more
 details.</para>
 </listitem>
 <listitem>
