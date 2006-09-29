@@ -90,6 +90,9 @@ if [ $rc -ne 0 ]; then
   exit 1
 fi
 
+# Cleanup compiled files
+find $tmpbuild/lib -name "*.pyc" | xargs rm -f
+
 # Make the ball
 tar cvf - -C $tmpdir $release | bzip2 > $release.tar.bz2
 rm -rf $tmpdir

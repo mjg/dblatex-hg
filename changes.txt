@@ -1,7 +1,7 @@
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
-* Passer la doc en XML + utiliser la manpage
-* Utiliser sgml2xml (osx)
+/ * Passer la doc en XML + utiliser la manpage
+x * Utiliser sgml2xml (osx)
 * Utilisation bibtex
 * Problèmes verbatim in tables
 * Problèmes footnote in tables
@@ -27,6 +27,11 @@ x * Bug #1382511 : &ndash; -> &#8211;
   -->
 </xsl:template>
 
+Release 0.2:
+------------
+
+* Major change: publishing code (except XSL) is re-written in Python. Perl,
+  GNU make and shell scripts are no more used.
 
 * Minor improvements:
   - list @continuation, @numeration, @spacing attributes now handled.
