@@ -24,6 +24,7 @@ package_base = r"%(package_base)s"
 
 %(lib_path)s
 %(catalogs)s
+%(style_set)s
 from %(package_path)s import %(package)s
 %(package)s.main(base=package_base)
 """
@@ -60,6 +61,7 @@ os.environ["SGML_CATALOG_FILES"] = cat
         self._package_base = os.path.join(install.install_data,
                                           self.data_files[0][0])
         self._catalogs = install.catalogs
+        self._style = install.style
         print self._package_base
 
         # Build the command line script
@@ -95,10 +97,16 @@ os.environ["SGML_CATALOG_FILES"] = cat
         else:
             catalogs = ""
 
+        if self._style:
+            style_set = "sys.argv.insert(1, '-T%s')" % self._style
+        else:
+            style_set = ""
+
         script_args = { 'env_executable': env_exec,
                         'env_args': env_exec and (' %s' % env_args) or '',
                         'py_executable': py_exec,
                         'lib_path': lib_path,
+                        'style_set': style_set,
                         'package': "dblatex",
                         'package_path': "dbtexmf.dblatex",
                         'catalogs': catalogs,
@@ -112,16 +120,47 @@ os.environ["SGML_CATALOG_FILES"] = cat
         os.close(fd)
 
 
+def which(utils):
+    paths = os.getenv("PATH").split(":")
+    utils = list(utils)
+    util_paths = {}
+    for path in paths:
+        founds = {}
+        for util in utils:
+            rpath = os.path.join(path, util)
+            if os.path.exists(rpath):
+                founds[util] = rpath
+                continue
+        util_paths.update(founds)
+        for util in founds:
+            utils.remove(util)
+        # No need to walk anymore in paths if everything found
+        if not(utils):
+            return (util_paths, [])
+    return (util_paths, utils)
+        
+
 class Install(install):
 
     user_options = install.user_options + \
                    [('catalogs=', None, 'default SGML catalogs'),
-                    ('nodeps', None, 'don\'t check the dependencies')]
+                    ('nodeps', None, 'don\'t check the dependencies'),
+                    ('style=', None, 'default style to use')]
 
     def initialize_options(self):
         install.initialize_options(self)
         self.catalogs = None
         self.nodeps = None
+        self.style = None
+
+    def check_util_dependencies(self):
+        found, missed = which(("xsltproc", "latex", "pdflatex", "kpsewhich"))
+        for util in found:
+            print "+checking %s... yes" % util
+        for util in missed:
+            print "+checking %s... no" % util
+        if missed:
+            raise OSError("not found: %s" % ", ".join(missed))
 
     def check_latex_dependencies(self):
         # Find the Latex files from the package
@@ -174,16 +213,17 @@ class Install(install):
             print status
             
         if mis_stys:
-            print "Error: %s not found" % ", ".join(mis_stys)
-            return -1
-        else:
-            return 0
+            raise OSError("not found: %s" % ", ".join(mis_stys))
 
     def run(self):
         if not(self.nodeps):
-            rc = self.check_latex_dependencies()
-            if rc != 0:
+            try:
+                self.check_util_dependencies()
+                self.check_latex_dependencies()
+            except Exception, e:
+                print >>sys.stderr, "Error: %s" % e
                 sys.exit(1)
+
         install.run(self)
 
 
@@ -203,6 +243,7 @@ def get_version():
     d = dblatex.DbLatex(base=os.getcwd())
     sys.path.remove("lib")
     return d.get_version()
+
 
 if __name__ == "__main__":
     setup(name="dblatex",
