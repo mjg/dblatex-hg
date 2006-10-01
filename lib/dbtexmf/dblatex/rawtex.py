@@ -55,7 +55,6 @@ class RawLatexParser:
             self.key_in.pos = line.find(self.key_in.key)
             self.key_out.pos = line.find(self.key_out.key)
 
-            #print "T1='%s' (%d, %d)" % (line, self.key_in.pos, self.key_out.pos)
             if (self.key_out.pos == -1 or
                 (self.key_in.pos >= 0 and (self.key_in.pos < self.key_out.pos))):
                 key = self.key_in
@@ -69,7 +68,6 @@ class RawLatexParser:
                 text = line
                 line = ""
 
-            #print "T2='%s' (%d/%d)" % (text, self.depth, self.hyphenate)
             if self.depth > 0:
                 lout += self.translate(text)
             else:
@@ -77,7 +75,6 @@ class RawLatexParser:
                 text, hof = self.hypof.subn("", text)
                 self.hyphenate += (hon - hof)
                 lout += text
-                #print "T3='%s' (%d,%d)(%d/%d)" % (lout, hon, hof, self.depth, self.hyphenate)
                 
             if key.pos != -1:
                 self.depth += key.depth
@@ -86,7 +83,6 @@ class RawLatexParser:
 
     def translate(self, text):
         if self.hyphenate:
-#            print "t1='%s'" % text
             # Preserve entities and put temporary \1 cut char
             texts = re.split("(&#[^;]+;)", text)
             for i in range(len(texts)):
@@ -95,13 +91,11 @@ class RawLatexParser:
             text = "\1".join(texts)
             text = text.replace("\1 ", " ")
             text = text.replace(" \1", " ")
-#            print "t2='%s'" % text
 
         # Preliminary backslash substitution
         text = text.replace("\\", r"\textbackslash")
 
         # Basic TeX escape
-#        print "t3='%s'" % text
         for r, s in self.texres:
             text = r.sub(s, text)
         # Entities replacement
@@ -119,10 +113,8 @@ class RawLatexParser:
         text = text.replace(r"\textbackslash", r"\textbackslash{}")
 
         # Now hyphenate if needed
-#        print "t4='%s'" % text
         if self.hyphenate:
             text = text.replace("\1", r"\-")
-#        print "t5='%s'" % text
         return text
         
 
