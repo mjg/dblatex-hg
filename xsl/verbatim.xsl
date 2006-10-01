@@ -12,9 +12,38 @@
 
 
 <xsl:template match="address|literallayout|literallayout[@class='monospaced']">
-  <xsl:text>&#10;\begin{verbatim}</xsl:text>
+  <xsl:call-template name="output.verbatim"/>
+</xsl:template>
+
+<xsl:template match="text()" mode="save.verbatim"/>
+
+<xsl:template match="address|literallayout|literallayout[@class='monospaced']"
+              mode="save.verbatim">
+  <xsl:call-template name="save.verbatim"/>
+</xsl:template>
+
+<xsl:template name="save.verbatim">
+  <xsl:text>&#10;\begin{SaveVerbatim}{</xsl:text>
+  <xsl:value-of select="generate-id()"/>
+  <xsl:text>}&#10;</xsl:text>
   <xsl:apply-templates mode="latex.verbatim"/>
-  <xsl:text>\end{verbatim}&#10;</xsl:text>
+  <xsl:text>&#10;\end{SaveVerbatim}&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template name="output.verbatim">
+  <!-- In tables just use the data previously saved -->
+  <xsl:choose>
+  <xsl:when test="ancestor::entry">
+    <xsl:text>\UseVerbatim{</xsl:text>
+    <xsl:value-of select="generate-id(.)"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>&#10;\begin{verbatim}</xsl:text>
+    <xsl:apply-templates mode="latex.verbatim"/>
+    <xsl:text>\end{verbatim}&#10;</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- Special cases where nothing to output in verbatim mode -->
