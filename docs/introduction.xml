@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <chapter><title>Introduction
  </title>
 <sect1>
@@ -59,10 +62,10 @@
    Version
   </title>
   <para>
-   This manual is for dblatex version &version;.
+   This manual is for dblatex version <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="version.xml"/>.
   </para>
   </sect1>
-  &changes;
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="changes/changes.xml"/>
   <sect1>
    <title> Publishing Principles </title>
   <para>

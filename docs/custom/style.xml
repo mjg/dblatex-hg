@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <sect1 id="sec-style"><title>Output Formatting Style</title>
 <para>The output rendering done by <command>dblatex</command> can be widely
 customized like explained in <xref linkend="sec-custom"/>. By default several

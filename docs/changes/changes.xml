@@ -1,32 +1,33 @@
-<sect1 id="sec-changes"><title>Changes</title>
-  <sect2 id="sec-changes-020"><title>Release &version;</title>
-  &changes9;
+<sect1  xmlns:xi="http://www.w3.org/2001/XInclude"
+        id="sec-changes"><title>Changes</title>
+  <sect2 id="sec-changes-020"><title>Release 0.2pre</title>
+  <xi:include href="changes-0.2.xml"/>
   </sect2>
   <sect2 id="sec-changes-0110"><title>Release 0.1.10</title>
   <para>Bug fix release.</para>
-  &changes8;
+  <xi:include href="changes-0.1.10.xml"/>
   </sect2>
   <sect2 id="sec-changes-019"><title>Release 0.1.9</title>
   <para>Few changes.</para>
-  &changes7;
+  <xi:include href="changes-0.1.9.xml"/>
   </sect2>
   <sect2 id="sec-changes-018"><title>Release 0.1.8</title>
   <para>This is mainly a bug fix release.</para>
-  &changes6;
+  <xi:include href="changes-0.1.8.xml"/>
   </sect2>
   <sect2 id="sec-changes-017"><title>Release 0.1.7</title>
-  &changes5;
+  <xi:include href="changes-0.1.7.xml"/>
   </sect2>
   <sect2 id="sec-changes-016"><title>Release 0.1.6</title>
-  &changes4;
+  <xi:include href="changes-0.1.6.xml"/>
   </sect2>
   <sect2 id="sec-changes-015"><title>Release 0.1.5</title>
-  &changes3;
+  <xi:include href="changes-0.1.5.xml"/>
   </sect2>
   <sect2 id="sec-changes-0141"><title>Release 0.1.4.1</title>
-  &changes2;
+  <xi:include href="changes-0.1.4.1.xml"/>
   </sect2>
   <sect2 id="sec-changes-014"><title>Release 0.1.4</title>
-  &changes1;
+  <xi:include href="changes-0.1.4.xml"/>
   </sect2>
 </sect1>

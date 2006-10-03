@@ -1,4 +1,7 @@
-  <sect1>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+  <sect1 xmlns:xi="http://www.w3.org/2001/XInclude">
    <title>
    Creating Tables
   </title>
@@ -77,9 +80,9 @@
    <para>
     When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given.
    </para>
-&table.eg00;
-&table.eg01;
-&table.eg02;
+   <xi:include href="table-eg00.xml"/>
+   <xi:include href="table-eg01.xml"/>
+   <xi:include href="table-eg02.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -105,7 +108,7 @@
    <para>
     is rendered like this:
    </para>
-&table.eg1;
+   <xi:include href="table-eg1.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -131,7 +134,7 @@
    <para>
     gives this table:
    </para>
-&table.eg2;
+   <xi:include href="table-eg2.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -156,7 +159,7 @@
    <para>
     It gives the following table:
    </para>
-&table.eg3;
+   <xi:include href="table-eg3.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -180,7 +183,7 @@
    <para>
     Here is an example of table containing several entries with morerows attribute:
    </para>
-&table.eg4;
+   <xi:include href="table-eg4.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -203,7 +206,7 @@
    <para>
     Here is how it is displayed.
    </para>
-&table.land;
+   <xi:include href="table-land.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -243,9 +246,9 @@
    <para>
     Here are examples for each size.
    </para>
-&table.small1;
-&table.small2;
-&table.small3;
-&table.small4;
+   <xi:include href="table-small1.xml"/>
+   <xi:include href="table-small2.xml"/>
+   <xi:include href="table-small3.xml"/>
+   <xi:include href="table-small4.xml"/>
    </sect2>
   </sect1>

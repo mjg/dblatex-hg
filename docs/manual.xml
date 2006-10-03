@@ -3,51 +3,9 @@
                       "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
 [
 <!ENTITY edition "13">
-<!ENTITY intro SYSTEM "introduction.xml">
-<!ENTITY install SYSTEM "install.xml">
-<!ENTITY figure SYSTEM "figure.xml">
-<!ENTITY version SYSTEM "version.xml">
-<!ENTITY publish SYSTEM "publish.xml">
-<!ENTITY table SYSTEM "tables/table.xml">
-<!ENTITY table.eg00 SYSTEM "tables/table-eg00.xml">
-<!ENTITY table.eg01 SYSTEM "tables/table-eg01.xml">
-<!ENTITY table.eg02 SYSTEM "tables/table-eg02.xml">
-<!ENTITY table.eg1  SYSTEM "tables/table-eg1.xml">
-<!ENTITY table.eg2  SYSTEM "tables/table-eg2.xml">
-<!ENTITY table.eg3  SYSTEM "tables/table-eg3.xml">
-<!ENTITY table.eg4  SYSTEM "tables/table-eg4.xml">
-<!ENTITY table.land SYSTEM "tables/table-land.xml">
-<!ENTITY table.small1 SYSTEM "tables/table-small1.xml">
-<!ENTITY table.small2 SYSTEM "tables/table-small2.xml">
-<!ENTITY table.small3 SYSTEM "tables/table-small3.xml">
-<!ENTITY table.small4 SYSTEM "tables/table-small4.xml">
-<!ENTITY equation.eg1 SYSTEM "math/equation-eg1.xml">
-<!ENTITY equation.eg2 SYSTEM "math/equation-eg2.xml">
-<!ENTITY equation.eg3 SYSTEM "math/equation-eg3.xml">
-<!ENTITY equation.eg4 SYSTEM "math/equation-eg4.xml">
-<!ENTITY mathml SYSTEM "math/mathml.xml">
-<!ENTITY custom SYSTEM "custom/custom.xml">
-<!ENTITY param SYSTEM "custom/param.xml">
-<!ENTITY specparam SYSTEM "custom/specparam.xml">
-<!ENTITY stycommand SYSTEM "custom/stycommand.xml">
-<!ENTITY styoption SYSTEM "custom/styoption.xml">
-<!ENTITY stypackage SYSTEM "custom/stypackage.xml">
-<!ENTITY stydebug SYSTEM "custom/stydebug.xml">
-<!ENTITY style SYSTEM "custom/style.xml">
-<!ENTITY changes SYSTEM "changes/changes.xml">
-<!ENTITY changes1 SYSTEM "changes/changes-0.1.4.xml">
-<!ENTITY changes2 SYSTEM "changes/changes-0.1.4.1.xml">
-<!ENTITY changes3 SYSTEM "changes/changes-0.1.5.xml">
-<!ENTITY changes4 SYSTEM "changes/changes-0.1.6.xml">
-<!ENTITY changes5 SYSTEM "changes/changes-0.1.7.xml">
-<!ENTITY changes6 SYSTEM "changes/changes-0.1.8.xml">
-<!ENTITY changes7 SYSTEM "changes/changes-0.1.9.xml">
-<!ENTITY changes8 SYSTEM "changes/changes-0.1.10.xml">
-<!ENTITY changes9 SYSTEM "changes/changes-0.2.xml">
-<!ENTITY faq SYSTEM "faq.xml">
 ]>
 
-<book lang="en">
+<book lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
  <bookinfo>
   <title>
   DocBook to LaTeX Publishing 
@@ -250,16 +208,16 @@
 </biblioentry>
 </bibliodiv>
 </bibliography>
-&intro;
-&install;
+<xi:include href="introduction.xml"/>
+<xi:include href="install.xml"/>
  <chapter>
   <title>
   Using dblatex
  </title>
-&publish;
-&style;
-&figure;
-&table;
+<xi:include href="publish.xml"/>
+<xi:include href="custom/style.xml"/>
+<xi:include href="figure.xml"/>
+<xi:include href="tables/table.xml"/>
   <sect1>
    <title>
    Writing LaTeX mathematical equations
@@ -349,28 +307,28 @@
     The following examples show how to write the equations.
    </para>
 <example><title>Inlined Equation</title>
-&equation.eg1; 
+<xi:include href="math/equation-eg1.xml"/>
 <programlisting><textobject><textdata fileref="math/equation-eg1.xml"/></textobject>
 </programlisting>
 </example>
 <example><title>Equation in a block</title>
-&equation.eg2;
+<xi:include href="math/equation-eg2.xml"/>
 <programlisting><textobject><textdata fileref="math/equation-eg2.xml"/></textobject>
 </programlisting>
 </example>
 <example><title>Equation in a float</title>
-&equation.eg3;
+<xi:include href="math/equation-eg3.xml"/>
 <programlisting><textobject><textdata fileref="math/equation-eg3.xml"/></textobject>
 </programlisting>
 </example>
 <example><title>Equation without a title</title>
-&equation.eg4;
+<xi:include href="math/equation-eg4.xml"/>
 <programlisting><textobject><textdata fileref="math/equation-eg4.xml"/></textobject>
 </programlisting>
 </example>
    </sect2>
   </sect1>
-&mathml;
+<xi:include href="math/mathml.xml"/>
   <sect1>
    <title>
    Creating an Index
@@ -438,8 +396,8 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
 </para></note>
   </sect1>
  </chapter>
- &custom;
- &faq;
+<xi:include href="custom/custom.xml"/>
+<xi:include href="faq.xml"/>
  <chapter>
   <title>
   Thanks

@@ -20,6 +20,6 @@ native db2latex simple: version.xml
 
 # Actual version of the release
 version.xml: FORCE
-	echo $(VERSION) > $@
+	echo "<emphasis>$(VERSION)</emphasis>" > $@
 
 FORCE:

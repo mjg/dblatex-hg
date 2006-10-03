@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
  <chapter id="sec-custom">
   <title>
   Customization
@@ -37,7 +40,7 @@
   <para>
    The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p <replaceable>custom.xsl</replaceable></option>. The available configuration parameters are the following:
   </para>
-&param;
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="param.xml"/>
    <sect2 id="sec-defaultscale">
     <title>imagedata.default.scale</title>
     <para>Default scale to apply to every <sgmltag>imagedata</sgmltag> that does not
@@ -145,14 +148,14 @@ must be some valid options passed to the \includegraphics command.</para>
    </title>
    <para>A compliant LaTeX style package supports the following options. The options are
    provided by the XSL stylesheets according to the document attributes.</para>
-&styoption;
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="styoption.xml"/>
    </sect2>
    <sect2>
     <title>
     Needed packages
    </title>
    <para>A LaTeX style package must at least include the following packages.</para>
-&stypackage;
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stypackage.xml"/>
    </sect2>
    <sect2>
     <title>
@@ -161,9 +164,9 @@ must be some valid options passed to the \includegraphics command.</para>
    <para>
     All the latex commands beginning with DBK are related to elements under <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>.
    </para>
-&stycommand;
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stycommand.xml"/>
    </sect2>
-&stydebug;
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stydebug.xml"/>
   </sect1>
   <sect1>
    <title>
@@ -227,7 +230,7 @@ must be some valid options passed to the \includegraphics command.</para>
   <para>
    The following table lists the supported parameters and the corresponding command line option.
   </para>
-&specparam;
+<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="specparam.xml"/>
   <para>
    Here is the specification file used for this manual.
   </para>
@@ -304,4 +307,3 @@ must be some valid options passed to the \includegraphics command.</para>
 </example>
   </sect1>
  </chapter>
-
