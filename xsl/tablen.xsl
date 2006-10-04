@@ -5,16 +5,16 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
-<!-- Upper table and informaltable templates. They call either the formatting
-     originally used (expects texclean) or the new table support,
-     depending on the $newtbl.use value -->
+<!-- Upper table and informaltable templates. They make the wrapper environment
+     depending of the kind of table (floating, landscape, role) and call the
+     actual newtbl engine. The $newtbl.use parameter is now obsolete. -->
 
 <xsl:param name="newtbl.format.thead">\bfseries%&#10;</xsl:param>
 <xsl:param name="newtbl.format.tbody"/>
 <xsl:param name="newtbl.format.tfoot"/>
 <xsl:param name="newtbl.default.colsep" select="'1'"/>
 <xsl:param name="newtbl.default.rowsep" select="'1'"/>
-<xsl:param name="newtbl.use" select="'1'"/>
+<xsl:param name="newtbl.use" select="'1'"/> <!-- no more used -->
 <xsl:param name="table.title.top" select="'0'"/>
 
 
@@ -45,16 +45,9 @@
   </xsl:if>
   <xsl:text>\begin{center}&#10;</xsl:text>
   <!-- do the actual work -->
-  <xsl:choose>
-  <xsl:when test="$newtbl.use='1'">
-    <xsl:apply-templates select="tgroup" mode="newtbl">
-      <xsl:with-param name="tabletype" select="'longtable'"/>
-    </xsl:apply-templates>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:apply-templates select="*[not(self::title)]"/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:apply-templates select="tgroup" mode="newtbl">
+    <xsl:with-param name="tabletype" select="'longtable'"/>
+  </xsl:apply-templates>
   <xsl:text>&#10;\end{center}&#10;</xsl:text>
   <xsl:if test="$size!='normal'">
     <xsl:text>\end{</xsl:text>
@@ -104,16 +97,9 @@
   </xsl:if>
   <xsl:text>\begin{center}&#10;</xsl:text>
   <!-- do the actual work -->
-  <xsl:choose>
-  <xsl:when test="$newtbl.use='1'">
-    <xsl:apply-templates select="tgroup" mode="newtbl">
-      <xsl:with-param name="tabletype" select="'longtable'"/>
-    </xsl:apply-templates>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:apply-templates/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:apply-templates select="tgroup" mode="newtbl">
+    <xsl:with-param name="tabletype" select="'longtable'"/>
+  </xsl:apply-templates>
   <xsl:text>\end{center}&#10;</xsl:text>
   <xsl:if test="$size!='normal'">
     <xsl:text>\end{</xsl:text>

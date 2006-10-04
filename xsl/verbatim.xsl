@@ -23,14 +23,20 @@
 </xsl:template>
 
 <xsl:template name="save.verbatim">
+  <xsl:param name="content">
+    <xsl:apply-templates mode="latex.verbatim"/>
+  </xsl:param>
   <xsl:text>&#10;\begin{SaveVerbatim}{</xsl:text>
   <xsl:value-of select="generate-id()"/>
   <xsl:text>}&#10;</xsl:text>
-  <xsl:apply-templates mode="latex.verbatim"/>
+  <xsl:value-of select="$content"/>
   <xsl:text>&#10;\end{SaveVerbatim}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template name="output.verbatim">
+  <xsl:param name="content">
+    <xsl:apply-templates mode="latex.verbatim"/>
+  </xsl:param>
   <!-- In tables just use the data previously saved -->
   <xsl:choose>
   <xsl:when test="ancestor::entry">
@@ -40,7 +46,7 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>&#10;\begin{verbatim}</xsl:text>
-    <xsl:apply-templates mode="latex.verbatim"/>
+    <xsl:value-of select="$content"/>
     <xsl:text>\end{verbatim}&#10;</xsl:text>
   </xsl:otherwise>
   </xsl:choose>

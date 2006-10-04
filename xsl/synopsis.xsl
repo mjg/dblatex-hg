@@ -10,9 +10,11 @@
 
 <xsl:template match="synopsis">
   <xsl:call-template name="label.id"/>
-  <xsl:text>&#10;\begin{verbatim}</xsl:text>
-  <xsl:apply-templates mode="latex.verbatim"/>
-  <xsl:text>\end{verbatim}&#10;</xsl:text>
+  <xsl:call-template name="output.verbatim"/>
+</xsl:template>
+
+<xsl:template match="synopsis|funcsynopsisinfo" mode="save.verbatim">
+  <xsl:call-template name="save.verbatim"/>
 </xsl:template>
 
 <!-- we want the brackets -->
@@ -153,9 +155,7 @@
 </xsl:template>
 
 <xsl:template match="funcsynopsisinfo">
-  <xsl:text>&#10;\begin{verbatim}&#10;</xsl:text>
-  <xsl:apply-templates mode="latex.verbatim"/>
-  <xsl:text>&#10;\end{verbatim}&#10;</xsl:text>
+  <xsl:call-template name="output.verbatim"/>
 </xsl:template>
 
 <xsl:template match="funcprototype">

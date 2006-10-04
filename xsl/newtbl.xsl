@@ -846,6 +846,8 @@
 <!-- The main starting point of the table handling -->
 <xsl:template match="tgroup" mode="newtbl">
   <xsl:param name="tabletype">tabular</xsl:param>
+  <!-- First, save the table verbatim data -->
+  <xsl:apply-templates mode="save.verbatim"/>
   <xsl:text>
 \begingroup%
   </xsl:text>

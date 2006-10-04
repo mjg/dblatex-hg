@@ -6,6 +6,23 @@
     ############################################################################ -->
 
 <xsl:template match="classsynopsis">
+  <xsl:call-template name="output.verbatim">
+    <xsl:with-param name="content">
+      <xsl:apply-templates select="." mode="content"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="classsynopsis" mode="save.verbatim">
+  <xsl:call-template name="save.verbatim">
+    <xsl:with-param name="content">
+      <xsl:apply-templates select="." mode="content"/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+
+<xsl:template match="classsynopsis" mode="content">
   <xsl:param name="language">
     <xsl:choose>
     <xsl:when test="@language">
@@ -44,7 +61,6 @@
      ######## -->
 
 <xsl:template match="classsynopsis" mode="java">
-  <xsl:text>\begin{verbatim}&#10;</xsl:text>
   <xsl:apply-templates select="ooclass[1]" mode="java"/>
   <xsl:if test="ooclass[position() &gt; 1]">
     <xsl:text> extends</xsl:text>
@@ -71,7 +87,6 @@
                                |methodsynopsis
                                |classsynopsisinfo" mode="java"/>
   <xsl:text>}&#10;</xsl:text>
-  <xsl:text>\end{verbatim}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="classsynopsisinfo" mode="java">
@@ -225,7 +240,6 @@
      ######### -->
 
 <xsl:template match="classsynopsis" mode="cpp">
-  <xsl:text>\begin{verbatim}&#10;</xsl:text>
   <xsl:apply-templates select="ooclass[1]" mode="cpp"/>
   <xsl:if test="ooclass[position() &gt; 1]">
     <xsl:text>: </xsl:text>
@@ -252,7 +266,6 @@
                               |methodsynopsis
                               |classsynopsisinfo" mode="cpp"/>
   <xsl:text>}&#10;</xsl:text>
-  <xsl:text>\end{verbatim}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="classsynopsisinfo" mode="cpp">
@@ -364,7 +377,6 @@
      ######## -->
 
 <xsl:template match="classsynopsis" mode="perl">
-  <xsl:text>\begin{verbatim}&#10;</xsl:text>
   <xsl:text>package </xsl:text>
   <xsl:apply-templates select="ooclass[1]" mode="perl"/>
   <xsl:text>;&#10;</xsl:text>
@@ -380,7 +392,6 @@
                               |fieldsynopsis
                               |methodsynopsis
                               |classsynopsisinfo" mode="perl"/>
-  <xsl:text>\end{verbatim}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="classsynopsisinfo" mode="perl">
