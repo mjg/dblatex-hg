@@ -6,6 +6,7 @@ import sys
 import os
 import re
 import tempfile
+import shutil
 from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
@@ -37,6 +38,7 @@ class DbTex:
         self.output = ""
         self.format = "pdf"
         self.tmpdir = ""
+        self.tmpdir_user = None
         self.fig_paths = []
         self.texinputs = []
         self.texbatch = 1
@@ -168,18 +170,17 @@ class DbTex:
 
     def compile(self):
         self.cwdir = os.getcwd()
-        self.tmpdir = tempfile.mkdtemp()
+        self.tmpdir = self.tmpdir_user or tempfile.mkdtemp()
         self.inputdir = os.path.dirname(self.input)
         os.chdir(self.tmpdir)
         try:
             donefile = self._compile()
-            rc = os.system("mv %s \"%s\"" % (donefile, self.output))
-            if rc == 0:
-                print "'%s' successfully built" % os.path.basename(self.output)
+            shutil.move(donefile, self.output)
+            print "'%s' successfully built" % os.path.basename(self.output)
         finally:
             os.chdir(self.cwdir)
             if not(self.debug):
-                os.system("rm -rf %s" % self.tmpdir)
+                shutil.rmtree(self.tmpdir)
             else:
                 print "%s not removed" % self.tmpdir
 
@@ -273,6 +274,8 @@ class DbTexCommand:
                           help="PostScript output. Equivalent to -tps")
         parser.add_option("-T", "--style",
                           help="Predefined output style")
+        parser.add_option("--tmpdir",
+                          help="Temporary working directory to use (for debug only)")
         parser.add_option("-v", "--version", action="store_true",
                           help="Print the %s version" % prog)
         parser.add_option("-V", "--verbose", action="store_true",
@@ -346,6 +349,14 @@ class DbTexCommand:
 
         if options.verbose:
             run.set_verbose(options.verbose)
+    
+        if options.tmpdir:
+            if not(os.path.exists(options.tmpdir)):
+                try:
+                    os.mkdir(options.tmpdir)
+                except Exception, e:
+                    failed_exit("Error: %s" % e)
+            run.tmpdir_user = options.tmpdir
 
     def main(self):
         (options, args) = self.parser.parse_args()

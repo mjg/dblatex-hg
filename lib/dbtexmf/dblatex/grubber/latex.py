@@ -92,7 +92,7 @@ class Latex(Depend):
             return 1
         if self.log.run_needed():
             msg.debug(_("LaTeX asks to run again"))
-            if (changed):
+            if (not(changed)):
                 msg.debug(_("but the aux files are unchanged"))
                 return 0
             return 1

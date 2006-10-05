@@ -3,6 +3,7 @@
 #
 import os
 import re
+import shutil
 
 from grubber.texbuilder import LatexBuilder
 
@@ -57,10 +58,9 @@ class RunLatex:
             self.texer.print_errors()
             raise
 
-        rc = os.system("mv %s %s" % (tmpout, binfile))
-        if rc != 0:
-            raise ValueError("'%s' not generated?" % tmpout)
-        
+        shutil.move(tmpout, binfile)
+
     def clean(self):
+        # FIXME: remove this and pur it as texer method
         os.system("rm -f *.log *.lot *.tu* *.mp")
  
