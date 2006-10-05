@@ -40,16 +40,16 @@ class Osx:
 
         entdict = {}
         for ent, uval in entmap:
-            entdict[ent] = '<!ENTITY %s "&#%s;">' % (ent, uval)
+            entdict[ent] = (re.compile("<!ENTITY\s+%s\s+\[[^\]]+\]\s*>" % ent),
+                            '<!ENTITY %s "&#%s;">' % (ent, uval))
 
         # Replace the entities
         nlines = []
         for line in lines:
             mapped = []
             for ent in entdict:
-                line, n = re.subn("<!ENTITY\s+%s\s+\[[^\]]+\]\s*>" % ent,
-                                  entdict[ent],
-                                  line)
+                reg, rep = entdict[ent]
+                line, n = reg.subn(rep, line)
                 if n:
                     mapped.append(ent)
             nlines.append(line)
