@@ -57,7 +57,10 @@ os.environ["SGML_CATALOG_FILES"] = cat
 
         # Data useful for building the script
         install = self.distribution.get_command_obj("install")
-        self._install_lib = install.install_lib
+        if not(install.install_data):
+            return
+
+        self._install_lib = os.path.normpath(install.install_lib)
         self._package_base = os.path.join(install.install_data,
                                           self.data_files[0][0])
         self._catalogs = install.catalogs
@@ -120,24 +123,20 @@ os.environ["SGML_CATALOG_FILES"] = cat
         os.close(fd)
 
 
-def which(utils):
-    paths = os.getenv("PATH").split(":")
-    utils = list(utils)
+def find_programs(utils):
+    contrib_path = os.path.join("lib", "contrib")
+    sys.path.append(contrib_path)
+    from which import which
     util_paths = {}
-    for path in paths:
-        founds = {}
-        for util in utils:
-            rpath = os.path.join(path, util)
-            if os.path.exists(rpath):
-                founds[util] = rpath
-                continue
-        util_paths.update(founds)
-        for util in founds:
-            utils.remove(util)
-        # No need to walk anymore in paths if everything found
-        if not(utils):
-            return (util_paths, [])
-    return (util_paths, utils)
+    missed = []
+    for util in utils:
+        try:
+            path = which.which(util)
+            util_paths[util] = path
+        except which.WhichError:
+            missed.append(util)
+    sys.path.remove(contrib_path)
+    return (util_paths, missed)
         
 
 class Install(install):
@@ -154,7 +153,8 @@ class Install(install):
         self.style = None
 
     def check_util_dependencies(self):
-        found, missed = which(("xsltproc", "latex", "pdflatex", "kpsewhich"))
+        found, missed = find_programs(("xsltproc", "latex",
+                                       "pdflatex", "kpsewhich"))
         for util in found:
             print "+checking %s... yes" % util
         for util in missed:
