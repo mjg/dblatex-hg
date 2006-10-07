@@ -182,6 +182,31 @@ class Latex(Depend):
             return 1
         return rc
 
+    def clean(self):
+        """
+        Remove all files that are produced by compilation.
+        """
+        self.remove_suffixes([".log", ".aux", ".toc", ".lof", ".lot",
+                              ".out", ".glo", ".cb"])
+
+        msg.log(_("cleaning additional files..."))
+        # for dep in self.sources.values():
+        #     dep.clean()
+
+        for mod in self.modules.objects.values():
+            mod.clean()
+
+    def remove_suffixes (self, list):
+        """
+        Remove all files derived from the main source with one of the
+        specified suffixes.
+        """
+        for suffix in list:
+            file = self.src_base + suffix
+            if os.path.exists(file):
+                msg.log(_("removing %s") % file)
+                os.unlink(file)
+
     def get_errors (self):
         if not(self.failed_module):
             return self.log.get_errors()

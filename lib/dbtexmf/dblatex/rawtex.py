@@ -150,6 +150,7 @@ class RawLatex:
             line = self.parser.parse(line)
             o.write(line)
         o.close()
+        f.close()
 
     def figconvert(self, line):
         # Is there an image included here

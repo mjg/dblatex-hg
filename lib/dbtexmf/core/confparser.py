@@ -87,6 +87,8 @@ class DbtexConfig:
             # The paths can be relative to the config file
             self.options += o.format(dir, value)
 
+        f.close()
+
     def fromstyle(self, style, paths=None):
         # First, find the related config file
         if not paths:

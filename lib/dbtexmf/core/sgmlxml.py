@@ -67,10 +67,12 @@ class Osx:
                                                sgmlfile, xmlfile))
         if rc != 0:
             i = 0
-            for line in open(errfile):
+            f = open(errfile)
+            for line in f:
                 sys.stderr.write(line)
                 i += 1
                 if i == 10: break
+            f.close()
             raise OSError("osx failed")
 
         # Now, replace the SDATA entities

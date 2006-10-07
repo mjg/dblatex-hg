@@ -18,7 +18,11 @@ class RunLatex:
 
     def set_fig_paths(self, paths):
         # Assume the paths are already absolute
-        self.fig_paths = paths
+        # Unixify the paths when under Windows
+        if paths and os.sep != "/":
+            self.fig_paths = [p.replace(os.sep, "/") for p in paths]
+        else:
+            self.fig_paths = paths
 
     def set_backend(self, backend):
         if not(backend in ("dvips", "pdftex")):
@@ -45,6 +49,7 @@ class RunLatex:
         for line in input:
             f.write(line)
         f.close()
+        input.close()
 
         # Build the output file
         try:
@@ -61,6 +66,5 @@ class RunLatex:
         shutil.move(tmpout, binfile)
 
     def clean(self):
-        # FIXME: remove this and pur it as texer method
-        os.system("rm -f *.log *.lot *.tu* *.mp")
+        self.texer.clean()
  

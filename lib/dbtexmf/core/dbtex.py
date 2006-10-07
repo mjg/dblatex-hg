@@ -66,12 +66,13 @@ class DbTex:
 
     def update_texinputs(self):
         # Systematically put the package style in TEXINPUTS
-        texpaths = ":".join(self.texinputs + [self.texdir + "//"])
+        sep = os.pathsep
+        texpaths = sep.join(self.texinputs + [self.texdir + "//"])
         texinputs = os.getenv("TEXINPUTS") or ""
-        if not(texinputs) or texinputs[0] == ":":
-            texinputs = ":%s%s" % (texpaths, texinputs)
+        if not(texinputs) or texinputs[0] == sep:
+            texinputs = sep + "%s%s" % (texpaths, texinputs)
         else:
-            texinputs = ":%s:%s" % (texpaths, texinputs)
+            texinputs = sep + "%s%s%s" % (texpaths, sep, texinputs)
         os.environ["TEXINPUTS"] = texinputs
 
     def set_format(self, format):
@@ -90,8 +91,9 @@ class DbTex:
         self.flags &= ~what
 
     def get_version(self):
-        s = file("%s/xsl/version.xsl" % self.topdir).read()
-        versions = re.findall("<xsl:variable[^>]*>([^<]*)<", s)
+        f = file("%s/xsl/version.xsl" % self.topdir)
+        versions = re.findall("<xsl:variable[^>]*>([^<]*)<", f.read())
+        f.close()
         if versions:
             return versions[0].strip()
         else:
@@ -167,6 +169,7 @@ class DbTex:
         self.runtex.set_fig_paths([self.inputdir] + self.fig_paths)
         self.runtex.compile(self.texfile, self.binfile, self.format,
                             batch=self.texbatch)
+        self.runtex.clean()
 
     def compile(self):
         self.cwdir = os.getcwd()

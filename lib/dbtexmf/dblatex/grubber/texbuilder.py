@@ -60,6 +60,9 @@ class LatexBuilder:
         if rc != 0:
             raise OSError("%s compilation failed" % self.tex.program)
 
+    def clean(self):
+        self.tex.clean()
+
     def print_errors(self):
         msg.display_all(self.tex.get_errors(), writer=msg.write_stderr)
 
