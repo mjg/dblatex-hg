@@ -1,13 +1,21 @@
 TABLES = $(wildcard table-eg*)
 PWD = $(shell pwd)
-#CHANGES = $(notdir $(wildcard changes/*.xml))
 CHANGES = $(wildcard changes/*.xml)
 VERSION = devel
-OPTS=
+OPTS =
+XSLTPROC = xsltproc
+XSLPROF = /usr/local/share/xsl/docbook/profiling/profile.xsl
 
-all: manual.pdf
+all: profile manual.pdf
 
 allstyle: all native db2latex simple
+
+profile:
+	@gmake -C manpage -f ../Makefile dblatex-doc.xml
+
+dblatex-doc.xml: dblatex.1.xml
+	$(XSLTPROC) -o $@ --param profile.attribute "'output'" \
+                          --param profile.value "'manual'" $(XSLPROF) $<
 
 clean:
 	$(RM) manual.pdf $(FIGURES)

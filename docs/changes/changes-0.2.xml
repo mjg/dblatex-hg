@@ -6,7 +6,7 @@ the possibility to integrates new features. Some other small improvements are
 included too:
 <itemizedlist>
 <listitem>
-  <para>Some list attributes like <sgmltag>continuation</sgmltag>, <sgmltag>numeration</sgmltag> and <sgmltag>spacing</sgmltag> are now handles.</para>
+  <para>Some list attributes like <sgmltag>continuation</sgmltag>, <sgmltag>numeration</sgmltag> and <sgmltag>spacing</sgmltag> are now supported.</para>
 </listitem>
 <listitem>
 <para>The <parameter>filename.as.url</parameter> parameter is added to avoid

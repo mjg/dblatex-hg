@@ -214,7 +214,7 @@
   <title>
   Using dblatex
  </title>
-<xi:include href="publish.xml"/>
+<xi:include href="manpage/dblatex-doc.xml"/>
 <xi:include href="custom/style.xml"/>
 <xi:include href="figure.xml"/>
 <xi:include href="tables/table.xml"/>
@@ -406,8 +406,9 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
   Thanks to the people who contributed to the project at its early age: Jean-Yves Le
   Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help,
   Vincent Hottier who asked for the embedded LaTeX equations support.</para>
-  <para>Thanks also to the current contributors, David Hedley (newtbl)
-  and Andreas Hoenen (Debian maintainer).</para>
+  <para>Thanks also to the current contributors: David Hedley (newtbl
+  implementor), Andreas Hoenen (Debian maintainer), and Nicolas Pernetty
+  (Windows port).</para>
   <para>Special thanks to the KDE documentation team, especially Philip Rodrigues,
   Michael Smith from the DocBook Project, and Kai Brommann, for their
   feedbacks, encouragements, and advice.

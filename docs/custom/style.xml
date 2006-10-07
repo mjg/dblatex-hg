@@ -117,8 +117,7 @@ $ cat latex/specs/mystyle.specs
 #
 # Dblatex spec file for my new style
 #
-TexInputs: ..//
-PdfInputs: ../contrib/mystyle/graphics//
+TexInputs: ../contrib/mystyle//
 TexStyle:  mytexstyle
 XslParam: ../contrib/mystyle/param.xsl
 Options:   -b pdftex

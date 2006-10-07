@@ -95,7 +95,8 @@
     Paths Lookup
    </title>
    <para>
-    You can use the option <option>-I "<replaceable>path1</replaceable> <replaceable>path2</replaceable> ..."</option> to specify where the figures are. The given paths must be absolute. The paths are added to the doculent root path.
+    You can use and cumulate the option <option>-I <replaceable>path</replaceable></option> to specify where the figures are. The given paths can be absolute or relative.
+    The paths are added to the document root path.
    </para>
 <example><title>Figures lookup</title>
    <para>
@@ -115,12 +116,12 @@
     And the document is compiled like this:
    </para>
    <programlisting>
-<![CDATA[% dblatex -I "/another/path /last/case" /initial/path/document.sgml
+<![CDATA[% dblatex -I /another/path -I /last/case /initial/path/document.sgml
 ]]>   </programlisting>
    <para>
     The figure1 lookup is done in the following directories, in respect of the order:
    </para>
-   <itemizedlist>
+   <itemizedlist spacing="compact">
     <listitem>
     <para>
     <filename>/initial/path/rep1/rep2</filename> ;

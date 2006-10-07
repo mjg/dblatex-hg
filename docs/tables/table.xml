@@ -6,14 +6,10 @@
    Creating Tables
   </title>
   <para>
-   DocBook tables can be quite complex, but dblatex should be able to drive most of
-   cases. </para>
+   DocBook tables can be quite complex, but <command>dblatex</command> should be able
+   to drive most of cases thanks to the excellent newtbl implementation
+   by David Hedley completely written in XSL.
   <para>
-   The tool contains two engines to create tables: the excellent newtbl implementation
-   by David Hedley completely written in XSL, and a (obsolete) perl parser.
-   One can select the engine to use with the parameter <varname>newtbl.use</varname>.
-   By default the newtbl engine is used, and the perl parser will be dropped one
-   day.</para>
   <para>
    Here is what is supported:
   </para>
@@ -65,8 +61,6 @@
    <sect2> <title> Limitations </title>
    <para>Currently the following things are known to fail with tables:
   <itemizedlist>
-   <listitem><para>Verbatim text in table cells is not
-   possible.</para></listitem>
    <listitem><para>Footnotes in table cells can fail, especially if the footnote
    contains several paragraph. Moreover they are lost is a float like a table.
    </para></listitem>
