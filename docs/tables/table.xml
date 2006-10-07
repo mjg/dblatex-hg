@@ -9,7 +9,7 @@
    DocBook tables can be quite complex, but <command>dblatex</command> should be able
    to drive most of cases thanks to the excellent newtbl implementation
    by David Hedley completely written in XSL.
-  <para>
+  </para>
   <para>
    Here is what is supported:
   </para>
@@ -61,8 +61,13 @@
    <sect2> <title> Limitations </title>
    <para>Currently the following things are known to fail with tables:
   <itemizedlist>
+   <listitem><para>program listings and screens cannot be embedded in tables.
+   Some other verbatim environments like litterallayout are allowed.
+   </para></listitem>
+  </itemizedlist>
+  <itemizedlist>
    <listitem><para>Footnotes in table cells can fail, especially if the footnote
-   contains several paragraph. Moreover they are lost is a float like a table.
+   contains several paragraphs. Moreover they are lost is a float like a table.
    </para></listitem>
   </itemizedlist>
    </para>
