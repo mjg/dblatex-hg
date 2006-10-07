@@ -3,13 +3,15 @@
 / * Passer la doc en XML + utiliser la manpage
 x * Utiliser sgml2xml (osx)
 * Utilisation bibtex
-* Problèmes verbatim in tables
+x * Problèmes verbatim in tables
 * Problèmes footnote in tables
 * Problèmes table in example
 * Remark in note
 x * Bug #1382511 : &ndash; -> &#8211;
 * Patch biblio à intégrer
 * Bug table
+* Faire <remark>
+* Faire <annotation>
 
 * <subtitles> silently skipped.
 
@@ -27,6 +29,8 @@ x * Bug #1382511 : &ndash; -> &#8211;
   -->
 </xsl:template>
 
+- Verbatim (litterallayout, address, synopsis, classsynopsis) in tables now work.
+
 Release 0.2:
 ------------
 
@@ -42,6 +46,7 @@ Release 0.2:
   - <alt> not printed in verbatim mode, and only in <*equation> elements.
   - Entities &#8217; and &#8230; correctly mapped.
   - db2latex.sty, docbook.sty: uses \examplename (locale).
+  - <uri>, <tag> defined.
 
 
 Release 0.1.10:

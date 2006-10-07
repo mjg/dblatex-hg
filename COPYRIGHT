@@ -69,10 +69,10 @@ MATHML 2.0 SUPPORT
 
 NEW TABLE SUPPORT
 --------------------------------------------------------------------------------
-  The newtbl code (http://www.vistair.com/newtbl) by David Hedley is now
-  included to drive the DocBook tables.
-  By default this very good implementation is used, but if neccessary one can
-  still use the native one by setting the parameter newtbl.use='0'. 
+  The newtbl code (http://www.vistair.com/newtbl) by David Hedley is
+  included to drive the DocBook tables. This very good implementation is now the
+  default and unique implementation used, so the newtbl.use parameter is
+  useless. 
 
 LATEX PACKAGES
 --------------------------------------------------------------------------------
@@ -90,6 +90,13 @@ LATEX PACKAGES
   LaTeX documents. The code used by dblatex IS NOT the offical rubber package
   and is not maintained by the rubber author or maintainer. The dblatex rubber
   customization is called grubber.
+
+PYTHON WHICH
+--------------------------------------------------------------------------------
+  The Python which package (http://trentm.com/downloads/which/1.1.0/which-1.1.0.zip)
+  is embedded in the dblatex package under lib/contrib/which and used to
+  check some program dependencies during the install setup. The which license is
+  here in the dblatex package: lib/contrib/which/LICENSE.txt.
 
 MISCELLANEOUS
 --------------------------------------------------------------------------------

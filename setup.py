@@ -247,20 +247,21 @@ def get_version():
 
 if __name__ == "__main__":
     setup(name="dblatex",
-      version=get_version(),
-      description='DocBook to LaTeX/ConTeXt Publishing',
-      author='Benoît Guillon',
-      author_email='marsgui@users.sourceforge.net',
-      url='http://dblatex.sf.net',
-      packages=['dbtexmf',
-                'dbtexmf.core',
-                'dbtexmf.dblatex',
-                'dbtexmf.dblatex.grubber'],
-      package_dir={'dbtexmf':'lib/dbtexmf'},
-      data_files=[('share/dblatex', ['xsl', 'latex', 'docs'])],
-      scripts=['scripts/dblatex'],
-      cmdclass={'build_scripts': BuildScripts,
-                'install': Install,
-                'install_data': InstallData}
-     )
+        version=get_version(),
+        description='DocBook to LaTeX/ConTeXt Publishing',
+        author='Benoît Guillon',
+        author_email='marsgui@users.sourceforge.net',
+        url='http://dblatex.sf.net',
+        packages=['dbtexmf',
+                  'dbtexmf.core',
+                  'dbtexmf.dblatex',
+                  'dbtexmf.dblatex.grubber'],
+        package_dir={'dbtexmf':'lib/dbtexmf'},
+        package_data={'dbtexmf.core':['sgmlent.txt']},
+        data_files=[('share/dblatex', ['xsl', 'latex', 'docs'])],
+        scripts=['scripts/dblatex'],
+        cmdclass={'build_scripts': BuildScripts,
+                  'install': Install,
+                  'install_data': InstallData}
+        )
 
