@@ -101,16 +101,7 @@
     <xsl:apply-templates select="." mode="lstid"/>
   </xsl:variable>
   <listing type="textdata" lstid="{$lstid}">
-    <xsl:element name="xi:include">
-      <xsl:attribute name="href">
-        <xsl:value-of select="$filename"/>
-      </xsl:attribute>
-      <xsl:attribute name="parse">text</xsl:attribute>
-      <xsl:attribute name="encoding">
-        <xsl:value-of select="$encoding"/>
-      </xsl:attribute>
-    </xsl:element>
-  </listing>
+    <xi:include href="{$filename}" parse="text" encoding="{$encoding}"/></listing>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -134,16 +125,8 @@
     <xsl:apply-templates select="." mode="lstid"/>
   </xsl:variable>
   <listing type="imagedata"  lstid="{$lstid}">
-    <xsl:element name="xi:include">
-      <xsl:attribute name="href">
-        <xsl:value-of select="$filename"/>
-      </xsl:attribute>
-      <xsl:attribute name="parse">text</xsl:attribute>
-      <xsl:attribute name="encoding">
-        <xsl:value-of select="$textdata.default.encoding"/>
-      </xsl:attribute>
-    </xsl:element>
-  </listing>
+    <xi:include href="{$filename}" parse="text"
+                encoding="{$textdata.default.encoding}"/></listing>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -158,16 +141,8 @@
     <xsl:apply-templates select="." mode="lstid"/>
   </xsl:variable>
   <listing type="inlinegraphic" lstid="{$lstid}">
-    <xsl:element name="xi:include">
-      <xsl:attribute name="href">
-        <xsl:value-of select="$filename"/>
-      </xsl:attribute>
-      <xsl:attribute name="parse">text</xsl:attribute>
-      <xsl:attribute name="encoding">
-        <xsl:value-of select="$textdata.default.encoding"/>
-      </xsl:attribute>
-    </xsl:element>
-  </listing>
+    <xi:include href="{$filename}" parse="text"
+                encoding="{$textdata.default.encoding}"/></listing>
 </xsl:template>
 
 <!-- ==================================================================== -->
