@@ -59,10 +59,10 @@ class DbTex:
 
     def set_base(self, topdir):
         self.topdir = os.path.realpath(topdir)
-        self.xslmain = "%s/xsl/docbook.xsl" % self.topdir
-        self.xsllist = "%s/xsl/common/mklistings.xsl" % self.topdir
-        self.texdir = "%s/texstyle" % self.topdir
-        self.confdir = "%s/confstyle" % self.topdir
+        self.xslmain = os.path.join(self.topdir, "xsl", "docbook.xsl")
+        self.xsllist = os.path.join(self.topdir, "xsl", "common", "mklistings.xsl")
+        self.texdir = os.path.join(self.topdir, "texstyle")
+        self.confdir = os.path.join(self.topdir, "confstyle")
 
     def update_texinputs(self):
         # Systematically put the package style in TEXINPUTS
@@ -91,7 +91,7 @@ class DbTex:
         self.flags &= ~what
 
     def get_version(self):
-        f = file("%s/xsl/version.xsl" % self.topdir)
+        f = file(os.path.join(self.topdir, "xsl", "version.xsl"))
         versions = re.findall("<xsl:variable[^>]*>([^<]*)<", f.read())
         f.close()
         if versions:

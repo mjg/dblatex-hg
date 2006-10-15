@@ -24,17 +24,18 @@ class DbLatex(DbTex):
 
         # Engines to use
         self.runtex = RunLatex()
-        self.runtex.index_style = "%s/latex/scripts/doc.ist" % self.topdir
+        self.runtex.index_style = os.path.join(self.topdir,
+                                               "latex", "scripts", "doc.ist")
         self.rawtex = RawLatex()
         self.xsltproc = XsltProc()
         self.sgmlxml = Osx()
 
     def set_base(self, topdir):
         DbTex.set_base(self, topdir)
-        self.xslmain = "%s/xsl/latex_book_fast.xsl" % self.topdir
-        self.xsllist = "%s/xsl/common/mklistings.xsl" % self.topdir
-        self.texdir = "%s/latex" % self.topdir
-        self.confdir = "%s/latex/specs" % self.topdir
+        self.xslmain = os.path.join(self.topdir, "xsl", "latex_book_fast.xsl")
+        self.xsllist = os.path.join(self.topdir, "xsl", "common", "mklistings.xsl")
+        self.texdir = os.path.join(self.topdir, "latex")
+        self.confdir = os.path.join(self.topdir, "latex", "specs")
 
 
 #

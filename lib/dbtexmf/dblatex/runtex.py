@@ -20,9 +20,10 @@ class RunLatex:
         # Assume the paths are already absolute
         # Unixify the paths when under Windows
         if paths and os.sep != "/":
-            self.fig_paths = [p.replace(os.sep, "/") for p in paths]
-        else:
-            self.fig_paths = paths
+            paths = [p.replace(os.sep, "/") for p in paths]
+
+        # Protect from tilde active char (maybe others?)
+        self.fig_paths = [p.replace("~", r"\string~") for p in paths]
 
     def set_backend(self, backend):
         if not(backend in ("dvips", "pdftex")):
