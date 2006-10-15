@@ -124,9 +124,8 @@ os.environ["SGML_CATALOG_FILES"] = cat
 
 
 def find_programs(utils):
-    contrib_path = os.path.join("lib", "contrib")
-    sys.path.append(contrib_path)
-    from which import which
+    sys.path.append("lib")
+    from contrib.which import which
     util_paths = {}
     missed = []
     for util in utils:
@@ -135,7 +134,7 @@ def find_programs(utils):
             util_paths[util] = path
         except which.WhichError:
             missed.append(util)
-    sys.path.remove(contrib_path)
+    sys.path.remove("lib")
     return (util_paths, missed)
         
 
@@ -153,7 +152,17 @@ class Install(install):
         self.style = None
 
     def check_util_dependencies(self):
-        found, missed = find_programs(("xsltproc", "latex",
+        # First, check non critical graphic tools
+        found, missed = find_programs(("epstopdf", "convert", "fig2dev"))
+        for util in found:
+            print "+checking %s... yes" % util
+        for util in missed:
+            print "+checking %s... no" % util
+        if missed:
+            print("warning: not found: %s" % ", ".join(missed))
+
+        # Now, be serious
+        found, missed = find_programs(("xsltproc", "latex", "makeindex",
                                        "pdflatex", "kpsewhich"))
         for util in found:
             print "+checking %s... yes" % util
@@ -231,10 +240,15 @@ class InstallData(install_data):
 
     def run(self):
         self.mkpath(self.install_dir)
-        for install_base, dirs in self.data_files:
+        for install_base, paths in self.data_files:
             basedir = os.path.join(self.install_dir, install_base)
-            for dir in dirs:
-                self.copy_tree(dir, os.path.join(basedir, dir))
+            for path in paths:
+                if os.path.isdir(path):
+                    self.copy_tree(path, os.path.join(basedir, path))
+                else:
+                    self.mkpath(basedir)
+                    self.copy_file(path, os.path.join(basedir,
+                                   os.path.basename(path)))
 
 
 def get_version():
@@ -258,7 +272,9 @@ if __name__ == "__main__":
                   'dbtexmf.dblatex.grubber'],
         package_dir={'dbtexmf':'lib/dbtexmf'},
         package_data={'dbtexmf.core':['sgmlent.txt']},
-        data_files=[('share/dblatex', ['xsl', 'latex', 'docs'])],
+        data_files=[('share/dblatex', ['xsl', 'latex']),
+                    ('share/doc/dblatex', ['docs/manual.pdf']),
+                    ('share/man/man1', ['docs/manpage/dblatex.1.gz'])],
         scripts=['scripts/dblatex'],
         cmdclass={'build_scripts': BuildScripts,
                   'install': Install,
