@@ -6,9 +6,10 @@
     ############################################################################ -->
 
 <!-- Mediaobject/imagedata parameters -->
-<xsl:param name="imagedata.default.scale">pagebound</xsl:param>
 <xsl:param name="mediaobject.caption.style">\slshape</xsl:param>
+<xsl:param name="imagedata.default.scale">pagebound</xsl:param>
 <xsl:param name="imagedata.file.check">1</xsl:param>
+<xsl:param name="imagedata.boxed">0</xsl:param>
 
 
 <!-- Initial image macro setting, depending on the parameter value -->
@@ -144,11 +145,11 @@
     <xsl:apply-templates select="../caption"/>
     <xsl:text>]{</xsl:text>
   </xsl:if>
-  <xsl:if test="$latex.figure.boxed = '1'">
+  <xsl:if test="$imagedata.boxed = '1'">
     <xsl:text>\fbox{</xsl:text>
   </xsl:if>
   <xsl:apply-templates select="imagedata"/>
-  <xsl:if test="$latex.figure.boxed = '1'">
+  <xsl:if test="$imagedata.boxed = '1'">
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:if test="$figcount &gt; 1">

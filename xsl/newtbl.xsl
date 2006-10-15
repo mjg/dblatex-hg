@@ -663,6 +663,7 @@
 
 <!-- Process each row in turn -->
 <xsl:template match="row" mode="newtbl">
+  <xsl:param name="tabletype"/>
   <xsl:param name="rownum"/>
   <xsl:param name="rows"/>
   <xsl:param name="colspec"/>
@@ -739,6 +740,7 @@
   <xsl:choose>
     <xsl:when test="following-sibling::row[1]">
       <xsl:apply-templates mode="newtbl" select="following-sibling::row[1]">
+        <xsl:with-param name="tabletype" select="$tabletype"/>
         <xsl:with-param name="rownum" select="$rownum + 1"/>
         <xsl:with-param name="rows" select="$rows"/>
         <xsl:with-param name="colspec" select="$colspec"/>
@@ -753,11 +755,14 @@
       <!-- Ask to table to end the head -->
       <xsl:if test="local-name(..) = 'thead'">
         <xsl:apply-templates select="ancestor::table|ancestor::informaltable"
-                             mode="newtbl.endhead"/>
+                             mode="newtbl.endhead">
+          <xsl:with-param name="tabletype" select="$tabletype"/>
+        </xsl:apply-templates>
       </xsl:if>
 
       <xsl:apply-templates mode="newtbl" 
                            select="(../following-sibling::tbody/row)[1]">
+        <xsl:with-param name="tabletype" select="$tabletype"/>
         <xsl:with-param name="rownum" select="$rownum + 1"/>
         <xsl:with-param name="rows" select="$rows"/>
         <xsl:with-param name="colspec" select="$colspec"/>
@@ -846,6 +851,8 @@
 <!-- The main starting point of the table handling -->
 <xsl:template match="tgroup" mode="newtbl">
   <xsl:param name="tabletype">tabular</xsl:param>
+  <xsl:param name="tablewidth">\linewidth-2\tabcolsep</xsl:param>
+
   <!-- First, save the table verbatim data -->
   <xsl:apply-templates mode="save.verbatim"/>
   <xsl:text>
@@ -880,7 +887,7 @@
       <xsl:when test="../@width">
         <xsl:value-of select="../@width"/>
       </xsl:when>
-      <xsl:otherwise>\linewidth-2\tabcolsep</xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="$tablewidth"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   
@@ -987,6 +994,7 @@
 
   <!-- Go through each row, starting with the header -->
   <xsl:apply-templates mode="newtbl" select="((thead|tbody)/row)[1]">
+    <xsl:with-param name="tabletype" select="$tabletype"/>
     <xsl:with-param name="rownum" select="1"/>
     <xsl:with-param name="rows" select="$rows"/>
     <xsl:with-param name="frame" select="$frame"/>
@@ -996,6 +1004,7 @@
 
   <!-- Go through each footer row -->
   <xsl:apply-templates mode="newtbl" select="tfoot/row[1]">
+    <xsl:with-param name="tabletype" select="$tabletype"/>
     <xsl:with-param name="rownum" select="count(thead/row|tbody/row)+1"/>
     <xsl:with-param name="rows" select="$rows"/>
     <xsl:with-param name="frame" select="$frame"/>

@@ -7,18 +7,22 @@
 
 <!-- Figure parameters -->
 <xsl:param name="figure.title.top">0</xsl:param>
+<xsl:param name="figure.default.position">[htbp]</xsl:param>
 
 
 <xsl:template match="figure">
   <xsl:text>\begin{figure}</xsl:text>
   <!-- figure placement preference -->
   <xsl:choose>
-  <xsl:when test="@float and @float='0'">
-    <xsl:text>[H]</xsl:text>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:value-of select="$latex.figure.position"/>
-  </xsl:otherwise>
+    <xsl:when test="@floatstyle != ''">
+      <xsl:value-of select="@floatstyle"/>
+    </xsl:when>
+    <xsl:when test="@float and @float='0'">
+      <xsl:text>[H]</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$figure.default.position"/>
+    </xsl:otherwise>
   </xsl:choose>
   <xsl:text>&#10;</xsl:text>
   <!-- title caption before the image -->

@@ -160,7 +160,7 @@
 <!-- Print the markup of the co referenced by coref -->
 <xsl:template match="coref" mode="latex.programlisting">
   <xsl:param name="rnode" select="/"/>
-  <xsl:variable name="co" select="id(@linkend)"/>
+  <xsl:variable name="co" select="$rnode//*[@id=current()/@linkend]"/>
 
   <xsl:choose>
   <xsl:when test="$co">
@@ -182,7 +182,7 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:message>
-      <xsl:text>*** Invalid co/@linkend='</xsl:text>
+      <xsl:text>*** Invalid coref/@linkend='</xsl:text>
       <xsl:value-of select="@linkend"/>
       <xsl:text>'</xsl:text>
     </xsl:message>
