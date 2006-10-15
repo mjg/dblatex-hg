@@ -1,17 +1,18 @@
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
-/ * Passer la doc en XML + utiliser la manpage
+x * Passer la doc en XML + utiliser la manpage
 x * Utiliser sgml2xml (osx)
-* Utilisation bibtex
 x * Problèmes verbatim in tables
+x * longtable sans caption : \addtocounter{table}{-1}
+* Utilisation bibtex
 * Problèmes footnote in tables
 * Problèmes table in example
 * Remark in note
-x * Bug #1382511 : &ndash; -> &#8211;
 * Patch biblio à intégrer
 * Bug table
 * Faire <remark>
 * Faire <annotation>
+* \caption{\protect\rule{0cm}{2cm} blablabla}
 
 * <subtitles> silently skipped.
 
@@ -29,10 +30,32 @@ x * Bug #1382511 : &ndash; -> &#8211;
   -->
 </xsl:template>
 
-- Verbatim (litterallayout, address, synopsis, classsynopsis) in tables now work.
-
 Release 0.2:
 ------------
+
+- Verbatim (litterallayout, address, synopsis, classsynopsis) in tables now work.
+- Nesting informaltables is possible.
+- Better osx() integration. The SDATA entities are translated to the equivalent
+  Unicode characters.
+- Better windows compatibility thanks to the Nicolas Pernetty's patches:
+  - Use of a portable 'which' during the install dependency check.
+  - Use of shutil instead of unix equivalent commands.
+  - Portable TEXINPUTS variable setup.
+  - Compatible figure path setup.
+  - Compatible package paths.
+- Basic support of @float and @floatstyle in <figure> and <table>.
+- Some cleanups and bug fixes.
+  - coref/@linkend fix.
+  - manual documentation reorganized
+  - Debian manpage provided in the package and integrated in the dblatex manual
+  - latex.figure.boxed parameter changed to imagedata.boxed
+  - latex.figure.position parameter changed to figure.default.position
+  - table.default.position added
+  - table counter bug fix
+
+
+Release 0.2pre:
+---------------
 
 * Major change: publishing code (except XSL) is re-written in Python. Perl,
   GNU make and shell scripts are no more used.
