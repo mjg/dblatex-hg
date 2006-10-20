@@ -188,7 +188,7 @@
 
 <xsl:template match="filename">
   <xsl:choose>
-  <xsl:when test="$filename.as.url='1'">
+  <xsl:when test="$filename.as.url='1' and not(ancestor::title)">
     <!-- Guess hyperref is always used now. No escaping needed here -->
     <xsl:text>\nolinkurl{</xsl:text>
     <xsl:value-of select="."/>
