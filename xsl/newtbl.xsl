@@ -253,11 +253,13 @@
   <xsl:param name="entries"/>
   
   <xsl:if test="$colnum &lt;= $colend">
+    <xsl:variable name="entry"
+                  select="$entries/*[self::entry or self::entrytbl]
+                                    [@colstart=$colnum and @rowend &gt;= $rownum]"/>
     <xsl:choose>
-      <xsl:when test="$entries/entry[@colstart=$colnum and 
-                      @rowend &gt;= $rownum]">
+      <xsl:when test="$entry">
         <!-- Just copy this entry then -->
-        <xsl:copy-of select="$entries/entry[@colstart=$colnum]"/>
+        <xsl:copy-of select="$entry"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- No rowspan entry found from the row above, so create a blank -->
@@ -270,9 +272,8 @@
     </xsl:choose>
     <xsl:variable name="nextcol">
       <xsl:choose>
-        <xsl:when test="$entries/entry[@colstart=$colnum and 
-                        @rowend &gt;= $rownum]">
-          <xsl:value-of select="$entries/entry[@colstart=$colnum]/@colend"/>
+        <xsl:when test="$entry">
+          <xsl:value-of select="$entry/@colend"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$colnum"/>
@@ -303,7 +304,7 @@
 <!-- colend = The ending column number of this entry -->
 <!-- defrowsep = The default rowsep value inherited from the entry's span -->
 <!--     or colspec -->
-<xsl:template match="entry" mode="newtbl.buildentries">
+<xsl:template match="entry|entrytbl" mode="newtbl.buildentries">
   <xsl:param name="colnum"/>
   <xsl:param name="rownum"/>
   <xsl:param name="colspec"/>
@@ -315,12 +316,14 @@
   
   <xsl:if test="$colnum &lt;= $cols">
     
+    <xsl:variable name="entry"
+                  select="$entries/*[self::entry or self::entrytbl]
+                                    [@colstart=$colnum and @rowend &gt;= $rownum]"/>
     <!-- Do we have an existing entry element from a previous row that -->
     <!-- should be copied into this row? -->
-    <xsl:choose><xsl:when test="$entries/entry[@colstart=$colnum and 
-                                @rowend &gt;= $rownum]">
+    <xsl:choose><xsl:when test="$entry">
       <!-- Just copy this entry then -->
-      <xsl:copy-of select="$entries/entry[@colstart=$colnum]"/>
+      <xsl:copy-of select="$entry"/>
       
       <!-- Process the next column using this current entry -->
       <xsl:apply-templates mode="newtbl.buildentries" select=".">
@@ -383,6 +386,14 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
+
+      <!-- No offset between column and cell content for entrytbl -->
+      <xsl:variable name="coloff">
+        <xsl:choose>
+          <xsl:when test="self::entrytbl">0</xsl:when>
+          <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       
       <!-- Does this entry want to start at a later column? -->
       <xsl:if test="$colnum &lt; $colstart">
@@ -443,6 +454,20 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
+
+      <!-- Vertical cell alignment -->
+      <xsl:variable name="valign">
+        <xsl:choose>
+          <!-- Entry element attribute first -->
+          <xsl:when test="string(@valign)">
+            <xsl:value-of select="@valign"/>
+          </xsl:when>
+          <!-- Then parent row -->
+          <xsl:when test="../@valign">
+            <xsl:value-of select="../@valign"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
       
       <xsl:copy>
         <xsl:for-each select="@*"><xsl:copy/></xsl:for-each>
@@ -451,6 +476,9 @@
         </xsl:attribute>
         <xsl:attribute name="colend">
           <xsl:value-of select="$colend"/>
+        </xsl:attribute>
+        <xsl:attribute name="coloff">
+          <xsl:value-of select="$coloff"/>
         </xsl:attribute>
         <xsl:attribute name="rowstart">
           <xsl:value-of select="$rownum"/>
@@ -474,6 +502,9 @@
         <xsl:attribute name="align">
           <xsl:value-of select="$align"/>
         </xsl:attribute>
+        <xsl:attribute name="valign">
+          <xsl:value-of select="$valign"/>
+        </xsl:attribute>
         <!-- Process the output here, to stay in the document context. -->
         <!-- In RTF entries the document links/refs are lost -->
         <xsl:element name="output">
@@ -482,7 +513,8 @@
       </xsl:copy>
       
       <!-- See if we've run out of entries for the current row -->
-      <xsl:if test="$colend &lt; $cols and not(following-sibling::entry[1])">
+      <xsl:if test="$colend &lt; $cols and
+                    not(following-sibling::*[self::entry or self::entrytbl][1])">
         <!-- Create more blank entries to pad the row -->
         <xsl:call-template name="tbl.blankentry" mode="newtbl">
           <xsl:with-param name="colnum" select="$colend + 1"/>
@@ -494,8 +526,8 @@
       </xsl:if>
       
       <xsl:apply-templates mode="newtbl.buildentries" 
-                           select="following-sibling::entry[1]">
-        <xsl:with-param name="colnum" select="$colend + 1"/>
+               select="following-sibling::*[self::entry or self::entrytbl][1]">
+      <xsl:with-param name="colnum" select="$colend + 1"/>
         <xsl:with-param name="rownum" select="$rownum"/>
         <xsl:with-param name="colspec" select="$colspec"/>
         <xsl:with-param name="spanspec" select="$spanspec"/>
@@ -509,12 +541,11 @@
 
 
 <!-- Output the current entry node -->
-<xsl:template match="entry" mode="newtbl">
+<xsl:template match="entry|entrytbl" mode="newtbl">
   <xsl:param name="colspec"/>
   <xsl:param name="context"/>
   <xsl:param name="frame"/>
   <xsl:param name="rownum"/>
-  <xsl:param name="valign"/>
   
   <xsl:variable name="cols" select="count($colspec/*)"/>
   <!--
@@ -533,12 +564,13 @@
     <xsl:value-of select="@colend - @colstart + 1"/>
     <xsl:text>}{</xsl:text>
     <xsl:call-template name="tbl.colfmt" mode="newtbl">
+      <xsl:with-param name="coloff" select="@coloff"/>
       <xsl:with-param name="colstart" select="@colstart"/>
       <xsl:with-param name="colend" select="@colend"/>
       <xsl:with-param name="colsep" select="@colsep"/>
       <xsl:with-param name="colspec" select="$colspec"/>
       <xsl:with-param name="frame" select="$frame"/>
-      <xsl:with-param name="valign" select="$valign"/>
+      <xsl:with-param name="valign" select="@valign"/>
     </xsl:call-template>
     <xsl:text>}{</xsl:text>
     
@@ -661,6 +693,15 @@
 </xsl:template>
 
 
+<!-- Actually build the embedded table like tgroup does -->
+<xsl:template match="entrytbl" mode="output">
+  <xsl:call-template name="tgroup">
+    <xsl:with-param name="tablewidth" select="'\linewidth-\arrayrulewidth'"/>
+    <xsl:with-param name="tableframe" select="'none'"/>
+  </xsl:call-template>
+</xsl:template>
+
+
 <!-- Process each row in turn -->
 <xsl:template match="row" mode="newtbl">
   <xsl:param name="tabletype"/>
@@ -674,8 +715,8 @@
   <!-- Build the entry node-set -->
   <xsl:variable name="entries">
     <xsl:choose>
-      <xsl:when test="entry[1]">
-        <xsl:apply-templates mode="newtbl.buildentries" select="entry[1]">
+      <xsl:when test="(entry|entrytbl)[1]">
+        <xsl:apply-templates mode="newtbl.buildentries" select="(entry|entrytbl)[1]">
           <xsl:with-param name="colnum" select="1"/>
           <xsl:with-param name="rownum" select="$rownum"/>
           <xsl:with-param name="colspec" select="$colspec"/>
@@ -697,7 +738,6 @@
     <xsl:with-param name="frame" select="$frame"/>
     <xsl:with-param name="context" select="$context"/>
     <xsl:with-param name="rownum" select="$rownum"/>
-    <xsl:with-param name="valign" select="@valign"/>
   </xsl:apply-templates>
   
   <!-- End this row -->
@@ -800,6 +840,7 @@
 <xsl:template name="tbl.colfmt" mode="newtbl">
   <xsl:param name="colstart"/>
   <xsl:param name="colend"/>
+  <xsl:param name="coloff"/>
   <xsl:param name="frame"/>
   <xsl:param name="colsep"/>
   <xsl:param name="colspec"/>
@@ -811,6 +852,11 @@
   <xsl:if test="$colstart = 1 and ($frame = 'all' or $frame = 'sides')">
     <xsl:text>|</xsl:text>
   </xsl:if>
+
+  <!-- Remove the offset between column and cell content? -->
+  <xsl:if test="$coloff = 0">
+    <xsl:text>@{}</xsl:text>
+  </xsl:if>
   
   <!-- Get the column width -->
   <xsl:variable name="width">
@@ -819,6 +865,9 @@
       <xsl:with-param name="colend" select="$colend"/>
       <xsl:with-param name="colspec" select="$colspec"/>
     </xsl:call-template>
+    <xsl:if test="$coloff = 0">
+      <xsl:text>+2\tabcolsep</xsl:text>
+    </xsl:if>
   </xsl:variable>
   
   <xsl:choose>
@@ -837,6 +886,10 @@
   <xsl:value-of select="$width"/>
   <xsl:text>}</xsl:text>
   
+  <xsl:if test="$coloff = 0">
+    <xsl:text>@{}</xsl:text>
+  </xsl:if>
+
   <!-- Need a colsep to the right? - only if last column and frame says -->
   <!-- so, or we are not the last column and colsep says so  -->
   
@@ -849,15 +902,14 @@
 
 
 <!-- The main starting point of the table handling -->
-<xsl:template match="tgroup" mode="newtbl">
+<xsl:template match="tgroup" mode="newtbl" name="tgroup">
   <xsl:param name="tabletype">tabular</xsl:param>
   <xsl:param name="tablewidth">\linewidth-2\tabcolsep</xsl:param>
+  <xsl:param name="tableframe">all</xsl:param>
 
   <!-- First, save the table verbatim data -->
   <xsl:apply-templates mode="save.verbatim"/>
-  <xsl:text>
-\begingroup%
-  </xsl:text>
+  <xsl:text>\begingroup%&#10;</xsl:text>
   
   <!-- Get the number of columns -->
   <xsl:variable name="cols">
@@ -866,9 +918,9 @@
         <xsl:value-of select="@cols"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="count(tbody/row[1]/entry)"/>
+        <xsl:value-of select="count(tbody/row[1]/*[self::entry or self::entrytbl])"/>
         <xsl:message>Warning: table's tgroup lacks cols attribute. 
-        Assuming <xsl:value-of select="count(tbody/row[1]/entry)"/>.
+        Assuming <xsl:value-of select="count(tbody/row[1]/*)"/>.
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
@@ -909,7 +961,7 @@
       <xsl:when test="../@frame">
         <xsl:value-of select="../@frame"/>
       </xsl:when>
-      <xsl:otherwise>all</xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="$tableframe"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   
