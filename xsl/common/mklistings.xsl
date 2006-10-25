@@ -42,6 +42,27 @@
 
 <!-- ==================================================================== -->
 
+<xsl:template name="string-replace" >
+  <xsl:param name="string"/>
+  <xsl:param name="from"/>
+  <xsl:param name="to"/>
+  <xsl:choose>
+    <xsl:when test="contains($string,$from)">
+      <xsl:value-of select="substring-before($string,$from)"/>
+      <xsl:value-of select="$to"/>
+      <xsl:call-template name="string-replace">
+        <xsl:with-param name="string" select="substring-after($string,$from)"/>
+        <xsl:with-param name="from" select="$from"/>
+        <xsl:with-param name="to" select="$to"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$string"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 <xsl:template name="get.external.filename">
   <xsl:variable name="filename">
   <xsl:choose>
@@ -53,18 +74,26 @@
     </xsl:otherwise>
   </xsl:choose>
   </xsl:variable>
-  <xsl:choose>
-  <xsl:when test="starts-with($filename, '/') or
-                  contains($filename, ':')">
-    <!-- it has absolute path or a uri scheme so it is an absolute uri -->
-    <xsl:value-of select="$filename"/>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:value-of select="$current.dir"/>
-    <xsl:text>/</xsl:text>
-    <xsl:value-of select="$filename"/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:variable name="absfilename">
+    <xsl:choose>
+    <xsl:when test="starts-with($filename, '/') or
+                    contains($filename, ':')">
+      <!-- it has absolute path or a uri scheme so it is an absolute uri -->
+      <xsl:value-of select="$filename"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$current.dir"/>
+      <xsl:text>/</xsl:text>
+      <xsl:value-of select="$filename"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <!-- get a valid URI -->
+  <xsl:call-template name="string-replace">
+    <xsl:with-param name="string" select="$absfilename"/>
+    <xsl:with-param name="from" select="' '"/>
+    <xsl:with-param name="to" select="'%20'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <!-- ==================================================================== -->

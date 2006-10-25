@@ -12,7 +12,7 @@
     <xsl:text>\begin{center}&#10;</xsl:text>
   </xsl:if>
   <!-- Forget the textobject -->
-  <xsl:apply-templates select="imageobjectco"/>
+  <xsl:apply-templates select="imageobjectco[1]"/>
   <xsl:if test="not(parent::figure)">
     <xsl:text>\end{center}&#10;</xsl:text>
     <xsl:text>\end{minipage}&#10;</xsl:text>
@@ -21,7 +21,12 @@
 </xsl:template>
 
 <xsl:template match="imageobjectco">
-  <xsl:apply-templates/>
+  <!-- Do as if we could have several imageobjects (DocBook 5) -->
+  <xsl:variable name="idx">
+    <xsl:call-template name="mediaobject.select.idx"/>
+  </xsl:variable>
+  <xsl:apply-templates select="imageobject[position()=$idx]"/>
+  <xsl:apply-templates select="calloutlist"/>
 </xsl:template>
 
 <xsl:template match="imageobjectco" mode="graphic.begin">

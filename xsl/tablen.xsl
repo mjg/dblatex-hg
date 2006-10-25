@@ -14,6 +14,7 @@
 <xsl:param name="newtbl.format.tfoot"/>
 <xsl:param name="newtbl.default.colsep" select="'1'"/>
 <xsl:param name="newtbl.default.rowsep" select="'1'"/>
+<xsl:param name="newtbl.use.hhline" select="'0'"/>
 <xsl:param name="newtbl.use" select="'1'"/> <!-- no more used -->
 <xsl:param name="table.title.top" select="'0'"/>
 <xsl:param name="table.default.position" select="'[htbp]'"/>

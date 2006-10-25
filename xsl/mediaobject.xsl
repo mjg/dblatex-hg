@@ -12,6 +12,22 @@
 <xsl:param name="imagedata.boxed">0</xsl:param>
 
 
+<!-- Simple mediaobject selection using @role -->
+<xsl:template name="mediaobject.select.idx">
+  <xsl:param name="olist" select="imageobject|imageobjectco"/>
+  <xsl:param name="role" select="'dblatex'"/>
+  <xsl:choose>
+  <xsl:when test="$olist[@role=$role]">
+    <xsl:value-of select="count($olist[@role=$role][1]/preceding-sibling::*) -
+                          count($olist[1]/preceding-sibling::*) + 1"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="1"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 <!-- Initial image macro setting, depending on the parameter value -->
 <xsl:template name="opt.extract">
   <xsl:param name="optgroup"/>
@@ -104,14 +120,20 @@
   </xsl:if>
   <xsl:choose>
     <xsl:when test="imageobject|imageobjectco">
+      <xsl:variable name="idx">
+        <xsl:call-template name="mediaobject.select.idx"/>
+      </xsl:variable>
+      <xsl:variable name="img"
+                    select="(imageobject|imageobjectco)[position()=$idx]"/>
+
       <xsl:if test="$imagedata.file.check='1'">
         <xsl:text>\imgexists{</xsl:text>
         <xsl:apply-templates
-            select="(imageobject|imageobjectco)[1]/descendant::imagedata"
+            select="$img/descendant::imagedata"
             mode="filename.get"/>
         <xsl:text>}{</xsl:text>
       </xsl:if>
-      <xsl:apply-templates select="(imageobject|imageobjectco)[1]"/>
+      <xsl:apply-templates select="$img"/>
       <xsl:if test="$imagedata.file.check='1'">
         <xsl:text>}{</xsl:text>
         <xsl:apply-templates select="textobject[1]"/>

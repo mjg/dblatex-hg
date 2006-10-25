@@ -195,6 +195,20 @@
       <xsl:attribute name="colsep"><xsl:value-of select="$colsep"/>
       </xsl:attribute>
     </xsl:if>
+    <!-- bgcolor specified via a PI -->
+    <xsl:if test="processing-instruction('dblatex')">
+      <xsl:variable name="bgcolor">
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
+          <xsl:with-param name="attribute" select="'bgcolor'"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:if test="$bgcolor != ''">
+        <xsl:attribute name="bgcolor"><xsl:value-of select="$bgcolor"/>
+        </xsl:attribute>
+      </xsl:if>
+    </xsl:if>
+
   </xsl:copy>
   
   <xsl:variable name="nextcolnum">
@@ -251,6 +265,7 @@
   <xsl:param name="rownum"/>
   <xsl:param name="colspec"/>
   <xsl:param name="entries"/>
+  <xsl:param name="rowcolor"/>
   
   <xsl:if test="$colnum &lt;= $colend">
     <xsl:variable name="entry"
@@ -262,12 +277,23 @@
         <xsl:copy-of select="$entry"/>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:variable name="bgcolor">
+          <xsl:choose>
+          <xsl:when test="$rowcolor != ''">
+            <xsl:value-of select="$rowcolor"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$colspec/colspec[@colnum=$colnum]/@bgcolor"/>
+          </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <!-- No rowspan entry found from the row above, so create a blank -->
         <entry colstart='{$colnum}' colend='{$colnum}' 
                rowstart='{$rownum}' rowend='{$rownum}'
                colsep='{$colspec/colspec[@colnum=$colnum]/@colsep}'
                defrowsep='{$colspec/colspec[@colnum=$colnum]/@rowsep}'
-               align='{$colspec/colspec[@colnum=$colnum]/@align}'/>
+               align='{$colspec/colspec[@colnum=$colnum]/@align}'
+               bgcolor='{$bgcolor}'/>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:variable name="nextcol">
@@ -285,6 +311,7 @@
       <xsl:with-param name="colend" select="$colend"/>
       <xsl:with-param name="rownum" select="$rownum"/>
       <xsl:with-param name="colspec" select="$colspec"/>
+      <xsl:with-param name="rowcolor" select="$rowcolor"/>
       <xsl:with-param name="entries" select="$entries"/>
     </xsl:call-template>
   </xsl:if>
@@ -310,6 +337,7 @@
   <xsl:param name="colspec"/>
   <xsl:param name="spanspec"/>
   <xsl:param name="frame"/>
+  <xsl:param name="rowcolor"/>
   <xsl:param name="entries"/>
   
   <xsl:variable name="cols" select="count($colspec/*)"/>
@@ -333,6 +361,7 @@
         <xsl:with-param name="colspec" select="$colspec"/>
         <xsl:with-param name="spanspec" select="$spanspec"/>
         <xsl:with-param name="frame" select="$frame"/>
+        <xsl:with-param name="rowcolor" select="$rowcolor"/>
         <xsl:with-param name="entries" select="$entries"/>
       </xsl:apply-templates>
       </xsl:when><xsl:otherwise>
@@ -403,6 +432,7 @@
           <xsl:with-param name="colend" select="$colstart - 1"/>
           <xsl:with-param name="colspec" select="$colspec"/>
           <xsl:with-param name="rownum" select="$rownum"/>
+          <xsl:with-param name="rowcolor" select="$rowcolor"/>
           <xsl:with-param name="entries" select="$entries"/>
         </xsl:call-template>
       </xsl:if>
@@ -468,6 +498,33 @@
           </xsl:when>
         </xsl:choose>
       </xsl:variable>
+
+      <xsl:variable name="cellcolor">
+        <xsl:if test="processing-instruction('dblatex')">
+          <xsl:call-template name="pi-attribute">
+            <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
+            <xsl:with-param name="attribute" select="'bgcolor'"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:variable>
+
+      <xsl:variable name="bgcolor">
+        <xsl:choose>
+          <xsl:when test="$cellcolor != ''">
+            <xsl:value-of select="$cellcolor"/>
+          </xsl:when>
+          <xsl:when test="$rowcolor != ''">
+            <xsl:value-of select="$rowcolor"/>
+          </xsl:when>
+          <xsl:when test="$colspec/colspec[@colnum=$colstart]/@bgcolor">
+            <xsl:value-of select="$colspec/colspec[@colnum=$colstart]/@bgcolor"/>
+          </xsl:when>
+          <xsl:when test="ancestor::*[self::table or self::informaltable]/@bgcolor">
+            <xsl:value-of select="ancestor::*[self::table or
+                                              self::informaltable]/@bgcolor"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
       
       <xsl:copy>
         <xsl:for-each select="@*"><xsl:copy/></xsl:for-each>
@@ -505,6 +562,11 @@
         <xsl:attribute name="valign">
           <xsl:value-of select="$valign"/>
         </xsl:attribute>
+        <xsl:if test="$bgcolor != ''">
+          <xsl:attribute name="bgcolor">
+            <xsl:value-of select="$bgcolor"/>
+          </xsl:attribute>
+        </xsl:if>
         <!-- Process the output here, to stay in the document context. -->
         <!-- In RTF entries the document links/refs are lost -->
         <xsl:element name="output">
@@ -521,6 +583,7 @@
           <xsl:with-param name="colend" select="$cols"/>
           <xsl:with-param name="colspec" select="$colspec"/>
           <xsl:with-param name="rownum" select="$rownum"/>
+          <xsl:with-param name="rowcolor" select="$rowcolor"/>
           <xsl:with-param name="entries" select="$entries"/>
         </xsl:call-template>
       </xsl:if>
@@ -532,6 +595,7 @@
         <xsl:with-param name="colspec" select="$colspec"/>
         <xsl:with-param name="spanspec" select="$spanspec"/>
         <xsl:with-param name="frame" select="$frame"/>
+        <xsl:with-param name="rowcolor" select="$rowcolor"/>
         <xsl:with-param name="entries" select="$entries"/>
       </xsl:apply-templates>
     </xsl:otherwise></xsl:choose>
@@ -571,6 +635,7 @@
       <xsl:with-param name="colspec" select="$colspec"/>
       <xsl:with-param name="frame" select="$frame"/>
       <xsl:with-param name="valign" select="@valign"/>
+      <xsl:with-param name="bgcolor" select="@bgcolor"/>
     </xsl:call-template>
     <xsl:text>}{</xsl:text>
     
@@ -696,61 +761,23 @@
 <!-- Actually build the embedded table like tgroup does -->
 <xsl:template match="entrytbl" mode="output">
   <xsl:call-template name="tgroup">
-    <xsl:with-param name="tablewidth" select="'\linewidth-\arrayrulewidth'"/>
+    <xsl:with-param name="tablewidth" select="'\linewidth-2\arrayrulewidth'"/>
     <xsl:with-param name="tableframe" select="'none'"/>
   </xsl:call-template>
 </xsl:template>
 
 
-<!-- Process each row in turn -->
-<xsl:template match="row" mode="newtbl">
-  <xsl:param name="tabletype"/>
+<!-- Rowsep building using \cline - done within a row -->
+<xsl:template name="clines.build">
+  <xsl:param name="entries"/>
   <xsl:param name="rownum"/>
-  <xsl:param name="rows"/>
-  <xsl:param name="colspec"/>
-  <xsl:param name="spanspec"/>
-  <xsl:param name="frame"/>
-  <xsl:param name="oldentries"/>
-  
-  <!-- Build the entry node-set -->
-  <xsl:variable name="entries">
-    <xsl:choose>
-      <xsl:when test="(entry|entrytbl)[1]">
-        <xsl:apply-templates mode="newtbl.buildentries" select="(entry|entrytbl)[1]">
-          <xsl:with-param name="colnum" select="1"/>
-          <xsl:with-param name="rownum" select="$rownum"/>
-          <xsl:with-param name="colspec" select="$colspec"/>
-          <xsl:with-param name="spanspec" select="$spanspec"/>
-          <xsl:with-param name="frame" select="$frame"/>
-          <xsl:with-param name="entries" select="exsl:node-set($oldentries)"/>
-        </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:copy-of select="exsl:node-set($oldentries)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  
-  <!-- Now output each entry -->
-  <xsl:variable name="context" select="local-name(..)"/>
-  <xsl:apply-templates select="exsl:node-set($entries)" mode="newtbl">
-    <xsl:with-param name="colspec" select="$colspec"/>
-    <xsl:with-param name="frame" select="$frame"/>
-    <xsl:with-param name="context" select="$context"/>
-    <xsl:with-param name="rownum" select="$rownum"/>
-  </xsl:apply-templates>
-  
-  <!-- End this row -->
-  <xsl:text>\tabularnewline&#10;</xsl:text>
-  
+
   <!-- Store any rowsep for this row -->
   <xsl:variable name="thisrowsep" select="@rowsep"/>
-  
-  <!-- Now process rowseps -->
-  <xsl:for-each select="exsl:node-set($entries)/*">
-    <!-- Only do rowsep for this col if it's not spanning this row and -->
-    <!-- not the last row -->
-    <xsl:if test="@rowend = $rownum and @rowend != $rows">
+
+  <xsl:for-each select="$entries/*">
+    <!-- Only do rowsep for this col if it's not spanning this row -->
+    <xsl:if test="@rowend = $rownum">
       <xsl:variable name="dorowsep">
         <xsl:choose>
           <!-- Entry rowsep override -->
@@ -776,6 +803,128 @@
       </xsl:if>
     </xsl:if>
   </xsl:for-each>
+</xsl:template>
+
+<!-- Rowsep building using \hhline - done within a row -->
+<xsl:template name="hhline.build">
+  <xsl:param name="entries"/>
+  <xsl:param name="rownum"/>
+
+  <!-- Store any rowsep for this row -->
+  <xsl:variable name="thisrowsep" select="@rowsep"/>
+
+  <xsl:text>\hhline{</xsl:text>
+  <xsl:for-each select="$entries/*">
+    <xsl:variable name="dorowsep">
+      <xsl:choose>
+        <!-- Only do rowsep for this col if it's not spanning this row -->
+        <xsl:when test="@rowend != $rownum">
+          <xsl:value-of select="0"/>
+        </xsl:when>
+        <!-- Entry rowsep override -->
+        <xsl:when test="@rowsep">
+          <xsl:value-of select="@rowsep"/>
+        </xsl:when>
+        <!-- Row rowsep override -->
+        <xsl:when test="$thisrowsep">
+          <xsl:value-of select="$thisrowsep"/>
+        </xsl:when>
+        <!-- Else use the default for this column -->
+        <xsl:otherwise>
+          <xsl:value-of select="@defrowsep"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <!-- hhline separator value -->
+    <xsl:variable name="hsep">
+      <xsl:choose>
+        <xsl:when test="$dorowsep = 1">-</xsl:when>
+        <xsl:otherwise>~</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="@colstart = @colend">
+        <xsl:value-of select="$hsep"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>*{</xsl:text>
+        <xsl:value-of select="@colend - @colstart + 1"/>
+        <xsl:text>}{</xsl:text>
+        <xsl:value-of select="$hsep"/>
+        <xsl:text>}</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+
+<!-- Process each row in turn -->
+<xsl:template match="row" mode="newtbl">
+  <xsl:param name="tabletype"/>
+  <xsl:param name="rownum"/>
+  <xsl:param name="rows"/>
+  <xsl:param name="colspec"/>
+  <xsl:param name="spanspec"/>
+  <xsl:param name="frame"/>
+  <xsl:param name="oldentries"/>
+
+  <xsl:variable name="rowcolor">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
+      <xsl:with-param name="attribute" select="'bgcolor'"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
+  <!-- Build the entry node-set -->
+  <xsl:variable name="entries">
+    <xsl:choose>
+      <xsl:when test="(entry|entrytbl)[1]">
+        <xsl:apply-templates mode="newtbl.buildentries" select="(entry|entrytbl)[1]">
+          <xsl:with-param name="colnum" select="1"/>
+          <xsl:with-param name="rownum" select="$rownum"/>
+          <xsl:with-param name="colspec" select="$colspec"/>
+          <xsl:with-param name="spanspec" select="$spanspec"/>
+          <xsl:with-param name="frame" select="$frame"/>
+          <xsl:with-param name="rowcolor" select="$rowcolor"/>
+          <xsl:with-param name="entries" select="exsl:node-set($oldentries)"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="exsl:node-set($oldentries)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <!-- Now output each entry -->
+  <xsl:variable name="context" select="local-name(..)"/>
+  <xsl:apply-templates select="exsl:node-set($entries)" mode="newtbl">
+    <xsl:with-param name="colspec" select="$colspec"/>
+    <xsl:with-param name="frame" select="$frame"/>
+    <xsl:with-param name="context" select="$context"/>
+    <xsl:with-param name="rownum" select="$rownum"/>
+  </xsl:apply-templates>
+  
+  <!-- End this row -->
+  <xsl:text>\tabularnewline&#10;</xsl:text>
+  
+  <!-- Now process rowseps only if not the last row -->
+  <xsl:if test="$rownum != $rows">
+    <xsl:choose>
+    <xsl:when test="$newtbl.use.hhline='1'">
+      <xsl:call-template name="hhline.build">
+        <xsl:with-param name="entries" select="exsl:node-set($entries)"/>
+        <xsl:with-param name="rownum" select="$rownum"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="clines.build">
+        <xsl:with-param name="entries" select="exsl:node-set($entries)"/>
+        <xsl:with-param name="rownum" select="$rownum"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
 
   <xsl:choose>
     <xsl:when test="following-sibling::row[1]">
@@ -825,7 +974,7 @@
   <xsl:value-of select="$colspec/colspec[@colnum=$col]/@colwidth"/>
   
   <xsl:if test="$col &lt; $colend">
-    <xsl:text>+2\tabcolsep+</xsl:text>
+    <xsl:text>+2\tabcolsep+\arrayrulewidth+</xsl:text>
     <xsl:call-template name="tbl.colwidth" mode="newtbl">
       <xsl:with-param name="col" select="$col + 1"/>
       <xsl:with-param name="colend" select="$colend"/>
@@ -845,17 +994,34 @@
   <xsl:param name="colsep"/>
   <xsl:param name="colspec"/>
   <xsl:param name="valign"/>
+  <xsl:param name="bgcolor"/>
   
   <xsl:variable name="cols" select="count($colspec/*)"/>
-  
+
   <!-- Need a colsep to the left? - only if first column and frame says so -->
   <xsl:if test="$colstart = 1 and ($frame = 'all' or $frame = 'sides')">
     <xsl:text>|</xsl:text>
   </xsl:if>
 
+  <!-- Need a colsep to the right? - only if last column and frame says -->
+  <!-- so, or we are not the last column and colsep says so  -->
+  <xsl:variable name="rsep">
+    <xsl:if test="($colend = $cols and ($frame = 'all' or $frame = 'sides')) or 
+                  ($colend != $cols and $colsep = 1)">
+      <xsl:text>|</xsl:text>
+    </xsl:if>
+  </xsl:variable>
+
   <!-- Remove the offset between column and cell content? -->
   <xsl:if test="$coloff = 0">
     <xsl:text>@{}</xsl:text>
+  </xsl:if>
+
+  <!-- Column color? -->
+  <xsl:if test="$bgcolor != ''">
+    <xsl:text>>{\columncolor</xsl:text>
+    <xsl:value-of select="$bgcolor"/>
+    <xsl:text>}</xsl:text>
   </xsl:if>
   
   <!-- Get the column width -->
@@ -865,6 +1031,9 @@
       <xsl:with-param name="colend" select="$colend"/>
       <xsl:with-param name="colspec" select="$colspec"/>
     </xsl:call-template>
+    <xsl:if test="$rsep = ''">
+      <xsl:text>+\arrayrulewidth</xsl:text>
+    </xsl:if>
     <xsl:if test="$coloff = 0">
       <xsl:text>+2\tabcolsep</xsl:text>
     </xsl:if>
@@ -890,13 +1059,7 @@
     <xsl:text>@{}</xsl:text>
   </xsl:if>
 
-  <!-- Need a colsep to the right? - only if last column and frame says -->
-  <!-- so, or we are not the last column and colsep says so  -->
-  
-  <xsl:if test="($colend = $cols and ($frame = 'all' or $frame = 'sides')) or 
-                ($colend != $cols and $colsep = 1)">
-    <xsl:text>|</xsl:text>
-  </xsl:if>
+  <xsl:value-of select="$rsep"/>
 </xsl:template>
 
 
