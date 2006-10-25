@@ -14,8 +14,7 @@ OPT =
 all: full2
 
 full%: $(TSTFILE)%.xml
-	TEXINPUTS=:$(PWD)/$(TOP)/latex//:$(TEXIN) \
-	../../scripts/dblatex -b pdftex $<
+	$(TOP)/scripts/dblatex $<
 
 test1: $(TSTFILE)1.tex $(TSTFILE)1.dvi $(TSTFILE)1.xml
 test2: $(TSTFILE)2.tex $(TSTFILE)2.dvi $(TSTFILE)2.xml
