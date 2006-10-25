@@ -19,6 +19,12 @@ def suffix_replace(path, oldext, newext=""):
     else:
         return (path+newext)
 
+def path_to_uri(path):
+    if os.sep != "/":
+        return path.replace(os.sep, "/")
+    else:
+        return path
+
 
 class DbTex:
     USE_MKLISTINGS = 1
@@ -110,9 +116,9 @@ class DbTex:
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
                 version="1.0">
                 \n""")
-        f.write('<xsl:import href="%s"/>\n' % self.xslmain)
+        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
         if self.xsluser:
-            f.write('<xsl:import href="%s"/>\n' % self.xsluser)
+            f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xsluser))
 
         for param in self.xslparams:
             v = param.split("=", 1)

@@ -19,7 +19,7 @@ class LogParser:
     """
 
     re_loghead = re.compile("This is [0-9a-zA-Z-]*(TeX|Omega)")
-    re_rerun = re.compile("LaTeX Warning:.*Rerun")
+    re_rerun = re.compile("(LaTeX|Package longtable) Warning:.*Rerun")
     re_file = re.compile("(\\((?P<file>[^ \n\t(){}]*)|\\))")
     re_badbox = re.compile(r"(Ov|Und)erfull \\[hv]box ")
     re_line = re.compile(r"(l\.(?P<line>[0-9]+)( (?P<code>.*))?$|<\*>)")

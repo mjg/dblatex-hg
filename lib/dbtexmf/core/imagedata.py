@@ -28,15 +28,15 @@ class ImageConverter:
 
 class GifConverter(ImageConverter):
     def convert(self, input, output, format, doexec=1):
-        cmd = "convert %s %s" % (input, output)
+        cmd = "convert \"%s\" %s" % (input, output)
         return self.system(cmd, doexec)
 
 class EpsConverter(ImageConverter):
     def convert(self, input, output, format, doexec=1):
         if format == "pdf":
-            cmd = "epstopdf --outfile=%s %s" % (output, input)
+            cmd = "epstopdf --outfile=%s \"%s\"" % (output, input)
         elif format == "png":
-            cmd = "convert %s %s" % (input, output)
+            cmd = "convert \"%s\" %s" % (input, output)
         else:
             cmd = ""
         return self.system(cmd, doexec)
@@ -54,7 +54,7 @@ class FigConverter(ImageConverter):
             post = ""
             epsfile = output
 
-        cmd = "fig2dev -L eps %s > %s" % (input, epsfile)
+        cmd = "fig2dev -L eps \"%s\" > %s" % (input, epsfile)
         cmd += post
         self.system(cmd)
 

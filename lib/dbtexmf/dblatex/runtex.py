@@ -18,8 +18,26 @@ class RunLatex:
 
     def set_fig_paths(self, paths):
         # Assume the paths are already absolute
+        if not(paths):
+            return
+
+        # Use TEXINPUTS to handle paths containing spaces
+        paths_blank = []
+        paths_input = []
+        for p in paths:
+            if p.find(" ") != -1:
+                paths_blank.append(p + "//")
+            else:
+                paths_input.append(p)
+
+        if paths_blank:
+            texinputs = os.pathsep.join(paths_blank)
+            os.environ["TEXINPUTS"] = os.getenv("TEXINPUTS") + os.pathsep + texinputs
+
+        paths = paths_input
+
         # Unixify the paths when under Windows
-        if paths and os.sep != "/":
+        if os.sep != "/":
             paths = [p.replace(os.sep, "/") for p in paths]
 
         # Protect from tilde active char (maybe others?)
