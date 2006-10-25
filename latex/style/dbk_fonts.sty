@@ -1,0 +1,21 @@
+
+% Math Support
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Use PostScript fonts
+%
+% Since mathptmx is included the following symbols are saved to prevent
+% from a clash, even if the symbols actually appear as black boxes...
+%
+\let\stdcoprod=\coprod
+\let\stdamalg=\amalg
+\let\stdjmath=\jmath
+\usepackage{mathptmx}
+\let\coprod=\stdcoprod
+\let\amalg=\stdamalg
+\let\jmath=\stdjmath
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+
