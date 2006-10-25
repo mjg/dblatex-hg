@@ -68,6 +68,26 @@ if the parameter is set to 1.</entry>
 </row>
 <!-- -->
 <row>
+<entry>figure.caution</entry>
+<entry>Figure to use to render a <sgmltag>caution</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<!-- -->
+<row>
+<entry>figure.default.position</entry>
+<entry>Default figure float placement algorithm to apply. The default parameter value
+is [htbp] meaning that latex tries to place the figure where it occurs first (h,
+here), then at the top of the page (t), at the bottom of the page (b), and finally on the next page (p).</entry>
+<entry>[htbp]</entry>
+</row>
+<row>
+<entry>figure.important</entry>
+<entry>Figure to use to render a <sgmltag>important</sgmltag> block. This parameter is
+added to allow new latex styles to use their own figures in admonitions.</entry>
+<entry>"warning"</entry>
+</row>
+<row>
 <entry>figure.note</entry>
 <entry>Figure to use to render a <sgmltag>note</sgmltag> block. This parameter is
 added to allow new latex styles to use their own figures in admonitions.</entry>
@@ -80,28 +100,16 @@ added to allow new latex styles to use their own figures in admonitions.</entry>
 <entry>Empty</entry>
 </row>
 <row>
-<entry>figure.important</entry>
-<entry>Figure to use to render a <sgmltag>important</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>"warning"</entry>
+<entry>figure.title.top</entry>
+<entry>Set to 1 the <sgmltag>figure</sgmltag> float title position is above the
+image. Set to 0 the title is under the image.</entry>
+<entry>0</entry>
 </row>
 <row>
 <entry>figure.warning</entry>
 <entry>Figure to use to render a <sgmltag>warning</sgmltag> block. This parameter is
 added to allow new latex styles to use their own figures in admonitions.</entry>
 <entry>"warning"</entry>
-</row>
-<row>
-<entry>figure.caution</entry>
-<entry>Figure to use to render a <sgmltag>caution</sgmltag> block. This parameter is
-added to allow new latex styles to use their own figures in admonitions.</entry>
-<entry>"warning"</entry>
-</row>
-<row>
-<entry>figure.title.top</entry>
-<entry>Set to 1 the <sgmltag>figure</sgmltag> float title position is above the
-image. Set to 0 the title is under the image.</entry>
-<entry>0</entry>
 </row>
 <!-- -->
 <row>
@@ -119,6 +127,12 @@ definition in the glossary.</entry>
 </row>
 <!-- -->
 <row>
+<entry>imagedata.boxed</entry>
+<entry>If set to 1, put the images into a framed box.</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
 <entry>imagedata.default.scale</entry>
 <entry>cf. <xref  linkend="sec-defaultscale"/></entry>
 <entry>pagebound</entry>
@@ -128,12 +142,6 @@ definition in the glossary.</entry>
 <entry>latex.hyperparam</entry>
 <entry>cf. <xref  linkend="sec-hyperparam"/></entry>
 <entry>empty</entry>
-</row>
-<!-- -->
-<row>
-<entry>latex.figure.boxed</entry>
-<entry>If set to 1, put the images into a framed box.</entry>
-<entry>0</entry>
 </row>
 <!-- -->
 <row>
@@ -232,6 +240,13 @@ text to italics.</entry>
 <sgmltag>rowspec</sgmltag> attribute is specified.</entry>
 <entry>1</entry>
 </row>
+<row>
+<entry>newtbl.use.hhline</entry>
+<entry>Set to 1, use the <filename>hhline</filename> package to draw the
+table row separators instead of cline. Using <filename>hhline</filename> seems
+more suited for colored tables.</entry>
+<entry>0</entry>
+</row>
 <!-- -->
 <row>
 <entry>qandaset.defaultlabel</entry>
@@ -253,6 +268,14 @@ when the defaultlabel attribute is not specified.</entry>
 can be used to select the book to print, because
 <command>dblatex</command> can output only one book from the set.</entry>
 <entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>table.default.position</entry>
+<entry>Default table float placement algorithm to apply. The default parameter value
+is [htbp] meaning that latex tries to place the table where it occurs first (h,
+here), then at the top of the page (t), at the bottom of the page (b), and finally on the next page (p).</entry>
+<entry>[htbp]</entry>
 </row>
 <!-- -->
 <row>

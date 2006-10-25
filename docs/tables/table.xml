@@ -250,4 +250,24 @@
    <xi:include href="table-small3.xml"/>
    <xi:include href="table-small4.xml"/>
    </sect2>
-  </sect1>
+<sect2>
+<title>Coloured tables</title>
+<para>You can color all the table by setting its <sgmltag>bgcolor</sgmltag>
+attribute.</para>
+<para>You can also color only some cells by using the Processing Instruction
+<literal><![CDATA[<?dblatex bgcolor="color"?>]]></literal>. The PI can apply to
+columns when put in a <sgmltag>colspec</sgmltag>, to rows when put at the
+beginning of a <sgmltag>row</sgmltag>, or to cells when put in a
+<sgmltag>entry</sgmltag>.</para>
+<para>The entry colour has precedence over the row colour,
+that has precedence over the column colour, that has precedence over the table
+colour.</para>
+<para>The color expression must be understood by the
+<filename>colortbl</filename> latex package.</para>
+<para>Here is an example.</para>
+<xi:include href="coloured.xml"/>
+<para>This table is coded like this:</para>
+<programlisting><textobject><textdata
+fileref="tables/coloured.xml"/></textobject></programlisting>
+</sect2>
+</sect1>
