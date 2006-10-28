@@ -14,8 +14,9 @@ class XsltProc:
         cmd = "xsltproc --xinclude -o %s " % outfile
         if self.use_catalogs and self.catalogs:
             cmd += " --catalogs "
-        for param in params:
-            cmd += "--param %s \"'%s'\" " % (param[0], param[1])
+        if params:
+            for param in params:
+                cmd += "--param %s \"'%s'\" " % (param[0], param[1])
         if opts:
             cmd += " ".join(opts) + " "
         cmd += "%s \"%s\"" % (xslfile, xmlfile)

@@ -4,15 +4,20 @@ x * Passer la doc en XML + utiliser la manpage
 x * Utiliser sgml2xml (osx)
 x * Problèmes verbatim in tables
 x * longtable sans caption : \addtocounter{table}{-1}
+x * mediaobject[@role='dblatex']
+x * mathml : &#x022EE; = vdots
+x * couleur dans tables
 * Utilisation bibtex
 * Problèmes footnote in tables
-* Problèmes table in example
 * Remark in note
 * Patch biblio à intégrer
 * Bug table
 * Faire <remark>
 * Faire <annotation>
+* Problèmes table in example
 * \caption{\protect\rule{0cm}{2cm} blablabla}
+* Faire \input@path dans rawtex (évite le _tmp)
+* Faire table/@cellpadding pour \tabcolsep
 
 * <subtitles> silently skipped.
 
@@ -33,25 +38,48 @@ x * longtable sans caption : \addtocounter{table}{-1}
 Release 0.2:
 ------------
 
-- Verbatim (litterallayout, address, synopsis, classsynopsis) in tables now work.
-- Nesting informaltables is possible.
-- Better osx() integration. The SDATA entities are translated to the equivalent
+* Better osx() integration. The SDATA entities are translated to the equivalent
   Unicode characters.
-- Better windows compatibility thanks to the Nicolas Pernetty's patches:
+
+* Better windows compatibility thanks to the Nicolas Pernetty's patches:
   - Use of a portable 'which' during the install dependency check.
   - Use of shutil instead of unix equivalent commands.
   - Portable TEXINPUTS variable setup.
   - Compatible figure path setup.
   - Compatible package paths.
-- Basic support of @float and @floatstyle in <figure> and <table>.
-- Some cleanups and bug fixes.
+  - Correct URI put in the customized XSL stylesheets.
+
+* Better table support:
+  - Verbatim (litterallayout, address, synopsis, classsynopsis) in tables now work.
+  - Informaltable nesting is possible.
+  - Basic <entrytbl> support.
+  - Better @valign support.
+  - Column, row and entry can be coloured in tables by using
+    <?dblatex bgcolor="..."?>. The alternative hhline package can be used to
+    have row lines properly printed (newtbl.use.hhline='1')
+  - Basic support of @float and @floatstyle in <table>.
+
+* Minor imageobject/figure improvements:
+  - Basic support of @float and @floatstyle in <figure>.
+  - Possibility to use imageobject/@role='dblatex' to select the image to process.
+  - Alternative <imageobject>s in a <mediaobjectco> are supported (DocBook 5).
+ 
+* Some cleanups and bug fixes.
+  - latex compilation cycle bug fix.
+  - logparser bug fix (rerun for table)
+  - dbk_fonts.sty now contain the font setup
   - coref/@linkend fix.
-  - manual documentation reorganized
-  - Debian manpage provided in the package and integrated in the dblatex manual
+  - user manual documentation reorganized
+  - PDF manual installed in a proper way
+  - Debian manpage added to the package and used in the dblatex manual
   - latex.figure.boxed parameter changed to imagedata.boxed
   - latex.figure.position parameter changed to figure.default.position
   - table.default.position added
   - table counter bug fix
+  - <filename> in section title bug fix
+  - mklistings.xsl: URI fix when the path contains some spaces
+  - imagedata.py: robust to paths containing spaces
+  - \vdots supported in MathML
 
 
 Release 0.2pre:

@@ -102,7 +102,7 @@ class Imagedata:
             conv = FigConverter()
         elif (ext == "eps"):
             conv = EpsConverter()
-        elif (ext == "gif"):
+        elif (ext in ("gif", "bmp")):
             conv = GifConverter()
         else:
             # Unknown conversion to do, or nothing to do

@@ -17,7 +17,7 @@
     <xsl:when test="@floatstyle != ''">
       <xsl:value-of select="@floatstyle"/>
     </xsl:when>
-    <xsl:when test="@float and @float='0'">
+    <xsl:when test="not(@float) or (@float and @float='0')">
       <xsl:text>[H]</xsl:text>
     </xsl:when>
     <xsl:otherwise>
