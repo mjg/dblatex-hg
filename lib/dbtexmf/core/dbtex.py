@@ -367,6 +367,26 @@ class DbTexCommand:
                     failed_exit("Error: %s" % e)
             run.tmpdir_user = options.tmpdir
 
+    def get_config_paths(self):
+        # Allows user directories where to look for configuration files
+        paths = [os.getcwd()]
+        paths.append(os.path.expanduser(os.path.join("~", "."+self.prog)))
+
+        # Unix specific system-wide config files
+        if "posix" in sys.builtin_module_names:
+            paths.append(os.path.join("/etc", self.prog))
+
+        # Last but not least, the tool config dir
+        paths.append(self.run.confdir)
+
+        # Optionally the paths from an environment variable
+        conf_paths = os.getenv("DBLATEX_CONFIG_FILES")
+        if not(conf_paths):
+            return paths
+
+        paths += conf_paths.split(os.pathsep)
+        return paths
+
     def main(self):
         (options, args) = self.parser.parse_args()
 
@@ -387,7 +407,8 @@ class DbTexCommand:
         conf = DbtexConfig()
         if options.style:
             try:
-                conf.fromstyle(options.style, [run.confdir])
+                conf.paths = self.get_config_paths()
+                conf.fromstyle(options.style)
             except Exception, e:
                 failed_exit("Error: %s" % e)
             
