@@ -10,11 +10,11 @@
 </xsl:template>
 
 <xsl:template match="xref" mode="label.get">
-  <xsl:variable name="target" select="id(@linkend)[1]"/>
+  <xsl:variable name="target" select="key('id',@linkend)[1]"/>
   <xsl:choose>
   <!-- If there is an endterm -->
   <xsl:when test="@endterm">
-    <xsl:variable name="etarget" select="id(@endterm)[1]"/>
+    <xsl:variable name="etarget" select="key('id',@endterm)[1]"/>
     <xsl:choose>
     <xsl:when test="count($etarget) = 0">
       <xsl:message>
@@ -41,7 +41,7 @@
 </xsl:template>
 
 <xsl:template match="xref">
-  <xsl:variable name="target" select="id(@linkend)[1]"/>
+  <xsl:variable name="target" select="key('id',@linkend)[1]"/>
   <xsl:call-template name="check.id.unique">
     <xsl:with-param name="linkend" select="@linkend"/>
   </xsl:call-template>
@@ -122,7 +122,7 @@
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:copy-of select="id(@endterm)[1]"/>
+    <xsl:copy-of select="key('id',@endterm)[1]"/>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -151,11 +151,15 @@
 </xsl:template>
 
 <!-- No reference must be made, but the label should be printed, if any -->
-<xsl:template match="xref|link" mode="toc.skip|xref.text">
+<xsl:template match="xref|link" mode="toc.skip">
   <xsl:apply-templates select="." mode="label.get"/>
 </xsl:template>
 
-<xsl:template match="ulink" mode="toc.skip|xref.text">
+<xsl:template match="xref|link" mode="xref.text">
+  <xsl:apply-templates select="." mode="label.get"/>
+</xsl:template>
+
+<xsl:template match="ulink" mode="toc.skip">
   <xsl:choose>
   <xsl:when test=".=''">
     <xsl:value-of select="@url"/>
@@ -167,6 +171,9 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="ulink" mode="xref.text">
+  <xsl:apply-templates select="." mode="toc.skip"/>
+</xsl:template>
 
 <!-- ###########################
      # Format display (%n, %t) #

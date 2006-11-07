@@ -142,6 +142,10 @@
   <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
 
+<xsl:template match="code">
+  <xsl:call-template name="inline.monoseq"/>
+</xsl:template>
+
 <xsl:template match="exceptionname">
   <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
@@ -388,6 +392,10 @@
 
 <xsl:template match="errortext">
   <xsl:call-template name="inline.charseq"/>
+</xsl:template>
+
+<xsl:template match="firstname|surname">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="foreignphrase">

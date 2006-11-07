@@ -438,29 +438,29 @@ Defaults to the context node.</para>
       <xsl:variable name="has_l" select="$l_nl"/>
 
       <xsl:if test="$has_h">
-        <xsl:value-of select="$h_nl"/>.
+        <xsl:apply-templates select="$h_nl"/>.
       </xsl:if>
 
       <xsl:if test="$has_f">
         <xsl:if test="$has_h"><xsl:text> </xsl:text></xsl:if>
-        <xsl:value-of select="$f_nl"/>
+        <xsl:apply-templates select="$f_nl"/>
       </xsl:if>
 
       <xsl:if test="$has_o">
         <xsl:if test="$has_h or $has_f"><xsl:text> </xsl:text></xsl:if>
-        <xsl:value-of select="$o_nl"/>
+        <xsl:apply-templates select="$o_nl"/>
       </xsl:if>
 
       <xsl:if test="$has_s">
         <xsl:if test="$has_h or $has_f or $has_o">
           <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="$s_nl"/>
+        <xsl:apply-templates select="$s_nl"/>
       </xsl:if>
 
       <xsl:if test="$has_l">
         <xsl:text>, </xsl:text>
-        <xsl:value-of select="$l_nl"/>
+        <xsl:apply-templates select="$l_nl"/>
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>

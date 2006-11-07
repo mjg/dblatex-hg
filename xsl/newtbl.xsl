@@ -22,7 +22,7 @@
 <!-- Step though each column, generating a colspec entry for it. If a  -->
 <!-- colspec was given in the xml, then use it, otherwise generate a -->
 <!-- default one -->
-<xsl:template name="tbl.defcolspec" mode="newtbl">
+<xsl:template name="tbl.defcolspec">
   <xsl:param name="colnum" select="1"/>
   <xsl:param name="colspec"/>
   <xsl:param name="align"/>
@@ -41,7 +41,7 @@
                  colwidth='\newtblstarfactor'/>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:call-template name="tbl.defcolspec" mode="newtbl">
+    <xsl:call-template name="tbl.defcolspec">
       <xsl:with-param name="colnum" select="$colnum + 1"/>
       <xsl:with-param name="align" select="$align"/>
       <xsl:with-param name="rowsep" select="$rowsep"/>
@@ -55,7 +55,7 @@
 
 
 <!-- replace-string function as XSLT doesn't have one built in. -->
-<xsl:template name="replace-string" mode="newtbl">
+<xsl:template name="replace-string">
   <xsl:param name="text"/>
   <xsl:param name="replace"/>
   <xsl:param name="with"/>
@@ -166,7 +166,7 @@
     <!-- Replace '*' with our to-be-computed factor -->
     <xsl:if test="contains(@colwidth,'*')">
       <xsl:attribute name="colwidth">
-        <xsl:call-template name="replace-string" mode="newtbl">
+        <xsl:call-template name="replace-string">
           <xsl:with-param name="text" select="@colwidth"/>
           <xsl:with-param name="replace">*</xsl:with-param>
           <xsl:with-param name="with">\newtblstarfactor</xsl:with-param>
@@ -230,7 +230,7 @@
 
 
 <!-- Generate a complete set of colspecs for each column in the table -->
-<xsl:template name="tbl.colspec" mode="newtbl">
+<xsl:template name="tbl.colspec">
   <xsl:param name="align"/>
   <xsl:param name="rowsep"/>
   <xsl:param name="colsep"/>
@@ -246,7 +246,7 @@
   </xsl:variable>
   
   <!-- Now generate colspecs for each missing column -->
-  <xsl:call-template name="tbl.defcolspec" mode="newtbl">
+  <xsl:call-template name="tbl.defcolspec">
     <xsl:with-param name="colspec" select="exsl:node-set($givencolspec)"/>
     <xsl:with-param name="cols" select="$cols"/>
     <xsl:with-param name="align" select="$align"/>
@@ -259,7 +259,7 @@
 
 <!-- Create a blank entry element. We check the 'entries' node-set -->
 <!-- to see if we should copy an entry from the row above instead -->
-<xsl:template name="tbl.blankentry" mode="newtbl">
+<xsl:template name="tbl.blankentry">
   <xsl:param name="colnum"/>
   <xsl:param name="colend"/>
   <xsl:param name="rownum"/>
@@ -306,7 +306,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:call-template name="tbl.blankentry" mode="newtbl">
+    <xsl:call-template name="tbl.blankentry">
       <xsl:with-param name="colnum" select="$nextcol + 1"/>
       <xsl:with-param name="colend" select="$colend"/>
       <xsl:with-param name="rownum" select="$rownum"/>
@@ -427,7 +427,7 @@
       <!-- Does this entry want to start at a later column? -->
       <xsl:if test="$colnum &lt; $colstart">
         <!-- If so, create some blank entries to fill in the gap -->
-        <xsl:call-template name="tbl.blankentry" mode="newtbl">
+        <xsl:call-template name="tbl.blankentry">
           <xsl:with-param name="colnum" select="$colnum"/>
           <xsl:with-param name="colend" select="$colstart - 1"/>
           <xsl:with-param name="colspec" select="$colspec"/>
@@ -578,7 +578,7 @@
       <xsl:if test="$colend &lt; $cols and
                     not(following-sibling::*[self::entry or self::entrytbl][1])">
         <!-- Create more blank entries to pad the row -->
-        <xsl:call-template name="tbl.blankentry" mode="newtbl">
+        <xsl:call-template name="tbl.blankentry">
           <xsl:with-param name="colnum" select="$colend + 1"/>
           <xsl:with-param name="colend" select="$cols"/>
           <xsl:with-param name="colspec" select="$colspec"/>
@@ -627,7 +627,7 @@
     <xsl:text>\multicolumn{</xsl:text>
     <xsl:value-of select="@colend - @colstart + 1"/>
     <xsl:text>}{</xsl:text>
-    <xsl:call-template name="tbl.colfmt" mode="newtbl">
+    <xsl:call-template name="tbl.colfmt">
       <xsl:with-param name="coloff" select="@coloff"/>
       <xsl:with-param name="colstart" select="@colstart"/>
       <xsl:with-param name="colend" select="@colend"/>
@@ -646,7 +646,7 @@
       <xsl:if test="$wordwrap">
         <xsl:text>\setlength{\newtblcolwidth}{</xsl:text>
         <!-- Put the column width here for line wrapping -->
-        <xsl:call-template name="tbl.colwidth" mode="newtbl">
+        <xsl:call-template name="tbl.colwidth">
           <xsl:with-param name="col" select="@colstart"/>
           <xsl:with-param name="colend" select="@colend"/>
           <xsl:with-param name="colspec" select="$colspec"/>
@@ -898,7 +898,7 @@
   
   <!-- Now output each entry -->
   <xsl:variable name="context" select="local-name(..)"/>
-  <xsl:apply-templates select="exsl:node-set($entries)" mode="newtbl">
+  <xsl:apply-templates select="exsl:node-set($entries)/*" mode="newtbl">
     <xsl:with-param name="colspec" select="$colspec"/>
     <xsl:with-param name="frame" select="$frame"/>
     <xsl:with-param name="context" select="$context"/>
@@ -966,7 +966,7 @@
 
 
 <!-- Calculate column width between two columns -->
-<xsl:template name="tbl.colwidth" mode="newtbl">
+<xsl:template name="tbl.colwidth">
   <xsl:param name="col"/>
   <xsl:param name="colend"/>
   <xsl:param name="colspec"/>
@@ -975,7 +975,7 @@
   
   <xsl:if test="$col &lt; $colend">
     <xsl:text>+2\tabcolsep+\arrayrulewidth+</xsl:text>
-    <xsl:call-template name="tbl.colwidth" mode="newtbl">
+    <xsl:call-template name="tbl.colwidth">
       <xsl:with-param name="col" select="$col + 1"/>
       <xsl:with-param name="colend" select="$colend"/>
       <xsl:with-param name="colspec" select="$colspec"/>
@@ -986,7 +986,7 @@
 
 
 <!-- Generate a latex column specifier, possibly surrounded by '|' -->
-<xsl:template name="tbl.colfmt" mode="newtbl">
+<xsl:template name="tbl.colfmt">
   <xsl:param name="colstart"/>
   <xsl:param name="colend"/>
   <xsl:param name="coloff"/>
@@ -1026,7 +1026,7 @@
   
   <!-- Get the column width -->
   <xsl:variable name="width">
-    <xsl:call-template name="tbl.colwidth" mode="newtbl">
+    <xsl:call-template name="tbl.colwidth">
       <xsl:with-param name="col" select="$colstart"/>
       <xsl:with-param name="colend" select="$colend"/>
       <xsl:with-param name="colspec" select="$colspec"/>
@@ -1130,7 +1130,7 @@
   
   <!-- Build up a complete colspec for each column -->
   <xsl:variable name="colspec">
-    <xsl:call-template name="tbl.colspec" mode="newtbl">
+    <xsl:call-template name="tbl.colspec">
       <xsl:with-param name="cols" select="$cols"/>
       <xsl:with-param name="rowsep">
         <xsl:choose>

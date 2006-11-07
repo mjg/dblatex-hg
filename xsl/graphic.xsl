@@ -22,7 +22,9 @@
     <xsl:text>}{</xsl:text>
     <xsl:call-template name="imagedata"/>
     <xsl:text>}{[</xsl:text>
-    <xsl:value-of select="$filename"/>
+    <xsl:call-template name="scape">
+      <xsl:with-param name="string" select="$filename"/>
+    </xsl:call-template>
     <xsl:text> not found]}</xsl:text>
   </xsl:when>
   <xsl:otherwise>

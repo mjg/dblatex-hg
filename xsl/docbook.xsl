@@ -7,7 +7,7 @@
     XSLT Stylesheet DocBook -> LaTeX
     ############################################################################ -->
 
-<xsl:output method="text" encoding="ISO-8859-1" indent="yes"/>
+<xsl:output method="text" encoding="UTF-8" indent="yes"/>
 
 <xsl:include href="common.xsl"/>
 <xsl:include href="common/l10n.xsl"/>
@@ -65,6 +65,8 @@
 <xsl:include href="pi.xsl"/>
 
 <xsl:include href="errors.xsl"/>
+
+<xsl:key name="id" match="*" use="@id|@xml:id"/>
 
 <xsl:strip-space elements="book article chapter title"/>
 

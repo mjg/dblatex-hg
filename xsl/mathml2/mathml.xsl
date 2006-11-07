@@ -6,9 +6,6 @@
 
 <xsl:import href="mmltex.xsl"/>
 
-<!-- because UTF-8 is not supported by texclean (not yet) -->
-<xsl:output method="text" indent="no" encoding="iso-8859-1"/>
-
 <!-- because xsltproc cannot strip "m:*" elements -->
 <xsl:strip-space elements="m:math m:mrow m:mstyle m:mtd m:mphantom
                            m:mi m:mo m:ms m:mn m:mtext m:maction"/>

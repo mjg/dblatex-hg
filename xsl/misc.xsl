@@ -357,9 +357,9 @@
   <xsl:text>\DBKinditem{</xsl:text>
   <xsl:value-of select="contrib"/>
   <xsl:text>}{</xsl:text>
-  <xsl:value-of select="firstname"/>
+  <xsl:apply-templates select="firstname"/>
   <xsl:text> </xsl:text>
-  <xsl:value-of select="surname"/>
+  <xsl:apply-templates select="surname"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 

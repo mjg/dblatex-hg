@@ -19,7 +19,7 @@
 </xsl:template>
 
 <xsl:template name="print.legalnotice">
-  <xsl:param name="$nodes" select="."/>
+  <xsl:param name="nodes" select="."/>
   <xsl:if test="$nodes">
     <xsl:text>
 %% ------------
