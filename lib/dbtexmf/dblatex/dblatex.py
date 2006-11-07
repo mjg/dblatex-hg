@@ -8,7 +8,6 @@ import re
 import tempfile
 from optparse import OptionParser
 
-from dbtexmf.core.xsltproc import XsltProc
 from dbtexmf.core.sgmlxml import Osx
 from dbtexmf.core.dbtex import DbTex, DbTexCommand
 
@@ -27,7 +26,6 @@ class DbLatex(DbTex):
         self.runtex.index_style = os.path.join(self.topdir,
                                                "latex", "scripts", "doc.ist")
         self.rawtex = RawLatex()
-        self.xsltproc = XsltProc()
         self.sgmlxml = Osx()
 
     def set_base(self, topdir):

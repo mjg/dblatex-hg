@@ -10,6 +10,7 @@ import shutil
 from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
+from dbtexmf.xslt import xslt
 
 
 def suffix_replace(path, oldext, newext=""):
@@ -81,6 +82,13 @@ class DbTex:
             texinputs = sep + "%s%s%s" % (texpaths, sep, texinputs)
         os.environ["TEXINPUTS"] = texinputs
 
+    def set_xslt(self, xsltmod=None):
+        if self.xsltproc:
+            return
+        if not(xsltmod):
+            xsltmod = "xsltproc"
+        self.xsltproc = xslt.load(xsltmod)
+
     def set_format(self, format):
         if not(format in ("rtex", "tex", "dvi", "ps", "pdf")):
             raise ValueError("unknown format '%s'" % format)
@@ -141,10 +149,10 @@ class DbTex:
         self.listings = os.path.join(self.tmpdir, "listings.xml")
         if (self.flags & self.USE_MKLISTINGS):
             print "Build the listings..."
-            param = ("current.dir", self.inputdir)
+            param = {"current.dir": self.inputdir}
             self.xsltproc.use_catalogs = 0
             self.xsltproc.run(self.xsllist, self.input,
-                              self.listings, params=[param])
+                              self.listings, params=param)
         else:
             print "No external file support"
             f = file(self.listings, "w")
@@ -153,10 +161,10 @@ class DbTex:
 
     def make_rawtex(self):
         self.rawfile = self.basefile + ".rtex"
-        param = ("listings.xml", self.listings)
+        param = {"listings.xml": self.listings}
         self.xsltproc.use_catalogs = 1
         self.xsltproc.run(self.xslbuild, self.input,
-                          self.rawfile, opts=self.xslopts, params=[param])
+                          self.rawfile, opts=self.xslopts, params=param)
 
     def make_tex(self):
         self.texfile = self.basefile + ".tex"
@@ -178,6 +186,7 @@ class DbTex:
         self.runtex.clean()
 
     def compile(self):
+        self.set_xslt()
         self.cwdir = os.getcwd()
         self.tmpdir = self.tmpdir_user or tempfile.mkdtemp()
         self.inputdir = os.path.dirname(self.input)
@@ -233,6 +242,7 @@ class DbTex:
 
 def failed_exit(msg, rc=1):
     print >>sys.stderr, (msg)
+    raise
     sys.exit(rc)
 
 
@@ -264,6 +274,8 @@ class DbTexCommand:
         parser.add_option("-I", "--fig-path", action="append",
                           dest="fig_paths", metavar="FIG_PATH",
                           help="Additional lookup path of the figures")
+        parser.add_option("-m", "--xslt",
+                          help="XSLT engine to use. (default=xsltproc)")
         parser.add_option("-o", "--output", dest="output",
                           help="Output filename. When not used, the input filename "
                                "is used, with the suffix of the output format")
@@ -289,7 +301,7 @@ class DbTexCommand:
                           help="Print the %s version" % prog)
         parser.add_option("-V", "--verbose", action="store_true",
                           help="Verbose mode, showing the running commands")
-        parser.add_option("-x", "--xslt", dest="xslopts",
+        parser.add_option("-x", "--xslt-opts", dest="xslopts",
                           action="append", metavar="XSLT_OPTIONS",
                           help="Arguments directly passed to the XSLT engine")
         parser.add_option("-X", "--no-external", action="store_true",
@@ -318,6 +330,12 @@ class DbTexCommand:
                 run.set_format(options.format)
             except Exception, e:
                 failed_exit("Error: %s" % e)
+
+        # Always set the XSLT (default or not)
+        try:
+            run.set_xslt(options.xslt)
+        except Exception, e:
+            failed_exit("Error: %s" % e)
 
         if options.xslopts:
             run.xslopts = options.xslopts

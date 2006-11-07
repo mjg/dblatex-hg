@@ -63,8 +63,8 @@ class Osx:
 
     def run(self, sgmlfile, xmlfile):
         errfile = "errors.osx"
-        rc= os.system("osx %s -f%s %s > %s" % (self.opts, errfile,
-                                               sgmlfile, xmlfile))
+        rc = os.system("osx %s -f%s %s > %s" % (self.opts, errfile,
+                                                sgmlfile, xmlfile))
         if rc != 0:
             i = 0
             f = open(errfile)

@@ -15,8 +15,8 @@ class XsltProc:
         if self.use_catalogs and self.catalogs:
             cmd += " --catalogs "
         if params:
-            for param in params:
-                cmd += "--param %s \"'%s'\" " % (param[0], param[1])
+            for param, value in params.items():
+                cmd += "--param %s \"'%s'\" " % (param, value)
         if opts:
             cmd += " ".join(opts) + " "
         cmd += "%s \"%s\"" % (xslfile, xmlfile)
@@ -28,3 +28,5 @@ class XsltProc:
         if rc != 0:
             raise ValueError("xsltproc failed")
 
+class Xslt(XsltProc):
+    "Plugin Class to load"

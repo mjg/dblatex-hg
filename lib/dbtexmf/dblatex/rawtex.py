@@ -2,6 +2,7 @@ import sys
 import os
 import re
 
+from texcodec import LatexCodec
 from dbtexmf.core.imagedata import *
 
 
@@ -13,37 +14,12 @@ class RawKey:
         self.len = len(key)
 
 class RawLatexParser:
-    # Maybe should be loaded from somewhere else
-    entmap =  (
-              ("&#732;",  "&#x2DC;",  r"\textasciitilde{}"),
-              ("&#8211;", "&#x2013;", r"\textendash{}"),
-              ("&#8212;", "&#x2014;", r"\textemdash{}"),
-              ("&#8217;", "&#x2019;", r"'"),
-              ("&#8220;", "&#x201C;", r"{}``"),
-              ("&#8221;", "&#x201D;", r"{}''"),
-              ("&#8230;", "&#x2026;", r"\ldots ")
-              )
-    charmap = (
-              ("\240", r"~"),
-              ("\xb0", "\\ensuremath{\xb0}"),
-              ("\xb1", r"\ensuremath{\pm}"),
-              ("\327", r"$\times$")
-              )
-
     def __init__(self):
         self.key_in = RawKey("<t>", 1)
         self.key_out = RawKey("</t>", -1)
         self.depth = 0
         self.hyphenate = 0
-        self.texres = (
-            # Kind of normalize
-            (re.compile("^[\s\n]*$"), r" "),
-            # TeX escapes
-            (re.compile(r"([{}%_^$])"), r"\\\1"),
-            (re.compile(r"([-^])"), r"\1{}"))
-        
-        # second pass after entity replacement
-        self.texres2 = (re.compile(r"([&#])"), r"\\\1")
+        self.codec = LatexCodec()
         
         # hyphenation patterns
         self.hypon = re.compile(r"<h>")
@@ -82,41 +58,19 @@ class RawLatexParser:
         return lout
 
     def translate(self, text):
+        text = self.codec.decode(text)
         if self.hyphenate:
-            # Preserve entities and put temporary \1 cut char
-            texts = re.split("(&#[^;]+;)", text)
-            for i in range(len(texts)):
-                if not(texts[i].startswith("&#")):
-                    texts[i] = "\1".join(texts[i])
-            text = "\1".join(texts)
+            text = "\1".join(text)
             text = text.replace("\1 ", " ")
             text = text.replace(" \1", " ")
 
-        # Preliminary backslash substitution
-        text = text.replace("\\", r"\textbackslash")
-
-        # Basic TeX escape
-        for r, s in self.texres:
-            text = r.sub(s, text)
-        # Entities replacement
-        for e1, ex, v in self.entmap:
-            text = text.replace(e1, v)
-            text = text.replace(ex, v)
-        # Second TeX escape
-        r, s = self.texres2
-        text = r.sub(s, text)
-        # Special Character Mapping
-        for c, v in self.charmap:
-            text = text.replace(c, v)
-
-        # Things are done, complete with {}
-        text = text.replace(r"\textbackslash", r"\textbackslash{}")
+        text = self.codec.encode(text)
 
         # Now hyphenate if needed
         if self.hyphenate:
             text = text.replace("\1", r"\-")
         return text
-        
+
 
 class RawLatex:
     def __init__(self):
