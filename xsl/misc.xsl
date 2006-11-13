@@ -24,7 +24,9 @@
     <xsl:value-of select="$latex.class.options"/>
     <xsl:text>]</xsl:text>
   </xsl:if>
-  <xsl:text>{report}&#10;</xsl:text>
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$latex.class.book"/>
+  <xsl:text>}&#10;</xsl:text>
   <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
   <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
   <xsl:text>%\usepackage{a4wide}&#10;</xsl:text>
@@ -43,7 +45,9 @@
     <xsl:value-of select="$latex.class.options"/>
     <xsl:text>]</xsl:text>
   </xsl:if>
-  <xsl:text>{article}&#10;</xsl:text>
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$latex.class.article"/>
+  <xsl:text>}&#10;</xsl:text>
   <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
   <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
   <xsl:text>%\usepackage{a4wide}&#10;</xsl:text>

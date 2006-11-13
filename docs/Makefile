@@ -1,5 +1,4 @@
 TABLES = $(wildcard table-eg*)
-PWD = $(shell pwd)
 CHANGES = $(wildcard changes/*.xml)
 VERSION = devel
 OPTS =
@@ -13,19 +12,19 @@ all: profile manual.pdf manpagegz
 allstyle: all native db2latex simple
 
 profile:
-	@gmake -C manpage -f ../Makefile dblatex-doc.xml
+	@$(MAKE) -C manpage -f ../Makefile dblatex-doc.xml
 
 dblatex-doc.xml: dblatex.1.xml
 	$(XSLTPROC) -o $@ --param profile.attribute "'output'" \
                           --param profile.value "'manual'" $(XSLPROF) $<
 
 manpagegz:
-	@gmake -C manpage -f ../Makefile dblatex.1.gz
+	@$(MAKE) -C manpage -f ../Makefile dblatex.1.gz
 
 clean:
-	$(RM) manual.pdf $(FIGURES)
+	$(RM) manual.pdf $(FIGURES) manpage/dblatex.1.gz manpage/dblatex-doc.xml
 
-native db2latex simple: version.xml
+native db2latex simple: version.xml profile
 	../scripts/dblatex -T $@ -o manual-$@.pdf manual.xml
 
 %.pdf: %.xml version.xml $(TABLES) $(CHANGES)

@@ -12,6 +12,8 @@
 <xsl:param name="latex.babel.use">1</xsl:param>
 <xsl:param name="latex.babel.language"/>
 <xsl:param name="latex.class.options"/>
+<xsl:param name="latex.class.article">article</xsl:param>
+<xsl:param name="latex.class.book">report</xsl:param>
 <xsl:param name="biblioentry.item.separator">, </xsl:param>
 
 <!-- Default behaviour setting -->

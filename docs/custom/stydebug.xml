@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE sect2 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <sect2 id="sec-debug"><title>Debugging your Style</title>
 <para>It is not surprising if your first dblatex compilation fails with a fresh
 LaTeX style. So, how to debug it when used with dblatex?</para>

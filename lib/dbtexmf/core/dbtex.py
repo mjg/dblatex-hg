@@ -242,7 +242,6 @@ class DbTex:
 
 def failed_exit(msg, rc=1):
     print >>sys.stderr, (msg)
-    raise
     sys.exit(rc)
 
 
