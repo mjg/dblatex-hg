@@ -1020,7 +1020,9 @@
   <!-- Column color? -->
   <xsl:if test="$bgcolor != ''">
     <xsl:text>>{\columncolor</xsl:text>
-    <xsl:value-of select="$bgcolor"/>
+    <xsl:call-template name="get-color">
+      <xsl:with-param name="color" select="$bgcolor"/>
+    </xsl:call-template>
     <xsl:text>}</xsl:text>
   </xsl:if>
   
@@ -1073,7 +1075,14 @@
   <!-- First, save the table verbatim data -->
   <xsl:apply-templates mode="save.verbatim"/>
   <xsl:text>\begingroup%&#10;</xsl:text>
-  
+
+  <!-- Set cellpadding -->
+  <xsl:if test="../@cellpadding">
+    <xsl:text>\setlength{\tabcolsep}{</xsl:text>
+    <xsl:value-of select="../@cellpadding"/>
+    <xsl:text>}%&#10;</xsl:text>
+  </xsl:if>
+
   <!-- Get the number of columns -->
   <xsl:variable name="cols">
     <xsl:choose>

@@ -14,6 +14,7 @@
 <xsl:include href="common/common.xsl"/>
 <xsl:include href="chapter.xsl"/>
 <xsl:include href="bridgehead.xsl"/>
+<xsl:include href="color.xsl"/>
 <xsl:include href="newtbl.xsl"/>
 <xsl:include href="tablen.xsl"/>
 <xsl:include href="admon.xsl"/>
@@ -31,6 +32,7 @@
 <xsl:include href="procedure.xsl"/>
 <xsl:include href="lists.xsl"/>
 <xsl:include href="xref.xsl"/>
+<xsl:include href="lang.xsl"/>
 <xsl:include href="misc.xsl"/>
 <xsl:include href="main.xsl"/>
 <xsl:include href="version.xsl"/>

@@ -15,6 +15,9 @@
   <xsl:when test="title|bibliographyinfo/title">
     <xsl:value-of select="(title|bibliographyinfo/title)[1]"/>
   </xsl:when>
+  <xsl:when test="ancestor::article">
+    <xsl:text>\refname</xsl:text>
+  </xsl:when>
   <xsl:otherwise>
     <xsl:text>\bibname</xsl:text>
   </xsl:otherwise>
