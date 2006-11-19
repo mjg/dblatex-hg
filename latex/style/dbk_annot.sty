@@ -13,6 +13,8 @@
 %% * http://partners.adobe.com/public/developer/en/pdf/PDFReference16.pdf
 %%   (section 8.4 Annotations)
 %%
+%% Example of use: \comment[width=5cm,symbol=Balloon,title={Note}]{...}
+%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{dbk_annot}[2006/11/19 v0.1 PDF Text Annotations]
 
@@ -20,6 +22,7 @@
 
 
 %% Default text annotation parameter values
+\let\defaultPDFlocation\empty%
 \let\defaultPDFopen\empty
 \let\defaultPDFtitle\empty
 \let\defaultPDFheight\baselineskip
@@ -28,6 +31,7 @@
 
 \def\commentdefault{%
   \let\PDFsymbol\empty%
+  \let\PDFlocation\defaultPDFlocation%
   \let\PDFtitle\defaultPDFtitle%
   \let\PDFopen\defaultPDFopen%
   \let\PDFwidth\defaultPDFwidth%
@@ -45,6 +49,7 @@
 \define@key{comment}{height}{\def\PDFheight{#1}}
 \define@key{comment}{depth}{\def\PDFdepth{#1}}
 \define@key{comment}{title}{\def\PDFtitle{/T (#1)}}
+\define@key{comment}{location}{\def\PDFlocation{#1}}
 \define@key{comment}{open}[true]{%
 \ifthenelse{\equal{#1}{true}}%
   {\def\PDFopen{/Open true}}%
@@ -56,6 +61,7 @@
 \define@key{defcomment}{height}{\def\defaultPDFheight{#1}}
 \define@key{defcomment}{depth}{\def\defaultPDFdepth{#1}}
 \define@key{defcomment}{title}{\def\defaultPDFtitle{/T (#1)}}
+\define@key{defcomment}{location}{\def\defaultPDFlocation{#1}}
 \define@key{defcomment}{open}[true]{%
 \ifthenelse{\equal{#1}{true}}%
   {\def\defaultPDFopen{/Open true}}%
@@ -80,7 +86,13 @@
 \def\docomment[#1]#2{%
   \commentdefault%
   \setkeys{comment}{#1}%
-  \pdfstringdef\@tempa{#2}%
+  \ifthenelse{\equal{\PDFlocation}{margin}}%
+    {\marginpar{\dodocomment{#2}}}%
+    {\dodocomment{#2}}%
+}
+
+\def\dodocomment#1{%
+  \pdfstringdef\@tempa{#1}%
   \pdfannot width \PDFwidth height \PDFheight depth \PDFdepth{%
     /Subtype /Text
     /Contents (\@tempa)
