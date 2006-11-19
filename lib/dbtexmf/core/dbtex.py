@@ -340,7 +340,7 @@ class DbTexCommand:
             run.xslopts = options.xslopts
 
         if options.xslparams:
-            run.xslparams = options.xslparams
+            run.xslparams += options.xslparams
 
         if options.debug:
             run.debug = options.debug
