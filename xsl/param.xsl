@@ -14,10 +14,10 @@
 <xsl:param name="latex.class.options"/>
 <xsl:param name="latex.class.article">article</xsl:param>
 <xsl:param name="latex.class.book">report</xsl:param>
-<xsl:param name="biblioentry.item.separator">, </xsl:param>
 
 <!-- Default behaviour setting -->
 
+<xsl:param name="biblioentry.item.separator">, </xsl:param>
 <xsl:param name="refentry.xref.manvolnum" select="1"/>
 <xsl:param name="refsynopsis.title">Synopsis</xsl:param>
 <xsl:param name="refnamediv.title"></xsl:param>
@@ -27,6 +27,7 @@
 <xsl:param name="classsynopsis.default.language">java</xsl:param>
 <xsl:param name="show.comments" select="1"/>
 <xsl:param name="glossterm.auto.link" select="0"/>
+<xsl:param name="pdf.annot.options"/>
 
 <!-- "Common" parameters -->
 

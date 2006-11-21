@@ -117,11 +117,10 @@
 </xsl:template>
 
 <xsl:template match="authorgroup">
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string">
-      <xsl:call-template name="person.name.list"/>
-    </xsl:with-param>
-  </xsl:call-template>
+  <xsl:variable name="string">
+    <xsl:call-template name="person.name.list"/>
+  </xsl:variable>
+  <xsl:value-of select="normalize-space($string)"/>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -394,7 +393,7 @@
   <xsl:call-template name="inline.charseq"/>
 </xsl:template>
 
-<xsl:template match="firstname|surname">
+<xsl:template match="firstname|surname|honorific|othername|lineage">
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -564,9 +563,18 @@
 
 <xsl:template match="comment|remark">
   <xsl:if test="$show.comments != 0">
-    <xsl:text>\marginpar{\footnotesize{</xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>}}</xsl:text>
+    <xsl:text>\comment</xsl:text>
+    <xsl:if test="@role">
+      <xsl:text>[title={</xsl:text>
+      <xsl:value-of select="@role"/>
+      <xsl:text>}]</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
+    <xsl:variable name="string">
+      <xsl:apply-templates/>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($string)"/>
+    <xsl:text>}</xsl:text>
   </xsl:if>
 </xsl:template>
 

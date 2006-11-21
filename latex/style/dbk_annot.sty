@@ -84,11 +84,13 @@
 \def\comment{\@ifnextchar[\docomment{\docomment[]}}
 
 \def\docomment[#1]#2{%
+  \begingroup%
   \commentdefault%
   \setkeys{comment}{#1}%
   \ifthenelse{\equal{\PDFlocation}{margin}}%
     {\marginpar{\dodocomment{#2}}}%
     {\dodocomment{#2}}%
+  \endgroup%
 }
 
 \def\dodocomment#1{%

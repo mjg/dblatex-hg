@@ -1,25 +1,18 @@
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
-x * Passer la doc en XML + utiliser la manpage
-x * Utiliser sgml2xml (osx)
 x * Problèmes verbatim in tables
 x * longtable sans caption : \addtocounter{table}{-1}
-x * mediaobject[@role='dblatex']
-x * mathml : &#x022EE; = vdots
-x * couleur dans tables
+x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * Utilisation bibtex
 * Problèmes footnote in tables
-* Remark in note
-* Patch biblio à intégrer
+* Patch biblio à intégrer (~/archives/tmp/biblio_patch)
 * Bug table
-* Faire <remark>
+/ * Remark in note
+/ * Remark in authorgroup
 * Faire <annotation>
 * Problèmes table in example
 * \caption{\protect\rule{0cm}{2cm} blablabla}
 * Faire \input@path dans rawtex (évite le _tmp)
-* Faire table/@cellpadding pour \tabcolsep
-* \setlength{\extrarowheight}{6pt}
-* couleurs au format #ccffdd (~archives/tmp/xslhtod.txt)
 
 * <subtitles> silently skipped.
 
@@ -28,28 +21,41 @@ x * couleur dans tables
 * envoyer cas de tests :
   -> informaltable.015.xml    KO  But what does mean colwidth="4in*"?
 
-<xsl:template match="authorgroup">
-<!--
-    <xsl:variable name="string">
-      <xsl:call-template name="person.name.list"/>
-    </xsl:variable>
-    <xsl:value-of select="normalize-space($string)"/>
-  -->
-</xsl:template>
-
 Release 0.2.1:
 --------------
-- Use of codecs for better and systematic unicode support
-- Extensible XSLT engines, loaded as plugins
-- Option -m added to select the XSLT to use
-- XSLT module using 4Suite (http://4suite.org) added
+* Python code improvements:
+  - Use of codecs for better and systematic unicode support.
+  - Extensible XSLT engines, loaded as plugins.
+  - Option -m added to select the XSLT to use.
+  - XSLT module using 4Suite (http://4suite.org) added.
+  - Possibility to have user and/or system-wide configuration files.
 
-- Use of key() instead of id()
-- UTF-8 output
-- legalnotice.xsl: Debian bug
-- newtbl.xsl, xref.xsl: more conformant XSL code
+* XSL improvements:
+  - UTF-8 XML output.
+  - Hexadecimal color like <?dblatex bgcolor="#cceeff"?> supported.
+  - Named color like <?dblatex bgcolor="blue"?> supported.
+  - lang.xsl: contains all lang stuff and calls the babel setup hook.
+  - newtbl.xsl: @cellpadding used for horizontal padding.
+  - pdf.annot.options parameter added to customize the PDF text annotation
+    rendering (width, height, depth, title).
+  - latex.class.book and latex.class.article parameters added to let user
+    choose an alternative document class.
 
-- dbk_core.sty: use enumitem instead of enumerate (simple style)
+* Latex improvements:
+  - Cleaner locale handling.
+  - New latex commands to customize the babel setup.
+  - Default babel setup for french.
+  - Remark/comment rendered as PDF text annotations. Fixes Bug #374210 and
+    allows remark in boxes/minipages like a note.
+
+* Bug fixes:
+  - Cross-references use of key() instead of id().
+  - newtbl.xsl, xref.xsl: more conformant XSL code.
+  - dbk_core.sty: use enumitem instead of enumerate (simple style).
+  - biblio.xsl: bibliographic title fixed for an article (use of \refname).
+  - dbtex.py: bug fix when both -Tstyle -Pparam are used.
+  - legalnotice.xsl: bug shown by xsltproc-1.1.18 fixed.
+  - graphic.xsl: escape graphic filenames.
 
 
 Release 0.2:

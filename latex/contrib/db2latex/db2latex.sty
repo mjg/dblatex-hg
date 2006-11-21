@@ -31,6 +31,7 @@
 \usepackage{dbk_verbatim}
 \usepackage{dbk_callout}
 \usepackage{dbk_locale}
+\usepackage{dbk_annot}
 
 % LaTeX <othercredit> commands to define
 %
@@ -98,7 +99,7 @@
   \stdmaketitle
   \noindent
   \textbf{\DBKtitle \\}
-  \ifthenelse{\equal{\DBKauthor}{}}{}{by \DBKauthor \\}
+  \ifx\DBKauthor\empty\else{by \DBKauthor \\}\fi
   \hspace{0pt}\\
   \ifthenelse{\equal{\DBKedition}{}}{}{Edition \DBKedition \\}
   \ifthenelse{\equal{\DBKpubdate}{}}{}{Published \DBKpubdate \\}

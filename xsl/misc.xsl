@@ -177,6 +177,15 @@
   </xsl:if>
 </xsl:template>
 
+<!-- Setup to do when the docbook package is loaded -->
+<xsl:template name="user.params.set2">
+  <xsl:if test="$pdf.annot.options">
+    <xsl:text>\commentsetup{</xsl:text>
+    <xsl:value-of select="$pdf.annot.options"/>
+    <xsl:text>}&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="book">
   <xsl:value-of select="$latex.book.preamblestart"/>
@@ -186,6 +195,7 @@
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
 
+  <xsl:call-template name="user.params.set2"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:apply-templates select="bookinfo" mode="docinfo"/>
 
@@ -303,6 +313,7 @@
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
 
+  <xsl:call-template name="user.params.set2"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:apply-templates select="articleinfo" mode="docinfo"/>
 
