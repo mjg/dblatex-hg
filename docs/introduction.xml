@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<chapter><title>Introduction
- </title>
+<chapter><title>Introduction</title>
 <sect1>
 <title>Why a DB2LaTeX clone?</title>
-<para>dblatex is actually a <ulink url="http://db2latex.sourceforge.net">DB2LaTeX</ulink> clone. So, why this project? The purpose is a bit different on these points:</para>
+<para><command>Dblatex</command> started as a <ulink url="http://db2latex.sourceforge.net">DB2LaTeX</ulink> clone. So, why this project? The purpose is a bit different on these points:</para>
 <itemizedlist>
-<listitem><para>The project is end-user oriented, that is it tries to hide as much as possible the latex compiling stuff by providing a single clean script to produce directly DVI, PostScript and PDF output.</para></listitem>
+<listitem><para>The project is end-user oriented, that is, it tries to hide as much as possible the latex compiling stuff by providing a single clean script to produce directly DVI, PostScript and PDF output.</para></listitem>
 <listitem><para>The actual output rendering is done not only by the XSL stylesheets transformation, but also by a dedicated LaTeX package. The purpose is to allow a deep LaTeX customisation without changing the XSL stylesheets.</para></listitem>
 <listitem><para>Post-processing is done by Python, to make publication faster, convert the images if needed, and do the whole compilation.</para></listitem>
 </itemizedlist></sect1>
   <sect1>
-   <title>
-   Features
-  </title>
+   <title>Features</title>
   <para>
-   With dblatex you can: 
+   With <command>dblatex</command> you can: 
   </para>
   <itemizedlist>
    <listitem>
@@ -58,16 +55,14 @@
   </itemizedlist>
   </sect1>
   <sect1>
-   <title>
-   Version
-  </title>
+   <title>Version</title>
   <para>
    This manual is for dblatex version <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="version.xml"/>.
   </para>
   </sect1>
   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="changes/changes.xml"/>
   <sect1>
-   <title> Publishing Principles </title>
+   <title>Publishing Principles</title>
   <para>
    Dblatex transforms a DocBook XML/SGML document to LaTeX. Once transformed into
    LaTeX, standard LaTeX tools are used to produce DVI, Postcript or PDF files.
@@ -81,9 +76,7 @@
 <imagedata fileref="processus" align="center" width="60%"/>
 </imageobject></mediaobject></figure>
    <sect2 id="sec-process">
-    <title>
-    Backend Drivers
-   </title>
+    <title>Backend Drivers</title>
    <para>
     The main script allows to use two LaTeX backend drivers:
    </para>
@@ -102,7 +95,7 @@ accepts PDF, PNG, JPEG, and TIFF graphics.
    </itemizedlist>
    </sect2>
    <sect2 id="sec-stylesheets">
-    <title> XSL Stylesheets </title>
+    <title>XSL Stylesheets</title>
     <para>
     The XSL stylesheets located under <filename>xsl/</filename> are used to transform from XML to &ldquo;raw&rdquo; LaTeX. The main file is <filename>latex_book_fast.xsl</filename>, that includes the other stylesheets of the directory.
     </para>
@@ -135,7 +128,7 @@ accepts PDF, PNG, JPEG, and TIFF graphics.
    </itemizedlist>
    </sect2>
    <sect2>
-    <title> LaTeX Style Package</title>
+    <title>LaTeX Style Package</title>
     <para>
     Once valid LaTeX is available, the LaTeX style package (docbook.sty) under <filename>latex/style/</filename> is used to customize the output rendering. It includes the other files of the directory. You can also provide your own LaTeX style (cf. <xref linkend="sec-custom"/>).
     </para>

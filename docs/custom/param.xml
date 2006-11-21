@@ -1,11 +1,13 @@
 <informaltable>
 <tgroup cols="3" colsep="1" rowsep="1" align="left">
-<colspec colname="c1"/>
+<colspec colname="c1" colwidth="2*"/>
+<colspec colname="c2" colwidth="3*"/>
+<colspec colname="c3" colwidth="*"/>
 <thead>
 <row>
 <entry>Parameter</entry>
 <entry>Role</entry>
-<entry>Default value</entry>
+<entry>Default Value</entry>
 </row>
 </thead>
 <tbody>
@@ -139,12 +141,6 @@ definition in the glossary.</entry>
 </row>
 <!-- -->
 <row>
-<entry>latex.hyperparam</entry>
-<entry>cf. <xref  linkend="sec-hyperparam"/></entry>
-<entry>empty</entry>
-</row>
-<!-- -->
-<row>
 <entry>latex.babel.use</entry>
 <entry>Set to 1 the babel package corresponding to the document language is
 included. Set to 0 no babel package is included whatever the document language
@@ -160,9 +156,29 @@ language whatever the document language is.</entry>
 </row>
 <!-- -->
 <row>
+<entry>latex.class.article</entry>
+<entry>This parameter sets the document class to use for
+<sgmltag>article</sgmltag> documents.</entry>
+<entry>article</entry>
+</row>
+<!-- -->
+<row>
+<entry>latex.class.book</entry>
+<entry>This parameter sets the document class to use for
+<sgmltag>book</sgmltag> documents.</entry>
+<entry>report</entry>
+</row>
+<!-- -->
+<row>
 <entry>latex.class.options</entry>
 <entry>Options passed to the \documentclass command.</entry>
 <entry>Empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>latex.hyperparam</entry>
+<entry>cf. <xref  linkend="sec-hyperparam"/></entry>
+<entry>empty</entry>
 </row>
 <!-- -->
 <row>
@@ -246,6 +262,14 @@ text to italics.</entry>
 table row separators instead of cline. Using <filename>hhline</filename> seems
 more suited for colored tables.</entry>
 <entry>0</entry>
+</row>
+<!-- -->
+<row>
+<entry>pdf.annot.options</entry>
+<entry>Options to change how the PDF text annotations should look. The supported 
+options are width, height, depth. The options must be comma separated like:
+<literal>width=5cm,depth=10cm</literal>.</entry>
+<entry>Empty</entry>
 </row>
 <!-- -->
 <row>

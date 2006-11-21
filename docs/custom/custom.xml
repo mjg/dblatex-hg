@@ -2,26 +2,26 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
  <chapter id="sec-custom">
-  <title>
-  Customization
- </title>
+  <title>Customization</title>
  <para>
   The transformation process (and thus the output rendering) can be heavily customized by:
  </para>
  <itemizedlist>
   <listitem>
   <para>
-  using a configuration stylesheet,
+  using some <link linkend="sec-param">configuration parameters</link> either in
+  a <link linkend="sec-param-stylesheet">configuration stylesheet</link> or directly
+  from the <link linkend="sec-param-value">command line</link>,
   </para>
  </listitem>
   <listitem>
   <para>
-  using customized stylesheets,
+  using some <link linkend="sec-custom-stylesheet">customized stylesheets</link>,
   </para>
  </listitem>
   <listitem>
   <para>
-  using a customized LaTeX style package.
+  using a <link linkend="sec-custom-latex">customized LaTeX style package</link>.
   </para>
  </listitem>
   <listitem>
@@ -34,11 +34,10 @@
   All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs"/>) to create a new tool dedicated to your needs.
  </para>
   <sect1 id="sec-param">
-   <title>
-   Configuration Parameter Stylesheet
-  </title>
+   <title>Configuration Parameters</title>
   <para>
-   The PDF rendering can be customised by using an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p <replaceable>custom.xsl</replaceable></option>. The available configuration parameters are the following:
+   The PDF rendering can be customised by using some configuration parameters.
+   The available configuration parameters are the following:
   </para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="param.xml"/>
    <sect2 id="sec-defaultscale">
@@ -62,9 +61,7 @@ comma separated list.</para>
 must be some valid options passed to the \includegraphics command.</para>
 </sect2>
    <sect2 id="sec-hyperparam">
-    <title>
-    latex.hyperparam
-   </title>
+    <title>latex.hyperparam</title>
    <para>
     This parameter gives the options to pass to the LaTeX hyperref package. No validity check is done. 
    </para>
@@ -85,9 +82,17 @@ must be some valid options passed to the \includegraphics command.</para>
 </example>
   </sect2>
   </sect1>
-  <sect1 id="sec-param-value"><title>Setting Parameter values</title>
-  <para>It is possible to set some XSL parameter values directly from the command
-  line without creating a configuration parameter stylesheet, by using the
+  <sect1 id="sec-param-stylesheet">
+   <title>Configuration Stylesheet</title>
+  <para>
+   The parameters can be stored in an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p <replaceable>custom.xsl</replaceable></option>. An example of configuration stylesheet is given with the manual:
+  </para>
+  <programlisting><textobject><textdata
+  fileref="myparam.xsl"/></textobject></programlisting>
+  </sect1>
+  <sect1 id="sec-param-value"><title>Setting Command line Parameters</title>
+  <para>You can set some XSL parameters directly from the command
+  line without creating a configuration parameter stylesheet, with the
   <option>-P <replaceable>parameter=value</replaceable></option> option.</para>
   <para>The following example set the latex.hyperparam parameter value:
    <programlisting>
@@ -95,10 +100,8 @@ must be some valid options passed to the \includegraphics command.</para>
 ]]></programlisting>
   </para>
   </sect1>
-  <sect1>
-   <title>
-   Customized stylesheets
-  </title>
+  <sect1 id="sec-custom-stylesheet">
+   <title>Customized Stylesheets</title>
   <para>
    If one needs to change some of the translations done by the XSL stylesheets, it is possible to provide user stylesheets to override the templates. To do this, write the stylesheets (e.g. mystyle.xsl) and include them in the configuration file such as shown by the following example.
   </para>
@@ -116,9 +119,7 @@ must be some valid options passed to the \includegraphics command.</para>
 </example>
   </sect1>
   <sect1 id="sec-custom-latex">
-   <title>
-   Customized LaTeX style
-  </title>
+   <title>Customized LaTeX style</title>
   <para>
    The actual output rendering is done by the latex style package used, and not by the XSL stylesheets whose role is only to translate to latex. Users can provide their own LaTeX style file, in respect of some rules:
   </para>
@@ -143,24 +144,18 @@ must be some valid options passed to the \includegraphics command.</para>
    The latex style file to use is specified by using the option <option>--style <replaceable>latex_style</replaceable></option>. An example of a simple LaTeX DocBook style is provided in the package.
   </para>
    <sect2>
-    <title>
-    Package options
-   </title>
+    <title>Package options</title>
    <para>A compliant LaTeX style package supports the following options. The options are
    provided by the XSL stylesheets according to the document attributes.</para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="styoption.xml"/>
    </sect2>
    <sect2>
-    <title>
-    Needed packages
-   </title>
+    <title>Needed packages</title>
    <para>A LaTeX style package must at least include the following packages.</para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stypackage.xml"/>
    </sect2>
    <sect2>
-    <title>
-    DocBook interface
-   </title>
+    <title>DocBook interface</title>
    <para>
     All the latex commands beginning with DBK are related to elements under <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>.
    </para>
@@ -169,9 +164,7 @@ must be some valid options passed to the \includegraphics command.</para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stydebug.xml"/>
   </sect1>
   <sect1>
-   <title>
-   Latex post process script
-  </title>
+   <title>Latex post process script</title>
   <para>
    Extra user actions can be processed on the latex file produced by the XSL stylesheets or on its temporary working files produced by the latex compilation. 
   </para>
@@ -183,12 +176,13 @@ must be some valid options passed to the \includegraphics command.</para>
   </para>
   </sect1>
   <sect1 id="sec-specs">
-   <title>
-   Specification file
-  </title>
+   <title>Dblatex Configuration File</title>
   <para>
-   A master configuration file, also called a specification file, can be defined to list all the customizations and options to apply. Such a file is passed by using the option <option>-S <replaceable>specs</replaceable></option>.
+   A master configuration file, also called a specification file, can be used to list
+   all the customizations and options to apply. Such a file is passed by using the
+   option <option>-S <replaceable>config_file</replaceable></option>.
   </para>
+  <sect2><title>Configuration File Format</title>
   <para>
    The format of the file is the following:
   </para>
@@ -234,15 +228,28 @@ must be some valid options passed to the \includegraphics command.</para>
   <para>
    Here is the specification file used for this manual.
   </para>
-<example><title>Specification file example</title>
+<example><title>User Manual Configuration File</title>
 <programlisting><textobject><textdata fileref="manual.specs"/></textobject>
 </programlisting>
 </example>
+  </sect2>
+  <sect2><title>Configuration Paths</title>
+  <para>By default <command>dblatex</command> tries to find the configuration files
+  in the following paths, in respect of the order:</para>
+  <orderedlist>
+  <listitem><para>The current directory</para></listitem>
+  <listitem><filename>$HOME/.dblatex</filename></listitem>
+  <listitem><filename>/etc/dblatex</filename></listitem>
+  <listitem><para>The dblatex package configuration directories.</para></listitem>
+  </orderedlist>
+  <para>You can add some extra paths where to look for by setting the
+  <envar>DBLATEX_CONFIG_FILES</envar> environment variable. The paths are
+  separated by ":" in Unix like systems, and by ";" on Windows. These paths are used
+  only when nothing is found in the default paths.</para>
+  </sect2>
   </sect1>
   <sect1>
-   <title>
-   Customization order
-  </title>
+   <title>Customization Precedence</title>
   <para>
    All the customization queries are translated to the corresponding command line options. Thus, using several customization methods can be unconsistent because each of them override the same option with another value. 
   </para>
@@ -269,7 +276,7 @@ must be some valid options passed to the \includegraphics command.</para>
    </para>
   </listitem>
   </itemizedlist>
-<example><title>Customization order</title>
+<example><title>Customization Order</title>
   <para>
    Let's consider the specification file containing the following parameters:
   </para>

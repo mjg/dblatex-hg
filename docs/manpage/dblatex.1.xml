@@ -187,6 +187,16 @@
         </listitem>
       </varlistentry>
       <varlistentry>
+        <term><option>-m <replaceable>xslt</replaceable></option></term>
+        <term>
+          <option>--xslt=<replaceable>xslt</replaceable></option>
+        </term>
+        <listitem>
+          <simpara>XSLT engine to use. The available engines are:
+          xsltproc (default), 4xslt.</simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
         <term><option>-o <replaceable>output</replaceable></option></term>
         <term><option>--output=<replaceable>output</replaceable></option></term>
         <listitem>
@@ -209,8 +219,7 @@
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term>
-          <option>-P <replaceable>param</replaceable>=<replaceable>value</replaceable></option>
+        <term><option>-P <replaceable>param</replaceable>=<replaceable>value</replaceable></option>
         </term>
         <term>
           <option>--param=<replaceable>param</replaceable>=<replaceable>value</replaceable></option>
@@ -280,7 +289,7 @@
       <varlistentry>
         <term><option>-x <replaceable>xslt_options</replaceable></option></term>
         <term>
-          <option>--xslt=<replaceable>xslt_options</replaceable></option>
+          <option>--xslt-opts=<replaceable>xslt_options</replaceable></option>
         </term>
         <listitem>
           <simpara>
@@ -299,6 +308,45 @@
             or <sgmltag>imagedata</sgmltag>, but it can be disabled if the document
             does not contain such callouts. Disabling this support can improve the
             processing performance for big documents.
+          </simpara>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title>Files</title>
+    <variablelist>
+      <varlistentry>
+        <term><filename>$HOME/.dblatex/</filename></term>
+        <listitem>
+          <simpara>
+            User configuration directory.
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><filename>/etc/dblatex/</filename></term>
+        <listitem>
+          <simpara>
+            System-wide configuration directory.
+          </simpara>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    <para>The predefined output styles are located in the installed package
+    directory.</para>
+  </refsect1>
+
+  <refsect1>
+    <title>Environment Variables</title>
+    <variablelist>
+      <varlistentry>
+        <term><envar>DBLATEX_CONFIG_FILES</envar></term>
+        <listitem>
+          <simpara>
+            Extra configuration directories that may contain some dblatex
+            configuration files.
           </simpara>
         </listitem>
       </varlistentry>

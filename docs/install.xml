@@ -1,11 +1,7 @@
- <chapter>
-  <title>
-  Installing the package
- </title>
-  <sect1>
-   <title>
-   Content
-  </title>
+<chapter>
+  <title>Installing the Package</title>
+  <section>
+   <title>Content</title>
   <para>
    The package contains the following:
   </para>
@@ -25,9 +21,8 @@
   </listitem>
   </varlistentry>
    <varlistentry>
-   <term>
-   scripts/
-</term><listitem><para>Several scripts, including the main script of the package.
+   <term>scripts/</term>
+   <listitem><para>Several scripts, including the main script of the package.
    </para>
   </listitem>
   </varlistentry>
@@ -46,18 +41,19 @@
   </listitem>
   </varlistentry>
   </variablelist>
-  </sect1>
-  <sect1>
-   <title>
-   Dependencies
-  </title>
+  </section>
+
+  <section><title>Installing on Unix Systems</title>
+  <section>
+   <title>Dependencies</title>
   <para>
    To work, the following items must be available:
   </para>
   <itemizedlist>
    <listitem>
    <para>
-   An XSLT. <filename>xsltproc</filename> is the default XSLT used.
+   An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one can
+   also use <ulink url="http://4suite.org">4suite</ulink>.
    </para>
   </listitem>
    <listitem>
@@ -75,21 +71,12 @@
    Python &gt;= 4.3.
    </para>
   </listitem>
-   <listitem>
-   <para>
-   GNU make.
-   </para>
-  </listitem>
   </itemizedlist>
-  </sect1>
-  <sect1>
-   <title>
-   Installation
-  </title>
-   <sect2>
-    <title>
-    Installing the dependencies
-   </title>
+  </section>
+  <section>
+   <title>Installation</title>
+   <section>
+    <title>Installing the dependencies</title>
    <para>
     To use the package, install properly the dependencies:
    </para>
@@ -142,11 +129,9 @@
    </para>
    </listitem>
    </orderedlist>
-   </sect2>
-   <sect2>
-    <title>
-    Installing the tool
-   </title>
+   </section>
+   <section>
+    <title>Installing the tool</title>
    <para>
     The steps to follow are the following:
    </para>
@@ -171,6 +156,68 @@
 ]]></programlisting>
    </listitem>
    </orderedlist>
-   </sect2>
-  </sect1>
+   </section>
+  </section>
+  </section>
+
+  <section><title>Installing on Windows</title>
+
+  <section><title>Dependencies</title>
+  <para>The following applications are required:
+  <itemizedlist>
+   <listitem>
+   <para>
+   An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one can
+   also use <ulink url="http://4suite.org">4suite</ulink>.
+   </para>
+  </listitem>
+   <listitem>
+   <para>The XML DocBook DTD.</para>
+  </listitem>
+   <listitem>
+   <para><ulink url="http://www.miktex.org">MiKTeX</ulink> &gt; 2.5.</para>
+  </listitem>
+   <listitem>
+   <para>
+   <ulink url="http://www.python.org">Python</ulink> &gt;= 4.3.
+   </para>
+  </listitem>
+  </itemizedlist>
+  </para>
+  </section>
+
+  <section><title>Installation</title>
+  <section><title>Installing MiKTeX</title>
+  <para>Install the minimal distribution, and add the following packages: 
+changebar,
+colortbl,
+fancybox,
+fancyhdr,
+fancyvrb,
+listings,
+overpics,
+rotating,
+subfigure,
+titlesec,
+bibtopic,
+enumitem,
+eepic,
+lm,
+lastpage,
+helvetic,
+times,
+symbol,
+courier.
+  </para>
+  </section>
+  <section><title>Installing dblatex</title>
+  <para>From the unpacked package directory just type:</para>
+  <screen>python setup.py install</screen>
+  <para>If the Python directory is <filename>C:\Python25</filename> you can now
+  try <command>dblatex</command> by typing:</para>
+  <screen>python C:\Python25\Scripts\dblatex file.xml</screen>
+  </section>
+  
+  </section>
+  </section>
  </chapter>

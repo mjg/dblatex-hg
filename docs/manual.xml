@@ -2,19 +2,17 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
                       "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
 [
-<!ENTITY edition "14">
+<!ENTITY edition "15">
 ]>
 
 <book lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
  <bookinfo>
-  <title>
-  DocBook to LaTeX Publishing 
- </title>
+  <title>DocBook to LaTeX Publishing</title>
  <author>
   <firstname>Benoît</firstname><surname>Guillon</surname>
  </author>
  <date>
-  27 Sep 2006
+  27 Nov 2006
  </date>
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
@@ -194,11 +192,20 @@
 </revdescription>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>27/10/06</date>
+<revnumber>14</revnumber><date>27/10/06</date>
 <authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>
   Changes: see <xref linkend="sec-changes-020"/>
+ </para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>27/11/06</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
+ <para>
+  Changes: see <xref linkend="sec-changes-021"/>
  </para>
 </revdescription>
 </revision>
@@ -220,21 +227,15 @@
 <xi:include href="introduction.xml"/>
 <xi:include href="install.xml"/>
  <chapter>
-  <title>
-  Using dblatex
- </title>
+  <title>Using dblatex</title>
 <xi:include href="manpage/dblatex-doc.xml"/>
 <xi:include href="custom/style.xml"/>
 <xi:include href="figure.xml"/>
 <xi:include href="tables/table.xml"/>
   <sect1>
-   <title>
-   Writing LaTeX mathematical equations
-  </title>
+   <title>Writing LaTeX Mathematical Equations</title>
    <sect2>
-    <title>
-    Presentation
-   </title>
+    <title>Presentation</title>
    <para>
     DocBook doesn't define elements for writing mathematical equations. Only few elements exist that tell how equation should be displayed (inlined, block):
    </para>
@@ -268,9 +269,7 @@
 </example>
    </sect2>
    <sect2>
-    <title>
-    Implementation choice
-   </title>
+    <title>Implementation choice</title>
    <para>
     The principle is to use only the <sgmltag>alt</sgmltag> element. If initially <sgmltag>alt</sgmltag> contains actually the text to print, it is chosen to use this element to embed LaTeX mathematical equations. This choice has the following advantages:
    </para>
@@ -301,17 +300,13 @@
    </para>
    </sect2>
    <sect2>
-    <title>
-    Compatibility
-   </title>
+    <title>Compatibility</title>
    <para>
     This implementation is not contradictory nor specific. In partticular, the <ulink url="http://ricardo.ecn.wfu.edu/~cottrell/dbtexmath/">DBTeXMath</ulink> proposal to extend the DSSSL stylesheets used by jade follows the same approach, and is integrated in the Norman Walsh XSL stylesheets.
    </para>
    </sect2>
    <sect2>
-    <title>
-    Examples
-   </title>
+    <title>Examples</title>
    <para>
     The following examples show how to write the equations.
    </para>
@@ -339,9 +334,7 @@
   </sect1>
 <xi:include href="math/mathml.xml"/>
   <sect1>
-   <title>
-   Creating an Index
-  </title>
+   <title>Creating an Index</title>
   <para>
    An index is automatically generated if some index entries (<sgmltag>indexterm</sgmltag>), telling the terms to put in the index, are written in the document. The <sgmltag>keyword</sgmltag> elements are not printed but are also added to the index.
   </para>
@@ -357,9 +350,7 @@
   </para>
   </sect1>
   <sect1>
-   <title>
-   Writing a Bibliography
-  </title>
+   <title>Writing a Bibliography</title>
   <para>
    A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter or a section and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections or subsections.
   </para>
@@ -391,9 +382,7 @@
 </example>
   </sect1>
   <sect1>
-   <title>
-   Document Revisions
-  </title>
+   <title>Document Revisions</title>
   <para>
    The attribute <sgmltag>revisionflag</sgmltag> is usefull to identify the changes between two revisions of a document. This information is managed by dblatex, that adds revision bars in the margin of the paragraphs changed, such like in this <phrase revisionflag="changed">paragraph</phrase>.
   </para>
@@ -408,9 +397,7 @@ The revision bars only appear when using the "dvips" driver. It seems to be a li
 <xi:include href="custom/custom.xml"/>
 <xi:include href="faq.xml"/>
  <chapter>
-  <title>
-  Thanks
- </title>
+  <title>Thanks</title>
  <para>
   Thanks to the people who contributed to the project at its early age: Jean-Yves Le
   Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help,

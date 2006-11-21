@@ -1,6 +1,5 @@
 <itemizedlist>
-<listitem><para>Better osx() integration. The SDATA entities are translated to the
-equivalent Unicode characters.</para></listitem>
+<listitem><para>Better <command>osx</command> integration. The SDATA entities are translated to the equivalent Unicode characters.</para></listitem>
 <listitem><para>Better Windows compatibility thanks to Nicolas Pernetty for his
 patches and feedbacks.</para>
 </listitem>
