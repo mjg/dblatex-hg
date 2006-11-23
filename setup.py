@@ -268,6 +268,7 @@ if __name__ == "__main__":
         url='http://dblatex.sf.net',
         packages=['dbtexmf',
                   'dbtexmf.core',
+                  'dbtexmf.xslt',
                   'dbtexmf.dblatex',
                   'dbtexmf.dblatex.grubber'],
         package_dir={'dbtexmf':'lib/dbtexmf'},
