@@ -83,9 +83,11 @@ class DbTex:
         os.environ["TEXINPUTS"] = texinputs
 
     def set_xslt(self, xsltmod=None):
-        if self.xsltproc:
-            return
+        # Set the XSLT to use. Set a default XSLT if none specified.
+        # One can replace an already defined XSLT if explicitely required.
         if not(xsltmod):
+            if self.xsltproc:
+                return
             xsltmod = "xsltproc"
         self.xsltproc = xslt.load(xsltmod)
 
