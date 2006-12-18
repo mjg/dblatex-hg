@@ -438,7 +438,7 @@
 <map key="&#x02126;"		text="\Omega "/>
 <map key="&#x02127;"		text="\mho "/>
 <map key="&#x02128;"		text="\mathfrak{Z}"/>
-<map key="&#x02129;"		text="\ElsevierGlyph{2129}"/> <!-- KO -->
+<map key="&#x02129;"		text="\ElsevierGlyph{2129}"/> <!-- KO (unicode) -->
 <map key="&#x0212B;"		text="\AA"/>
 <map key="&#x0212C;"		text="\mathscr{B}"/>
 <map key="&#x0212D;"		text="\mathfrak{C}"/>
@@ -498,7 +498,7 @@
 <map key="&#x021AE;"		text="\nleftrightarrow "/>
 <map key="&#x021B0;"		text="\Lsh "/>
 <map key="&#x021B1;"		text="\Rsh "/>
-<map key="&#x021B3;"		text="\ElsevierGlyph{21B3}"/> <!-- KO -->
+<map key="&#x021B3;"		text="\ElsevierGlyph{21B3}"/> <!-- KO (unicode) -->
 <map key="&#x021B6;"		text="\curvearrowleft "/>
 <map key="&#x021B7;"		text="\curvearrowright "/>
 <map key="&#x021BA;"		text="\circlearrowleft "/>
@@ -583,8 +583,8 @@
 <map key="&#x0222F;"		text="\oiint "/> <!-- KO -->
 <map key="&#x02230;"		text="\oiiint "/> <!-- KO -->
 <map key="&#x02231;"		text="\clwintegral "/> <!-- KO -->
-<map key="&#x02232;"		text="\ElsevierGlyph{2232}"/> <!-- KO -->
-<map key="&#x02233;"		text="\ElsevierGlyph{2233}"/> <!-- KO -->
+<map key="&#x02232;"		text="\ElsevierGlyph{2232}"/> <!-- KO (unicode) -->
+<map key="&#x02233;"		text="\ElsevierGlyph{2233}"/> <!-- KO (unicode) -->
 <map key="&#x02234;"		text="\therefore "/>
 <map key="&#x02235;"		text="\because "/>
 <map key="&#x02236;"		text=":"/>
@@ -665,8 +665,8 @@
 <map key="&#x02271;"		text="\ngeq "/>
 <map key="&#x02272;"		text="\lesssim "/>
 <map key="&#x02273;"		text="\gtrsim "/>
-<map key="&#x02274;"		text="\ElsevierGlyph{2274} "/> <!-- KO -->
-<map key="&#x02275;"		text="\ElsevierGlyph{2275} "/> <!-- KO -->
+<map key="&#x02274;"		text="\ElsevierGlyph{2274} "/> <!-- KO (unicode) -->
+<map key="&#x02275;"		text="\ElsevierGlyph{2275} "/> <!-- KO (unicode) -->
 <map key="&#x02276;"		text="\lessgtr "/>
 <map key="&#x02277;"		text="\gtrless "/>
 <map key="&#x02278;"		text="\notlessgreater "/> <!-- KO (unicode.sty) -->
