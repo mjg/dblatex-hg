@@ -11,7 +11,7 @@ class XsltProc:
         self.use_catalogs = 1
 
     def run(self, xslfile, xmlfile, outfile, opts=None, params=None):
-        cmd = "xsltproc --xinclude -o %s " % outfile
+        cmd = "xsltproc --xinclude -o \"%s\" " % outfile
         if self.use_catalogs and self.catalogs:
             cmd += " --catalogs "
         if params:
@@ -19,7 +19,7 @@ class XsltProc:
                 cmd += "--param %s \"'%s'\" " % (param, value)
         if opts:
             cmd += " ".join(opts) + " "
-        cmd += "%s \"%s\"" % (xslfile, xmlfile)
+        cmd += "\"%s\" \"%s\"" % (xslfile, xmlfile)
         self.system(cmd)
 
     def system(self, cmd):

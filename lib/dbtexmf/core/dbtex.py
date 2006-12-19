@@ -7,6 +7,7 @@ import os
 import re
 import tempfile
 import shutil
+import urllib
 from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
@@ -21,10 +22,7 @@ def suffix_replace(path, oldext, newext=""):
         return (path+newext)
 
 def path_to_uri(path):
-    if os.sep != "/":
-        return path.replace(os.sep, "/")
-    else:
-        return path
+    return urllib.pathname2url(path)
 
 
 class DbTex:
@@ -47,6 +45,8 @@ class DbTex:
         self.tmpdir = ""
         self.tmpdir_user = None
         self.fig_paths = []
+        self.bib_paths = []
+        self.bst_paths = []
         self.texinputs = []
         self.texbatch = 1
         self.fig_format = ""
@@ -163,7 +163,8 @@ class DbTex:
 
     def make_rawtex(self):
         self.rawfile = self.basefile + ".rtex"
-        param = {"listings.xml": self.listings}
+        param = {"listings.xml": self.listings,
+                 "current.dir": self.inputdir}
         self.xsltproc.use_catalogs = 1
         self.xsltproc.run(self.xslbuild, self.input,
                           self.rawfile, opts=self.xslopts, params=param)
@@ -183,6 +184,8 @@ class DbTex:
         if self.backend:
             self.runtex.set_backend(self.backend)
         self.runtex.set_fig_paths([self.inputdir] + self.fig_paths)
+        self.runtex.set_bib_paths([self.inputdir] + self.bib_paths,
+                                  [self.inputdir] + self.bst_paths)
         self.runtex.compile(self.texfile, self.binfile, self.format,
                             batch=self.texbatch)
         self.runtex.clean()
@@ -275,6 +278,12 @@ class DbTexCommand:
         parser.add_option("-I", "--fig-path", action="append",
                           dest="fig_paths", metavar="FIG_PATH",
                           help="Additional lookup path of the figures")
+        parser.add_option("-l", "--bst-path", action="append",
+                          dest="bst_paths", metavar="BST_PATH",
+                          help="Bibliography style file path")
+        parser.add_option("-L", "--bib-path", action="append",
+                          dest="bib_paths", metavar="BIB_PATH",
+                          help="BibTeX database path")
         parser.add_option("-m", "--xslt",
                           help="XSLT engine to use. (default=xsltproc)")
         parser.add_option("-o", "--output", dest="output",
@@ -349,6 +358,12 @@ class DbTexCommand:
 
         if options.fig_paths:
             run.fig_paths += [os.path.realpath(p) for p in options.fig_paths]
+
+        if options.bib_paths:
+            run.bib_paths += [os.path.realpath(p) for p in options.bib_paths]
+
+        if options.bst_paths:
+            run.bst_paths += [os.path.realpath(p) for p in options.bst_paths]
 
         if options.texinputs:
             for texinputs in options.texinputs:

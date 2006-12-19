@@ -43,6 +43,15 @@ class RunLatex:
         # Protect from tilde active char (maybe others?)
         self.fig_paths = [p.replace("~", r"\string~") for p in paths]
 
+    def set_bib_paths(self, bibpaths, bstpaths=None):
+        # Just set BIBINPUTS and/or BSTINPUTS
+        if bibpaths:
+            os.environ["BIBINPUTS"] = os.pathsep.join(bibpaths +
+                                                      [os.getenv("BIBINPUTS", "")])
+        if bstpaths:
+            os.environ["BSTINPUTS"] = os.pathsep.join(bstpaths +
+                                                      [os.getenv("BSTINPUTS", "")])
+
     def set_backend(self, backend):
         if not(backend in ("dvips", "pdftex")):
             raise ValueError("'%s': invalid backend" % backend)

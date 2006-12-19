@@ -16,6 +16,7 @@ def latex_char_replace(exc):
         try:
             l.append(unient.unicode_map[ord(c)])
         except KeyError:
+            print "Missing character &#x%x;" % ord(c)
             l.append(u"\&\#x%x;" % ord(c))
     return (u"".join(l), exc.end)
 
@@ -23,7 +24,6 @@ def latex_char_replace(exc):
 class LatexCodec:
     # This mapping for characters < 256 seems enough for latin1 output
     charmap = {
-              "~"   : r"\textasciitilde{}",
               "\xa0": r"~",
               # "\xa2": r"\textcent{}",
               # "\xa4": r"\textcurrency{}",
@@ -50,9 +50,10 @@ class LatexCodec:
         self.texres = (
             # Kind of normalize
             (re.compile("^[\s\n]*$"), r" "),
-            # TeX escapes
+            # TeX escapes (the order is important)
             (re.compile(r"([{}%_^$&#])"), r"\\\1"),
-            (re.compile(r"([-^])"), r"\1{}"))
+            (re.compile(r"([-^])"), r"\1{}"),
+            (re.compile(r"~"), r"\\textasciitilde{}"))
 
     def decode(self, text):
         return self._decode(text)[0]

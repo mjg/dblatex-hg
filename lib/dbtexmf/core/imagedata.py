@@ -1,6 +1,7 @@
 import sys
 import os
 import re
+import shutil
 
 #
 # Objects to convert an image format to another. Actually use the underlying
@@ -92,7 +93,7 @@ class Imagedata:
 
         # Natively supported format?
         if (ext == self.output_format):
-            return fig
+            return self._safe_file(fig, realfig, ext)
 
         # Try to convert
         count = len(self.converted)
@@ -106,11 +107,28 @@ class Imagedata:
             conv = GifConverter()
         else:
             # Unknown conversion to do, or nothing to do
-            return fig
+            return self._safe_file(fig, realfig, ext)
 
         # Convert the image and put it in the cache
         conv.convert(realfig, newfig, self.output_format)
         self.converted[realfig] = newfig
+        return newfig
+
+    def _safe_file(self, fig, realfig, ext):
+        """
+        Copy the file in the working directory if its path contains characters
+        unsupported by latex, like spaces.
+        """
+        if fig.find(" ") == -1:
+            return fig
+
+        # Added to the converted list
+        count = len(self.converted)
+        newfig = "figcopy%d.%s" % (count, ext)
+        self.converted[realfig] = newfig
+
+        # Do the copy
+        shutil.copyfile(realfig, newfig)
         return newfig
 
     def scanformat(self, fig):

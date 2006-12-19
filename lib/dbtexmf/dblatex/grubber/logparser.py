@@ -19,7 +19,9 @@ class LogParser:
     """
 
     re_loghead = re.compile("This is [0-9a-zA-Z-]*(TeX|Omega)")
-    re_rerun = re.compile("(LaTeX|Package longtable) Warning:.*Rerun")
+    re_rerun = re.compile(
+        "(LaTeX|Package longtable|Package bibtopic) Warning:.*Rerun")
+    re_rerun2 = re.compile("\(Changebar\).*Rerun")
     re_file = re.compile("(\\((?P<file>[^ \n\t(){}]*)|\\))")
     re_badbox = re.compile(r"(Ov|Und)erfull \\[hv]box ")
     re_line = re.compile(r"(l\.(?P<line>[0-9]+)( (?P<code>.*))?$|<\*>)")
@@ -94,6 +96,8 @@ class LogParser:
         """
         for line in self.lines:
             if self.re_rerun.match(line):
+                return 1
+            if self.re_rerun2.match(line):
                 return 1
         return 0
 

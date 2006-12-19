@@ -16,11 +16,12 @@ class TexParser:
         self.doc = doc
         self.comment_mark = "%"
         self.hooks = {
-            "usepackage" : self.h_usepackage,
+            "usepackage"   : self.h_usepackage,
+            "begin{btSect}": self.h_bibtopic,
         }
         self.update_rehooks()
 
-    def update_rehooks (self):
+    def update_rehooks(self):
         """
         Update the regular expression used to match macro calls using the keys
         in the `hook' dictionary. We don't match all control sequences for
@@ -35,7 +36,7 @@ class TexParser:
 
         self.rehooks = re.compile(pattern % "|".join(hooklist))
 
-    def add_hook (self, name, fun):
+    def add_hook(self, name, fun):
         """
         Register a given function to be called (with no arguments) when a
         given macro is found.
@@ -107,4 +108,12 @@ class TexParser:
 #                self.process(file)
 #            else:
             self.doc.modules.register(name, dict)
+
+    def h_bibtopic(self, dict):
+        """
+        Called when a \\btSect macro is found. It can also be loaded by a
+        usepackage of bibtopic. Note that once loaded the btSect hook will be
+        preempted by the bibtopic module hook.
+        """
+        self.doc.modules.register("bibtopic", dict)
 

@@ -150,6 +150,7 @@ class Index(TexModule):
 #        if self.doc.env.execute(cmd, env):
 #            msg.error(_("could not make index %s") % self.target)
 #            return 1
+        cmd = ['"'+c+'"' for c in cmd]
         msg.debug(" ".join(cmd))
         rc = os.system(" ".join(cmd))
         if (rc != 0):
@@ -203,8 +204,8 @@ class Module (TexModule):
         self.indices = {}
         self.defaults = []
         self.commands = {}
-        doc.add_hook("makeindex", self.makeindex)
-        doc.add_hook("newindex", self.newindex)
+        doc.parser.add_hook("makeindex", self.makeindex)
+        doc.parser.add_hook("newindex", self.newindex)
 
     def register (self, name, idx, ind, ilg):
         """

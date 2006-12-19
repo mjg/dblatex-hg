@@ -169,7 +169,8 @@ class Latex(Depend):
 
     def compile(self):
         self.must_compile = 0
-        cmd = "%s -interaction=batchmode %s" % (self.program, self.srcfile)
+        cmd = "%s -interaction=batchmode %s" % (self.program,
+                                                os.path.basename(self.srcfile))
         msg.log(cmd)
         rc = os.system(cmd)
         if rc != 0:
