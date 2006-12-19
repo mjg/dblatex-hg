@@ -52,6 +52,7 @@
 
 \newenvironment{DBKrevtable}{
   \begin{center}
+  \savetablecounter %
   \begin{longtable}{ |>{\centering}p{3cm} |>{\centering}p{3cm} |>
   {\raggedright}p{6.9cm} |>{\centering}p{3cm} | }
   \hline
@@ -69,7 +70,7 @@
   \endhead
 }{
   \end{longtable}
-  \addtocounter{table}{-1}
+  \restoretablecounter %
   \end{center}
 }
 

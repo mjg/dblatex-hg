@@ -1,11 +1,10 @@
 %%
-%% Manages the table columns sizes.
+%% Manages the tables.
 %%
-%% The principle is to evaluate the column size involved by a star '*' factor.
-%% To evaluate this you need to know:
-%% - the total table size (\textwidth),
-%% - the fixed sizes specified in @colwidth,
-%% - the number of star factors contained in the table.
+%% The package is provided to:
+%% - fix or workaround some bugs,
+%% - define some specific dimensions,
+%% - workaround annoying longtable things about table counter.
 
 \usepackage{longtable}
 \usepackage{lscape}
@@ -37,34 +36,13 @@
 \newdimen\newtblsparewidth%
 \newdimen\newtblcolwidth%
 
-% Native table support, to remove soon
-\newdimen\colwidth
-\newdimen\fixwidth
-\newdimen\mcellsz
-\newdimen\cellsz
-\newcounter{colnb}
-
-% Margin cell size
-\setlength{\mcellsz}{2\tabcolsep}
-
-% Macro that evaluates the column size for one '*' factor
-%   #1: number of '*' factors. Must not be zero.
-%   #2: total number of columns
-%   #3: cumulated fixed size for all the columns
-%   #4: orientation (no more used)
-
-\def\resizetable#1#2#3#4{ %
-  \setlength{\fixwidth}{#3}%
-  \setlength{\colwidth}{\linewidth-\fixwidth-#2\mcellsz}%-\mcellsz}%
-  \setcounter{colnb}{#1}%
-  \divide\colwidth\value{colnb}%
+% Avoid table counter mess with (informal) longtable
+\def\emptyrefstepcounter#1{}
+\let\stdrefstepcounter\refstepcounter%
+\def\savetablecounter{%
+  \let\refstepcounter\emptyrefstepcounter%
+}
+\def\restoretablecounter{%
+  \let\refstepcounter\stdrefstepcounter%
 }
 
-% Size of a proportional '*' column
-\def\tsize{\colwidth}
-
-% Shortcut to use multirow, so that it works with tsize
-\long\def\mrow#1#2#3{ %
-  \setlength{\cellsz}{#2}%
-  \multirow{#1}{\cellsz}{#3}%
-}

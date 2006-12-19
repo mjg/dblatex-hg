@@ -53,3 +53,8 @@
 \newlength{\lstwidth}
 \setlength{\lstcharwidth}{0.51em}
 \setlength{\lstframesep}{\lst@frametextsep}
+
+% Environment to render fancyvrb like listings does
+\newenvironment{fvlisting}[1][]
+  {\lstset{fancyvrb,#1}}
+  {\lstset{fancyvrb=false}}
