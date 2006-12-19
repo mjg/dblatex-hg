@@ -46,7 +46,7 @@
     <!-- beware, hyperlabel is docbook specific -->
     <xsl:text>\hyperlabel{</xsl:text>
     <xsl:value-of select="normalize-space($id)"/>
-    <xsl:text>}&#10;</xsl:text>
+    <xsl:text>}%&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
@@ -88,14 +88,25 @@
     </xsl:if>
   </xsl:variable>
 
-  <xsl:if test="$abbrev!='' or
+  <!-- Nothing in the TOC for unnumbered sections -->
+  <xsl:variable name="unnumbered"
+                select="parent::refsect1
+                       |parent::refsect2
+                       |parent::refsect3
+                       |parent::refsection
+                       |parent::preface
+                       |parent::colophon
+                       |parent::dedication"/>
+
+  <xsl:if test="not($unnumbered) and
+                ($abbrev!='' or
                 (descendant::footnote|
-                descendant::xref|
-                descendant::link|
-                descendant::ulink|
-                descendant::anchor|
-                descendant::inlinegraphic|
-                descendant::inlinemediaobject)">
+                 descendant::xref|
+                 descendant::link|
+                 descendant::ulink|
+                 descendant::anchor|
+                 descendant::inlinegraphic|
+                 descendant::inlinemediaobject))">
     <xsl:text>[{</xsl:text> 
     <xsl:choose>
     <xsl:when test="$abbrev!=''">

@@ -22,6 +22,11 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Table cells are forbidden for footnotes -->
+<xsl:template match="footnote[ancestor::entry]">
+  <xsl:text>\footnotemark{}</xsl:text>
+</xsl:template>
+
 <xsl:template match="footnoteref">
   <xsl:text>\ref{</xsl:text>
   <xsl:value-of select="@linkend"/>
@@ -46,8 +51,23 @@
   <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- in a programlisting do as normal but in tex-escaped pattern -->
+<xsl:template match="footnote" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagout" select="$co.tagout"/>
+  <xsl:value-of select="$co-tagin"/>
+  <xsl:apply-templates select="."/>
+  <xsl:value-of select="$co-tagout"/>
+</xsl:template>
+
+
 <xsl:template match="*" mode="toc.skip">
   <xsl:apply-templates mode="toc.skip"/>
+</xsl:template>
+
+<!-- escape characters as usual -->
+<xsl:template match="text()" mode="toc.skip">
+  <xsl:apply-templates select="."/>
 </xsl:template>
 
 <!-- in this mode the footnotes must vanish -->

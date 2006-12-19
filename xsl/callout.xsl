@@ -160,6 +160,8 @@
 <!-- Print the markup of the co referenced by coref -->
 <xsl:template match="coref" mode="latex.programlisting">
   <xsl:param name="rnode" select="/"/>
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagout" select="$co.tagout"/>
   <xsl:variable name="co" select="$rnode//*[@id=current()/@linkend]"/>
 
   <xsl:choose>
@@ -178,7 +180,7 @@
       <xsl:with-param name="rnode" select="$rnode"/>
     </xsl:apply-templates>
     <!-- Exit tex sequence -->
-    <xsl:value-of select="$co.tagout"/>
+    <xsl:value-of select="$co-tagout"/>
   </xsl:when>
   <xsl:otherwise>
     <xsl:message>

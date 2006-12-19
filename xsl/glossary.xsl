@@ -79,7 +79,9 @@
     <xsl:with-param name="level" select="$l+1"/>
   </xsl:call-template>
   <xsl:text>{</xsl:text>
-  <xsl:copy-of select="title"/>
+  <xsl:call-template name="normalize-scape">
+    <xsl:with-param name="string" select="title"/>
+  </xsl:call-template>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
 

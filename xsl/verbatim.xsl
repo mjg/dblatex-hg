@@ -39,7 +39,8 @@
   </xsl:param>
   <!-- In tables just use the data previously saved -->
   <xsl:choose>
-  <xsl:when test="ancestor::entry">
+  <xsl:when test="ancestor::entry|
+                  ancestor::legalnotice">
     <xsl:text>\UseVerbatim{</xsl:text>
     <xsl:value-of select="generate-id(.)"/>
     <xsl:text>}</xsl:text>
@@ -114,9 +115,10 @@
     </xsl:if>
   </xsl:variable>
 
-  <!-- get the listing co escape sequence if needed -->
+  <!-- get the listing escape sequence if needed -->
   <xsl:variable name="co-tagin">
-    <xsl:if test="descendant::co">
+    <xsl:if test="descendant::co|
+                  descendant::footnote">
       <xsl:call-template name="co-tagin-gen"/>
     </xsl:if>
   </xsl:variable>
@@ -203,11 +205,139 @@
 </xsl:template>
 
 
-<!-- sans doute a reprendre
-<xsl:template match="literal">
-<xsl:text>{\verb </xsl:text>
-<xsl:apply-templates mode="latex.verbatim"/>
-<xsl:text>}</xsl:text>
+<!-- Listings does not work in tables, even for external files. So, we
+     use the fancyvrb verbatim coupled to listings for the rendering stuff.
+     This mode assumes that all the verbatim data is in an external
+     file. Using the save/use commands would work except for linenumbering
+     stuff. -->
+
+<xsl:template match="programlisting|screen"
+              mode="save.verbatim">
+  <xsl:if test="not(descendant::imagedata[@format='linespecific']|
+                    descendant::inlinegraphic[@format='linespecific']|
+                    descendant::textdata)">
+    <xsl:variable name="str">
+      <xsl:apply-templates mode="latex.programlisting"/>
+    </xsl:variable>
+
+    <xsl:text>\begin{VerbatimOut}{tmplst-</xsl:text>
+    <xsl:value-of select="generate-id()"/>
+    <xsl:text>}</xsl:text>
+    <!-- some text just after the open tag must be put on a new line -->
+    <xsl:if test="not(contains($str,'&#10;')) or
+           string-length(normalize-space(substring-before($str,'&#10;')))&gt;0">
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$str"/>
+    <!-- put a \n only if needed -->
+    <xsl:if test="substring($str,string-length($str))!='&#10;' and
+                  string-length(substring-after(
+                    concat(substring-after($str,normalize-space($str)),'&#10;'),
+                    '&#10;'))=0">
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+    <xsl:text>\end{VerbatimOut}&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
--->
+
+
+<xsl:template match="programlisting[ancestor::entry or ancestor::entrytbl]|
+                     screen[ancestor::entry or ancestor::entrytbl]">
+
+  <xsl:variable name="lsopt">
+    <!-- language option is only for programlisting -->
+    <xsl:if test="@language">
+      <xsl:text>language=</xsl:text>
+      <xsl:value-of select="@language"/>
+      <xsl:text>,</xsl:text>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="fvopt">
+    <!-- print line numbers -->
+    <xsl:if test="@linenumbering='numbered'">
+      <xsl:text>numbers=left,</xsl:text>
+      <!-- find the fist line number to print -->
+      <xsl:choose>
+      <xsl:when test="@startinglinenumber">
+        <xsl:text>firstnumber=</xsl:text>
+        <xsl:value-of select="@startinglinenumber"/>
+        <xsl:text>,</xsl:text>
+      </xsl:when>
+      <xsl:when test="@continuation and (@continuation='continues')">
+        <!-- ask for continuation -->
+        <xsl:text>firstnumber=last</xsl:text>
+        <xsl:text>,</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- explicit restart numbering -->
+        <xsl:text>firstnumber=1</xsl:text>
+        <xsl:text>,</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+    <!-- TODO: TeX delimiters if <co>s are embedded -->
+  </xsl:variable>
+
+  <xsl:text>\begin{fvlisting}</xsl:text>
+  <xsl:if test="$lsopt!=''">
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$lsopt"/>
+    <xsl:text>]</xsl:text>
+  </xsl:if>
+  <xsl:text>&#10;</xsl:text>
+
+  <xsl:text>\VerbatimInput</xsl:text>
+  <xsl:if test="$fvopt!=''">
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$fvopt"/>
+    <xsl:text>]</xsl:text>
+  </xsl:if>
+
+  <xsl:text>{</xsl:text>
+  <xsl:choose>
+  <xsl:when test="descendant::imagedata[@format='linespecific']|
+                  descendant::inlinegraphic[@format='linespecific']|
+                  descendant::textdata">
+    <!-- the listing content is in a (real) external file -->
+    <xsl:apply-templates
+        select="descendant::imagedata|descendant::inlinegraphic|
+                descendant::textdata"
+        mode="filename.abs.get"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- the listing is outputed in a temporary file -->
+    <xsl:text>tmplst-</xsl:text>
+    <xsl:value-of select="generate-id(.)"/>
+  </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>}&#10;</xsl:text>
+
+  <xsl:text>\end{fvlisting}&#10;</xsl:text>
+
+</xsl:template>
+
+
+<xsl:template match="*" mode="filename.abs.get">
+  <xsl:choose>
+  <xsl:when test="@entityref">
+    <xsl:value-of select="unparsed-entity-uri(@entityref)"/>
+  </xsl:when>
+  <xsl:when test="contains(@fileref, ':')">
+    <!-- absolute uri scheme -->
+    <xsl:value-of select="substring-after(@fileref, ':')"/>
+  </xsl:when>
+  <xsl:when test="starts-with(@fileref, '/')">
+    <!-- absolute unix like path -->
+    <xsl:value-of select="@fileref"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- relative to the doc directory -->
+    <xsl:value-of select="$current.dir"/>
+    <xsl:text>/</xsl:text>
+    <xsl:value-of select="@fileref"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>

@@ -400,6 +400,10 @@
   <xsl:call-template name="cross-reference"/>
 </xsl:template>
 
+<xsl:template match="formalpara|refsection" mode="xref-to">
+  <xsl:call-template name="title-link-to"/>
+</xsl:template>
+
 <xsl:template match="co" mode="xref-to">
   <xsl:apply-templates select="." mode="callout-bug"/>
 </xsl:template>

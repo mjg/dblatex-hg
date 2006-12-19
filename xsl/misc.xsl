@@ -196,7 +196,9 @@
   <xsl:text>}&#10;</xsl:text>
 
   <xsl:call-template name="user.params.set2"/>
+  <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
+  <xsl:call-template name="biblio.setup"/>
   <xsl:apply-templates select="bookinfo" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
@@ -314,7 +316,9 @@
   <xsl:text>}&#10;</xsl:text>
 
   <xsl:call-template name="user.params.set2"/>
+  <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
+  <xsl:call-template name="biblio.setup"/>
   <xsl:apply-templates select="articleinfo" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->

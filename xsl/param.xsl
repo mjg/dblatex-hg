@@ -6,6 +6,7 @@
 <xsl:param name="latex.hyperparam"/>
 <xsl:param name="latex.style">docbook</xsl:param>
 <xsl:param name="latex.biblio.output">all</xsl:param>
+<xsl:param name="latex.biblio.style"/>
 <xsl:param name="latex.bibfiles">''</xsl:param>
 <xsl:param name="latex.bibwidelabel">WIDELABEL</xsl:param>
 <xsl:param name="latex.output.revhistory">1</xsl:param>

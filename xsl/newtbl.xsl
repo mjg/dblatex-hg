@@ -38,7 +38,12 @@
       <xsl:otherwise>
         <colspec colnum='{$colnum}' align='{$align}' star='1'
                  rowsep='{$rowsep}' colsep='{$colsep}' 
-                 colwidth='\newtblstarfactor'/>
+                 colwidth='\newtblstarfactor'>
+          <xsl:if test="contains($newtbl.autowidth,'default') or
+                        contains($newtbl.autowidth,'all')">
+            <xsl:attribute name="autowidth">1</xsl:attribute>
+          </xsl:if>
+        </colspec>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="tbl.defcolspec">
@@ -177,11 +182,18 @@
           <xsl:with-param name="width" select="substring-before(@colwidth, '*')"/>
         </xsl:call-template>
       </xsl:attribute>
+      <xsl:if test="contains($newtbl.autowidth,'all')">
+        <xsl:attribute name="autowidth">1</xsl:attribute>
+      </xsl:if>
     </xsl:if>
     <!-- No colwidth specified? Assume '*' -->
     <xsl:if test="not(string(@colwidth))">
       <xsl:attribute name="colwidth">\newtblstarfactor</xsl:attribute>
       <xsl:attribute name="star">1</xsl:attribute>
+      <xsl:if test="contains($newtbl.autowidth,'default') or
+                    contains($newtbl.autowidth,'all')">
+        <xsl:attribute name="autowidth">1</xsl:attribute>
+      </xsl:if>
     </xsl:if>
     <xsl:if test="not(@align)">
       <xsl:attribute name="align"><xsl:value-of select="$align"/>
@@ -352,7 +364,7 @@
     <xsl:choose><xsl:when test="$entry">
       <!-- Just copy this entry then -->
       <xsl:copy-of select="$entry"/>
-      
+
       <!-- Process the next column using this current entry -->
       <xsl:apply-templates mode="newtbl.buildentries" select=".">
         <xsl:with-param name="colnum" 
@@ -617,33 +629,31 @@
       <xsl:message>BANG</xsl:message>
       </xsl:if>
   -->
-  
   <xsl:if test="@colstart &lt;= $cols">
     
-    <!--  <xsl:variable name="wordwrap" select="@align = 'justify' or para"/> -->
-    <xsl:variable name="wordwrap" select="true()"/>
-    
+    <!-- Should this column be sized by latex? -->
+    <xsl:variable name="autowidth"
+                  select="$colspec/colspec[@colnum=current()/@colstart]/@autowidth"/>
+
+    <xsl:variable name="moreprint"
+                  select="not($autowidth and (@rowstart != $rownum))"/>
+
     <!-- Generate the column spec for this column -->
     <xsl:text>\multicolumn{</xsl:text>
     <xsl:value-of select="@colend - @colstart + 1"/>
     <xsl:text>}{</xsl:text>
-    <xsl:call-template name="tbl.colfmt">
-      <xsl:with-param name="coloff" select="@coloff"/>
-      <xsl:with-param name="colstart" select="@colstart"/>
-      <xsl:with-param name="colend" select="@colend"/>
-      <xsl:with-param name="colsep" select="@colsep"/>
+    <xsl:apply-templates select="." mode="tbl.colfmt">
       <xsl:with-param name="colspec" select="$colspec"/>
       <xsl:with-param name="frame" select="$frame"/>
-      <xsl:with-param name="valign" select="@valign"/>
-      <xsl:with-param name="bgcolor" select="@bgcolor"/>
-    </xsl:call-template>
+      <xsl:with-param name="autowidth" select="$autowidth"/>
+    </xsl:apply-templates>
     <xsl:text>}{</xsl:text>
     
     <!-- Put everything inside a multirow if required -->
-    <xsl:if test="@morerows and @morerows > 0">
+    <xsl:if test="@morerows and @morerows > 0 and $moreprint">
       <!-- Multirow doesn't use setlength and hence our calc stuff doesn't -->
       <!-- work. Do it manually then -->
-      <xsl:if test="$wordwrap">
+      <xsl:if test="not($autowidth)">
         <xsl:text>\setlength{\newtblcolwidth}{</xsl:text>
         <!-- Put the column width here for line wrapping -->
         <xsl:call-template name="tbl.colwidth">
@@ -656,7 +666,7 @@
       <xsl:text>\multirowii{</xsl:text>
       <xsl:value-of select="@morerows + 1"/>
       <xsl:choose>
-        <xsl:when test="$wordwrap">
+        <xsl:when test="not($autowidth)">
           <xsl:text>}{</xsl:text>
           <!-- Only output the contents of this row if it's on the correct -->
           <!-- row -ve width means don't output the cell contents, but maybe -->
@@ -677,7 +687,7 @@
       <xsl:text>\rotatebox{90}{</xsl:text>
     </xsl:if>
     
-    <xsl:if test="$wordwrap">  
+    <xsl:if test="not($autowidth)">  
       <xsl:choose>
         <xsl:when test="@align = 'left'">
           <xsl:text>\raggedright</xsl:text>
@@ -714,19 +724,21 @@
     </xsl:choose>
     
     <!-- Dump out the entry contents -->
-    <xsl:text>%&#10;</xsl:text>
-    <xsl:choose>
-      <xsl:when test="output">
-        <xsl:value-of select="output"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="output"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>%&#10;</xsl:text>
+    <xsl:if test="$moreprint">
+      <xsl:text>%&#10;</xsl:text>
+      <xsl:choose>
+        <xsl:when test="output">
+          <xsl:value-of select="output"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="." mode="output"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text>%&#10;</xsl:text>
+    </xsl:if>
     
     <!-- Close off multirow if required -->
-    <xsl:if test="@morerows and @morerows > 0">
+    <xsl:if test="@morerows and @morerows > 0 and $moreprint">
       <xsl:text>}</xsl:text>
     </xsl:if>
     
@@ -868,6 +880,7 @@
   <xsl:param name="spanspec"/>
   <xsl:param name="frame"/>
   <xsl:param name="oldentries"/>
+  <xsl:param name="rowstack"/>
 
   <xsl:variable name="rowcolor">
     <xsl:call-template name="pi-attribute">
@@ -898,32 +911,51 @@
   
   <!-- Now output each entry -->
   <xsl:variable name="context" select="local-name(..)"/>
-  <xsl:apply-templates select="exsl:node-set($entries)/*" mode="newtbl">
-    <xsl:with-param name="colspec" select="$colspec"/>
-    <xsl:with-param name="frame" select="$frame"/>
-    <xsl:with-param name="context" select="$context"/>
-    <xsl:with-param name="rownum" select="$rownum"/>
-  </xsl:apply-templates>
-  
-  <!-- End this row -->
-  <xsl:text>\tabularnewline&#10;</xsl:text>
-  
-  <!-- Now process rowseps only if not the last row -->
-  <xsl:if test="$rownum != $rows">
-    <xsl:choose>
-    <xsl:when test="$newtbl.use.hhline='1'">
-      <xsl:call-template name="hhline.build">
-        <xsl:with-param name="entries" select="exsl:node-set($entries)"/>
-        <xsl:with-param name="rownum" select="$rownum"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="clines.build">
-        <xsl:with-param name="entries" select="exsl:node-set($entries)"/>
-        <xsl:with-param name="rownum" select="$rownum"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-    </xsl:choose>
+  <xsl:variable name="row-output">
+    <xsl:if test="$context = 'thead'">
+      <xsl:value-of select="$rowstack"/>
+    </xsl:if>
+
+    <xsl:if test="$rownum = 1">
+      <!-- Need a top line? -->
+      <xsl:if test="$frame = 'all' or $frame = 'top' or $frame = 'topbot'">
+        <xsl:text>\hline</xsl:text>
+      </xsl:if>
+      <xsl:text>&#10;</xsl:text>
+    </xsl:if>
+
+    <xsl:apply-templates select="exsl:node-set($entries)/*" mode="newtbl">
+      <xsl:with-param name="colspec" select="$colspec"/>
+      <xsl:with-param name="frame" select="$frame"/>
+      <xsl:with-param name="context" select="$context"/>
+      <xsl:with-param name="rownum" select="$rownum"/>
+    </xsl:apply-templates>
+    
+    <!-- End this row -->
+    <xsl:text>\tabularnewline&#10;</xsl:text>
+    
+    <!-- Now process rowseps only if not the last row -->
+    <xsl:if test="$rownum != $rows">
+      <xsl:choose>
+      <xsl:when test="$newtbl.use.hhline='1'">
+        <xsl:call-template name="hhline.build">
+          <xsl:with-param name="entries" select="exsl:node-set($entries)"/>
+          <xsl:with-param name="rownum" select="$rownum"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="clines.build">
+          <xsl:with-param name="entries" select="exsl:node-set($entries)"/>
+          <xsl:with-param name="rownum" select="$rownum"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:variable>
+
+  <!-- Head rows must be buffered -->
+  <xsl:if test="$context != 'thead'">
+    <xsl:value-of select="$row-output"/>
   </xsl:if>
 
   <xsl:choose>
@@ -936,16 +968,18 @@
         <xsl:with-param name="spanspec" select="$spanspec"/>
         <xsl:with-param name="frame" select="$frame"/>
         <xsl:with-param name="oldentries" select="$entries"/>
+        <xsl:with-param name="rowstack" select="$row-output"/>
       </xsl:apply-templates>
     </xsl:when>
-    <xsl:when test="local-name(..) = 'tfoot'">
+    <xsl:when test="$context = 'tfoot'">
     </xsl:when>
     <xsl:otherwise>
       <!-- Ask to table to end the head -->
-      <xsl:if test="local-name(..) = 'thead'">
+      <xsl:if test="$context = 'thead'">
         <xsl:apply-templates select="ancestor::table|ancestor::informaltable"
                              mode="newtbl.endhead">
           <xsl:with-param name="tabletype" select="$tabletype"/>
+          <xsl:with-param name="headrows" select="$row-output"/>
         </xsl:apply-templates>
       </xsl:if>
 
@@ -986,78 +1020,85 @@
 
 
 <!-- Generate a latex column specifier, possibly surrounded by '|' -->
-<xsl:template name="tbl.colfmt">
-  <xsl:param name="colstart"/>
-  <xsl:param name="colend"/>
-  <xsl:param name="coloff"/>
+<xsl:template match="entry|entrytbl" mode="tbl.colfmt">
   <xsl:param name="frame"/>
-  <xsl:param name="colsep"/>
   <xsl:param name="colspec"/>
-  <xsl:param name="valign"/>
-  <xsl:param name="bgcolor"/>
+  <xsl:param name="autowidth"/>
   
   <xsl:variable name="cols" select="count($colspec/*)"/>
 
   <!-- Need a colsep to the left? - only if first column and frame says so -->
-  <xsl:if test="$colstart = 1 and ($frame = 'all' or $frame = 'sides')">
+  <xsl:if test="@colstart = 1 and ($frame = 'all' or $frame = 'sides')">
     <xsl:text>|</xsl:text>
   </xsl:if>
 
   <!-- Need a colsep to the right? - only if last column and frame says -->
   <!-- so, or we are not the last column and colsep says so  -->
   <xsl:variable name="rsep">
-    <xsl:if test="($colend = $cols and ($frame = 'all' or $frame = 'sides')) or 
-                  ($colend != $cols and $colsep = 1)">
+    <xsl:if test="(@colend = $cols and ($frame = 'all' or $frame = 'sides')) or 
+                  (@colend != $cols and @colsep = 1)">
       <xsl:text>|</xsl:text>
     </xsl:if>
   </xsl:variable>
 
   <!-- Remove the offset between column and cell content? -->
-  <xsl:if test="$coloff = 0">
+  <xsl:if test="@coloff = 0">
     <xsl:text>@{}</xsl:text>
   </xsl:if>
 
   <!-- Column color? -->
-  <xsl:if test="$bgcolor != ''">
+  <xsl:if test="@bgcolor != ''">
     <xsl:text>>{\columncolor</xsl:text>
     <xsl:call-template name="get-color">
-      <xsl:with-param name="color" select="$bgcolor"/>
+      <xsl:with-param name="color" select="@bgcolor"/>
     </xsl:call-template>
     <xsl:text>}</xsl:text>
   </xsl:if>
   
-  <!-- Get the column width -->
-  <xsl:variable name="width">
-    <xsl:call-template name="tbl.colwidth">
-      <xsl:with-param name="col" select="$colstart"/>
-      <xsl:with-param name="colend" select="$colend"/>
-      <xsl:with-param name="colspec" select="$colspec"/>
-    </xsl:call-template>
-    <xsl:if test="$rsep = ''">
-      <xsl:text>+\arrayrulewidth</xsl:text>
-    </xsl:if>
-    <xsl:if test="$coloff = 0">
-      <xsl:text>+2\tabcolsep</xsl:text>
-    </xsl:if>
-  </xsl:variable>
-  
   <xsl:choose>
-    <xsl:when test="$valign = 'top'">
-      <xsl:text>p</xsl:text>
-    </xsl:when>
-    <xsl:when test="$valign = 'bottom'">
-      <xsl:text>b</xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>m</xsl:text>
-    </xsl:otherwise>
+  <xsl:when test="not($autowidth)">  
+    <!-- Get the column width -->
+    <xsl:variable name="width">
+      <xsl:call-template name="tbl.colwidth">
+        <xsl:with-param name="col" select="@colstart"/>
+        <xsl:with-param name="colend" select="@colend"/>
+        <xsl:with-param name="colspec" select="$colspec"/>
+      </xsl:call-template>
+      <xsl:if test="$rsep = ''">
+        <xsl:text>+\arrayrulewidth</xsl:text>
+      </xsl:if>
+      <xsl:if test="@coloff = 0">
+        <xsl:text>+2\tabcolsep</xsl:text>
+      </xsl:if>
+    </xsl:variable>
+    
+    <xsl:choose>
+      <xsl:when test="@valign = 'top'">
+        <xsl:text>p</xsl:text>
+      </xsl:when>
+      <xsl:when test="@valign = 'bottom'">
+        <xsl:text>b</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>m</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$width"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:choose>
+      <xsl:when test="@align = 'left'">l</xsl:when>
+      <xsl:when test="@align = 'right'">r</xsl:when>
+      <xsl:when test="@align = 'center'">c</xsl:when>
+      <xsl:otherwise>c</xsl:otherwise>
+    </xsl:choose>
+  </xsl:otherwise>
   </xsl:choose>
   
-  <xsl:text>{</xsl:text>
-  <xsl:value-of select="$width"/>
-  <xsl:text>}</xsl:text>
-  
-  <xsl:if test="$coloff = 0">
+  <xsl:if test="@coloff = 0">
     <xsl:text>@{}</xsl:text>
   </xsl:if>
 
@@ -1209,13 +1250,14 @@
     <xsl:text>l</xsl:text>
   </xsl:for-each>
   <xsl:text>}</xsl:text>
-  
-  <!-- Need a top line? -->
-  <xsl:if test="$frame = 'all' or $frame = 'top' or $frame = 'topbot'">
-    <xsl:text>\hline</xsl:text>
-  </xsl:if>
-  <xsl:text>&#10;</xsl:text>
 
+  <xsl:if test="not(thead)">
+    <xsl:apply-templates select="ancestor::table|ancestor::informaltable"
+                         mode="newtbl.endhead">
+      <xsl:with-param name="tabletype" select="$tabletype"/>
+    </xsl:apply-templates>
+  </xsl:if>
+ 
   <!-- Go through each row, starting with the header -->
   <xsl:apply-templates mode="newtbl" select="((thead|tbody)/row)[1]">
     <xsl:with-param name="tabletype" select="$tabletype"/>
