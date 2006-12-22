@@ -68,6 +68,7 @@ rm -f $tmpbuild/build_package
 rm -f $tmpbuild/changes.txt
 rm -f $tmpbuild/xsl/common/.cvsignore
 rm -f $tmpbuild/xsl/common/Makefile
+rm -f $tmpbuild/xsl/mathml2/Makefile
 rm -r $tmpbuild/tests/mathml/build
 rm -f $tmpbuild/tests/mathml/excluded*
 
