@@ -221,4 +221,16 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Callout list title -->
+<xsl:template match="calloutlist/title">
+  <xsl:text>&#10;{\bf </xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>}&#10;</xsl:text>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
+  <!-- Ask to latex to let the title with its list -->
+  <xsl:text>\nopagebreak&#10;</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>

@@ -121,6 +121,10 @@
                               self::variablelist][not(child::title)]">
     <xsl:text>~</xsl:text>
   </xsl:when>
+  <!-- add a space to avoid the term be centered -->
+  <xsl:when test="child::*[1][self::figure]">
+    <xsl:text>~ </xsl:text>
+  </xsl:when>
   <!-- force linebreak after the term -->
   <xsl:when test="$term.breakline='1'">
     <xsl:text>\hspace{0em}\\&#10;</xsl:text>

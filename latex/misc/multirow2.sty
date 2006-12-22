@@ -151,6 +151,7 @@
     \dimen0=#3\relax
     \ifdim\dimen0<\z@
       \dimen0=-\dimen0
+      \let\footnotemark\relax
     \fi
     \setbox0\vbox{\hsize\dimen0\@parboxrestore\multirowiisetup\strut#5\strut}%
     \dimen0=\ht0

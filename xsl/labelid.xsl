@@ -27,6 +27,7 @@
 <xsl:template name="label.id">
   <xsl:param name="object" select="."/>
   <xsl:param name="string" select="''"/>
+  <xsl:param name="inline" select="0"/>
   <xsl:variable name="id">
     <xsl:choose>
       <xsl:when test="$object/@id">
@@ -46,7 +47,10 @@
     <!-- beware, hyperlabel is docbook specific -->
     <xsl:text>\hyperlabel{</xsl:text>
     <xsl:value-of select="normalize-space($id)"/>
-    <xsl:text>}%&#10;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:if test="$inline=0">
+      <xsl:text>%&#10;</xsl:text>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 

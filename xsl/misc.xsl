@@ -56,6 +56,13 @@
   <xsl:text>\usepackage{makeidx}&#10;</xsl:text>
 </xsl:variable>
 
+<!-- Use the UTF-8 Passivetex support -->
+<xsl:template name="font.setup">
+  <xsl:if test="$latex.unicode.use!='0'">
+    <xsl:text>\usepackage{unicode}&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="releaseinfo">
   <xsl:apply-templates/>
 </xsl:template>
@@ -196,6 +203,7 @@
   <xsl:text>}&#10;</xsl:text>
 
   <xsl:call-template name="user.params.set2"/>
+  <xsl:call-template name="font.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:call-template name="biblio.setup"/>
@@ -316,6 +324,7 @@
   <xsl:text>}&#10;</xsl:text>
 
   <xsl:call-template name="user.params.set2"/>
+  <xsl:call-template name="font.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:call-template name="biblio.setup"/>

@@ -82,6 +82,13 @@ LATEX PACKAGES
   latex distribution.
 
   * bibtopic.sty 
+  * enumitem.sty
+  * ragged2e.sty
+
+PASSIVETEX PACKAGES
+--------------------------------------------------------------------------------
+  Some of the Passivetex packages are provided to extend the support of Unicode
+  characters. The Passivetex LICENSE file is under latex/misc/passivetex.
 
 (G)RUBBER SUPPORT
 --------------------------------------------------------------------------------

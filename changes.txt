@@ -1,18 +1,14 @@
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
-x * Problèmes verbatim in tables
-x * longtable sans caption : \addtocounter{table}{-1}
 x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
-* Utilisation bibtex
 * Problèmes footnote in tables
 * Patch biblio à intégrer (~/archives/tmp/biblio_patch)
 * Bug table
-/ * Remark in note
-/ * Remark in authorgroup
 * Faire <annotation>
 * Problèmes table in example
 * \caption{\protect\rule{0cm}{2cm} blablabla}
 * Faire \input@path dans rawtex (évite le _tmp)
+x * tocloft
 
 * <subtitles> silently skipped.
 
@@ -21,8 +17,83 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * envoyer cas de tests :
   -> informaltable.015.xml    KO  But what does mean colwidth="4in*"?
 
+x * 1463054 	Long formal tables do not span multiple pages
+x * 1587091 	Link to formalpara
+x * 1606166     Address in legalnotice
+x * 1600441 	images with special characters in path
+x * 1600124 	xml:import uris need to be uri encoded
+x * <programlisting> in <table>
+x * Bug biblioset
+x * Footnote in table
+* 1593494 	crash on double quotes in input
+* 1492296 	subscript, superscript = Undefined control sequence
+  If I use <subscript> or <superscript> in my DocBook
+  source, the result is a fatal TeX error Undefined
+  control sequence. I think the problem is the use of
+  \text{...} in dblatex/xsl/inlined.xsl. If I change
+  \text to \textnormal in the two templates in that file
+  (see below), the problem goes away. Or perhaps I have
+  something wrong in my TeX/LaTeX installation?
+
+  < <xsl:text>$^{\text{</xsl:text>
+  > <xsl:text>$^{\textnormal{</xsl:text>
+
+  > <xsl:text>$_{\text{</xsl:text>
+  < <xsl:text>$_{\textnormal{</xsl:text>
+  \def\text in /usr/local/share/texmf-dist/tex/latex/base/nfssfont.tex
+* Abstract removed if not exist
+* citation/@role
+* @revisionflag='deleted'
+x * xref to glossentry
+
+
+Release 0.2.2:
+--------------
+
+* BibTeX support.
+  - Some bibliography databases can be specified in <?bibtex?>
+  - A bibliography style can be specified in <?bibtex?>
+  - A global style can be defined with the latex.biblio.style parameter
+  - Options -L bib_path and -l bst_path added
+  - Bibtex is automatically called when the file is compiled
+
+* Table changes:
+  - Longtables can be used to have formal tables across several pages. Use
+    table.in.float=0 for this.
+  - Automatic table width allowed with newtbl.autowidth={default|all}
+  - Footnotes in tables are possible.
+  - Basic programlisting/screen support in table.
+
+* Other changes:
+  - Better cited bibliography support.
+  - Possible use of natbib citation styles (belgabor patch)
+  - Better MathML entity mapping.
+  - Footnote in programlisting possible.
+
+* Bug fixes:
+  - Fix about tilde translation.
+  - Check if a title is numbered or not for TOC filtering.
+  - Bug SF #1587091: link to formalpara (and refsection)
+  - Bug SF #1600124: correct URI from pathname in XSL parameter file
+  - Bug SF #1600441: handle image files with spaces in the path
+  - Bug SF #1606166: verbatim in legalnotice
+  - Catch a 'Rerun' asked by bibtopic or changebar packages
+  - Xref to a formal table fixed
+  - Escape characters in some biblio elements.
+  - Glossary title fix.
+  - Better MathML entity mapping.
+  - Added calloutlist title.
+  - Handles UTF-8 indexterms 
+  - Fix anchor in glossterms
+  - Extends unicode support (with passivetex packages). It is activated with
+    latex.unicode.use=1
+  - Handles callout list titles
+  - Handles xref to a glossentry
+
+
 Release 0.2.1:
 --------------
+
 * Python code improvements:
   - Use of codecs for better and systematic unicode support.
   - Extensible XSLT engines, loaded as plugins.
@@ -61,7 +132,7 @@ Release 0.2.1:
 Release 0.2:
 ------------
 
-* Better osx() integration. The SDATA entities are translated to the equivalent
+* Better osx(1) integration. The SDATA entities are translated to the equivalent
   Unicode characters.
 
 * Better windows compatibility thanks to the Nicolas Pernetty's patches:

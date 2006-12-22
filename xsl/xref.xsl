@@ -6,7 +6,9 @@
     ############################################################################ -->
 
 <xsl:template match="anchor">
-  <xsl:call-template name="label.id"/>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="inline" select="1"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="xref" mode="label.get">
@@ -140,10 +142,10 @@
 </xsl:template>
 
 <!-- Text of endterm xref must be managed with the text() function to support
-     the special latex characters -->
+     the special latex characters, but things like anchors must be skipped -->
 
 <xsl:template match="*" mode="xref.text">
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="text()|*[not(self::anchor)]"/>
 </xsl:template>
 
 <xsl:template match="term" mode="xref.text">
@@ -367,6 +369,18 @@
       <xsl:value-of select="@id"/>
     </xsl:otherwise>
     </xsl:choose>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="glossentry" mode="xref-to">
+  <xsl:text>\hyperlink{</xsl:text>
+  <xsl:value-of select="@id"/>
+  <xsl:text>}{</xsl:text>
+  <xsl:call-template name="inline.italicseq">
+    <xsl:with-param name="content">
+      <xsl:apply-templates select="glossterm" mode="xref.text"/>
+    </xsl:with-param>
+  </xsl:call-template>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
