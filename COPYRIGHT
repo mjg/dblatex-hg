@@ -107,6 +107,14 @@ PYTHON WHICH
 
 MISCELLANEOUS
 --------------------------------------------------------------------------------
-  * string-replace by David Carlisle http://www.jclark.com
-  * xt by James Clarck http://www.jclark.com
+  The string-replace template by David Carlisle
+  (http://www.dcarlisle.demon.co.uk/david) is extracted from pmathml.xsl
+  (http://www.w3.org/Math/XSL/pmathml.xsl), one of the W3C MathML XSL
+  stylesheets (http://www.w3.org/Math/XSL/Overview.html).
+
+  The code is made available under the following conditions:
+  "Copyright (C) David Carlisle 2001, 2002.
+  Use and distribution of this code are permitted under the terms of the
+  W3C Software Notice and License
+  (http://www.w3.org/Consortium/Legal/copyright-software-19980720)".
 
