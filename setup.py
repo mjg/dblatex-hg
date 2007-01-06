@@ -186,7 +186,7 @@ class Install(install):
             print("warning: not found: %s" % ", ".join(missed))
 
         # Now, be serious
-        found, missed = find_programs(("xsltproc", "latex", "makeindex",
+        found, missed = find_programs(("latex", "makeindex",
                                        "pdflatex", "kpsewhich"))
         for util in found:
             print "+checking %s... yes" % util
@@ -194,6 +194,38 @@ class Install(install):
             print "+checking %s... no" % util
         if missed:
             raise OSError("not found: %s" % ", ".join(missed))
+
+    def check_xslt_dependencies(self):
+        sys.path.append("lib")
+        from dbtexmf.xslt import xslt
+        sys.path.remove("lib")
+
+        # At least one XSLT must be available
+        deplists = xslt.get_deplists()
+        if not(deplists):
+            raise OSError("no XSLT available")
+
+        # For each XSLT check the programs they depend on
+        xslt_found = []
+        xslt_missed = []
+        for (mod, deplist) in deplists:
+            if not(deplist):
+                xslt_found.append(mod)
+                print "+checking XSLT %s... yes" % mod
+                continue
+            found, missed = find_programs(deplist)
+            if missed:
+                xslt_missed.append(mod)
+                print "+checking XSLT %s... no (missing %s)" % \
+                      (mod, ", ".join(missed))
+            else:
+                xslt_found.append(mod)
+                print "+checking XSLT %s... yes" % mod
+
+        if not(xslt_found):
+            raise OSError("XSLT not installed: %s" % ", ".join(xslt_missed))
+        elif xslt_missed:
+            print "warning: XSLT not found: %s" % ", ".join(xslt_missed)
 
     def check_latex_dependencies(self):
         # Find the Latex files from the package
@@ -252,6 +284,7 @@ class Install(install):
     def run(self):
         if not(self.nodeps):
             try:
+                self.check_xslt_dependencies()
                 self.check_util_dependencies()
                 self.check_latex_dependencies()
             except Exception, e:
