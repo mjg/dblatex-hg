@@ -207,6 +207,7 @@
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:call-template name="biblio.setup"/>
+  <xsl:call-template name="annotation.setup"/>
   <xsl:apply-templates select="bookinfo" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
@@ -328,6 +329,7 @@
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:call-template name="biblio.setup"/>
+  <xsl:call-template name="annotation.setup"/>
   <xsl:apply-templates select="articleinfo" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
@@ -422,7 +424,7 @@
   <xsl:apply-templates select="(abstract|articleinfo/abstract)[1]"/>
 
   <!-- Apply templates -->
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="*[not(self::abstract)]"/>
   <xsl:if test="*//indexterm|*//keyword">
    <xsl:text>\printindex&#10;</xsl:text>
   </xsl:if>

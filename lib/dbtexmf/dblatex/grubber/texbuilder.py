@@ -62,6 +62,7 @@ class LatexBuilder:
 
     def clean(self):
         self.tex.clean()
+        self.maker.reinit()
 
     def print_errors(self):
         msg.display_all(self.tex.get_errors(), writer=msg.write_stderr)

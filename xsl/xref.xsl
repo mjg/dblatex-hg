@@ -149,7 +149,10 @@
 </xsl:template>
 
 <xsl:template match="term" mode="xref.text">
-  <xsl:apply-templates mode="xref.text"/>
+  <xsl:variable name="text">
+    <xsl:apply-templates mode="xref.text"/>
+  </xsl:variable>
+  <xsl:value-of select="normalize-space($text)"/>
 </xsl:template>
 
 <!-- No reference must be made, but the label should be printed, if any -->

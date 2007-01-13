@@ -5,6 +5,8 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:param name="imageobjectco.hide" select="0"/>
+
 <xsl:template match="mediaobjectco">
   <xsl:if test="not(parent::figure)">
     <xsl:text>&#10;</xsl:text>
@@ -181,6 +183,7 @@
     <xsl:apply-templates select="." mode="latex.programlisting">
       <xsl:with-param name="co-tagin" select="''"/>
       <xsl:with-param name="co-tagout" select="''"/>
+      <xsl:with-param name="co-hide" select="$imageobjectco.hide"/>
     </xsl:apply-templates>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>

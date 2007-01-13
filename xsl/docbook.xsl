@@ -62,6 +62,8 @@
 <xsl:include href="qandaset.xsl"/>
 <xsl:include href="quote.xsl"/>
 <xsl:include href="sidebar.xsl"/>
+<xsl:include href="annotation.xsl"/>
+<xsl:include href="chunker.xsl"/>
 <xsl:include href="para.xsl"/>
 <xsl:include href="scape.xsl"/>
 <xsl:include href="pi.xsl"/>

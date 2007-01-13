@@ -14,6 +14,7 @@
 <!-- Prerequesite: the following latex macros are defined:
      * \co{text}
      * \coref{text}{label}
+     * \colabel{label}
      * \collabel{label}
 -->
 
@@ -131,12 +132,20 @@
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="co-tagin" select="'&lt;:'"/>
   <xsl:param name="co-tagout" select="$co.tagout"/>
+  <xsl:param name="co-hide" select="0"/>
   <xsl:variable name="conum">
     <xsl:apply-templates select="." mode="conumber"/>
   </xsl:variable>
 
   <xsl:value-of select="$co-tagin"/>
   <xsl:choose>
+  <xsl:when test="$co-hide != 0">
+    <xsl:if test="@id">
+      <xsl:text>\colabel{</xsl:text>
+      <xsl:value-of select="@id"/>
+      <xsl:text>}</xsl:text>
+    </xsl:if>
+  </xsl:when>
   <xsl:when test="@id">
     <xsl:text>\coref{</xsl:text>
     <xsl:value-of select="$conum"/>

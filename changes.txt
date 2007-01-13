@@ -1,15 +1,12 @@
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
 x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
-* Problèmes footnote in tables
 * Patch biblio à intégrer (~/archives/tmp/biblio_patch)
 * Bug table
-* Faire <annotation>
+x * Faire <annotation>
 * Problèmes table in example
 * \caption{\protect\rule{0cm}{2cm} blablabla}
 * Faire \input@path dans rawtex (évite le _tmp)
-x * tocloft
-
 * <subtitles> silently skipped.
 
 * paramètre pour supprimer hyphenation
@@ -17,14 +14,6 @@ x * tocloft
 * envoyer cas de tests :
   -> informaltable.015.xml    KO  But what does mean colwidth="4in*"?
 
-x * 1463054 	Long formal tables do not span multiple pages
-x * 1587091 	Link to formalpara
-x * 1606166     Address in legalnotice
-x * 1600441 	images with special characters in path
-x * 1600124 	xml:import uris need to be uri encoded
-x * <programlisting> in <table>
-x * Bug biblioset
-x * Footnote in table
 * 1593494 	crash on double quotes in input
 * 1492296 	subscript, superscript = Undefined control sequence
   If I use <subscript> or <superscript> in my DocBook
@@ -44,7 +33,35 @@ x * Footnote in table
 * Abstract removed if not exist
 * citation/@role
 * @revisionflag='deleted'
-x * xref to glossentry
+* gérer \IfFileExists{truncate.sty}{ ... \usepackage{truncate}...}
+* titre dans les procédures (de.xml)
+* <varlistentry lang="de"><term lang="de"><listitem><note lang="de">
+
+
+Release 0.2.3:
+--------------
+
+* Improvements:
+  - Experimental annotation support (enabled when annotation.support=1)
+  - Add imageobjectco.hide={0|1} to hide the callout numbers on the image.
+
+* Setup changes:
+  - Check the available XSLTs (xsltproc is not required if 4Suite
+    is available) (Bug SF #1617458).
+  - Avoid optional package dependency (unicode.sty)
+  - Add the --use-python-path to use the python interpreter
+    running setup.py, instead of relying on env to locate python
+    (thanks to Max Horn, the Fink packager)
+  - Fix the wrapper script building when --root is used
+    (thanks to Max Horn, the Fink packager)
+
+* Bug fixes:
+  - Locale elements translated to iso-latin1.
+  - Xref to a term containing empty lines.
+  - Locale mappings updated for 'de' and 'es'.
+  - Spanish babel setup added, to workaround some of the bugs introduced by
+    spanish.
+  - string-replace origin detailed in COPYRIGHT.
 
 
 Release 0.2.2:
@@ -59,7 +76,7 @@ Release 0.2.2:
 
 * Table changes:
   - Longtables can be used to have formal tables across several pages. Use
-    table.in.float=0 for this.
+    table.in.float=0 for this (Bug SF #1463054).
   - Automatic table width allowed with newtbl.autowidth={default|all}
   - Footnotes in tables are possible.
   - Basic programlisting/screen support in table.

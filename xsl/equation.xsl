@@ -37,6 +37,7 @@
 <xsl:template match="informalequation/graphic"/>
 <xsl:template match="equation/graphic"/>
 <xsl:template match="equation/title"/>
+<xsl:template match="mathphrase"/>
 
 <!-- Direct copy of the content -->
 

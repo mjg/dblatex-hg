@@ -2,11 +2,7 @@
 # DbLatex main class handling the compilation of a DocBook file via
 # XSL Transformation and LaTeX compilation.
 #
-import sys
 import os
-import re
-import tempfile
-from optparse import OptionParser
 
 from dbtexmf.core.sgmlxml import Osx
 from dbtexmf.core.dbtex import DbTex, DbTexCommand

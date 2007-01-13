@@ -17,7 +17,7 @@ class Depend (object): #{{{2
     rebuild the files of this node, returning zero on success and something
     else on failure.
     """
-    def __init__ (self, env, prods=[], sources={}, loc={}):
+    def __init__ (self, env, prods=None, sources={}, loc={}):
         """
         Initialize the object for a given set of output files and a given set
         of sources. The argument `prods' is a list of file names, and the
@@ -26,7 +26,10 @@ class Depend (object): #{{{2
         describes where in the sources this dependency was created.
         """
         self.env = env
-        self.prods = prods
+        if prods:
+            self.prods = prods
+        else:
+            self.prods = []
         self.set_date()
         self.sources = sources
         self.making = 0
@@ -152,6 +155,9 @@ class Depend (object): #{{{2
             src.clean()
         self.date = None
 
+    def reinit (self):
+        self.__init__(self.env)
+
     def leaves (self):
         """
         Return a list of all source files that are required by this node and
@@ -232,4 +238,8 @@ class Maker:
             return -1
         else:
             return 0
+
+    def reinit(self):
+        for node in self.dep_nodes:
+            node.reinit()
 

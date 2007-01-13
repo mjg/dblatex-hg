@@ -8,6 +8,7 @@ import re
 import tempfile
 import shutil
 import urllib
+import glob
 from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
@@ -177,7 +178,11 @@ class DbTex:
 
         # By default figures are relative to the source file directory
         self.rawtex.set_fig_paths([self.inputdir] + self.fig_paths)
-        self.rawtex.parse(self.rawfile, self.texfile)
+
+        self.rawfiles = glob.glob("*.rtex")
+        for rawfile in self.rawfiles:
+            texfile = os.path.splitext(rawfile)[0] + ".tex"
+            self.rawtex.parse(rawfile, texfile)
 
     def make_bin(self):
         self.binfile = self.basefile + "." + self.format
@@ -186,6 +191,19 @@ class DbTex:
         self.runtex.set_fig_paths([self.inputdir] + self.fig_paths)
         self.runtex.set_bib_paths([self.inputdir] + self.bib_paths,
                                   [self.inputdir] + self.bst_paths)
+
+        # Build the dependent files
+        self.rawfiles.remove(self.rawfile)
+        for rawfile in self.rawfiles:
+            texfile = os.path.splitext(rawfile)[0] + ".tex"
+            binfile = os.path.splitext(rawfile)[0] + "." + self.format
+            print "build %s" % binfile
+            self.runtex.compile(texfile, binfile, self.format,
+                                batch=self.texbatch)
+            self.runtex.clean()
+
+        # Build the main document file 
+        print "build %s" % self.binfile
         self.runtex.compile(self.texfile, self.binfile, self.format,
                             batch=self.texbatch)
         self.runtex.clean()

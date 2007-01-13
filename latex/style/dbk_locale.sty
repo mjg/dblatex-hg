@@ -160,6 +160,15 @@
 %% Define the babel setups in docbook
 \babelsetup{fr}{\NoAutoSpaceBeforeFDP}
 
+\babelsetup{es}{%
+  % Avoid enumitem to crash with spanish babel
+  \let\savees@listquot\es@listquot
+  \def\es@listquot{\protect\savees@listquot}
+
+  % Remove those horrible and messy "x shorthands
+  \renewcommand\shorthandsspanish{}
+}
+
 %% Apply default locale setup
 \setuplocale{en}
 

@@ -68,7 +68,7 @@
   </listitem>
    <listitem>
    <para>
-   Python &gt;= 4.3.
+   Python &gt;= 2.3.
    </para>
   </listitem>
   </itemizedlist>
@@ -179,7 +179,7 @@
   </listitem>
    <listitem>
    <para>
-   <ulink url="http://www.python.org">Python</ulink> &gt;= 4.3.
+   <ulink url="http://www.python.org">Python</ulink> &gt;= 2.3.
    </para>
   </listitem>
   </itemizedlist>

@@ -142,9 +142,14 @@
     <xsl:call-template name="l10n.language"/>
   </xsl:param>
 
-  <xsl:call-template name="gentext">
-    <xsl:with-param name="key" select="$element.name"/>
-    <xsl:with-param name="lang" select="$lang"/>
+  <!-- the locale mapping is in UTF-8, so escape it -->
+  <xsl:call-template name="scape">
+    <xsl:with-param name="string">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="$element.name"/>
+        <xsl:with-param name="lang" select="$lang"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

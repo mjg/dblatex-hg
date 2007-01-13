@@ -10,19 +10,21 @@
    <gentext key="Answer" text="A:"/>
    <gentext key="answer" text="A:"/>
    <gentext key="Appendix" text="Anhang"/>
+   <gentext key="appendix" text="Anhang"/>
    <gentext key="Article" text="Artikel"/>
    <gentext key="article" text="Artikel"/>
+   <gentext key="Author" text="Autor"/>
    <gentext key="Bibliography" text="Literaturverzeichnis"/>
    <gentext key="bibliography" text="Literaturverzeichnis"/>
    <gentext key="Book" text="Buch"/>
    <gentext key="book" text="Buch"/>
    <gentext key="CAUTION" text="ACHTUNG"/>
-   <gentext key="caution" text="ACHTUNG"/>
    <gentext key="Caution" text="Achtung"/>
    <gentext key="caution" text="Achtung"/>
+   <gentext key="chapter" text="Kapitel"/>
    <gentext key="Chapter" text="Kapitel"/>
-   <gentext key="Colophon" text="Colophon"/>
-   <gentext key="colophon" text="Colophon"/>
+   <gentext key="Colophon" text="Kolophon"/>
+   <gentext key="colophon" text="Kolophon"/>
    <gentext key="Copyright" text="Copyright"/>
    <gentext key="copyright" text="Copyright"/>
    <gentext key="Dedication" text="Widmung"/>
@@ -68,8 +70,13 @@
    <gentext key="preface" text="Vorwort"/>
    <gentext key="Procedure" text="Prozedur"/>
    <gentext key="procedure" text="Prozedur"/>
+   <gentext key="ProductionSet" text="Produktion"/>
+   <gentext key="PubDate" text="Ver&#246;ffentlicht"/>
+   <gentext key="pubdate" text="Ver&#246;ffentlicht"/>
    <gentext key="Published" text="Ver&#246;ffentlicht"/>
    <gentext key="published" text="Ver&#246;ffentlicht"/>
+   <gentext key="Qandadiv" text="F &amp; A"/>
+   <gentext key="qandadiv" text="F &amp; A"/>
    <gentext key="Question" text="F:"/>
    <gentext key="question" text="F:"/>
    <gentext key="RefName" text="Name"/>
@@ -86,6 +93,12 @@
    <gentext key="revhistory" text="Versionsgeschichte"/>
    <gentext key="Revision" text="Version"/>
    <gentext key="revision" text="Version"/>
+   <gentext key="sect1" text="Abschnitt"/>
+   <gentext key="sect2" text="Abschnitt"/>
+   <gentext key="sect3" text="Abschnitt"/>
+   <gentext key="sect4" text="Abschnitt"/>
+   <gentext key="sect5" text="Abschnitt"/>
+   <gentext key="section" text="Abschnitt"/>
    <gentext key="Section" text="Abschnitt"/>
    <gentext key="See" text="Siehe"/>
    <gentext key="see" text="Siehe"/>
@@ -100,12 +113,12 @@
    <gentext key="Sidebar" text="Randnotiz"/>
    <gentext key="sidebar" text="randnotiz"/>
    <gentext key="Step" text="Schritt"/>
-   <gentext key="TIP" text="TIP"/>
-   <gentext key="tip" text="TIP"/>
+   <gentext key="step" text="Schritt"/>
    <gentext key="Table" text="Tabelle"/>
    <gentext key="table" text="Tabelle"/>
-   <gentext key="Tip" text="Tip"/>
-   <gentext key="tip" text="Tip"/>
+   <gentext key="tip" text="Tipp"/>
+   <gentext key="TIP" text="TIPP"/>
+   <gentext key="Tip" text="Tipp"/>
    <gentext key="WARNING" text="WARNUNG"/>
    <gentext key="warning" text="WARNUNG"/>
    <gentext key="Warning" text="Warnung"/>

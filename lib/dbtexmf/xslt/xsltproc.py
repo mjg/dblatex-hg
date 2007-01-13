@@ -10,6 +10,9 @@ class XsltProc:
         self.catalogs = os.getenv("SGML_CATALOG_FILES")
         self.use_catalogs = 1
 
+    def get_deplist(self):
+        return ["xsltproc"]
+
     def run(self, xslfile, xmlfile, outfile, opts=None, params=None):
         cmd = "xsltproc --xinclude -o \"%s\" " % outfile
         if self.use_catalogs and self.catalogs:

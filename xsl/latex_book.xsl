@@ -11,20 +11,29 @@
 <xsl:import href="mathml2/mathml.xsl"/>
 
 
+<xsl:template name="apply-templates">
+  <xsl:apply-imports/>
+  <xsl:apply-templates select="." mode="annotation.links"/>
+</xsl:template>
+
+<xsl:template match="*">
+  <xsl:call-template name="apply-templates"/>
+</xsl:template>
+
 <xsl:template match="*[@revisionflag]">
   <xsl:choose>
     <xsl:when test="local-name(.) = 'para'
                     or local-name(.) = 'section'
                     or local-name(.) = 'appendix'">
       <xsl:text>\cbstart{}</xsl:text>
-      <xsl:apply-imports/>
+      <xsl:call-template name="apply-templates"/>
       <xsl:text>\cbend{}&#10;</xsl:text>
     </xsl:when>
     <xsl:when test="local-name(.) = 'phrase'
                     or local-name(.) = 'ulink'
                     or local-name(.) = 'xref'">
       <xsl:text>\cbstart{}</xsl:text>
-      <xsl:apply-imports/>
+      <xsl:call-template name="apply-templates"/>
       <xsl:text>\cbend{}</xsl:text>
     </xsl:when>
     <xsl:otherwise>
@@ -34,7 +43,7 @@
         <xsl:text>(Assuming block)</xsl:text>
       </xsl:message>
       <xsl:text>\cbstart{}</xsl:text>
-      <xsl:apply-imports/>
+      <xsl:call-template name="apply-templates"/>
       <xsl:text>\cbend{}&#10;</xsl:text>
     </xsl:otherwise>
   </xsl:choose>

@@ -122,7 +122,7 @@
     <xsl:text>~</xsl:text>
   </xsl:when>
   <!-- add a space to avoid the term be centered -->
-  <xsl:when test="child::*[1][self::figure]">
+  <xsl:when test="child::*[not(self::indexterm)][1][self::figure]">
     <xsl:text>~ </xsl:text>
   </xsl:when>
   <!-- force linebreak after the term -->

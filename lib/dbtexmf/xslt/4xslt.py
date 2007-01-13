@@ -16,6 +16,9 @@ class FourXslt:
         # Do it only once
         self.factory = self.get_factory()
 
+    def get_deplist(self):
+        return []
+
     def get_factory(self):
         system_catalogs = ['/etc/xml/catalog',
                            '/usr/local/share/xml/catalog']

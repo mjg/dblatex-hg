@@ -81,5 +81,8 @@
 % Make the <co> text and the label to link to
 \def\coref#1#2{\co{#1}\label{#2}}
 
+% Make only the <co> label to link to
+\def\colabel#1{\refstepcounter{cocnt}\label{#1}}
+
 % Make the <callout> label to link to
 \def\collabel#1{\refstepcounter{colref}\label{#1}}

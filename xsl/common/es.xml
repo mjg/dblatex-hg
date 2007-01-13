@@ -6,60 +6,62 @@
 <!-- See http://docbook.sourceforge.net/ -->
 
    <gentext key="Abstract" text="Resumen"/>
-   <gentext key="abstract" text="Resumen"/>
+   <gentext key="abstract" text="resumen"/>
    <gentext key="Answer" text="R:"/>
-   <gentext key="answer" text="R:"/>
+   <gentext key="answer" text="r:"/>
    <gentext key="Appendix" text="Ap&#233;ndice"/>
+   <gentext key="appendix" text="ap&#233;ndice"/>
    <gentext key="Article" text="Art&#237;culo"/>
-   <gentext key="article" text="Art&#237;culo"/>
+   <gentext key="article" text="art&#237;culo"/>
+   <gentext key="Author" text="Autor"/>
    <gentext key="Bibliography" text="Bibliograf&#237;a"/>
-   <gentext key="bibliography" text="Bibliograf&#237;a"/>
+   <gentext key="bibliography" text="bibliograf&#237;a"/>
    <gentext key="Book" text="Libro"/>
-   <gentext key="book" text="Libro"/>
+   <gentext key="book" text="libro"/>
    <gentext key="CAUTION" text="ATENCI&#211;N"/>
-   <gentext key="caution" text="ATENCI&#211;N"/>
    <gentext key="Caution" text="Atenci&#243;n"/>
    <gentext key="caution" text="Atenci&#243;n"/>
    <gentext key="Chapter" text="Cap&#237;tulo"/>
-   <gentext key="Colophon" text="Colophon"/>
-   <gentext key="colophon" text="Colophon"/>
+   <gentext key="chapter" text="cap&#237;tulo"/>
+   <gentext key="Colophon" text="Colof&#243;n"/>
+   <gentext key="colophon" text="colof&#243;n"/>
    <gentext key="Copyright" text="Copyright"/>
-   <gentext key="copyright" text="Copyright"/>
-   <gentext key="Dedication" text="Dedicado"/>
-   <gentext key="dedication" text="Dedicado"/>
+   <gentext key="copyright" text="copyright"/>
+   <gentext key="Dedication" text="Dedicatoria"/>
+   <gentext key="dedication" text="dedicatoria"/>
    <gentext key="Edition" text="Edici&#243;n"/>
-   <gentext key="edition" text="Edici&#243;n"/>
+   <gentext key="edition" text="edici&#243;n"/>
    <gentext key="Equation" text="Ecuaci&#243;n"/>
-   <gentext key="equation" text="Ecuaci&#243;n"/>
+   <gentext key="equation" text="ecuaci&#243;n"/>
    <gentext key="equation-untitled" text=""/>
    <gentext key="Example" text="Ejemplo"/>
-   <gentext key="example" text="Ejemplo"/>
+   <gentext key="example" text="ejemplo"/>
    <gentext key="Figure" text="Figura"/>
-   <gentext key="figure" text="Figura"/>
+   <gentext key="figure" text="figura"/>
+   <gentext key="Glossary" text="Glosario"/>
+   <gentext key="glossary" text="glosario"/>
    <gentext key="GlossSee" text="Ver"/>
-   <gentext key="glosssee" text="Ver"/>
+   <gentext key="glosssee" text="ver"/>
    <gentext key="GlossSeeAlso" text="Ver tambi&#233;n"/>
-   <gentext key="glossseealso" text="Ver tambi&#233;n"/>
+   <gentext key="glossseealso" text="ver tambi&#233;n"/>
    <gentext key="Glossary" text="Glosario"/>
    <gentext key="glossary" text="Glosario"/>
    <gentext key="IMPORTANT" text="IMPORTANTE"/>
-   <gentext key="important" text="IMPORTANTE"/>
    <gentext key="ISBN" text="ISBN"/>
-   <gentext key="isbn" text="ISBN"/>
+   <gentext key="isbn" text="isbn"/>
    <gentext key="Important" text="Importante"/>
-   <gentext key="important" text="Importante"/>
+   <gentext key="important" text="importante"/>
    <gentext key="Index" text="&#205;ndice"/>
-   <gentext key="index" text="&#205;ndice"/>
+   <gentext key="index" text="&#237;ndice"/>
    <gentext key="LegalNotice" text="Aviso Legal"/>
-   <gentext key="legalnotice" text="Aviso Legal"/>
+   <gentext key="legalnotice" text="aviso legal"/>
    <gentext key="MsgAud" text="Audiencia"/>
-   <gentext key="msgaud" text="Audiencia"/>
+   <gentext key="msgaud" text="audiencia"/>
    <gentext key="MsgLevel" text="Nivel"/>
-   <gentext key="msglevel" text="Nivel"/>
+   <gentext key="msglevel" text="nivel"/>
    <gentext key="MsgOrig" text="Origen"/>
-   <gentext key="msgorig" text="Origen"/>
+   <gentext key="msgorig" text="origen"/>
    <gentext key="NOTE" text="NOTA"/>
-   <gentext key="note" text="NOTA"/>
    <gentext key="Note" text="Nota"/>
    <gentext key="note" text="Nota"/>
    <gentext key="Part" text="Parte"/>
@@ -67,55 +69,60 @@
    <gentext key="Preface" text="Prefacio"/>
    <gentext key="preface" text="Prefacio"/>
    <gentext key="Procedure" text="Procedimiento"/>
-   <gentext key="procedure" text="Procedimiento"/>
+   <gentext key="procedure" text="procedimiento"/>
    <gentext key="PubDate" text="Fecha de publicaci&#243;n"/>
-   <gentext key="pubdate" text="Fecha de publicaci&#243;n"/>
+   <gentext key="pubdate" text="fecha de publicaci&#243;n"/>
    <gentext key="Published" text="Publicado"/>
-   <gentext key="published" text="Publicado"/>
+   <gentext key="published" text="publicado"/>
+   <gentext key="Qandadiv" text="P y R"/>
+   <gentext key="qandadiv" text="P y R"/>
    <gentext key="Question" text="P:"/>
-   <gentext key="question" text="P:"/>
-   <gentext key="RefEntry" text=""/>
-   <gentext key="refentry" text=""/>
-   <gentext key="RefName" text="Nombre"/>
-   <gentext key="refname" text="Nombre"/>
-   <gentext key="RefSection" text=""/>
-   <gentext key="refsection" text=""/>
-   <gentext key="RefSynopsisDiv" text="Synopsis"/>
-   <gentext key="refsynopsisdiv" text="Synopsis"/>
+   <gentext key="question" text="p:"/>
+   <gentext key="RefEntry" text="Entrada de referencia"/>
+   <gentext key="refentry" text="entrada de referencia"/>
+   <gentext key="reference" text="referencia"/>
+   <gentext key="References" text="References" lang="en"/>
+   <gentext key="RefName" text="Nombre de referencia"/>
+   <gentext key="refname" text="nombre de referencia"/>
+   <gentext key="RefSection" text="Secci&#243;n de referencia"/>
+   <gentext key="refsection" text="secci&#243;n de referencia"/>
+   <gentext key="RefSynopsisDiv" text="Sinopsis"/>
+   <gentext key="refsynopsisdiv" text="sinopsis"/>
    <gentext key="Reference" text="Referencia"/>
-   <gentext key="reference" text="Referencia"/>
+   <gentext key="reference" text="referencia"/>
    <gentext key="Revision" text="Revisi&#243;n"/>
-   <gentext key="revision" text="Revisi&#243;n"/>
+   <gentext key="revision" text="revisi&#243;n"/>
+   <gentext key="sect1" text="Secci&#243;n"/>
+   <gentext key="sect2" text="Secci&#243;n"/>
+   <gentext key="sect3" text="Secci&#243;n"/>
+   <gentext key="sect4" text="Secci&#243;n"/>
+   <gentext key="sect5" text="Secci&#243;n"/>
+   <gentext key="section" text="secci&#243;n"/>
    <gentext key="RevHistory" text="Historial de revisiones"/>
    <gentext key="revhistory" text="Historial de revisiones"/>
    <gentext key="Section" text="Secci&#243;n"/>
    <gentext key="See" text="Ver"/>
-   <gentext key="see" text="Ver"/>
+   <gentext key="see" text="ver"/>
    <gentext key="SeeAlso" text="Ver Tambi&#233;n"/>
-   <gentext key="seealso" text="Ver Tambi&#233;n"/>
+   <gentext key="seealso" text="ver tambi&#233;n"/>
    <gentext key="Set" text="Conjunto"/>
-   <gentext key="set" text="Conjunto"/>
-   <gentext key="SetIndex" text="&#205;ndice del conjunto"/>
-   <gentext key="setindex" text="&#205;ndice del conjunto"/>
-   <gentext key="Sidebar" text="Sidebar"/>
-   <gentext key="sidebar" text="sidebar"/>
+   <gentext key="set" text="conjunto"/>
+   <gentext key="SetIndex" text="&#205;ndice del Conjunto"/>
+   <gentext key="setindex" text="&#237;ndice del conjunto"/>
+   <gentext key="Sidebar" text="Barra lateral"/>
+   <gentext key="sidebar" text="barra lateral"/>
    <gentext key="Step" text="Paso"/>
+   <gentext key="step" text="paso"/>
    <gentext key="TIP" text="SUGERENCIA"/>
-   <gentext key="tip" text="SUGERENCIA"/>
    <gentext key="Table" text="Tabla"/>
    <gentext key="table" text="Tabla"/>
    <gentext key="Tip" text="Sugerencia"/>
    <gentext key="tip" text="Sugerencia"/>
    <gentext key="WARNING" text="AVISO"/>
-   <gentext key="warning" text="AVISO"/>
    <gentext key="Warning" text="Aviso"/>
    <gentext key="warning" text="Aviso"/>
-   <gentext key="appendix" text="ap&#233;ndice"/>
-   <gentext key="chapter" text="cap&#237;tulo"/>
-   <gentext key="section" text="secci&#243;n"/>
-   <gentext key="step" text="paso"/>
    <gentext key="Seealso" text="Ver Tambi&#233;n"/>
-   <gentext key="seealso" text="Ver Tambi&#233;n"/>
+   <gentext key="seealso" text="ver tambi&#233;n"/>
    <gentext key="TableofContents" text="Tabla de contenidos"/>
    <gentext key="tableofcontents" text="Tabla de contenidos"/>
    <gentext key="in" text="en"/>
@@ -123,7 +130,7 @@
    <gentext key="Edited" text="Editado"/>
    <gentext key="edited" text="Editado"/>
    <gentext key="Editedby" text="Editado por"/>
-   <gentext key="editedby" text="Editado por"/>
+   <gentext key="editedby" text="editado por"/>
    <gentext key="and" text="y"/>
    <gentext key="Notes" text="Notas"/>
    <gentext key="notes" text="Notas"/>
