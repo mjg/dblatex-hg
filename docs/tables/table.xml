@@ -2,9 +2,7 @@
 <!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
   <sect1 xmlns:xi="http://www.w3.org/2001/XInclude">
-   <title>
-   Creating Tables
-  </title>
+   <title>Creating Tables</title>
   <para>
    DocBook tables can be quite complex, but <command>dblatex</command> should be able
    to drive most of cases thanks to the excellent newtbl implementation
@@ -58,7 +56,7 @@
    </para>
   </listitem>
   </itemizedlist>
-   <sect2> <title> Limitations </title>
+   <sect2> <title>Limitations</title>
    <para>Currently the following things are known to fail with tables:
   <itemizedlist>
    <listitem><para>program listings and screens cannot be embedded in tables.
@@ -73,9 +71,7 @@
    </para>
    </sect2>
    <sect2>
-    <title>
-    Tables without colwidth
-   </title>
+    <title>Tables without colwidth</title>
    <para>
     When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given.
    </para>
@@ -84,9 +80,7 @@
    <xi:include href="table-eg02.xml"/>
    </sect2>
    <sect2>
-    <title>
-    Tables with mixed colspec
-   </title>
+    <title>Tables with mixed colspec</title>
    <para>
     A table can have <sgmltag>colspec</sgmltag> elements containing <sgmltag>colwidth</sgmltag> attribute mixed with <sgmltag>colspec</sgmltag> elements without <sgmltag>colwidth</sgmltag>. The following XML source: 
    </para>
@@ -110,9 +104,7 @@
    <xi:include href="table-eg1.xml"/>
    </sect2>
    <sect2>
-    <title>
-    Tables with proportional and fixed colwidth
-   </title>
+    <title>Tables with proportional and fixed colwidth</title>
    <para>
     Proportional column widths are supported. The following XML source:
    </para>
@@ -136,9 +128,7 @@
    <xi:include href="table-eg2.xml"/>
    </sect2>
    <sect2>
-    <title>
-    Tables with fixed colwidths
-   </title>
+    <title>Tables with fixed colwidths</title>
    <para>
     All the columns can have fixed size, like this: 
    </para>
@@ -160,10 +150,40 @@
    </para>
    <xi:include href="table-eg3.xml"/>
    </sect2>
+   <sect2 id="sec-newtbl-autowidth">
+   <title>Automatic column width</title>
+   <para>In the previous sections the columns widths are computed from a
+   proportional basis, when no colwidth is specified or when the colwidths
+   contain some star ("*"). Of course, the colwidths containing a fixed width
+   incidently sets the column width with this size.</para>
+   <para>It is possible to change this sizing policy by playing with the 
+   <parameter>newtbl.autowidth</parameter> parameter. It can take the following
+   values:
+   <variablelist>
+   <varlistentry><term>default</term>
+   <listitem>
+   <para>The automatic width (that is, latex is in charge to size the column
+   width) is applied only to columns not having a specified 
+   <sgmltag>colspec</sgmltag> colwidth. It includes both undefined
+   <sgmltag>colspec</sgmltag>, and <sgmltag>colspec</sgmltag> without the colwidth
+   attribute.</para>
+   </listitem>
+   </varlistentry>
+   <varlistentry><term>all</term>
+   <listitem>
+   <para>the automatic width is applied to any column, whatever a colspec is provided
+   or not.</para>
+   </listitem>
+   </varlistentry>
+   </variablelist>
+   </para>
+   <para>By default the parameter is unset, and no automatic width is applied.
+   Using automatic width is handy in some situations but there is no more
+   control if the tables fit in the page or not, since in this case the column
+   is as wide as its content, with no more paragraph breaking.</para>
+   </sect2>
    <sect2>
-    <title>
-    Tables with morerows
-   </title>
+    <title>Tables with morerows</title>
    <para>
     A table can contain entries that cover several lines. The following XML source contains an entry covering 4 lines: 
    </para>
@@ -208,9 +228,7 @@
    <xi:include href="table-land.xml"/>
    </sect2>
    <sect2>
-    <title>
-    Smaller tables
-   </title>
+    <title>Smaller tables</title>
    <para>
     For big tables it can be usefull to have smaller text, so that the table is not too large or too long and it can be displayed within a page. It is possible to specify smaller table text by using the <sgmltag>role</sgmltag> attribute of the elements <sgmltag>table</sgmltag> or <sgmltag>informaltable</sgmltag>.
    </para>

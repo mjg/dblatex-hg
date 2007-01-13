@@ -187,6 +187,26 @@
         </listitem>
       </varlistentry>
       <varlistentry>
+        <term><option>-l <replaceable>bst_path</replaceable></option></term>
+        <term>
+          <option>--bst-path=<replaceable>bst_path</replaceable></option>
+        </term>
+        <listitem>
+          <simpara>Additional lookup path of the BibTeX styles. <phrase
+          output="manual">See <xref linkend="sec-bibtex"/>.</phrase></simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-L <replaceable>bib_path</replaceable></option></term>
+        <term>
+          <option>--bib-path=<replaceable>bib_path</replaceable></option>
+        </term>
+        <listitem>
+          <simpara>Additional lookup path of the BibTeX databases. <phrase
+          output="manual">See <xref linkend="sec-bibtex"/>.</phrase></simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
         <term><option>-m <replaceable>xslt</replaceable></option></term>
         <term>
           <option>--xslt=<replaceable>xslt</replaceable></option>
@@ -315,7 +335,7 @@
   </refsect1>
 
   <refsect1>
-    <title>Files</title>
+    <title>Files and Directories</title>
     <variablelist>
       <varlistentry>
         <term><filename>$HOME/.dblatex/</filename></term>

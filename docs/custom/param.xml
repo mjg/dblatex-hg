@@ -30,6 +30,28 @@ other cross-reference link in the document.</entry>
 </row>
 <!-- -->
 <row>
+<entry>citation.default.style</entry>
+<entry>Default natbib citation style to apply when natbib is used. See <xref
+linkend="sec-natbib"/>.</entry>
+<entry>Empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>citation.natbib.options</entry>
+<entry>Options to pass to the natbib package when it is loaded. See also <xref
+linkend="sec-natbib"/>.</entry>
+<entry>Empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>citation.natbib.use</entry>
+<entry>Load the natbib package, and allows the use of natbib citation styles. The
+package is loaded if the parameter is set to 1. See <xref
+linkend="sec-natbib"/>.</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
 <entry>co.linkends.show</entry>
 <entry>Next to a callout markup the links to the corresponding calloutlist
 items are shown when the parameter is set to 1.
@@ -141,6 +163,15 @@ definition in the glossary.</entry>
 </row>
 <!-- -->
 <row>
+<entry>imageobjectco.hide</entry>
+<entry>When set to 1 the callout numbered circles are not drawn on the image.
+Only the anchors are put, allowing callout list items to jump at the referenced
+position on the image. The purpose of this parameter is to allow the use of
+images that already contain the callout numbers (like for GIMP manual).</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
 <entry>latex.babel.use</entry>
 <entry>Set to 1 the babel package corresponding to the document language is
 included. Set to 0 no babel package is included whatever the document language
@@ -152,6 +183,23 @@ is.</entry>
 <entry>latex.babel.language</entry>
 <entry>This parameter forces the use of the specified babel
 language whatever the document language is.</entry>
+<entry>Empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>latex.biblio.output</entry>
+<entry>Defines how the BibTeX bibliographic entries are printed out.
+The available values are defined in <xref linkend="sec-bibtex"/>.
+</entry>
+<entry>all</entry>
+</row>
+<!-- -->
+<row>
+<entry>latex.biblio.style</entry>
+<entry>Defines the default BibTeX style to apply.
+Meaningful when not empty, only for the used bibtex databases.
+See <xref linkend="sec-bibtex"/>.
+</entry>
 <entry>Empty</entry>
 </row>
 <!-- -->
@@ -177,8 +225,15 @@ language whatever the document language is.</entry>
 <!-- -->
 <row>
 <entry>latex.hyperparam</entry>
-<entry>cf. <xref  linkend="sec-hyperparam"/></entry>
+<entry>See <xref  linkend="sec-hyperparam"/></entry>
 <entry>empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>latex.unicode.use</entry>
+<entry>Set to 1 the passivetex unicode support is included, allowing to
+handle a wider range of Unicode characters (like cyrillic).</entry>
+<entry>0</entry>
 </row>
 <!-- -->
 <row>
@@ -230,18 +285,9 @@ text to italics.</entry>
 </row>
 <!-- -->
 <row>
-<entry>newtbl.format.thead</entry>
-<entry>LaTeX formatting for head table cells.</entry>
-<entry>\bfseries%&#10;</entry>
-</row>
-<row>
-<entry>newtbl.format.tbody</entry>
-<entry>LaTeX formatting for body table cells.</entry>
-<entry>Empty</entry>
-</row>
-<row>
-<entry>newtbl.format.tfoot</entry>
-<entry>LaTeX formatting for foot table cells.</entry>
+<entry>newtbl.autowidth</entry>
+<entry>Defines if the table column widths must be automatically sized by 
+latex. See <xref linkend="sec-newtbl-autowidth"/>.</entry>
 <entry>Empty</entry>
 </row>
 <row>
@@ -255,6 +301,21 @@ text to italics.</entry>
 <entry>Set to 1, print the row separators when no
 <sgmltag>rowspec</sgmltag> attribute is specified.</entry>
 <entry>1</entry>
+</row>
+<row>
+<entry>newtbl.format.thead</entry>
+<entry>LaTeX formatting for head table cells.</entry>
+<entry>\bfseries%&#10;</entry>
+</row>
+<row>
+<entry>newtbl.format.tbody</entry>
+<entry>LaTeX formatting for body table cells.</entry>
+<entry>Empty</entry>
+</row>
+<row>
+<entry>newtbl.format.tfoot</entry>
+<entry>LaTeX formatting for foot table cells.</entry>
+<entry>Empty</entry>
 </row>
 <row>
 <entry>newtbl.use.hhline</entry>
@@ -300,6 +361,15 @@ can be used to select the book to print, because
 is [htbp] meaning that latex tries to place the table where it occurs first (h,
 here), then at the top of the page (t), at the bottom of the page (b), and finally on the next page (p).</entry>
 <entry>[htbp]</entry>
+</row>
+<!-- -->
+<row>
+<entry>table.in.float</entry>
+<entry>Set to 0 the formal tables are no more put in table floats. They are displayed
+with the longtable package, allowing to have formal tables covering several pages
+(which is not possible with floats). The limitation is that the title must
+necessarily be on the top of the table.</entry>
+<entry>1</entry>
 </row>
 <!-- -->
 <row>

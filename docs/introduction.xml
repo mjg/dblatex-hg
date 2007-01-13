@@ -32,6 +32,9 @@
    <para> write several bibliographies, </para>
   </listitem>
    <listitem>
+   <para> reuse BibTeX bibliographies, </para>
+  </listitem>
+   <listitem>
    <para> use callouts on program listings or on images, </para>
   </listitem>
    <listitem>

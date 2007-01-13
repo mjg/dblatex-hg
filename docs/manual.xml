@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
                       "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
 [
-<!ENTITY edition "15">
+<!ENTITY edition "17">
 ]>
 
 <book lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -12,7 +12,7 @@
   <firstname>Benoît</firstname><surname>Guillon</surname>
  </author>
  <date>
-  27 Nov 2006
+  27 Jan 2007
  </date>
 <subtitle>User Manual</subtitle>
 <pubsnumber>Ref A0</pubsnumber>
@@ -201,14 +201,27 @@
 </revdescription>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>27/11/06</date>
+<revnumber>15</revnumber><date>27/11/06</date>
 <authorinitials>B. Guillon</authorinitials>
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-021"/>
- </para>
+ <para>Changes: see <xref linkend="sec-changes-021"/></para>
 </revdescription>
 </revision>
+<revision>
+<revnumber>16</revnumber><date>23/12/06</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
+ <para>Changes: see <xref linkend="sec-changes-022"/></para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>27/01/07</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
+ <para>Changes: see <xref linkend="sec-changes-023"/></para>
+</revdescription>
+</revision>
+
 </revhistory>
 </bookinfo>
 <bibliography><title>Documentation</title>
@@ -349,40 +362,8 @@
    The index is put at the end of the document. It is not possible to put it somewhere else.
   </para>
   </sect1>
-  <sect1>
-   <title>Writing a Bibliography</title>
-  <para>
-   A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter or a section and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections or subsections.
-  </para>
-  <para>
-   The writer selects information that describes each bibliography entry (<sgmltag>biblioentry</sgmltag>), and chooses the presentation order. The titles and authors are displayed first.
-  </para>
-<example><title>A Bibliography</title>
-  <programlisting>
-<![CDATA[<bibliography><title>Bibliography Example</title> 
-  <bibliodiv><title>References</title>
-    <biblioentry>
-      <title>Document title</title>
-      <author><firstname>J.</firstname><surname>Duval</surname></author>
-      <pubsnumber>DEX000567325</pubsnumber>
-    </biblioentry>
-  </bibliodiv>
-  <bibliodiv><title>White papers</title>
-    <biblioentry>
-      <title>Technical notes</title>
-      <authorgroup>
-        <author><firstname>J.</firstname><surname>Duval</surname></author>
-        <author><firstname>R.</firstname><surname>Marion</surname></author>
-      </authorgroup>
-      <pubsnumber>DEX000704520</pubsnumber>
-    </biblioentry>
-  </bibliodiv>
-</bibliography>
-]]>  </programlisting>
-</example>
-  </sect1>
-  <sect1>
-   <title>Document Revisions</title>
+<xi:include href="biblio.xml"/>
+  <sect1><title>Document Revisions</title>
   <para>
    The attribute <sgmltag>revisionflag</sgmltag> is usefull to identify the changes between two revisions of a document. This information is managed by dblatex, that adds revision bars in the margin of the paragraphs changed, such like in this <phrase revisionflag="changed">paragraph</phrase>.
   </para>
@@ -390,7 +371,9 @@
    Adding the revision flags can be manual, but its is tedious and error prone. The perl script <ulink url="http://www.sun.com/xml/developers/diffmk/">diffmk</ulink> by Norman Walsh can do the work for you. It works fine, but it depends on several Perl modules.
   </para>
 <note><para>
-The revision bars only appear when using the "dvips" driver. It seems to be a limitation of the LaTeX macros defined by the changebar package.
+With old changebar packages the revision bars only appear when using the "dvips"
+driver. This limitation has been fixed with changebar greater or equal 
+to v3.5c.
 </para></note>
   </sect1>
  </chapter>
