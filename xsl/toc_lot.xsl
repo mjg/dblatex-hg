@@ -51,13 +51,18 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- Print the Toc and all the LoTs listed in $doc.lot.show -->
-<xsl:template match="book|article" mode="lots">
-  <xsl:param name="lots" select="$doc.lot.show"/>
-
+<!-- Print the ToC and all the LoTs listed in $doc.lot.show -->
+<xsl:template match="book|article" mode="toc_lots">
   <xsl:if test="$doc.toc.show != '0'">
     <xsl:text>\tableofcontents&#10;</xsl:text>
   </xsl:if>
+  <xsl:apply-templates select="." mode="lots"/>
+</xsl:template>
+
+<!-- Print all the LoTs listed in $doc.lot.show -->
+<xsl:template match="book|article" mode="lots">
+  <xsl:param name="lots" select="$doc.lot.show"/>
+
   <xsl:choose>
   <xsl:when test="contains($lots, ',')">
     <xsl:apply-templates select="." mode="lot">

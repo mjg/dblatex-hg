@@ -284,9 +284,8 @@
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\maketitle&#10;</xsl:text>
 
-  <!-- Print the LOTs -->
-  <xsl:apply-templates select="." mode="lots"/>
-
+  <!-- Print the TOC/LOTs -->
+  <xsl:apply-templates select="." mode="toc_lots"/>
   <xsl:call-template name="label.id"/>
 
   <!-- Print the abstract -->
@@ -414,8 +413,8 @@
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\maketitle&#10;</xsl:text>
 
-  <!-- Print the LOTs -->
-  <xsl:apply-templates select="." mode="lots"/>
+  <!-- Print the TOC/LOTs -->
+  <xsl:apply-templates select="." mode="toc_lots"/>
   <xsl:call-template name="label.id"/>
 
   <!-- Print the abstract -->
