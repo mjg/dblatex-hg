@@ -48,7 +48,7 @@
       <xsl:text>*** Unrecognized language on classsynopsis: </xsl:text>
       <xsl:value-of select="$language"/>
     </xsl:message>
-    <xsl:apply-templates select=".">
+    <xsl:apply-templates select="." mode="content">
       <xsl:with-param name="language"  select="$classsynopsis.default.language"/>
     </xsl:apply-templates>
   </xsl:otherwise>

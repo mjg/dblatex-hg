@@ -1,5 +1,5 @@
 DocBook to LaTeX Publishing
-Copyright (C) 2003-2006 Benoit Guillon <marsgui@users.sourceforge.net>
+Copyright (C) 2003-2007 Benoit Guillon <marsgui@users.sourceforge.net>
  
 
 LICENSE:
@@ -27,7 +27,7 @@ IMPORTANT:
   stylesheets
 
    
-FROM THE OFFICIAL XSL Docbook Stylesheets
+FROM THE OFFICIAL XSL DocBook Stylesheets
 --------------------------------------------------------------------------------
   Permission is hereby granted, free of charge, to any person
   obtaining a copy of this software and associated documentation
@@ -62,7 +62,7 @@ DOCBOOK DTD
 
 MATHML 2.0 SUPPORT
 --------------------------------------------------------------------------------
-  xsltml (http://xsltml.sourceforge.net) by Vasil Yaroshevich integrated as
+  xsltml (http://xsltml.sourceforge.net) by Vasil Yaroshevich is integrated as
   MathML 2.0 support. See the xsltml README file for copyright. The stylesheets
   used here are derived from the original package and are not maintained by the
   xsltml author or maintainer.
@@ -84,6 +84,7 @@ LATEX PACKAGES
   * bibtopic.sty 
   * enumitem.sty
   * ragged2e.sty
+  * attachfile.sty
 
 PASSIVETEX PACKAGES
 --------------------------------------------------------------------------------

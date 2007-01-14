@@ -5,8 +5,9 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
-<!-- LoT parameters -->
+<!-- ToC/LoT parameters -->
 <xsl:param name="doc.lot.show">figure,table</xsl:param>
+<xsl:param name="doc.toc.show">1</xsl:param>
 
 
 <!-- Noting to do: things are done by latex -->
@@ -50,10 +51,13 @@
   </xsl:choose>
 </xsl:template>
 
-<!-- Print all the LoTs listed in $doc.lot.show -->
+<!-- Print the Toc and all the LoTs listed in $doc.lot.show -->
 <xsl:template match="book|article" mode="lots">
   <xsl:param name="lots" select="$doc.lot.show"/>
 
+  <xsl:if test="$doc.toc.show != '0'">
+    <xsl:text>\tableofcontents&#10;</xsl:text>
+  </xsl:if>
   <xsl:choose>
   <xsl:when test="contains($lots, ',')">
     <xsl:apply-templates select="." mode="lot">

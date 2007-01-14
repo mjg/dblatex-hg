@@ -44,14 +44,15 @@ class RawLatexParser:
                 text = line
                 line = ""
 
-            if self.depth > 0:
-                lout += self.translate(text)
-            else:
-                text, hon = self.hypon.subn("", text)
-                text, hof = self.hypof.subn("", text)
-                self.hyphenate += (hon - hof)
-                lout += text
-                
+            if (text):
+                if self.depth > 0:
+                    lout += self.translate(text)
+                else:
+                    text, hon = self.hypon.subn("", text)
+                    text, hof = self.hypof.subn("", text)
+                    self.hyphenate += (hon - hof)
+                    lout += text
+
             if key.pos != -1:
                 self.depth += key.depth
 

@@ -9,6 +9,11 @@
 \renewcommand{\plainfootrulewidth}{0.5pt}
 \setcounter{page}{1}
 
+\def\releasebox{%
+  \ifthenelse{\equal{\DBKreleaseinfo}{}}{}%
+  {\framebox{\textsc{\textsf{\DBKreleaseinfo}}}}%
+}
+
 % Fancy header/footer for the first page
 
 \chead[]{%
@@ -16,7 +21,7 @@
     >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
     \multirow{3}{5.6cm}{\DBKtitle}
     & & \tabularnewline%
-    & \framebox{\textsc{\textsf{\DBKreleaseinfo}}}
+    & \releasebox
     & \textsf{\arabic{page} / \getpagerefnumber{LastPage}} \tabularnewline %
     & & \tabularnewline%
   \end{tabular}%
@@ -33,7 +38,7 @@
     >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
     \multirow{3}{5.6cm}{\DBKtitle}
     & & \textsf{\DBKreference{} \edhead} \tabularnewline%
-    & \framebox{\textsc{\textsf{\DBKreleaseinfo}}} &  \tabularnewline %
+    & \releasebox & \tabularnewline %
     & & \textsf{\arabic{page} / \getpagerefnumber{LastPage}}
   \tabularnewline%
   \end{tabular}%

@@ -79,6 +79,8 @@
    <gentext key="refname" text="Name"/>
    <gentext key="RefSection" text=""/>
    <gentext key="refsection" text=""/>
+   <gentext key="refsect1" text=""/>
+   <gentext key="refsect2" text=""/>
    <gentext key="RefSynopsisDiv" text="Synopsis"/>
    <gentext key="refsynopsisdiv" text="Synopsis"/>
    <gentext key="Revision" text="Revision"/>

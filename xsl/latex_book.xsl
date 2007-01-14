@@ -16,7 +16,10 @@
   <xsl:apply-templates select="." mode="annotation.links"/>
 </xsl:template>
 
-<xsl:template match="*">
+<xsl:template match="*[not(self::indexterm or
+                           self::calloutlist or
+                           self::programlisting or
+                           self::screen)]">
   <xsl:call-template name="apply-templates"/>
 </xsl:template>
 

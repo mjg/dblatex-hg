@@ -55,6 +55,10 @@ Release 0.2.3:
   - Fix the wrapper script building when --root is used
     (thanks to Max Horn, the Fink packager)
 
+* Minor changes:
+  - When <releaseinfo> is set empty, the box in the header is removed.
+  - Add doc.toc.show={0|1} to let user skip the TOC.
+
 * Bug fixes:
   - Locale elements translated to iso-latin1.
   - Xref to a term containing empty lines.
@@ -62,6 +66,8 @@ Release 0.2.3:
   - Spanish babel setup added, to workaround some of the bugs introduced by
     spanish.
   - string-replace origin detailed in COPYRIGHT.
+  - <abstract> duplication fixed.
+  - spurious space fix.
 
 
 Release 0.2.2:

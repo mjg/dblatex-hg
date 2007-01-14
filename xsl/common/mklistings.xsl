@@ -13,7 +13,7 @@
 
      ******************************************************************** -->
 
-<xsl:param name="textdata.default.encoding"></xsl:param>
+<xsl:param name="textdata.default.encoding">iso-8859-1</xsl:param>
 <xsl:param name="current.dir">.</xsl:param>
 
 <!-- * This stylesheet is derivated from the insertfile.xsl stylesheet from

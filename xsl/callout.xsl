@@ -207,14 +207,14 @@
   <xsl:param name="rnode" select="/"/>
   <xsl:apply-templates select="title"/>
   <xsl:text>&#10;\begin{description}&#10;</xsl:text>
-  <xsl:apply-templates select="callout">
+  <xsl:apply-templates select="callout" mode="item">
     <xsl:with-param name="rnode" select="$rnode"/>
   </xsl:apply-templates>
   <xsl:text>\end{description}&#10;</xsl:text>
 </xsl:template>
 
 <!-- Callout Description -->
-<xsl:template match="callout">
+<xsl:template match="callout" mode="item">
   <xsl:param name="rnode" select="/"/>
   <xsl:text>\item[{</xsl:text>
   <xsl:call-template name="corefs.split">

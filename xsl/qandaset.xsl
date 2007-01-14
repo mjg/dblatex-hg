@@ -108,10 +108,10 @@
     <xsl:text>&#10;\begin{enumerate}&#10;</xsl:text>
   </xsl:if>
 
-  <xsl:apply-templates select="question">
+  <xsl:apply-templates select="question" mode="wp">
     <xsl:with-param name="defaultlabel" select="$defaultlabel"/>
   </xsl:apply-templates>
-  <xsl:apply-templates select="answer">
+  <xsl:apply-templates select="answer" mode="wp">
     <xsl:with-param name="defaultlabel" select="$defaultlabel"/>
   </xsl:apply-templates>
 
@@ -121,7 +121,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="question">
+<xsl:template match="question" mode="wp">
   <xsl:param name="defaultlabel"/>
 
   <xsl:choose>
@@ -157,7 +157,7 @@
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="answer">
+<xsl:template match="answer" mode="wp">
   <xsl:param name="defaultlabel"/>
 
   <xsl:choose>

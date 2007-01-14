@@ -283,7 +283,6 @@
   <xsl:text>\hyperlink{#3}{#2}}&#10;</xsl:text>
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\maketitle&#10;</xsl:text>
-  <xsl:text>\tableofcontents&#10;</xsl:text>
 
   <!-- Print the LOTs -->
   <xsl:apply-templates select="." mode="lots"/>
@@ -414,7 +413,6 @@
   <xsl:text>\hyperlink{#3}{#2}}&#10;</xsl:text>
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\maketitle&#10;</xsl:text>
-  <xsl:text>\tableofcontents&#10;</xsl:text>
 
   <!-- Print the LOTs -->
   <xsl:apply-templates select="." mode="lots"/>
