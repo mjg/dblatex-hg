@@ -13,6 +13,13 @@
 <tbody>
 <!-- -->
 <row>
+<entry>annotation.support</entry>
+<entry>Set to 1 the experimental DocBook 5 <sgmltag>annotation</sgmltag> support is
+enabled.</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
 <entry>callout.markup.circled</entry>
 <entry>Set to 1 the callouts references in a <sgmltag>calloutlist</sgmltag>
 are white numbers in black circles, like the markups in the listing (or graphic).
