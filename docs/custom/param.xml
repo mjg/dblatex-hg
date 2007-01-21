@@ -92,6 +92,22 @@ if the parameter is set to 1.</entry>
 </row>
 <!-- -->
 <row>
+<entry>doc.toc.show</entry>
+<entry>Print the table of contents when set to 1.</entry>
+<entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>draft.mode</entry>
+<entry>Print <sgmltag>releaseinfo</sgmltag> in a framed box in the header, when the
+parameter is set to 'yes'.
+The <sgmltag>releaseinfo</sgmltag> is ignored if the parameter is set to 'no',
+or if the releaseinfo content is empty.
+</entry>
+<entry>no</entry>
+</row>
+<!-- -->
+<row>
 <entry>figure.caution</entry>
 <entry>Figure to use to render a <sgmltag>caution</sgmltag> block. This parameter is
 added to allow new latex styles to use their own figures in admonitions.</entry>

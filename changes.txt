@@ -36,6 +36,10 @@ x * Faire <annotation>
 * gérer \IfFileExists{truncate.sty}{ ... \usepackage{truncate}...}
 * titre dans les procédures (de.xml)
 * <varlistentry lang="de"><term lang="de"><listitem><note lang="de">
+* support de korean, japan, etc.
+* log python global (+ niveaux de debug)
+* <set> avec attachfile
+1617460
 
 
 Release 0.2.3:
@@ -45,9 +49,9 @@ Release 0.2.3:
   - Experimental annotation support (enabled when annotation.support=1)
   - Add imageobjectco.hide={0|1} to hide the callout numbers on the image.
 
-* Setup changes:
+* Setup changes and fixes:
   - Check the available XSLTs (xsltproc is not required if 4Suite
-    is available) (Bug SF #1617458).
+    is available) (SF Bug #1617458).
   - Avoid optional package dependency (unicode.sty)
   - Add the --use-python-path to use the python interpreter
     running setup.py, instead of relying on env to locate python
@@ -56,18 +60,22 @@ Release 0.2.3:
     (thanks to Max Horn, the Fink packager)
 
 * Minor changes:
-  - When <releaseinfo> is set empty, the box in the header is removed.
+  - When <releaseinfo> is set, but empty, the box in the header is removed.
   - Add doc.toc.show={0|1} to let user skip the TOC.
+  - Add draft.mode={'yes'|'no'} to print the <releaseinfo> content or not in the
+    header of each page (SF Request #1600886).
 
 * Bug fixes:
-  - Locale elements translated to iso-latin1.
-  - Xref to a term containing empty lines.
+  - Some locale elements translated to iso-latin1.
   - Locale mappings updated for 'de' and 'es'.
   - Spanish babel setup added, to workaround some of the bugs introduced by
     spanish.
-  - string-replace origin detailed in COPYRIGHT.
-  - <abstract> duplication fixed.
-  - spurious space fix.
+  - Load babel before the docbook style, to work around the babel/3875 bug.
+  - Xref to a term containing empty lines.
+  - String-replace origin detailed in COPYRIGHT.
+  - <abstract> duplication fixed (SF Bug #1560164).
+  - Spurious space fix.
+  - Make the -B option actually work.
 
 
 Release 0.2.2:
