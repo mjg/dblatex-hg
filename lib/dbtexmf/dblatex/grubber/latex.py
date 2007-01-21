@@ -38,6 +38,8 @@ class Latex(Depend):
         self.modules = Modules(self)
         self.parser = TexParser(self)
         self.date = None
+        self.batch = 1
+        self.opts = ""
 
     def set_source(self, input):
         self.srcfile = os.path.realpath(input)
@@ -123,6 +125,11 @@ class Latex(Depend):
         self.failed_dep = self
         self.failed_module = None
 
+        if self.batch:
+            self.opts = "-interaction=batchmode"
+        else:
+            self.opts = ""
+
         need_compile = force or self.compile_needed()
         while need_compile:
             if self.compile(): return 1
@@ -169,8 +176,8 @@ class Latex(Depend):
 
     def compile(self):
         self.must_compile = 0
-        cmd = "%s -interaction=batchmode %s" % (self.program,
-                                                os.path.basename(self.srcfile))
+        cmd = "%s %s %s" % (self.program, self.opts,
+                            os.path.basename(self.srcfile))
         msg.log(cmd)
         rc = os.system(cmd)
         if rc != 0:

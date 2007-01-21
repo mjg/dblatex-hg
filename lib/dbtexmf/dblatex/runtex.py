@@ -81,6 +81,7 @@ class RunLatex:
 
         # Build the output file
         try:
+            self.texer.batch = batch
             self.texer.set_format(format)
             self.texer.set_backend(self.backend)
             if self.index_style:

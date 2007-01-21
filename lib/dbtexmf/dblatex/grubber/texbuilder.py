@@ -26,6 +26,7 @@ class LatexBuilder:
         self.backend = "pdftex"
         self.format = "pdf"
         self.index_style = ""
+        self.batch = 1
 
     def set_format(self, format):
         # Just record it
@@ -38,6 +39,7 @@ class LatexBuilder:
         self.index_style = index_style
 
     def compile(self, source):
+        self.tex.batch = self.batch
         self.tex.set_source(source)
         self.tex.prepare()
 

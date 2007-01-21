@@ -197,13 +197,13 @@ class DbTex:
         for rawfile in self.rawfiles:
             texfile = os.path.splitext(rawfile)[0] + ".tex"
             binfile = os.path.splitext(rawfile)[0] + "." + self.format
-            print "build %s" % binfile
+            print "Build %s" % binfile
             self.runtex.compile(texfile, binfile, self.format,
                                 batch=self.texbatch)
             self.runtex.clean()
 
         # Build the main document file 
-        print "build %s" % self.binfile
+        print "Build %s" % self.binfile
         self.runtex.compile(self.texfile, self.binfile, self.format,
                             batch=self.texbatch)
         self.runtex.clean()
