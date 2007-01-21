@@ -196,7 +196,7 @@ class Install(install):
             raise OSError("not found: %s" % ", ".join(missed))
 
     def check_xslt_dependencies(self):
-        sys.path.append("lib")
+        sys.path.insert(0, "lib")
         from dbtexmf.xslt import xslt
         sys.path.remove("lib")
 
@@ -310,7 +310,7 @@ class InstallData(install_data):
 
 
 def get_version():
-    sys.path.append("lib")
+    sys.path.insert(0, "lib")
     from dbtexmf.dblatex import dblatex
     d = dblatex.DbLatex(base=os.getcwd())
     sys.path.remove("lib")
