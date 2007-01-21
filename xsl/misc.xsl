@@ -13,6 +13,7 @@
 <xsl:param name="doc.publisher.show">0</xsl:param>
 <xsl:param name="doc.alignment"/>
 <xsl:param name="set.book.num">1</xsl:param>
+<xsl:param name="draft.mode">no</xsl:param>
 
 <xsl:variable name="latex.book.preamblestart">
   <xsl:text>% -----------------------------------------  &#10;</xsl:text>
@@ -95,11 +96,16 @@
 </xsl:template>
 
 <xsl:template match="bookinfo|articleinfo" mode="docinfo">
-  <xsl:if test="releaseinfo">
+  <xsl:choose>
+  <xsl:when test="$draft.mode='no'">
+    <xsl:text>\renewcommand{\DBKreleaseinfo}{}&#10;</xsl:text>
+  </xsl:when>
+  <xsl:when test="releaseinfo">
     <xsl:text>\renewcommand{\DBKreleaseinfo}{</xsl:text>
     <xsl:apply-templates select="releaseinfo"/>
     <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
+  </xsl:when>
+  </xsl:choose>
   <xsl:if test="pubsnumber">
     <xsl:text>\renewcommand{\DBKreference}{</xsl:text>
     <xsl:value-of select="normalize-space(pubsnumber)"/>
@@ -198,6 +204,8 @@
   <xsl:value-of select="$latex.book.preamblestart"/>
   <xsl:call-template name="user.params.set"/>
 
+  <!-- Load babel before the style (bug #babel/3875) -->
+  <xsl:call-template name="babel.setup"/>
   <xsl:text>\usepackage[hyperlink]{</xsl:text>
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
@@ -318,6 +326,8 @@
   <xsl:value-of select="$latex.article.preamblestart"/>
   <xsl:call-template name="user.params.set"/>
 
+  <!-- Load babel before the style (bug #babel/3875) -->
+  <xsl:call-template name="babel.setup"/>
   <xsl:text>\usepackage[article,hyperlink]{</xsl:text>
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
