@@ -81,18 +81,28 @@
 <xsl:template match="ulink">
   <!-- messy sharp (#) in newtbl table cells, so escape it -->
   <xsl:variable name="url">
-    <xsl:choose>
-    <xsl:when test="ancestor::entry">
-      <xsl:call-template name="string-replace">
-        <xsl:with-param name="string" select="@url"/>
-        <xsl:with-param name="from" select="'#'"/>
-        <xsl:with-param name="to" select="'\#'"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="@url"/>
-    </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="scape-encode">
+      <xsl:with-param name="string">
+        <xsl:choose>
+        <xsl:when test="ancestor::entry or ancestor::revision">
+          <xsl:call-template name="string-replace">
+            <xsl:with-param name="string">
+              <xsl:call-template name="string-replace">
+                <xsl:with-param name="string" select="@url"/>
+                <xsl:with-param name="from" select="'#'"/>
+                <xsl:with-param name="to" select="'\#'"/>
+              </xsl:call-template>
+            </xsl:with-param>
+            <xsl:with-param name="from" select="'&amp;'"/>
+            <xsl:with-param name="to" select="'\&amp;'"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@url"/>
+        </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:variable>
 
   <xsl:choose>

@@ -5,14 +5,15 @@
 import os
 import sys
 import re
+from subprocess import call
 
 class Osx:
     def __init__(self):
-        self.opts = "-xlower "\
-                    "-xno-nl-in-tag "\
-                    "-xempty "\
-                    "-xno-expand-internal "\
-                    "-xid" # To have id() working without a DTD
+        self.opts = ["-xlower",
+                     "-xno-nl-in-tag",
+                     "-xempty",
+                     "-xno-expand-internal",
+                     "-xid"] # To have id() working without a DTD
 
     def replace_entities(self, entfile, mapfile, outfile=None):
         # Find out the SDATA entities to replace
@@ -63,8 +64,9 @@ class Osx:
 
     def run(self, sgmlfile, xmlfile):
         errfile = "errors.osx"
-        rc = os.system("osx %s -f%s %s > %s" % (self.opts, errfile,
-                                                sgmlfile, xmlfile))
+        f = open(xmlfile, "w")
+        rc = call(["osx"] + self.opts + ["-f", errfile, sgmlfile], stdout=f)
+        f.close()
         if rc != 0:
             i = 0
             f = open(errfile)

@@ -59,7 +59,9 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="refmeta"/>
+<xsl:template match="refmeta">
+  <xsl:apply-templates select="indexterm"/>
+</xsl:template>
 
 <xsl:template match="refentrytitle">
   <xsl:call-template name="inline.charseq"/>

@@ -6,6 +6,7 @@ dependencies.
 """
 import os
 import time
+import subprocess
 
 from msg import _, msg
 
@@ -156,7 +157,10 @@ class Depend (object): #{{{2
         self.date = None
 
     def reinit (self):
-        self.__init__(self.env)
+        """
+        Reinitializing depends on actual dependency leaf
+        """
+        pass
 
     def leaves (self):
         """
@@ -205,7 +209,7 @@ class DependShell (Depend): #{{{2
 
     def run (self):
         msg.progress(_("running %s") % self.cmd[0])
-        rc = os.system(" ".join(self.cmd))
+        rc = subprocess.call(self.cmd)
         if rc != 0:
             msg.error(_("execution of %s failed") % self.cmd[0])
             return 1
@@ -240,6 +244,6 @@ class Maker:
             return 0
 
     def reinit(self):
-        for node in self.dep_nodes:
-            node.reinit()
+        # Forget the old dependency nodes
+        self.__init__()
 

@@ -17,6 +17,7 @@ from __future__ import generators
 import os, sys
 from os.path import *
 import re, string
+import subprocess
 
 #from grubber import _
 #from grubber import *
@@ -260,7 +261,7 @@ class BibTex(TexModule):
         if len(self.bst_path) != 1:
             os.environ["BSTINPUTS"] = string.join(self.bst_path +
                 [os.getenv("BSTINPUTS", "")], ":")
-        rc = os.system("bibtex %s" % self.base)
+        rc = subprocess.call(["bibtex", self.base])
         if rc != 0:
             msg.info(_("There were errors making the bibliography."))
             return 1

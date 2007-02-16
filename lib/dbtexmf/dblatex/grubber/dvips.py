@@ -11,6 +11,7 @@ is "Omega" (instead of "TeX" for instance), then "odvips" is used instead of
 import sys
 import os
 from os.path import *
+import subprocess
 
 from msg import _ , msg
 from plugins import TexModule
@@ -24,17 +25,20 @@ class Dep (Depend):
         self.target = target
         Depend.__init__(self, doc.env, prods=[target], sources={source: node})
         self.options = []
+        if self.doc.engine == "Omega":
+            self.cmdexec = "odvips"
+        else:
+            self.cmdexec = "dvips"
+            self.options.append("-R0")
 
     def run (self):
-        if self.doc.engine == "Omega":
-            cmd = ["odvips"]
-        else:
-            cmd = ["dvips"]
+        cmd = [self.cmdexec]
         msg.progress(_("running %s on %s") % (cmd[0], self.source))
         for opt in self.doc.paper.split():
             cmd.extend(["-t", opt])
         cmd.extend(self.options + ["-o", self.target, self.source])
-        rc = os.system(" ".join(cmd))
+        msg.debug(" ".join(cmd))
+        rc = subprocess.call(cmd)
         if rc != 0:
             msg.error(_("%s failed on %s") % (cmd[0], self.source))
             return 1

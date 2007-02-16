@@ -9,6 +9,7 @@ building a LaTeX document from start to finish.
 import os
 import sys
 import time
+import subprocess
 
 from msg import _, msg
 from util import Watcher
@@ -40,6 +41,10 @@ class Latex(Depend):
         self.date = None
         self.batch = 1
         self.opts = ""
+
+    def reinit(self):
+        # Restart with a clean module set, parser and logger
+        self.__init__(self.env)
 
     def set_source(self, input):
         self.srcfile = os.path.realpath(input)
@@ -176,10 +181,11 @@ class Latex(Depend):
 
     def compile(self):
         self.must_compile = 0
-        cmd = "%s %s %s" % (self.program, self.opts,
-                            os.path.basename(self.srcfile))
-        msg.log(cmd)
-        rc = os.system(cmd)
+        cmd = [self.program, self.opts, os.path.basename(self.srcfile)]
+        if not(self.opts):
+            cmd.pop(1)
+        msg.log(" ".join(cmd))
+        rc = subprocess.call(cmd)
         if rc != 0:
             msg.error(_("%s failed") % self.program)
         # Whatever the result is, read the log file

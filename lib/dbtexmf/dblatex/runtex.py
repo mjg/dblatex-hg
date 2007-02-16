@@ -11,7 +11,6 @@ from grubber.texbuilder import LatexBuilder
 class RunLatex:
     def __init__(self):
         self.fig_paths = []
-        self.verbose = 1
         self.index_style = ""
         self.backend = "pdftex"
         self.texer = LatexBuilder()

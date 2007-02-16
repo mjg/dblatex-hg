@@ -95,17 +95,12 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="bookinfo|articleinfo" mode="docinfo">
-  <xsl:choose>
-  <xsl:when test="$draft.mode='no'">
-    <xsl:text>\renewcommand{\DBKreleaseinfo}{}&#10;</xsl:text>
-  </xsl:when>
-  <xsl:when test="releaseinfo">
+<xsl:template match="bookinfo|articleinfo|info" mode="docinfo">
+  <xsl:if test="releaseinfo and $draft.mode!='no'">
     <xsl:text>\renewcommand{\DBKreleaseinfo}{</xsl:text>
     <xsl:apply-templates select="releaseinfo"/>
     <xsl:text>}&#10;</xsl:text>
-  </xsl:when>
-  </xsl:choose>
+  </xsl:if>
   <xsl:if test="pubsnumber">
     <xsl:text>\renewcommand{\DBKreference}{</xsl:text>
     <xsl:value-of select="normalize-space(pubsnumber)"/>
@@ -197,6 +192,9 @@
     <xsl:value-of select="$pdf.annot.options"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
+  <xsl:if test="$draft.mode='no'">
+    <xsl:text>\renewcommand{\DBKreleaseinfo}{}&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 
@@ -210,13 +208,13 @@
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
 
-  <xsl:call-template name="user.params.set2"/>
   <xsl:call-template name="font.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:call-template name="biblio.setup"/>
   <xsl:call-template name="annotation.setup"/>
-  <xsl:apply-templates select="bookinfo" mode="docinfo"/>
+  <xsl:call-template name="user.params.set2"/>
+  <xsl:apply-templates select="bookinfo|info" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
   <xsl:if test="subtitle">
@@ -332,13 +330,13 @@
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
 
-  <xsl:call-template name="user.params.set2"/>
   <xsl:call-template name="font.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
   <xsl:call-template name="biblio.setup"/>
   <xsl:call-template name="annotation.setup"/>
-  <xsl:apply-templates select="articleinfo" mode="docinfo"/>
+  <xsl:call-template name="user.params.set2"/>
+  <xsl:apply-templates select="articleinfo|info" mode="docinfo"/>
 
   <!-- Override the infos if specified here -->
   <xsl:if test="subtitle">
@@ -356,6 +354,9 @@
         <xsl:choose>
         <xsl:when test="./title">
           <xsl:value-of select="./title"/>
+        </xsl:when>
+        <xsl:when test="./info/title">
+          <xsl:value-of select="./info/title"/>
         </xsl:when>
         <xsl:when test="./articleinfo/title">
           <xsl:value-of select="./articleinfo/title"/>

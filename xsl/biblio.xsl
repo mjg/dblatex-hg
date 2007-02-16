@@ -345,6 +345,8 @@
                                     pagenums|
                                     isbn|
                                     issn|
+                                    biblioid|
+                                    releaseinfo|
                                     pubsnumber"/>
   <xsl:apply-templates select="author|authorgroup" mode="bibliography.mode"/>
   <xsl:if test="title">
@@ -399,6 +401,7 @@
                         pagenums|
                         isbn|
                         issn|
+                        biblioid|
                         pubsnumber">
     <xsl:value-of select="$biblioentry.item.separator"/>
     <xsl:apply-templates select="." mode="bibliography.mode"/> 
@@ -423,6 +426,31 @@
       <xsl:apply-templates/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- Biblioid depends on its class -->
+<xsl:template match="biblioid" mode="bibliography.mode">
+  <xsl:choose>
+    <xsl:when test="@class='doi'">
+      <xsl:text>DOI</xsl:text>
+    </xsl:when>
+    <xsl:when test="@class='isbn'">
+      <xsl:text>ISBN</xsl:text>
+    </xsl:when>
+    <xsl:when test="@class='issn'">
+      <xsl:text>ISSN</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:message>
+        <xsl:text>The biblioid class '</xsl:text>
+        <xsl:value-of select="@class"/>
+        <xsl:text>' not supported!</xsl:text>
+      </xsl:message>
+      <xsl:value-of select="@class"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text> </xsl:text>
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="author" mode="bibliography.mode">
@@ -467,7 +495,7 @@
 <!-- to manage entities correctly (such as &amp;) -->
 <xsl:template match="subtitle|volumenum|edition|
                      pubdate|pagenums|isbn|issn|
-                     holder|publishername" mode="bibliography.mode">
+                     holder|publishername|releaseinfo" mode="bibliography.mode">
   <xsl:apply-templates/>
 </xsl:template>
 

@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:ng="http://docbook.org/docbook-ng"
+                xmlns:db="http://docbook.org/ns/docbook"
                 xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="exsl"
+                exclude-result-prefixes="db ng exsl"
                 version="1.0">
 
 <!--############################################################################
@@ -83,19 +85,92 @@
 
 
 <xsl:template match="/">
-  <xsl:message>
-  <xsl:text>XSLT stylesheets DocBook -  LaTeX 2e </xsl:text>
-  <xsl:text>(</xsl:text><xsl:value-of select="$version"/><xsl:text>)</xsl:text>
-  </xsl:message>
-  <xsl:message>===================================================</xsl:message>
+  <xsl:param name="rfs" select="0"/>
+  <xsl:if test="$rfs=0">
+    <xsl:message>
+    <xsl:text>XSLT stylesheets DocBook -  LaTeX 2e </xsl:text>
+    <xsl:text>(</xsl:text><xsl:value-of select="$version"/><xsl:text>)</xsl:text>
+    </xsl:message>
+    <xsl:message>===================================================</xsl:message>
+  </xsl:if>
   <xsl:choose>
   <xsl:when test="set|book|article">
     <xsl:apply-templates/>
+  </xsl:when>
+  <xsl:when test="function-available('exsl:node-set')
+                  and (*/self::ng:* or */self::db:*)">
+    <xsl:message>Stripping NS from DocBook 5/NG document.</xsl:message>
+    <xsl:variable name="nons">
+      <xsl:apply-templates mode="stripNS"/>
+    </xsl:variable>
+    <xsl:message>Processing stripped document.</xsl:message>
+    <xsl:apply-templates select="exsl:node-set($nons)">
+      <xsl:with-param name="rfs" select="1"/>
+    </xsl:apply-templates>
   </xsl:when>
   <xsl:otherwise>
     <xsl:apply-templates select="." mode="doc-wrap"/>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+
+<!-- DocBook NG/V5 translated to DocBook V4, taken from the
+     DocBook XSL Stylesheets
+  -->
+
+<xsl:template match="*" mode="stripNS">
+  <xsl:choose>
+    <xsl:when test="self::ng:* or self::db:*">
+      <xsl:element name="{local-name(.)}">
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates mode="stripNS"/>
+      </xsl:element>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy>
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates mode="stripNS"/>
+      </xsl:copy>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ng:link|db:link" mode="stripNS">
+  <xsl:variable xmlns:xlink="http://www.w3.org/1999/xlink"
+                name="href" select="@xlink:href|@href"/>
+  <xsl:choose>
+    <xsl:when test="$href != '' and not(starts-with($href,'#'))">
+      <ulink url="{$href}">
+        <xsl:for-each select="@*">
+          <xsl:if test="local-name(.) != 'href'">
+            <xsl:copy/>
+          </xsl:if>
+        </xsl:for-each>
+        <xsl:apply-templates mode="stripNS"/>
+      </ulink>
+    </xsl:when>
+    <xsl:when test="$href != '' and starts-with($href,'#')">
+      <link linkend="{substring-after($href,'#')}">
+        <xsl:for-each select="@*">
+          <xsl:if test="local-name(.) != 'href'">
+            <xsl:copy/>
+          </xsl:if>
+        </xsl:for-each>
+        <xsl:apply-templates mode="stripNS"/>
+      </link>
+    </xsl:when>
+    <xsl:otherwise>
+      <link>
+        <xsl:copy-of select="@*"/>
+        <xsl:apply-templates mode="stripNS"/>
+      </link>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="comment()|processing-instruction()|text()" mode="stripNS">
+  <xsl:copy/>
 </xsl:template>
 
 </xsl:stylesheet>

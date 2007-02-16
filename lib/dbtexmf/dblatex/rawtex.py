@@ -2,7 +2,8 @@ import sys
 import os
 import re
 
-from texcodec import LatexCodec
+from texcodec import LatexCodec, TexCodec
+from rawverb import VerbParser
 from dbtexmf.core.imagedata import *
 
 
@@ -14,12 +15,12 @@ class RawKey:
         self.len = len(key)
 
 class RawLatexParser:
-    def __init__(self):
-        self.key_in = RawKey("<t>", 1)
-        self.key_out = RawKey("</t>", -1)
+    def __init__(self, key_in="<t>", key_out="</t>", codec=None):
+        self.key_in = RawKey(key_in, 1)
+        self.key_out = RawKey(key_out, -1)
         self.depth = 0
         self.hyphenate = 0
-        self.codec = LatexCodec()
+        self.codec = codec or LatexCodec()
         
         # hyphenation patterns
         self.hypon = re.compile(r"<h>")
@@ -73,6 +74,18 @@ class RawLatexParser:
         return text
 
 
+class RawUtfParser(RawLatexParser):
+    "Just encode to UTF-8 without latex escaping"
+
+    def __init__(self):
+        RawLatexParser.__init__(self, "<u>", "</u>", TexCodec())
+
+    def translate(self, text):
+        # Currently no hyphenation stuff, just encode
+        text = self.codec.decode(text)
+        return self.codec.encode(text)
+
+
 class RawLatex:
     def __init__(self):
         self.figre = \
@@ -80,14 +93,19 @@ class RawLatex:
                        r"\\begin{overpic}|"\
                        r"\\imgexits)[^{]*{([^}]*)}")
         self.image = Imagedata()
-        self.parser = RawLatexParser()
+        self.parsers = [VerbParser(),
+                        RawLatexParser(),
+                        RawUtfParser()]
         self.format = None
 
     def set_fig_paths(self, paths):
         self.image.paths = paths
 
-    def set_format(self, format):
+    def set_format(self, format, backend=None):
         figformats = {"pdf":"pdf", "dvi":"eps", "ps":"eps"}
+        # Adjust the actual format from backend
+        if (format == "pdf" and backend == "dvips"):
+            format = "ps"
         if figformats.has_key(format):
             self.image.output_format = figformats[format]
             self.format = format
@@ -102,8 +120,12 @@ class RawLatex:
         for line in f:
             if self.format:
                 line = self.figconvert(line)
-            line = self.parser.parse(line)
-            o.write(line)
+            for p in self.parsers:
+                line = p.parse(line)
+                if not(line):
+                    break
+            if line:
+                o.write(line)
         o.close()
         f.close()
 

@@ -13,6 +13,7 @@ from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
 from dbtexmf.xslt import xslt
+from dbtexmf.core.logger import logger
 
 
 def suffix_replace(path, oldext, newext=""):
@@ -98,12 +99,6 @@ class DbTex:
         else:
             self.format = format
 
-    def set_verbose(self, verbose):
-        self.verbose = verbose
-        self.runtex.verbose = verbose
-        self.rawtex.verbose = verbose
-        self.xsltproc.verbose = verbose
-
     def unset_flags(self, what):
         self.flags &= ~what
 
@@ -143,7 +138,7 @@ class DbTex:
         self.xslbuild = wrapper
 
     def make_xml(self):
-        print "Build the XML file..."
+        self.log.info("Build the XML file...")
         xmlfile = self.basefile + ".xml"
         self.sgmlxml.run(self.input, xmlfile)
         self.input = xmlfile
@@ -151,13 +146,13 @@ class DbTex:
     def make_listings(self):
         self.listings = os.path.join(self.tmpdir, "listings.xml")
         if (self.flags & self.USE_MKLISTINGS):
-            print "Build the listings..."
+            self.log.info("Build the listings...")
             param = {"current.dir": self.inputdir}
             self.xsltproc.use_catalogs = 0
             self.xsltproc.run(self.xsllist, self.input,
                               self.listings, params=param)
         else:
-            print "No external file support"
+            self.log.info("No external file support")
             f = file(self.listings, "w")
             f.write("<listings/>\n")
             f.close()
@@ -172,7 +167,7 @@ class DbTex:
 
     def make_tex(self):
         self.texfile = self.basefile + ".tex"
-        self.rawtex.set_format(self.format)
+        self.rawtex.set_format(self.format, self.backend)
         if self.fig_format:
             self.rawtex.fig_format(self.fig_format)
 
@@ -197,13 +192,13 @@ class DbTex:
         for rawfile in self.rawfiles:
             texfile = os.path.splitext(rawfile)[0] + ".tex"
             binfile = os.path.splitext(rawfile)[0] + "." + self.format
-            print "Build %s" % binfile
+            self.log.info("Build %s" % binfile)
             self.runtex.compile(texfile, binfile, self.format,
                                 batch=self.texbatch)
             self.runtex.clean()
 
         # Build the main document file 
-        print "Build %s" % self.binfile
+        self.log.info("Build %s" % self.binfile)
         self.runtex.compile(self.texfile, self.binfile, self.format,
                             batch=self.texbatch)
         self.runtex.clean()
@@ -409,7 +404,7 @@ class DbTexCommand:
             run.unset_flags(run.USE_MKLISTINGS)
 
         if options.verbose:
-            run.set_verbose(options.verbose)
+            run.verbose = options.verbose
     
         if options.tmpdir:
             if not(os.path.exists(options.tmpdir)):
@@ -476,6 +471,9 @@ class DbTexCommand:
          
         # Now apply the command line setup
         self.run_setup(options)
+
+        # Verbose mode
+        run.log = logger(self.prog, run.verbose)
 
         input = os.path.realpath(args[0])
 

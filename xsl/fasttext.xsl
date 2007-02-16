@@ -8,7 +8,7 @@
     ############################################################################ -->
 
 <!-- These templates boost the text processing but needs some post-parsing
-     to escape the TeX characters. -->
+     to escape the TeX characters and do the encoding. -->
 
 <xsl:template name="scape" >
   <xsl:param name="string"/>
@@ -21,9 +21,6 @@
 <xsl:template match="text()">
   <xsl:text>&lt;t&gt;</xsl:text>
   <xsl:value-of select="."/>
-  <!--
-  <xsl:value-of select="normalize-space(.)"/>
-  -->
   <xsl:text>&lt;/t&gt;</xsl:text>
 </xsl:template>
 
@@ -38,6 +35,14 @@
     <xsl:with-param name="from" select="$from"/>
     <xsl:with-param name="to" select="concat('&lt;/t&gt;',$to,'&lt;t&gt;')"/>
   </xsl:call-template>
+</xsl:template>
+
+<!-- just ask for encoding -->
+<xsl:template name="scape-encode" >
+  <xsl:param name="string"/>
+  <xsl:text>&lt;u&gt;</xsl:text>
+  <xsl:value-of select="$string"/>
+  <xsl:text>&lt;/u&gt;</xsl:text>
 </xsl:template>
 
 <!-- specific behaviour for MML -->

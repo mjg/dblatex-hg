@@ -6,6 +6,7 @@ msg object.
 """
 import os, os.path
 import sys
+import logging
 
 def _(txt): return txt
 
@@ -28,6 +29,7 @@ class Message (object):
         self.path = ""
         self.cwd = "./"
         self.pos = []
+        self._log = logging.getLogger("dblatex")
 
     def write_stdout(self, text, level=0):
         print text
@@ -58,9 +60,9 @@ class Message (object):
         if kind == "error":
             if text[0:13] == "LaTeX Error: ":
                 text = text[13:]
-            self(0, self.format_pos(info, text))
+            self._log.error(self.format_pos(info, text))
             if info.has_key("code") and info["code"] and not self.short:
-                self(0, self.format_pos(info,
+                self._log.error(self.format_pos(info,
                     _("leading text: ") + info["code"]))
 
         elif kind == "abort":
@@ -68,23 +70,23 @@ class Message (object):
                 msg = _("compilation aborted ") + info["why"]
             else:
                 msg = _("compilation aborted: %s %s") % (text, info["why"])
-            self(0, self.format_pos(info, msg))
+            self._log.error(self.format_pos(info, msg))
 
-        elif kind == "warning":
-            self(0, self.format_pos(info, text))
+#        elif kind == "warning":
+#            self._log.warning(self.format_pos(info, text))
 
     def error (self, text, **info):
         self.display(kind="error", text=text, **info)
     def warn (self, what, **where):
-        self(0, self.format_pos(where, what))
+        self._log.warning(self.format_pos(where, what))
     def progress (self, what, **where):
-        self(1, self.format_pos(where, what + "..."))
+        self._log.info(self.format_pos(where, what + "..."))
     def info (self, what, **where):
-        self(2, self.format_pos(where, what))
+        self._log.info(self.format_pos(where, what))
     def log (self, what, **where):
-        self(3, self.format_pos(where, what))
+        self._log.debug(self.format_pos(where, what))
     def debug (self, what, **where):
-        self(4, self.format_pos(where, what))
+        self._log.debug(self.format_pos(where, what))
 
     def format_pos (self, where, text):
         """

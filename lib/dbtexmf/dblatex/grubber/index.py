@@ -41,6 +41,7 @@ occur.
 import os
 from os.path import *
 import re, string
+import subprocess
 
 from msg import _, msg
 from plugins import TexModule
@@ -150,9 +151,8 @@ class Index(TexModule):
 #        if self.doc.env.execute(cmd, env):
 #            msg.error(_("could not make index %s") % self.target)
 #            return 1
-        cmd = ['"'+c+'"' for c in cmd]
         msg.debug(" ".join(cmd))
-        rc = os.system(" ".join(cmd))
+        rc = subprocess.call(cmd)
         if (rc != 0):
             msg.error(_("could not make index %s") % self.target)
             return 1
