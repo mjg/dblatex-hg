@@ -170,7 +170,7 @@ class LogParser:
                 if m:
                     parsing = 0
                     skipping = 1
-                    pdfTeX = line.find("pdfTeX warning") != -1
+                    pdfTeX = error.find("pdfTeX warning") != -1
                     if (pdfTeX and warnings) or (errors and not pdfTeX):
                         if pdfTeX:
                             d = {
@@ -179,7 +179,7 @@ class LogParser:
                                 "text": error[error.find(":")+2:]
                             }
                         else:
-                            d =    {
+                            d = {
                                 "kind": "error",
                                 "text": error
                             }
