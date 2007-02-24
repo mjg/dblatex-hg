@@ -37,6 +37,13 @@ other cross-reference link in the document.</entry>
 </row>
 <!-- -->
 <row>
+<entry>calloutlist.style</entry>
+<entry>Defines how the callout list items are displayed. The value must be some
+valid enumitem description list options.</entry>
+<entry>"leftmargin=1cm,style=sameline"</entry>
+</row>
+<!-- -->
+<row>
 <entry>citation.default.style</entry>
 <entry>Default natbib citation style to apply when natbib is used. See <xref
 linkend="sec-natbib"/>.</entry>
