@@ -10,6 +10,7 @@
 <xsl:param name="co.linkends.show" select="'1'"/>
 <xsl:param name="callout.markup.circled" select="'1'"/>
 <xsl:param name="callout.linkends.hot" select="'1'"/>
+<xsl:param name="calloutlist.style" select="'leftmargin=1cm,style=sameline'"/>
 
 <!-- Prerequesite: the following latex macros are defined:
      * \co{text}
@@ -207,6 +208,12 @@
   <xsl:param name="rnode" select="/"/>
   <xsl:apply-templates select="title"/>
   <xsl:text>&#10;\begin{description}&#10;</xsl:text>
+  <xsl:if test="$calloutlist.style != ''">
+    <xsl:text>[</xsl:text>
+    <xsl:value-of select="$calloutlist.style"/>
+    <xsl:text>]</xsl:text>
+  </xsl:if>
+  <xsl:text>&#10;</xsl:text>
   <xsl:apply-templates select="callout" mode="item">
     <xsl:with-param name="rnode" select="$rnode"/>
   </xsl:apply-templates>

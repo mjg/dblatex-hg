@@ -55,12 +55,16 @@
 </xsl:template>
 
 <xsl:template name="title.and.label">
-  <xsl:apply-templates select="title" mode="toc"/>
-  <xsl:text>{</xsl:text> 
-  <xsl:apply-templates select="title" mode="content"/>
-  <xsl:text>}&#10;</xsl:text> 
+  <xsl:apply-templates select="title" mode="format.title"/>
   <xsl:call-template name="label.id"/>
   <xsl:apply-templates select="title" mode="foottext"/>
+</xsl:template>
+
+<xsl:template match="title" mode="format.title">
+  <xsl:apply-templates select="." mode="toc"/>
+  <xsl:text>{</xsl:text> 
+  <xsl:apply-templates select="." mode="content"/>
+  <xsl:text>}&#10;</xsl:text> 
 </xsl:template>
 
 <!-- optionally the TOC entry text can be different from the actual

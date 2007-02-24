@@ -17,7 +17,7 @@
   <xsl:if test="title">
     <xsl:text>\let\savabstractname=\abstractname&#10;</xsl:text>
     <xsl:text>\def\abstractname{</xsl:text>
-    <xsl:value-of select="title"/>
+    <xsl:apply-templates select="title"/>
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:text>\begin{abstract}&#10;</xsl:text>
@@ -28,6 +28,13 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="abstract/title"/>
+<xsl:template match="abstract/title">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<!-- Just render the content -->
+<xsl:template match="highlights">
+  <xsl:apply-templates/>
+</xsl:template>
 
 </xsl:stylesheet>

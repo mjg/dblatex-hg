@@ -92,11 +92,8 @@
 </xsl:template>
 
 <xsl:template match="table/title">
-  <xsl:text>&#10;\caption{</xsl:text>
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="."/>
-  </xsl:call-template>
-  <xsl:text>}&#10;</xsl:text>
+  <xsl:text>&#10;\caption</xsl:text>
+  <xsl:apply-templates select="." mode="format.title"/>
   <xsl:call-template name="label.id">
     <xsl:with-param name="object" select="parent::table"/>
   </xsl:call-template>
@@ -143,15 +140,26 @@
 </xsl:template>
 
 <xsl:template match="table/title" mode="longtable">
-  <xsl:variable name="s">
-    <xsl:call-template name="normalize-scape">
-      <xsl:with-param name="string" select="."/>
-    </xsl:call-template>
+  <xsl:variable name="toc">
+    <xsl:apply-templates select="." mode="toc"/>
   </xsl:variable>
-  <xsl:text>\caption[</xsl:text>
-  <xsl:value-of select="$s"/>
-  <xsl:text>]{</xsl:text>
-  <xsl:value-of select="$s"/>
+  <xsl:variable name="content">
+    <xsl:apply-templates select="." mode="content"/>
+  </xsl:variable>
+  <xsl:text>\caption</xsl:text>
+  <!-- The title in the TOC -->
+  <xsl:choose>
+  <xsl:when test="$toc != ''">
+    <xsl:value-of select="$toc"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>[{</xsl:text>
+    <xsl:value-of select="$content"/>
+    <xsl:text>}]</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$content"/>
   <xsl:call-template name="label.id">
     <xsl:with-param name="object" select="parent::table"/>
   </xsl:call-template>
