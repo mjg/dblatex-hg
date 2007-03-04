@@ -18,7 +18,8 @@
   <xsl:otherwise>
     <xsl:variable name="low.int">
       <xsl:call-template name="char-to-int">
-        <xsl:with-param name="char" select="substring($hex, string-length($hex))"/>
+        <xsl:with-param name="char"
+                        select="substring($hex, string-length($hex))"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="high.int">
@@ -54,7 +55,8 @@
   <xsl:otherwise>
     <xsl:variable name="right">
       <xsl:call-template name="hex-to-rate">
-        <xsl:with-param name="hex" select="substring($hex, string-length($hex)-1)"/>
+        <xsl:with-param name="hex"
+                        select="substring($hex, string-length($hex)-1)"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="left">
