@@ -233,7 +233,7 @@
         </term>
         <listitem>
           <simpara>
-            An <application>XSL</application> user configuration file to use.
+            An <application>XSL</application> user stylesheet to use.
             <phrase output="manual">See <xref linkend="sec-param"/>.</phrase>
           </simpara>
         </listitem>
@@ -248,6 +248,22 @@
           <simpara>
             Set an <application>XSL</application> parameter from command line.
             <phrase output="manual">See <xref linkend="sec-param-value"/>.</phrase>
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-s <replaceable>latex_style</replaceable></option></term>
+        <term>
+          <option>--texstyle=<replaceable>latex_style</replaceable></option>
+        </term>
+        <listitem>
+          <simpara>
+            Latex style to apply. It can be a package name, or directly a latex
+            package path. A package name must be without a directory
+            path and without the '.sty' extension. On the contrary,
+            a full latex package path can contain a directory path, but must ends with
+            the '.sty' extension.
+            <phrase output="manual">See <xref linkend="sec-custom-latex"/>.</phrase>
           </simpara>
         </listitem>
       </varlistentry>
@@ -388,6 +404,11 @@
     <para>
       To use the db2latex output style:
       <screen>dblatex -T db2latex myfile.xml</screen>
+    </para>
+    <para>
+      To apply your own latex style:
+      <screen>dblatex -s mystyle myfile.xml
+dblatex -s /path/to/mystyle.sty myfile.xml</screen>
     </para>
   </refsect1>
 

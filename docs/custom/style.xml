@@ -95,32 +95,39 @@ linkend="sec-specs"/>.
 <sect2><title>Adding a New Formatting Style</title>
 <para>To add a new formatting style, do the following steps:</para>
 <procedure>
+<step><para>Let's create the style directores that will contain all the specific
+data. We choose to put them under the default <command>dblatex</command>
+user configuration directory.</para>
+<programlisting><![CDATA[
+$ mkdir -p $HOME/.dblatex/mystyle/latex
+$ mkdir -p $HOME/.dblatex/mystyle/xsl
+]]></programlisting>
+<para>Note that you could choose another configuration directory (see <xref
+linkend="sec-conf-path"/> for more details).</para>
+</step>
 <step><para>Create the latex stylesheets you need. It must define the expected DocBook
 interface and include some core definitions from the default latex
-stylesheets (cf. <xref linkend="sec-custom-latex"/>).</para></step>
-<step><para>Put the latex stylesheets under a directory located under
-<filename>contrib/</filename>.</para>
+stylesheets (cf. <xref linkend="sec-custom-latex"/>). Create also your XSL
+stylesheet if necessary.</para></step>
+<step><para>Put these files under the appropriate directories:</para>
 <programlisting><![CDATA[
-$ mkdir latex/contrib/mystyle
-$ mv mytexstyle.sty latex/contrib/mystyle
+$ mv mytexstyle.sty $HOME/.dblatex/mystyle/latex/.
+$ mv param.xsl $HOME/.dblatex/mystyle/xsl/.
 ]]></programlisting>
 </step>
-<step><para>If needed, create an XSL parameter file (e.g.
-<filename>param.xsl</filename>) that tunes the XSL production, and
-put it under <filename>mystyle/</filename>.
-</para></step>
-<step><para>Create a specification file under the directory
-<filename>specs/</filename>. The specification file must point to the new latex
-stylesheet, and give the specific parameters. Example:</para>
+<step><para>Create a configuration file under the directory
+<filename>$HOME/.dblatex</filename>. The specification file must point to the new
+latex stylesheet, and give the specific parameters. Example:</para>
 <programlisting><![CDATA[
-$ cat latex/specs/mystyle.specs
+$ cat $HOME/.dblatex/mystyle.conf
 #
-# Dblatex spec file for my new style
+# Dblatex config file for my new style.
+# Note that the directories are relative to mystyle.conf
 #
-TexInputs: ../contrib/mystyle//
+TexInputs: mystyle/latex//
 TexStyle:  mytexstyle
-XslParam: ../contrib/mystyle/param.xsl
-Options:   -b pdftex
+XslParam:  mystyle/param.xsl
+Options:   -f fig
 ]]></programlisting>
 </step>
 <step><para>That's it. Try to compile your document with your style, and check the
@@ -130,7 +137,6 @@ $ dblatex -T mystyle file.xml
 ]]></programlisting>
 </step>
 </procedure>
-
 
 </sect2>
 </sect1>

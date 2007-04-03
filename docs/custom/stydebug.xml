@@ -10,7 +10,7 @@ LaTeX style. So, how to debug it when used with dblatex?</para>
 When the compilation is done, the temporary working directory will not be
 removed.
 <programlisting><![CDATA[
-$ dblatex --style mytexstyle -d file.xml
+$ dblatex --texstyle=./mystyle.sty -d file.xml
 ...
 /tmp/tpub-ben-99629 is not removed
 ]]></programlisting>

@@ -19,7 +19,7 @@
 <row>
 <entry>TexStyle</entry>
 <entry>Latex package name</entry>
-<entry>--style</entry>
+<entry>--texstyle</entry>
 <entry>Defines the LaTeX style package to use.</entry>
 </row>
 <row>

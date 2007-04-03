@@ -34,9 +34,9 @@
   All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs"/>) to create a new tool dedicated to your needs.
  </para>
   <sect1 id="sec-param">
-   <title>Configuration Parameters</title>
+   <title>XSL Parameters</title>
   <para>
-   The PDF rendering can be customised by using some configuration parameters.
+   The PDF rendering can be customised by using some XSL configuration parameters.
    The available configuration parameters are the following:
   </para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="param.xml"/>
@@ -82,15 +82,8 @@ must be some valid options passed to the \includegraphics command.</para>
 </example>
   </sect2>
   </sect1>
-  <sect1 id="sec-param-stylesheet">
-   <title>Configuration Stylesheet</title>
-  <para>
-   The parameters can be stored in an XSL configuration stylesheet. The configuration file is specified by using the option <option>-p <replaceable>custom.xsl</replaceable></option>. An example of configuration stylesheet is given with the manual:
-  </para>
-  <programlisting><textobject><textdata
-  fileref="myparam.xsl"/></textobject></programlisting>
-  </sect1>
-  <sect1 id="sec-param-value"><title>Setting Command line Parameters</title>
+
+<sect1 id="sec-param-value"><title>Setting Command line Parameters</title>
   <para>You can set some XSL parameters directly from the command
   line without creating a configuration parameter stylesheet, with the
   <option>-P <replaceable>parameter=value</replaceable></option> option.</para>
@@ -99,24 +92,54 @@ must be some valid options passed to the \includegraphics command.</para>
 <![CDATA[  dblatex -P latex.hyperparam=colorlinks,linkcolor=blue myfile.xml
 ]]></programlisting>
   </para>
-  </sect1>
-  <sect1 id="sec-custom-stylesheet">
-   <title>Customized Stylesheets</title>
+</sect1>
+
+<sect1>
+<title>XSL User Stylesheet</title>
+  <para>You can provide your own XSL stylesheet to set some of the XSL parameters,
+  and/or to override some of the dblatex XSL templates. The user stylesheet is
+  specified by using the option
+  <option>-p <replaceable>custom.xsl</replaceable></option>.</para>
+
+<sect2 id="sec-param-stylesheet">
+<title>Changing the XSL parameter values</title>
   <para>
-   If one needs to change some of the translations done by the XSL stylesheets, it is possible to provide user stylesheets to override the templates. To do this, write the stylesheets (e.g. mystyle.xsl) and include them in the configuration file such as shown by the following example.
+   The parameters can be stored in a user defined XSL stylesheet. An example of
+   configuration stylesheet is given with this manual:
   </para>
-<example><title>Using a customized stylesheet in a configuration file</title>
+  <programlisting><textobject><textdata
+  fileref="myparam.xsl"/></textobject></programlisting>
+  </sect2>
+  <sect2 id="sec-custom-stylesheet">
+   <title>Overriding some templates</title>
+  <para>
+   You can directly put the overriding templates in your XSL stylesheet, but do not
+   try to import the default dblatex stylesheets in it: it is automatically done by
+   the tool. So, just focus on the template to override and dblatex will ensure
+   that your definitions will get precedence over the dblatex ones.
+  </para>
+  <para>
+  You can of course split your templates in several files, and import each of
+  them in the main user stylesheet by calling <literal>xsl:import</literal>.
+  </para>
+<example><title>Overriding templates</title>
   <programlisting>
 <![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
-]]><![CDATA[<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
-]]><![CDATA[ 
-]]><![CDATA[<!-- Let's import our own XSL to override the default behaviour. 
-]]><![CDATA[ -->
-]]><![CDATA[<xsl:import href="mystyle.xsl"/>
-]]><![CDATA[
-]]><![CDATA[</xsl:stylesheet>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+ 
+<!-- Let's import our own XSL to override the default behaviour. -->
+<xsl:import href="mystyle.xsl"/>
+
+<!-- Let's patch directly a template here -->
+<xsl:template match="article" mode="docinfo">
+  <xsl:apply-imports/>
+  <xsl:text>\let\mymacro=\DBKrelease</xsl:text>
+</xsl:template>
+
+</xsl:stylesheet>
 ]]>  </programlisting>
 </example>
+  </sect2>
   </sect1>
   <sect1 id="sec-custom-latex">
    <title>Customized LaTeX style</title>
@@ -141,8 +164,21 @@ must be some valid options passed to the \includegraphics command.</para>
   </listitem>
   </itemizedlist>
   <para>
-   The latex style file to use is specified by using the option <option>--style <replaceable>latex_style</replaceable></option>. An example of a simple LaTeX DocBook style is provided in the package.
+   The latex style file to use is specified by using the option <option>--texstyle <replaceable>latex_style</replaceable></option>. An example of a simple LaTeX DocBook style is provided in the package.
   </para>
+  <para>
+   The <option>--texstyle <replaceable>latex_style</replaceable></option> option
+   accepts a package name (no path and no <filename>.sty</filename> extension) or a
+   full style file path. If a full path is used,
+   the filename must ends with <filename>.sty</filename>.
+   </para>
+   <programlisting>
+# Give a package name and assume its path is already in TEXINPUTS
+dblatex --texstyle=mystyle file.xml
+
+# Give the full package path. The TEXINPUTS is then updated by dblatex
+dblatex --texstyle=./mystyle.sty file.xml
+</programlisting>
    <sect2>
     <title>Package options</title>
    <para>A compliant LaTeX style package supports the following options. The options are
@@ -233,7 +269,7 @@ must be some valid options passed to the \includegraphics command.</para>
 </programlisting>
 </example>
   </sect2>
-  <sect2><title>Configuration Paths</title>
+  <sect2 id="sec-conf-path"><title>Configuration Paths</title>
   <para>By default <command>dblatex</command> tries to find the configuration files
   in the following paths, in respect of the order:</para>
   <orderedlist>
@@ -254,7 +290,7 @@ must be some valid options passed to the \includegraphics command.</para>
    All the customization queries are translated to the corresponding command line options. Thus, using several customization methods can be unconsistent because each of them override the same option with another value. 
   </para>
   <para>
-   For instance, you can specify the use of a specification file in which it is said to use a latex style (parameter TexStyle) and explicitely use the <option>--style</option> command line option. So, what is the behaviour?
+   For instance, you can specify the use of a specification file in which it is said to use a latex style (parameter TexStyle) and explicitely use the <option>--texstyle</option> command line option. So, what is the behaviour?
   </para>
   <para>
    The options order is the following:
@@ -276,7 +312,7 @@ must be some valid options passed to the \includegraphics command.</para>
    </para>
   </listitem>
   </itemizedlist>
-<example><title>Customization Order</title>
+<example><title>Customization Precedence</title>
   <para>
    Let's consider the specification file containing the following parameters:
   </para>
@@ -289,7 +325,7 @@ must be some valid options passed to the \includegraphics command.</para>
    And now the command line:
   </para>
   <programlisting>
-<![CDATA[dblatex -b dvips -p file1.xsl -p file2.xsl -S file.specs --style mystyle2 mydoc.sgml
+<![CDATA[dblatex -b dvips -p file1.xsl -p file2.xsl -S file.specs -s mystyle2 mydoc.xml
 ]]>  </programlisting>
   <para>
    The setting used is the following:
@@ -307,7 +343,7 @@ must be some valid options passed to the \includegraphics command.</para>
   </listitem>
    <listitem>
    <para>
-   &ldquo;--style mystyle2&rdquo; override &ldquo;mystyle1&rdquo; set by the spec file.
+   &ldquo;-s mystyle2&rdquo; override &ldquo;mystyle1&rdquo; set by the spec file.
    </para>
   </listitem>
   </itemizedlist>
