@@ -22,6 +22,7 @@
 <xsl:include href="legalnotice.xsl"/>
 <xsl:include href="example.xsl"/>
 <xsl:include href="inlined.xsl"/>
+<xsl:include href="url.xsl"/>
 <xsl:include href="format.xsl"/>
 <xsl:include href="verbatim.xsl"/>
 <xsl:include href="verbatimco.xsl"/>
@@ -33,7 +34,7 @@
 <xsl:include href="lists.xsl"/>
 <xsl:include href="xref.xsl"/>
 <xsl:include href="lang.xsl"/>
-<xsl:include href="misc.xsl"/>
+<xsl:include href="preamble.xsl"/>
 <xsl:include href="main.xsl"/>
 <xsl:include href="version.xsl"/>
 <xsl:include href="param.xsl"/>
@@ -73,6 +74,6 @@
 
 <xsl:key name="id" match="*" use="@id|@xml:id"/>
 
-<xsl:strip-space elements="book article chapter title"/>
+<xsl:strip-space elements="book article articleinfo chapter title"/>
 
 </xsl:stylesheet>

@@ -16,8 +16,8 @@
 %%      different approach which will work properly in conjunction with
 %%      bigstrut.sty.
 %% V1.2a was modified by Piet van Oostrum <piet@cs.uu.nl> to use \vskip
-%%    instead of \raise in positioning, avoiding making rows too high
-%%    when the adjustment is large.
+%%      instead of \raise in positioning, avoiding making rows too high
+%%      when the adjustment is large.
 %% V1.3 was modified by Piet van Oostrum to work properly in a p{} column
 %%      (\leavevmode added)
 %% V1.4 was modified by Piet van Oostrum to check for the special case that
@@ -32,7 +32,10 @@
 %%
 % Make an entry that will span multiple rows of a table.
 %
-% \multirowii{nrows}[bigstruts]{width}[fixup]{text}
+% \multirowii[pos]{nrows}[bigstruts]{width}[fixup]{text}
+%
+% pos specifies the vertical position of text. 'p' at the top of the box,
+%       'm' in the middle (default), 'b' at the bottom.
 %
 % nrows is the number of rows to span.  It's up to you to leave the other
 %       rows empty, or the stuff created by \multirowii will over-write it.
@@ -44,6 +47,7 @@
 %       is the total number of uses of \bigstrut within the rows being
 %       spanned.  Count 2 uses for each \bigstrut, 1 for each \bigstrut[x]
 %       where x is either t or b.  The default is 0.
+%
 % width is the width to which the text is to be set, or * to indicate that
 %       the text argument's natural width is to be used.
 %
@@ -135,7 +139,16 @@
 %  \end{tabular}
 %
 \def\multirowiisetup{\raggedright\vskip1pt} 
-\def\multirowii#1{\relax\@ifnextchar
+\def\vfillsetup#1{%
+  \if#1m\let\vfillup=\vfill\let\vfilldn=\vfill\else%
+  \if#1p\let\vfillup=\relax\let\vfilldn=\vfill\else%
+  \if#1b\let\vfillup=\vfill\let\vfilldn=\relax\else%
+  \let\vfillup=\vfill\let\vfilldn=\vfill \fi\fi\fi}
+
+\def\multirowii{\@ifnextchar [{\@multirowiiv}{\vfillsetup{m}\@multirowiim}}
+\def\@multirowiiv[#1]{\vfillsetup{#1}\@multirowiim}
+
+\def\@multirowiim#1{\relax\@ifnextchar
   [{\@multirowii{#1}}{\@multirowii{#1}[0]}}
 \def\@multirowii#1[#2]#3{\@ifnextchar [{\@xmultirowii{#1}[#2]{#3}}%
   {\@xmultirowii{#1}[#2]{#3}[0pt]}}
@@ -144,8 +157,8 @@
   \advance\@tempdima\@tempcnta\dp\@arstrutbox
   \ifnum\@tempcnta<0\@tempdima=-\@tempdima\fi
   \advance\@tempdima#2\bigstrutjot
-  \if*#3\setbox0\vtop to \@tempdima{\vfill\multirowiisetup
-    \hbox{\strut#5\strut}\vfill}%
+  \if*#3\setbox0\vtop to \@tempdima{\vfillup\multirowiisetup
+    \hbox{\strut#5\strut}\vfilldn}%
     \ht0\z@\dp0\z@
   \else
     \dimen0=#3\relax
@@ -169,7 +182,7 @@
       \ifdim#3<\z@
         \setbox0\vbox{}%
       \fi
-      \setbox0\vtop to \@tempdima{\vfill\unvbox0\vfill}%
+      \setbox0\vtop to \@tempdima{\vfillup\unvbox0\vfilldn}%
       \ht0\z@\dp0\z@
     \fi
   \fi

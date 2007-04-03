@@ -192,10 +192,10 @@
 <xsl:template match="filename">
   <xsl:choose>
   <xsl:when test="$filename.as.url='1' and not(ancestor::title)">
-    <!-- Guess hyperref is always used now. No escaping needed here -->
-    <xsl:text>\nolinkurl{</xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>}</xsl:text>
+    <!-- Guess hyperref is always used now. -->
+    <xsl:call-template name="nolinkurl-output">
+      <xsl:with-param name="url" select="."/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="inline.monoseq"/>

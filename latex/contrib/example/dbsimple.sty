@@ -7,11 +7,9 @@
 % The defined options
 \DeclareOption{hyperlink}{ \def\DBKhyperlink{yes} }
 \DeclareOption{nohyperlink}{ \def\DBKhyperlink{no} }
-\DeclareOption{article}{ \def\DBKisarticle{yes} }
-\DeclareOption{report}{ \def\DBKisarticle{no} }
 
 % Default values
-\ExecuteOptions{nohyperlink,report}
+\ExecuteOptions{nohyperlink}
 
 % If defined, process the options
 \ProcessOptions\relax

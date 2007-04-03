@@ -24,6 +24,20 @@ def texinputs_parse(strpath, basedir=None):
         paths.append(d)
     return paths
 
+def texstyle_parse(texstyle):
+    sty = os.path.basename(texstyle)
+    dir = os.path.dirname(texstyle)
+    if sty.endswith(".sty"):
+        path = os.path.realpath(dir)
+        sty = sty[:-4]
+        if not(os.path.isfile(texstyle)):
+            raise ValueError("Latex style '%s' not found" % texstyle)
+    elif (dir):
+        raise ValueError("Invalid latex style path: missing .sty")
+    else:
+        path = ""
+    return ("latex.style=%s" % sty, path)
+
 
 class OptMap:
     def __init__(self, option):

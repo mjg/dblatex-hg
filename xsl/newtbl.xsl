@@ -663,7 +663,18 @@
         </xsl:call-template>
         <xsl:text>}</xsl:text>
       </xsl:if>
-      <xsl:text>\multirowii{</xsl:text>
+      <xsl:text>\multirowii</xsl:text>
+      
+      <!-- Vertical alignment done by custom multirow -->
+      <xsl:if test="@valign and @valign!=''">
+        <xsl:choose>
+        <xsl:when test="@valign = 'top'"><xsl:text>[p]</xsl:text></xsl:when>
+        <xsl:when test="@valign = 'bottom'"><xsl:text>[b]</xsl:text></xsl:when>
+        <xsl:otherwise><xsl:text>[m]</xsl:text></xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+      
+      <xsl:text>{</xsl:text>
       <xsl:value-of select="@morerows + 1"/>
       <xsl:choose>
         <xsl:when test="not($autowidth)">

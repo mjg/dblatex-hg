@@ -11,7 +11,7 @@ import urllib
 import glob
 from optparse import OptionParser
 
-from dbtexmf.core.confparser import DbtexConfig, texinputs_parse
+from dbtexmf.core.confparser import DbtexConfig, texinputs_parse, texstyle_parse
 from dbtexmf.xslt import xslt
 from dbtexmf.core.logger import logger
 
@@ -71,6 +71,7 @@ class DbTex:
         self.xslmain = os.path.join(self.topdir, "xsl", "docbook.xsl")
         self.xsllist = os.path.join(self.topdir, "xsl", "common", "mklistings.xsl")
         self.texdir = os.path.join(self.topdir, "texstyle")
+        self.texlocal = ""
         self.confdir = os.path.join(self.topdir, "confstyle")
 
     def update_texinputs(self):
@@ -82,6 +83,9 @@ class DbTex:
             texinputs = sep + "%s%s" % (texpaths, texinputs)
         else:
             texinputs = sep + "%s%s%s" % (texpaths, sep, texinputs)
+        # Texlocal has precedence over the standard (and added) paths
+        if self.texlocal:
+            texinputs = self.texlocal + "//" + sep + texinputs
         os.environ["TEXINPUTS"] = texinputs
 
     def set_xslt(self, xsltmod=None):
@@ -307,6 +311,10 @@ class DbTexCommand:
         parser.add_option("-P", "--param", dest="xslparams",
                           action="append", metavar="PARAM=VALUE",
                           help="Set an XSL parameter value from command line")
+        parser.add_option("-s", "--texstyle", metavar="STYFILE",
+                          help="Latex style to apply. It can be a package name, or "
+                               "directly a package path that must ends with "
+                               "'.sty'")
         parser.add_option("-t", "--type", dest="format",
                           help="Output format. Available formats:\n"
                                "tex, dvi, ps, pdf (default=pdf)")
@@ -378,6 +386,14 @@ class DbTexCommand:
         if options.bst_paths:
             run.bst_paths += [os.path.realpath(p) for p in options.bst_paths]
 
+        if options.texstyle:
+            try:
+                xslparam, texpath = texstyle_parse(options.texstyle)
+            except Exception, e:
+                failed_exit("Error: %s" % e)
+            run.xslparams.append(xslparam)
+            if texpath: run.texinputs.append(texpath)
+
         if options.texinputs:
             for texinputs in options.texinputs:
                 run.texinputs += texinputs_parse(texinputs)
@@ -412,7 +428,7 @@ class DbTexCommand:
                     os.mkdir(options.tmpdir)
                 except Exception, e:
                     failed_exit("Error: %s" % e)
-            run.tmpdir_user = options.tmpdir
+            run.tmpdir_user = os.path.abspath(options.tmpdir)
 
     def get_config_paths(self):
         # Allows user directories where to look for configuration files

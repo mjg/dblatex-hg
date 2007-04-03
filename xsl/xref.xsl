@@ -88,7 +88,13 @@
           <xsl:call-template name="string-replace">
             <xsl:with-param name="string">
               <xsl:call-template name="string-replace">
-                <xsl:with-param name="string" select="@url"/>
+                <xsl:with-param name="string">
+                  <xsl:call-template name="string-replace">
+                    <xsl:with-param name="string" select="@url"/>
+                    <xsl:with-param name="from" select="'%'"/>
+                    <xsl:with-param name="to" select="'\%'"/>
+                  </xsl:call-template>
+                </xsl:with-param>
                 <xsl:with-param name="from" select="'#'"/>
                 <xsl:with-param name="to" select="'\#'"/>
               </xsl:call-template>

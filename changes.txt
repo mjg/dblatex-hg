@@ -3,7 +3,6 @@
 x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * Patch biblio à intégrer (~/archives/tmp/biblio_patch)
 * Bug table
-x * Faire <annotation>
 * Problèmes table in example
 * \caption{\protect\rule{0cm}{2cm} blablabla}
 * Faire \input@path dans rawtex (évite le _tmp)
@@ -37,10 +36,59 @@ x * Faire <annotation>
 * titre dans les procédures (de.xml)
 * <varlistentry lang="de"><term lang="de"><listitem><note lang="de">
 * support de korean, japan, etc.
-* log python global (+ niveaux de debug)
 * <set> avec attachfile
-1617460
+* \usepackage[T1,T2A,T2D]{fontenc}
+  \usepackage{ucs}
+  \usepackage[utf8x]{inputenc}
+  \def\hyperparamadd{pdfcreator=DBLaTeX-devel}
+  \usepackage[french]{babel}
+  \usepackage[hyperlink]{docbook}
+  \lstset{inputencoding=utf8x, extendedchars=\true}
+* Bug #1642442
+  - \author{John MaddockPaul A. BristowXiaogang Zhang}
+  - Missing character &#x3a0; $\Pi
+    Missing character &#x3c6; $\varphi
+    Missing character &#x393; $\Gamma
+    Missing character &#x3c7; $\chi
+    Missing character &#x200b;
 
+Release 0.2.5:
+--------------
+- Add the -s, --texstyle option.
+- Preamble handling refactored. The expected benefit is to make dblatex more
+  customizable.
+- Drop the docbook style 'article' or 'report' option. It is up to the style to
+  find out if it is an article or not (if needed).
+- Support @valign combined with @morerow.
+- Better URL handling in tables (special characters like '%').
+- Better dblatex package precedence, to ensure that the dblatex specific
+  packages have always precedence over the system wide package.
+- Fix use of compact itemizes in french.
+- A small synopsis bug fix.
+
+Release 0.2.4:
+--------------
+
+* Minor improvements:
+  - Basic DocBook 5 support (namespace stripping)
+  - More consistent console output (use of logging)
+  - Add general parser/encoding mechanism (to fix <programlisting> encoding troubles)
+  - Better <calloulist> item indentation. The calloutlist.style parameter is
+    provided to change the rendering.
+
+* Bug fixes:
+  - <releaseinfo> displayed in a biblioentry.
+  - draft.mode parameter more consistent.
+  - <biblioid> support in biblioentry.
+  - Fix regression bug (introduced in 0.2.3): ps building possible again
+  - Fix bug about image conversion combined with -bdvips
+  - Indexterm taken into account when in <refmeta>
+  - Use of subprocess instead of os.system() to have a portable latex compilation.
+  - Add -R0 to dvips to work with 5.95b (thanks to Andreas Hoenen)
+  - Fix URL UTF-8 to Latin1 encoding
+  - Fix bug in dumping latex errors when latex fails
+  - <programlisting> characters now encoded to Latin1
+  - Basic <highlights> support
 
 Release 0.2.3:
 --------------
@@ -53,8 +101,8 @@ Release 0.2.3:
   - Check the available XSLTs (xsltproc is not required if 4Suite
     is available) (SF Bug #1617458).
   - Avoid optional package dependency (unicode.sty)
-  - Add the --use-python-path to use the python interpreter
-    running setup.py, instead of relying on env to locate python
+  - Add the --use-python-path to use the path of the python interpreter that
+    runs setup.py, instead of relying on env to locate python
     (thanks to Max Horn, the Fink packager)
   - Fix the wrapper script building when --root is used
     (thanks to Max Horn, the Fink packager)
@@ -62,7 +110,7 @@ Release 0.2.3:
 * Minor changes:
   - When <releaseinfo> is set, but empty, the box in the header is removed.
   - Add doc.toc.show={0|1} to let user skip the TOC.
-  - Add draft.mode={'yes'|'no'} to print the <releaseinfo> content or not in the
+  - Add draft.mode={'yes'|'no'} to print or not the <releaseinfo> content in the
     header of each page (SF Request #1600886).
 
 * Bug fixes:

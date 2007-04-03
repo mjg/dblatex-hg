@@ -158,7 +158,11 @@
 }
 
 %% Define the babel setups in docbook
-\babelsetup{fr}{\NoAutoSpaceBeforeFDP}
+\babelsetup{fr}{%
+  \NoAutoSpaceBeforeFDP
+  % Avoid mess between enumitem and french redefinition
+  \FrenchItemizeSpacingfalse
+}
 
 \babelsetup{es}{%
   % Avoid enumitem to crash with spanish babel

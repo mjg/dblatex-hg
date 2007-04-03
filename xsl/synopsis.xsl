@@ -150,8 +150,10 @@
      ################ -->
 
 <xsl:template match="funcsynopsis">
+  <xsl:text>&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="funcsynopsisinfo">
@@ -163,7 +165,10 @@
   <xsl:if test="$funcsynopsis.style='kr'">
     <xsl:apply-templates select="./paramdef" mode="kr"/>
   </xsl:if>
-  <xsl:text>\newline&#10;</xsl:text>
+  <xsl:if test="following-sibling::*">
+    <xsl:text>\newline</xsl:text>
+  </xsl:if>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="funcdef">
