@@ -433,7 +433,7 @@
   <xsl:call-template name="cross-reference"/>
 </xsl:template>
 
-<xsl:template match="formalpara|refsection" mode="xref-to">
+<xsl:template match="formalpara|refsection|preface" mode="xref-to">
   <xsl:call-template name="title-link-to"/>
 </xsl:template>
 

@@ -245,7 +245,12 @@ class Install(install):
             for line in f:
                 line = line.split("%")[0]
                 m = re_sty.search(line)
-                if m: used_stys.append(m.group(1))
+                if m:
+                    p = m.group(1)
+                    try:
+                        used_stys.index(p)
+                    except:
+                        used_stys.append(p)
             f.close()
 
         # Now look if they are found
@@ -254,7 +259,7 @@ class Install(install):
         used_stys.sort()
 
         # Dirty...
-        for f in ("truncate", "elfonts"):
+        for f in ("truncate", "elfonts", "CJKutf8", "pinyin"):
             try:
                 used_stys.remove(f)
             except:

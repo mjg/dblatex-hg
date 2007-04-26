@@ -187,6 +187,10 @@
   </section>
 
   <section><title>Installation</title>
+  <section><title>Installing xsltproc</title>
+  <para>You can download the binaries and getting the installation instructions
+  from: <ulink url="http://www.zlatkovic.com/libxml.en.html"/>.</para>
+  </section>
   <section><title>Installing MiKTeX</title>
   <para>Install the minimal distribution, and add the following packages: 
 changebar,

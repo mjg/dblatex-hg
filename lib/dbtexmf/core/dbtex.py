@@ -24,7 +24,10 @@ def suffix_replace(path, oldext, newext=""):
         return (path+newext)
 
 def path_to_uri(path):
-    return urllib.pathname2url(path)
+    if os.name == 'nt':
+        return 'file:///' + urllib.pathname2url(path).replace('|', ':', 1)
+    else:
+        return urllib.pathname2url(path)
 
 
 class DbTex:
@@ -51,6 +54,7 @@ class DbTex:
         self.bst_paths = []
         self.texinputs = []
         self.texbatch = 1
+        self.texpost = ""
         self.fig_format = ""
         self.backend = ""
 
@@ -187,6 +191,7 @@ class DbTex:
         self.binfile = self.basefile + "." + self.format
         if self.backend:
             self.runtex.set_backend(self.backend)
+        self.runtex.texpost = self.texpost
         self.runtex.set_fig_paths([self.inputdir] + self.fig_paths)
         self.runtex.set_bib_paths([self.inputdir] + self.bib_paths,
                                   [self.inputdir] + self.bst_paths)
@@ -264,6 +269,7 @@ class DbTex:
 
 def failed_exit(msg, rc=1):
     print >>sys.stderr, (msg)
+    raise
     sys.exit(rc)
 
 
@@ -311,6 +317,11 @@ class DbTexCommand:
         parser.add_option("-P", "--param", dest="xslparams",
                           action="append", metavar="PARAM=VALUE",
                           help="Set an XSL parameter value from command line")
+        parser.add_option("-r", "--texpost", metavar="SCRIPT",
+                          help="Script called at the very end of the tex "
+                               "compilation. Its role is to modify the tex file "
+                               "or one of the compilation file before the last "
+                               "round.")
         parser.add_option("-s", "--texstyle", metavar="STYFILE",
                           help="Latex style to apply. It can be a package name, or "
                                "directly a package path that must ends with "
@@ -415,6 +426,12 @@ class DbTexCommand:
             if not(os.path.isfile(xsluser)):
                 failed_exit("Error: '%s' does not exist" % options.xsl_user)
             run.xsluser = xsluser
+
+        if options.texpost:
+            path = os.path.realpath(options.texpost)
+            if not(os.path.isfile(path)):
+                failed_exit("Error: '%s' does not exist" % options.texpost)
+            run.texpost = path
 
         if options.no_external:
             run.unset_flags(run.USE_MKLISTINGS)

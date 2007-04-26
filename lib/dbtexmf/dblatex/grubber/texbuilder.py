@@ -6,6 +6,8 @@ LaTeX document building system for Grubber.
 This module is specific to Grubber and provides a class that encapsulates some of
 the rubber internals.
 """
+import subprocess
+import os
 from msg import _, msg
 from maker import Maker
 from latex import Latex
@@ -27,6 +29,8 @@ class LatexBuilder:
         self.format = "pdf"
         self.index_style = ""
         self.batch = 1
+        self.encoding = "latin-1"
+        self.texpost = ""
 
     def set_format(self, format):
         # Just record it
@@ -40,6 +44,7 @@ class LatexBuilder:
 
     def compile(self, source):
         self.tex.batch = self.batch
+        self.tex.encoding = self.encoding
         self.tex.set_source(source)
         self.tex.prepare()
 
@@ -61,6 +66,21 @@ class LatexBuilder:
         rc = self.maker.make()
         if rc != 0:
             raise OSError("%s compilation failed" % self.tex.program)
+
+        # Post process script to call?
+        if not(self.texpost):
+            return
+
+        os.environ["LATEX"] = self.tex.program
+        rc = subprocess.call([self.texpost, source])
+        if rc == 1:
+            return
+        if rc != 0:
+            raise OSError("%s texpost failed" % self.texpost)
+
+        rc = self.maker.make(force=1)
+        if rc != 0:
+            raise OSError("%s post compilation failed" % self.tex.program)
 
     def clean(self):
         self.tex.clean()

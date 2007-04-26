@@ -115,6 +115,9 @@ class Latex(Depend):
         self.parser.parse(f)
         f.close()
 
+    def force_run(self):
+        self.run(force=1)
+
     def run(self, force=0):
         """
         Run the building process until the last compilation, or stop on error.

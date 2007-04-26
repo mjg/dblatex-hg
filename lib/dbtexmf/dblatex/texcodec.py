@@ -53,6 +53,12 @@ class TexCodec:
         self._errors = errors
         self._decode = codecs.getdecoder(input_encoding)
         self._encode = codecs.getencoder(output_encoding)
+
+        # No different output encoding expected?
+        if input_encoding == output_encoding:
+            self.charmap = {}
+            return
+
         if not(tex_handler_installed.has_key(self._errors)):
             f = self.build_error_func(pre, post, errors)
             codecs.register_error(self._errors, f)

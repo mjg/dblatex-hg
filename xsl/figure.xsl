@@ -46,11 +46,8 @@
 </xsl:template>
 
 <xsl:template match="figure/title">
-  <xsl:text>\caption{</xsl:text>
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="."/>
-  </xsl:call-template>
-  <xsl:text>}&#10;</xsl:text>
+  <xsl:text>\caption</xsl:text>
+  <xsl:apply-templates select="." mode="format.title"/>
   <xsl:call-template name="label.id">
     <xsl:with-param name="object" select="parent::figure"/>
   </xsl:call-template>

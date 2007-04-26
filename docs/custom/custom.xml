@@ -179,6 +179,18 @@ dblatex --texstyle=mystyle file.xml
 # Give the full package path. The TEXINPUTS is then updated by dblatex
 dblatex --texstyle=./mystyle.sty file.xml
 </programlisting>
+<sect2><title>Reusing an existing LaTeX style</title>
+<para>You can either create your latex style from scratch, in respect of the
+interfaces described in the following sections, or you can simply reuse an
+already existing style and override what you want. The latter method is easier
+for small things to change.</para>
+<para>Here is an example of a style package reusing the default docbook
+style:</para>
+<example><title>Reused LaTeX style</title>
+<programlisting><textobject><textdata fileref="mystyle.sty"/></textobject>
+</programlisting>
+</example>
+</sect2>
    <sect2>
     <title>Package options</title>
    <para>A compliant LaTeX style package supports the following options. The options are
@@ -199,7 +211,7 @@ dblatex --texstyle=./mystyle.sty file.xml
    </sect2>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stydebug.xml"/>
   </sect1>
-  <sect1>
+  <sect1 id="sec-texpost">
    <title>Latex post process script</title>
   <para>
    Extra user actions can be processed on the latex file produced by the XSL stylesheets or on its temporary working files produced by the latex compilation. 
@@ -210,6 +222,36 @@ dblatex --texstyle=./mystyle.sty file.xml
   <para>
    The post process script is called just before the last latex compilation, and takes one parameter, the latex file compiled by the tool.
   </para>
+  <sect2><title>Post latex compilations</title>
+  <para>
+   The latex compilations done once the script is called depend on the return code
+   of the script:
+  <itemizedlist>
+   <listitem>
+   <para>
+   When the return code is 0, <command>dblatex</command> continues the
+   compilation as many times as necessary.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   When the return code is 1, no more compilation is done by dblatex.
+   This case is useful
+   if the script needs to control precisely the number of compilation to apply.
+   It is up to the script to perform the expected compilations.</para>
+   <para>To do so, the script can retrieve in the <envar>LATEX</envar> environment
+   variable the actual compiler used by <command>dblatex</command>.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   When the return code is another value, an error is raised to signal
+   a failed post process script execution.
+   </para>
+  </listitem>
+  </itemizedlist>
+  </para>
+  </sect2>
   </sect1>
   <sect1 id="sec-specs">
    <title>Dblatex Configuration File</title>

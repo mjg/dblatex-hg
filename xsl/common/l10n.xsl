@@ -23,7 +23,7 @@
   <xsl:param name="target" select="."/>
   <xsl:param name="xref-context" select="false()"/>
 
-  <xsl:variable name="language">
+  <xsl:variable name="mc-language">
     <xsl:choose>
       <xsl:when test="$l10n.gentext.language != ''">
         <xsl:value-of select="$l10n.gentext.language"/>
@@ -59,14 +59,43 @@
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="language" select="translate($mc-language,
+                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                                        'abcdefghijklmnopqrstuvwxyz')"/>
+
+  <xsl:variable name="adjusted.language">
+    <xsl:choose>
+      <xsl:when test="contains($language,'-')">
+        <xsl:value-of select="substring-before($language,'-')"/>
+        <xsl:text>_</xsl:text>
+        <xsl:value-of select="substring-after($language,'-')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$language"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:choose>
-    <xsl:when test="contains($language,'-')">
-      <xsl:value-of select="substring-before($language,'-')"/>
-      <xsl:text>_</xsl:text>
-      <xsl:value-of select="substring-after($language,'-')"/>
+    <xsl:when test="$l10n.xml/internationalization/localization[@language=$adjusted.language]">
+      <xsl:value-of select="$adjusted.language"/>
     </xsl:when>
+    <!-- try just the lang code without country -->
+    <xsl:when test="$l10n.xml/internationalization/localization[@language=substring-before($adjusted.language,'_')]">
+      <xsl:value-of select="substring-before($adjusted.language,'_')"/>
+    </xsl:when>
+    <!-- or use the default -->
     <xsl:otherwise>
-      <xsl:value-of select="$language"/>
+      <xsl:message>
+        <xsl:text>No localization exists for "</xsl:text>
+        <xsl:value-of select="$adjusted.language"/>
+        <xsl:text>" or "</xsl:text>
+        <xsl:value-of select="substring-before($adjusted.language,'_')"/>
+        <xsl:text>". Using default "</xsl:text>
+        <xsl:value-of select="$l10n.gentext.default.language"/>
+        <xsl:text>".</xsl:text>
+      </xsl:message>
+      <xsl:value-of select="$l10n.gentext.default.language"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

@@ -24,14 +24,16 @@ class VerbCodec(TexCodec):
 
 
 class VerbParser:
-    def __init__(self):
+    def __init__(self, output_encoding="latin-1"):
         self.start_re = re.compile(r"\\begin{lstlisting}")
         self.stop_re = re.compile(r"\\end{lstlisting}")
         self.esc_re = re.compile(r"escapeinside={([^}]*)}{([^}]*)}")
         self.block = ""
+        self.encoding = output_encoding
         self.default_esc_start = "<:"
         self.default_esc_stop = ":>"
-        self.default_codec = VerbCodec(self.default_esc_start, self.default_esc_stop)
+        self.default_codec = VerbCodec(self.default_esc_start, self.default_esc_stop,
+                                       output_encoding=output_encoding)
 
     def parse(self, line):
         if not(self.block):
@@ -81,7 +83,7 @@ class VerbParser:
 
         # Add the escape option if necessary
         if not(self.esc_start) and c.get_errors() != 0:
-            escopt = "escapeinside{%s}{%s}" % (c.pre, c.post)
+            escopt = "escapeinside={%s}{%s}" % (c.pre, c.post)
             if self.options:
                 if self.options[-2] != ",":
                     escopt = "," + escopt
@@ -102,7 +104,8 @@ class VerbParser:
         if (self.esc_start):
             if self.esc_start != self.default_esc_start:
                 return VerbCodec(self.esc_start, self.esc_stop,
-                                 "verbtex" + self.esc_start)
+                                 "verbtex" + self.esc_start,
+                                 output_encoding=self.encoding)
             else:
                 return self.default_codec
 
@@ -119,7 +122,8 @@ class VerbParser:
         if (s == self.default_esc_start):
             return self.default_codec
 
-        return VerbCodec(s, self.default_esc_stop, "verbtex" + s)
+        return VerbCodec(s, self.default_esc_stop, "verbtex" + s,
+                         output_encoding=self.encoding)
 
 
 if __name__ == "__main__":

@@ -252,6 +252,20 @@
         </listitem>
       </varlistentry>
       <varlistentry>
+        <term><option>-r <replaceable>script</replaceable></option></term>
+        <term>
+          <option>--texpost=<replaceable>script</replaceable></option>
+        </term>
+        <listitem>
+          <simpara>
+            Script called at the very end of the tex compilation. Its role is to
+            modify the tex file or one of the compilation files before the last
+            round.
+            <phrase output="manual">See <xref linkend="sec-texpost"/>.</phrase>
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
         <term><option>-s <replaceable>latex_style</replaceable></option></term>
         <term>
           <option>--texstyle=<replaceable>latex_style</replaceable></option>

@@ -5,6 +5,10 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:param name="latex.encoding">latin1</xsl:param>
+<xsl:param name="korean.package">CJK</xsl:param>
+
+
 <xsl:template name="babel.setup">
   <!-- babel use? -->
   <xsl:if test="$latex.babel.use='1'">
@@ -39,7 +43,7 @@
   <!-- locale setup for docbook -->
   <xsl:if test="$lang!='' and $lang!='en'">
     <xsl:text>\setuplocale{</xsl:text>
-    <xsl:value-of select="$lang"/>
+    <xsl:value-of select="substring($lang, 1, 2)"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
 
@@ -115,5 +119,100 @@
     <xsl:when test="starts-with($lang,'uk')">ukrainian</xsl:when>
   </xsl:choose>
 </xsl:template>
+
+
+<xsl:template name="lang.document.begin">
+  <xsl:param name="lang"/>
+  <xsl:if test="starts-with($lang,'zh') or
+                starts-with($lang,'ja') or
+                (starts-with($lang,'ko') and $korean.package='CJK')">
+    <xsl:text>\begin{CJK}{UTF8}{cyberbit}&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="lang.document.end">
+  <xsl:param name="lang"/>
+  <xsl:if test="starts-with($lang,'zh') or
+                starts-with($lang,'ja') or
+                (starts-with($lang,'ko') and $korean.package='CJK')">
+    <xsl:text>\clearpage&#10;</xsl:text>
+    <xsl:text>\end{CJK}&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<!-- #############
+     # Encodings #
+     ############# -->
+<!-- Encodings are put with langs since the locale has impact on the encoding
+     to use -->
+
+<xsl:template name="lang-in-unicode">
+  <xsl:param name="lang"/>
+  <xsl:choose>
+    <xsl:when test="starts-with($lang,'zh')">1</xsl:when>
+    <xsl:when test="starts-with($lang,'ko')">1</xsl:when>
+    <xsl:when test="starts-with($lang,'ja')">1</xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- This template should not be there, but currently only encoding needs it -->
+<xsl:template name="py.params.set">
+  <xsl:variable name="use-unicode">
+    <xsl:call-template name="lang-in-unicode">
+      <xsl:with-param name="lang">
+        <xsl:call-template name="l10n.language">
+          <xsl:with-param name="target" select="(/set|/book|/article)[1]"/>
+          <xsl:with-param name="xref-context" select="true()"/>
+        </xsl:call-template>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:text>%%&lt;params&gt;&#10;</xsl:text>
+  <xsl:if test="$use-unicode='1' or $latex.encoding='utf8'">
+    <xsl:text>%% latex.encoding utf8&#10;</xsl:text>
+  </xsl:if>
+  <xsl:text>%%&lt;/params&gt;&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template name="encode.before.style">
+  <xsl:param name="lang"/>
+  <xsl:variable name="use-unicode">
+    <xsl:call-template name="lang-in-unicode">
+      <xsl:with-param name="lang" select="$lang"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:choose>
+  <xsl:when test="$use-unicode='1'"/>
+  <xsl:when test="$latex.encoding='latin1'">
+    <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
+    <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
+  </xsl:when>
+  <xsl:when test="$latex.encoding='utf8'">
+    <xsl:text>\usepackage[T2A,T2D,T1]{fontenc}&#10;</xsl:text>
+    <xsl:text>\usepackage{ucs}&#10;</xsl:text>
+    <xsl:text>\usepackage[utf8x]{inputenc}&#10;</xsl:text>
+  </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="encode.after.style">
+  <xsl:param name="lang"/>
+  <xsl:variable name="use-unicode">
+    <xsl:call-template name="lang-in-unicode">
+      <xsl:with-param name="lang" select="$lang"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:choose>
+  <xsl:when test="$use-unicode='1' or $latex.encoding='utf8'">
+    <xsl:text>\lstset{inputencoding=utf8x, extendedchars=\true}&#10;</xsl:text>
+  </xsl:when>
+  <xsl:when test="$latex.encoding='latin1' and $latex.unicode.use!='0'">
+    <!-- Use the UTF-8 Passivetex support if required -->
+    <xsl:text>\usepackage{unicode}&#10;</xsl:text>
+  </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 
 </xsl:stylesheet>

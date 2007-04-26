@@ -148,14 +148,31 @@ class Index(TexModule):
                 string.join(self.path + [os.getenv(path_var, "")], ":") }
         else:
             env = {}
-#        if self.doc.env.execute(cmd, env):
-#            msg.error(_("could not make index %s") % self.target)
-#            return 1
+
         msg.debug(" ".join(cmd))
         rc = subprocess.call(cmd)
         if (rc != 0):
             msg.error(_("could not make index %s") % self.target)
             return 1
+
+        # Beware with UTF-8 encoding, makeindex with headings can be messy
+        if self.doc.encoding == "utf8" and self.style:
+            f = file(self.target, "r")
+            error = 0
+            for line in f:
+                try:
+                    line.decode("utf8")
+                except:
+                    error = 1
+                    break
+            f.close()
+            if error:
+                print "here"
+                # Retry without style
+                msg.log(_("%s on UTF8 failed. Retry...") % self.tool)
+                self.style = ""
+                self.md5 = None
+                return self.post_compile()
 
         self.doc.must_compile = 1
         return 0

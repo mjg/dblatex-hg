@@ -82,10 +82,16 @@
    <gentext key="refsection" text=""/>
    <gentext key="RefSynopsisDiv" text="&#22823;&#32434;"/>
    <gentext key="refsynopsisdiv" text="&#22823;&#32434;"/>
-   <gentext key="Revision" text="&#20462;&#35746;"/>
-   <gentext key="revision" text="&#20462;&#35746;"/>
    <gentext key="RevHistory" text="&#20462;&#35746;&#21382;&#21490;"/>
    <gentext key="revhistory" text="&#20462;&#35746;&#21382;&#21490;"/>
+   <gentext key="Revision" text="&#20462;&#35746;"/>
+   <gentext key="revision" text="&#20462;&#35746;"/>
+   <gentext key="sect1" text="&#33410;"/>
+   <gentext key="sect2" text="&#33410;"/>
+   <gentext key="sect3" text="&#33410;"/>
+   <gentext key="sect4" text="&#33410;"/>
+   <gentext key="sect5" text="&#33410;"/>
+   <gentext key="section" text="&#33410;"/>
    <gentext key="Section" text="&#33410;"/>
    <gentext key="See" text="&#35265;"/>
    <gentext key="see" text="&#35265;"/>

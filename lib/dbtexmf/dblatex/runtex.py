@@ -13,6 +13,7 @@ class RunLatex:
         self.fig_paths = []
         self.index_style = ""
         self.backend = "pdftex"
+        self.texpost = ""
         self.texer = LatexBuilder()
 
     def set_fig_paths(self, paths):
@@ -56,6 +57,24 @@ class RunLatex:
             raise ValueError("'%s': invalid backend" % backend)
         self.backend = backend
 
+    def _clear_params(self):
+        self._param_started = 0
+        self._param_ended = 0
+        self._params = {}
+
+    def _set_params(self, line):
+        # FIXME
+        if self._param_ended:
+            return
+        if not(self._param_started):
+            if line.startswith("%%<params>"): self._param_started = 1
+            return
+        if line.startswith("%%</params>"):
+            self._param_ended = 1
+            return
+        p = line.split()
+        self._params[p[1]] = p[2]
+
     def compile(self, texfile, binfile, format, batch=1):
         root = os.path.splitext(texfile)[0]
         tmpbase = root + "_tmp"
@@ -72,8 +91,10 @@ class RunLatex:
             f.write("\\makeatother\n")
 
         # Copy the original file
+        self._clear_params()
         input = file(texfile)
         for line in input:
+            self._set_params(line)
             f.write(line)
         f.close()
         input.close()
@@ -81,6 +102,8 @@ class RunLatex:
         # Build the output file
         try:
             self.texer.batch = batch
+            self.texer.texpost = self.texpost
+            self.texer.encoding = self._params.get("latex.encoding", "latin-1")
             self.texer.set_format(format)
             self.texer.set_backend(self.backend)
             if self.index_style:

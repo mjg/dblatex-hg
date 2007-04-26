@@ -63,6 +63,7 @@
 <xsl:template match="title" mode="format.title">
   <xsl:apply-templates select="." mode="toc"/>
   <xsl:text>{</xsl:text> 
+  <!-- should be normalized, but it is done by post processing -->
   <xsl:apply-templates select="." mode="content"/>
   <xsl:text>}&#10;</xsl:text> 
 </xsl:template>

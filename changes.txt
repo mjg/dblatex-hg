@@ -44,6 +44,16 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
   \usepackage[french]{babel}
   \usepackage[hyperlink]{docbook}
   \lstset{inputencoding=utf8x, extendedchars=\true}
+* \documentclass[12pt,a4paper]{article}
+  %\usepackage[encapsulated]{CJK}
+  \usepackage{CJK}
+  \usepackage{pinyin}
+  \begin{document}
+  \begin{CJK}{UTF8}{cyberbit}
+  ...
+  \clearpage
+  \end{CJK}
+  \end{document}
 * Bug #1642442
   - \author{John MaddockPaul A. BristowXiaogang Zhang}
   - Missing character &#x3a0; $\Pi
@@ -52,19 +62,36 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
     Missing character &#x3c7; $\chi
     Missing character &#x200b;
 
+
 Release 0.2.5:
 --------------
-- Add the -s, --texstyle option.
-- Preamble handling refactored. The expected benefit is to make dblatex more
-  customizable.
-- Drop the docbook style 'article' or 'report' option. It is up to the style to
-  find out if it is an article or not (if needed).
-- Support @valign combined with @morerow.
-- Better URL handling in tables (special characters like '%').
-- Better dblatex package precedence, to ensure that the dblatex specific
-  packages have always precedence over the system wide package.
-- Fix use of compact itemizes in french.
-- A small synopsis bug fix.
+
+* Improvements:
+  - Basic support for CJK languages. Use the CJK package and the cyberbit fonts.
+    The HLatex package is not supported yet.
+  - Support native UTF-8 latex compilation, thanks to the ucs package.
+  - Add the -s, --texstyle option.
+  - Preamble handling refactored. The expected benefit is to make dblatex more
+    customizable.
+  - Drop the docbook style 'article' or 'report' option. It is up to the style to
+    find out if it is an article or not (if needed).
+  - Support @valign combined with @morerow.
+  - Better URL handling in tables (special characters like '%').
+  - Better dblatex package precedence, to ensure that the dblatex specific
+    packages have always precedence over the system wide package.
+  - Figure captions take into account the inline docbook elements.
+ 
+* Bug fixes:
+  - Restore the -r, --texpost option.
+  - Fix use of compact itemizes in french.
+  - Fix --tmpdir bug for relative paths.
+  - Fix a small synopsis bug.
+  - Fix SF bug #1672862. Change the parsing separators to some non-human writable
+    pattern.
+  - Fix the block display of MathML equations put in an <informalequation>.
+  - Fix <programlisting> latex translation bug.
+  - Remove unexpected space strippings in <title>s.
+  - Fix bug about locale formatting (in l10n.xsl).
 
 Release 0.2.4:
 --------------

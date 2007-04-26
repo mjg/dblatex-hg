@@ -21,11 +21,16 @@
      MML TeX patches or missing templates
      ==================================== -->
 
-<!-- to put mathml in a latex equation environment -->
+<!-- to put mathml in a latex (informal) equation environment -->
 <xsl:template match="m:math">
   <xsl:choose>
   <xsl:when test="ancestor::equation[not(child::title)]">
     <xsl:apply-templates/>
+  </xsl:when>
+  <xsl:when test="ancestor::informalequation">
+    <xsl:text>&#10;\[&#10;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#10;\]&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>
     <xsl:apply-imports/>
