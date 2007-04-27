@@ -12,6 +12,7 @@
 import re
 
 from texcodec import TexCodec
+from rawparse import RawUtfParser
 
 
 class VerbCodec(TexCodec):
@@ -78,8 +79,9 @@ class VerbParser:
         c = self.get_codec()
         c.clear_errors()
 
-        # Now, encode the block
-        text = c.encode(c.decode(self.block))
+        # Now, parse/encode the block
+        p = RawUtfParser(codec=c)
+        text = p.parse(self.block)
 
         # Add the escape option if necessary
         if not(self.esc_start) and c.get_errors() != 0:

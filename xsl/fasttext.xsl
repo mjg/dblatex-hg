@@ -4,6 +4,8 @@
 <!ENTITY t2 "&#x371;t">
 <!ENTITY u1 "&#x370;u">
 <!ENTITY u2 "&#x371;u">
+<!ENTITY v1 "&#x370;u">
+<!ENTITY v2 "&#x371;u">
 ]>
 <!--
 Old separators were:
@@ -37,6 +39,13 @@ Old separators were:
   <xsl:value-of select="."/>
   <xsl:text>&t2;</xsl:text>
 </xsl:template>
+
+<xsl:template match="text()" mode="latex.programlisting">
+  <xsl:text>&v1;</xsl:text>
+  <xsl:value-of select="."/> 
+  <xsl:text>&v2;</xsl:text>
+</xsl:template>
+
 
 <!-- replace some text in a string *as is* the string is already escaped.
      Here it ends to inserting raw text between tags. -->
