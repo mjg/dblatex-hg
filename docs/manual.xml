@@ -388,8 +388,8 @@ driver. This limitation has been fixed with changebar greater or equal
 to v3.5c.
 </para></note>
   </sect1>
- </chapter>
 <xi:include href="locale.xml"/>
+ </chapter>
 <xi:include href="custom/custom.xml"/>
 <xi:include href="faq.xml"/>
  <chapter>
