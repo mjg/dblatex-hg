@@ -267,9 +267,11 @@ class DbTex:
         return self.binfile
 
 
+dump_stack = False
 def failed_exit(msg, rc=1):
+    global dump_stack
     print >>sys.stderr, (msg)
-    raise
+    if dump_stack: raise
     sys.exit(rc)
 
 
@@ -291,6 +293,8 @@ class DbTexCommand:
         parser.add_option("-d", "--debug", action="store_true",
                           help="Debug mode. Keep the temporary directory in "
                                "which %s actually works" % prog)
+        parser.add_option("-D", "--dump", action="store_true",
+                          help="Dump error stack (debug purpose)")
         parser.add_option("-f", "--fig-format",
                           help="Input figure format, used when not deduced from "
                                "figure extension")
@@ -446,6 +450,10 @@ class DbTexCommand:
                 except Exception, e:
                     failed_exit("Error: %s" % e)
             run.tmpdir_user = os.path.abspath(options.tmpdir)
+
+        if options.dump:
+            global dump_stack
+            dump_stack = True
 
     def get_config_paths(self):
         # Allows user directories where to look for configuration files
