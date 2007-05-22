@@ -339,6 +339,7 @@
   <xsl:variable name="data" select="subtitle|
                                     volumenum|
                                     edition|
+                                    address|
                                     copyright|
                                     publisher|
                                     pubdate|
@@ -395,6 +396,7 @@
   <xsl:for-each select="subtitle|
                         volumenum|
                         edition|
+                        address|
                         copyright|
                         publisher|
                         pubdate|
@@ -468,8 +470,8 @@
 </xsl:template>
 
 <xsl:template match="editor" mode="bibliography.mode">
-    <xsl:call-template name="person.name"/>
-    <xsl:value-of select="$biblioentry.item.separator"/>
+  <xsl:call-template name="person.name"/>
+  <xsl:value-of select="$biblioentry.item.separator"/>
 </xsl:template>
 
 <xsl:template match="copyright" mode="bibliography.mode">
@@ -491,11 +493,20 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="publisher" mode="bibliography.mode">
+  <xsl:apply-templates select="publishername" mode="bibliography.mode"/>
+  <xsl:for-each select="address">
+    <xsl:value-of select="$biblioentry.item.separator"/>
+    <xsl:apply-templates select="." mode="bibliography.mode"/>
+  </xsl:for-each>
+</xsl:template>
+
 
 <!-- to manage entities correctly (such as &amp;) -->
 <xsl:template match="subtitle|volumenum|edition|
                      pubdate|pagenums|isbn|issn|
-                     holder|publishername|releaseinfo" mode="bibliography.mode">
+                     holder|publishername|releaseinfo|address"
+              mode="bibliography.mode">
   <xsl:apply-templates/>
 </xsl:template>
 
