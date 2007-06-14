@@ -302,16 +302,27 @@ class Install(install):
 class InstallData(install_data):
 
     def run(self):
-        self.mkpath(self.install_dir)
+        # Walk through sub-dirs, specified in data_files and build the
+        # full data files list accordingly
+        full_data_files = []
         for install_base, paths in self.data_files:
-            basedir = os.path.join(self.install_dir, install_base)
+            base_files = []
             for path in paths:
                 if os.path.isdir(path):
-                    self.copy_tree(path, os.path.join(basedir, path))
+                     for root, dirs, files in os.walk(path):
+                         idir = os.path.join(install_base, root)
+                         files = [os.path.join(root, i) for i in files]
+                         if files:
+                             full_data_files += [(idir, files)]
                 else:
-                    self.mkpath(basedir)
-                    self.copy_file(path, os.path.join(basedir,
-                                   os.path.basename(path)))
+                     base_files.append(path)
+
+            if base_files:
+                full_data_files += [(install_base, base_files)]
+
+        # Replace synthetic data_files by the full one, and do the actual job
+        self.data_files = full_data_files
+        return install_data.run(self)
 
 
 def get_version():
