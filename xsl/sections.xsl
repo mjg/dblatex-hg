@@ -6,7 +6,7 @@
     ############################################################################ -->
 
 <xsl:template match="sect1|sect2|sect3|sect4|sect5">
-  <xsl:call-template name="element.and.label"/>
+  <xsl:call-template name="mapheading"/>
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -20,6 +20,7 @@
   <xsl:param name="level" select="''"/>
   <xsl:param name="name" select="''"/>
   <xsl:param name="num" select="'1'"/>
+  <xsl:param name="allnum" select="'0'"/>
   <xsl:text>&#10;</xsl:text>
   <xsl:choose>
   <xsl:when test="$level &lt; 6">
@@ -48,6 +49,7 @@
   </xsl:otherwise>
   </xsl:choose>
   <xsl:choose>
+  <xsl:when test="$allnum = '1'"/>
   <xsl:when test="$num = '0'">
     <xsl:text>*</xsl:text>
   </xsl:when>
@@ -70,10 +72,9 @@
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:call-template name="map.sect.level">
+  <xsl:call-template name="makeheading">
     <xsl:with-param name="level" select="count(ancestor::section)+$min"/>
   </xsl:call-template>
-  <xsl:call-template name="title.and.label"/>
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -107,24 +108,25 @@
 </xsl:template>
 
 <xsl:template match="simplesect">
-  <xsl:call-template name="map.sect.level">
+  <xsl:call-template name="makeheading">
     <xsl:with-param name="level">
       <xsl:call-template name="get.sect.level"/>
     </xsl:with-param>
   </xsl:call-template>
-  <xsl:call-template name="title.and.label"/>
   <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="section/title"/>
 <xsl:template match="simplesect/title"/>
 
-<xsl:template match="sectioninfo"/>
-<xsl:template match="sect1info"/>
-<xsl:template match="sect2info"/>
-<xsl:template match="sect3info"/>
-<xsl:template match="sect4info"/>
-<xsl:template match="sect5info"/>
+<xsl:template match="sectioninfo
+                    |sect1info
+                    |sect2info
+                    |sect3info
+                    |sect4info
+                    |sect5info">
+  <xsl:apply-templates select="itermset"/>
+</xsl:template>
 
 <xsl:template match="titleabbrev"/>
 

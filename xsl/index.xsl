@@ -116,5 +116,8 @@
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="itermset">
+  <xsl:apply-templates/>
+</xsl:template>
 
 </xsl:stylesheet>

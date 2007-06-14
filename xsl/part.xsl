@@ -9,7 +9,7 @@
   <xsl:text>%&#10;</xsl:text>
   <xsl:text>% PART&#10;</xsl:text>
   <xsl:text>%&#10;</xsl:text>
-  <xsl:call-template name="element.and.label"/>
+  <xsl:call-template name="mapheading"/>
   <xsl:apply-templates/>
 </xsl:template>
 

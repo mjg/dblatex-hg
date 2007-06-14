@@ -81,4 +81,18 @@
   </xsl:choose>
 </xsl:template>
 
+
+<!-- Update the TOC depth for printed TOC and PDF bookmarks -->
+<xsl:template name="set-tocdepth">
+  <xsl:param name="depth"/>
+  <!-- For printed TOC -->
+  <xsl:text>\addtocontents{toc}{\protect\setcounter{tocdepth}{</xsl:text>
+  <xsl:value-of select="$depth"/>
+  <xsl:text>}\ignorespaces}&#10;</xsl:text>
+  <!-- For bookmarks -->
+  <xsl:text>\setcounter{tocdepth}{</xsl:text>
+  <xsl:value-of select="$depth"/>
+  <xsl:text>}&#10;</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>

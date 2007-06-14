@@ -28,7 +28,8 @@
 </xsl:template>
 
 <xsl:template match="footnoteref">
-  <xsl:text>\ref{</xsl:text>
+  <!-- <xsl:text>\ref{</xsl:text> -->
+  <xsl:text>\footref{</xsl:text>
   <xsl:value-of select="@linkend"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
@@ -48,6 +49,7 @@
   <xsl:text>\stepcounter{footnote}&#10;</xsl:text>
   <xsl:text>\footnotetext{</xsl:text>
   <xsl:apply-templates/>
+  <xsl:call-template name="label.id"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 

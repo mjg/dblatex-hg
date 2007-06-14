@@ -46,6 +46,12 @@ Old separators were:
   <xsl:text>&v2;</xsl:text>
 </xsl:template>
 
+<xsl:template match="text()" mode="latex.verbatim">
+  <xsl:text>&v1;</xsl:text>
+  <xsl:value-of select="."/> 
+  <xsl:text>&v2;</xsl:text>
+</xsl:template>
+
 
 <!-- replace some text in a string *as is* the string is already escaped.
      Here it ends to inserting raw text between tags. -->

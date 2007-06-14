@@ -4,10 +4,56 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<xsl:param name="preface.tocdepth">0</xsl:param>
+<xsl:param name="dedication.tocdepth">0</xsl:param>
+<xsl:param name="colophon.tocdepth">0</xsl:param>
 
-<xsl:template match="preface|colophon|dedication">
-  <xsl:call-template name="element.and.label"/>
-  <xsl:apply-templates/>
+
+<xsl:template match="colophon">
+  <xsl:call-template name="section.unnumbered">
+    <xsl:with-param name="tocdepth" select="number($colophon.tocdepth)"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="dedication">
+  <xsl:call-template name="section.unnumbered">
+    <xsl:with-param name="tocdepth" select="number($dedication.tocdepth)"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="preface">
+  <xsl:call-template name="section.unnumbered">
+    <xsl:with-param name="tocdepth" select="number($preface.tocdepth)"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="section.unnumbered">
+  <xsl:param name="tocdepth" select="0"/>
+  <xsl:choose>
+  <xsl:when test="number($tocdepth) = -1">
+    <xsl:call-template name="mapheading"/>
+    <xsl:apply-templates/>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- don't use starred headings, but rely on counters instead -->
+    <xsl:text>\setcounter{secnumdepth}{-1}&#10;</xsl:text>
+    <xsl:call-template name="set-tocdepth">
+      <xsl:with-param name="depth" select="$tocdepth - 1"/>
+    </xsl:call-template>
+    <xsl:call-template name="makeheading">
+      <xsl:with-param name="level" select="'0'"/>
+      <xsl:with-param name="allnum" select="'1'"/>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+    <!-- restore the initial counters -->
+    <xsl:text>\setcounter{secnumdepth}{</xsl:text>
+    <xsl:value-of select="$doc.section.depth"/>
+    <xsl:text>}&#10;</xsl:text>
+    <xsl:call-template name="set-tocdepth">
+      <xsl:with-param name="depth" select="$toc.section.depth"/>
+    </xsl:call-template>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="dedication/title"></xsl:template>
@@ -26,11 +72,49 @@
                      preface//sect3|
                      preface//sect4|
                      preface//sect5">
-  <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="name" select="local-name(.)"/>
-  </xsl:call-template>
-  <xsl:call-template name="title.and.label"/>
+  <xsl:choose>
+  <xsl:when test="number($preface.tocdepth) = -1">
+    <xsl:call-template name="makeheading">
+      <xsl:with-param name="name" select="local-name(.)"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="makeheading">
+      <xsl:with-param name="name" select="local-name(.)"/>
+      <xsl:with-param name="allnum" select="'1'"/>
+    </xsl:call-template>
+  </xsl:otherwise>
+  </xsl:choose>
   <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="preface//section">
+  <xsl:variable name="allnum">
+    <xsl:choose>
+    <xsl:when test="number($preface.tocdepth) = -1">0</xsl:when>
+    <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:call-template name="makeheading">
+    <xsl:with-param name="level" select="count(ancestor::section)+1"/>
+    <xsl:with-param name="allnum" select="$allnum"/>
+  </xsl:call-template>
+  <xsl:apply-templates/>
+</xsl:template>
+
+<!-- don't know where to put it -->
+<xsl:template match="beginpage">
+  <xsl:choose>
+  <xsl:when test="@pagenum != ''">
+    <xsl:message>Cannot start a new page at a specific page number</xsl:message>
+  </xsl:when>
+  <xsl:when test="@role = 'openright'">
+    <xsl:text>\cleardoublepage&#10;</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\clearpage&#10;</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -20,11 +20,10 @@
     <xsl:choose>
     <xsl:when test="count($etarget) = 0">
       <xsl:message>
-        <xsl:value-of select="count($etargets)"/>
-        <xsl:text>*** Error: endterm points to nonexistent ID: </xsl:text>
+        <xsl:text>Error: endterm points to nonexistent ID: </xsl:text>
         <xsl:value-of select="@endterm"/>
       </xsl:message>
-      <xsl:text>[NONEXISTENT ID]</xsl:text>
+      <xsl:text>[??]</xsl:text>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="$etarget" mode="xref.text"/>
@@ -51,7 +50,7 @@
   <xsl:choose>
   <xsl:when test="count($target)=0">
     <xsl:message>
-    <xsl:text>*** Error: xref to nonexistent id: </xsl:text>
+    <xsl:text>XRef to nonexistent id: </xsl:text>
     <xsl:value-of select="@linkend"/>
     </xsl:message>
     <xsl:text>[?]</xsl:text>
@@ -139,9 +138,22 @@
       </xsl:with-param>
     </xsl:call-template>
   </xsl:when>
-  <xsl:otherwise>
-    <xsl:copy-of select="key('id',@endterm)[1]"/>
-  </xsl:otherwise>
+  <xsl:when test="@endterm">
+    <xsl:variable name="etarget" select="key('id',@endterm)[1]"/>
+    <xsl:choose>
+    <xsl:when test="count($etarget) = 0">
+      <xsl:message>
+        <xsl:text>Error: endterm points to nonexistent ID: </xsl:text>
+        <xsl:value-of select="@endterm"/>
+      </xsl:message>
+      <xsl:text>[NONEXISTENT ID]</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="$etarget" mode="xref.text"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise/>
   </xsl:choose>
 </xsl:template>
 
@@ -434,6 +446,15 @@
 </xsl:template>
 
 <xsl:template match="formalpara|refsection|preface" mode="xref-to">
+  <xsl:call-template name="title-link-to"/>
+</xsl:template>
+
+<xsl:template match="preface/sect1|
+                     preface//sect2|
+                     preface//sect3|
+                     preface//sect4|
+                     preface//sect5|
+                     preface//section" mode="xref-to">
   <xsl:call-template name="title-link-to"/>
 </xsl:template>
 

@@ -1250,6 +1250,11 @@
     <xsl:value-of select="$numunknown"/>
     <xsl:text>}}%&#10;</xsl:text>
   </xsl:if>
+
+  <!-- Start the next table on a new line -->
+  <xsl:if test="preceding::tgroup">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
   
   <!-- Start the table declaration -->
   <xsl:text>\begin{</xsl:text>

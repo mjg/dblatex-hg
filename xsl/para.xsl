@@ -6,14 +6,10 @@
     ############################################################################ -->
 
 
-<xsl:template match="para">
+<xsl:template match="para|simpara">
   <xsl:text>&#10;</xsl:text>
   <xsl:apply-templates/>
   <xsl:text>&#10;</xsl:text>
-</xsl:template>
-
-<xsl:template match="simpara">
-  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="formalpara">
@@ -35,7 +31,7 @@
  |  Especial Cases Do not add Linefeed 
  +============================================================================-->
 
-<xsl:template match="listitem/para">
+<xsl:template match="listitem/para|step/para|listitem/simpara|step/simpara">
   <xsl:if test="preceding-sibling::*">
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
@@ -44,7 +40,6 @@
 </xsl:template>
 
 <xsl:template match="textobject/para"> <xsl:apply-templates/> </xsl:template>
-<xsl:template match="step/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="question/para"> <xsl:apply-templates/> </xsl:template>
 <xsl:template match="answer/para"> <xsl:apply-templates/> </xsl:template>
 

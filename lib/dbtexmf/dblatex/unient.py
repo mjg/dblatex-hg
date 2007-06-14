@@ -407,6 +407,7 @@ unicode_map = {
 0x02026: r"\ldots{}", # HORIZONTAL ELLIPSIS
 0x02030: r"\textperthousand{}", # PER MILLE SIGN
 0x02031: r"\textpertenthousand{}", # PER TEN THOUSAND SIGN
+0x020AC: r"\texteuro{}", # EURO
 0x02116: r"\cyrchar\textnumero{}", # NUMERO SIGN
 0x02122: r"\texttrademark{}", # TRADE MARK SIGN
 0x0212B: r"\AA{}", # ANGSTROM SIGN

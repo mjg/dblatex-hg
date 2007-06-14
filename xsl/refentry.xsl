@@ -13,7 +13,7 @@
   <xsl:text>&#10;</xsl:text>
   <xsl:text>% Reference &#10;</xsl:text>
   <xsl:text>% ---------&#10;</xsl:text>
-  <xsl:call-template name="element.and.label"/>
+  <xsl:call-template name="mapheading"/>
   <xsl:apply-templates select="partintro"/>
   <xsl:apply-templates select="*[local-name(.) != 'partintro']"/>
 </xsl:template>
@@ -158,7 +158,7 @@
      ############ -->
 
 <xsl:template match="refsect1|refsect2|refsect3">
-  <xsl:call-template name="element.and.label"/>
+  <xsl:call-template name="mapheading"/>
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -171,12 +171,11 @@
 <xsl:template match="refsect3info"/>
 
 <xsl:template match="refsection">
-  <xsl:call-template name="map.sect.level">
+  <xsl:call-template name="makeheading">
     <!-- its starts from subsection, so level+1 -->
     <xsl:with-param name="level" select="count(ancestor::refsection)+2"/>
     <xsl:with-param name="num" select="0"/>
   </xsl:call-template>
-  <xsl:call-template name="title.and.label"/>
   <xsl:apply-templates/>
 </xsl:template>
 

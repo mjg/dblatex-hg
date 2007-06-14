@@ -150,7 +150,8 @@
   
 <xsl:template match="glossentry/glossdef">
   <xsl:text>&#10;</xsl:text>
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="*[not(self::glossseealso)]"/>
+  <xsl:apply-templates select="glossseealso"/>
 </xsl:template>
 
 <xsl:template match="glossseealso|glosssee">
@@ -161,8 +162,10 @@
     <xsl:apply-templates/>
   </xsl:variable>
   <xsl:text> </xsl:text>
-  <xsl:call-template name="gentext.element.name"/>
-  <xsl:call-template name="gentext.space"/>
+  <xsl:if test="position()=1">
+    <xsl:call-template name="gentext.element.name"/>
+    <xsl:call-template name="gentext.space"/>
+  </xsl:if>
   <xsl:text>"</xsl:text>
   <xsl:choose>
     <xsl:when test="@otherterm">
@@ -183,7 +186,16 @@
       <xsl:value-of select="$text"/>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:text>". </xsl:text>
+  <xsl:text>"</xsl:text>
+
+  <xsl:choose>
+    <xsl:when test="position()=last()">
+      <xsl:text>.</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>, </xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="glossentry" mode="xref">

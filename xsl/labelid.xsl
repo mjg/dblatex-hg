@@ -9,20 +9,47 @@
 <xsl:param name="titleabbrev.in.toc">1</xsl:param>
 
 
-<xsl:template name="element.and.label">
-  <xsl:call-template name="label.id">
-    <xsl:with-param name="string">
+<xsl:template name="mapheading">
+  <xsl:call-template name="makeheading">
+    <xsl:with-param name="command">
       <xsl:call-template name="sec-map">
         <xsl:with-param name="keyword" select="local-name(.)"/>
       </xsl:call-template>
-      <xsl:apply-templates select="title" mode="toc"/>
-      <xsl:text>{</xsl:text> 
-      <xsl:apply-templates select="title" mode="content"/>
-      <xsl:text>}</xsl:text> 
     </xsl:with-param>
   </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="makeheading">
+  <xsl:param name="num" select="'1'"/>
+  <xsl:param name="allnum" select="'0'"/>
+  <xsl:param name="level"/>
+  <xsl:param name="name"/>
+  <xsl:param name="command"/>
+
+  <xsl:variable name="rcommand">
+    <xsl:choose>
+    <xsl:when test="$command=''">
+      <xsl:call-template name="map.sect.level">
+        <xsl:with-param name="name" select="$name"/>
+        <xsl:with-param name="level" select="$level"/>
+        <xsl:with-param name="num" select="$num"/>
+        <xsl:with-param name="allnum" select="$allnum"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$command"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:value-of select="$rcommand"/>
+  <xsl:apply-templates select="title" mode="format.title">
+    <xsl:with-param name="allnum" select="$allnum"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="label.id"/>
   <xsl:apply-templates select="title" mode="foottext"/>
 </xsl:template>
+
 
 <xsl:template name="label.id">
   <xsl:param name="object" select="."/>
@@ -54,14 +81,11 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template name="title.and.label">
-  <xsl:apply-templates select="title" mode="format.title"/>
-  <xsl:call-template name="label.id"/>
-  <xsl:apply-templates select="title" mode="foottext"/>
-</xsl:template>
-
 <xsl:template match="title" mode="format.title">
-  <xsl:apply-templates select="." mode="toc"/>
+  <xsl:param name="allnum" select="'0'"/>
+  <xsl:apply-templates select="." mode="toc">
+    <xsl:with-param name="allnum" select="$allnum"/>
+  </xsl:apply-templates>
   <xsl:text>{</xsl:text> 
   <!-- should be normalized, but it is done by post processing -->
   <xsl:apply-templates select="." mode="content"/>
@@ -74,6 +98,10 @@
      for the TOC.
  -->
 <xsl:template match="title" mode="toc">
+  <xsl:param name="allnum" select="0"/>
+  <xsl:param name="pre" select="'[{'"/>
+  <xsl:param name="post" select="'}]'"/>
+
   <!-- Use the titleabbrev for the TOC (if possible) -->
   <xsl:variable name="abbrev">
     <xsl:if test="$titleabbrev.in.toc='1'">
@@ -103,20 +131,22 @@
                        |parent::refsect2
                        |parent::refsect3
                        |parent::refsection
-                       |parent::preface
+                       |ancestor::preface
                        |parent::colophon
                        |parent::dedication"/>
 
-  <xsl:if test="not($unnumbered) and
+  <xsl:if test="($allnum=1 or not($unnumbered)) and
                 ($abbrev!='' or
                 (descendant::footnote|
                  descendant::xref|
                  descendant::link|
                  descendant::ulink|
                  descendant::anchor|
+                 descendant::glossterm[@linkend]|
                  descendant::inlinegraphic|
-                 descendant::inlinemediaobject))">
-    <xsl:text>[{</xsl:text> 
+                 descendant::inlinemediaobject) or
+                 (descendant::glossterm and $glossterm.auto.link != 0))">
+    <xsl:value-of select="$pre"/> 
     <xsl:choose>
     <xsl:when test="$abbrev!=''">
       <!-- The TOC contains the titleabbrev content -->
@@ -130,7 +160,7 @@
       <xsl:value-of select="normalize-space($s)"/>
     </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}]</xsl:text> 
+    <xsl:value-of select="$post"/> 
   </xsl:if>
 </xsl:template>
 

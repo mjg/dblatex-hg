@@ -35,25 +35,7 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * gérer \IfFileExists{truncate.sty}{ ... \usepackage{truncate}...}
 * titre dans les procédures (de.xml)
 * <varlistentry lang="de"><term lang="de"><listitem><note lang="de">
-* support de korean, japan, etc.
 * <set> avec attachfile
-* \usepackage[T1,T2A,T2D]{fontenc}
-  \usepackage{ucs}
-  \usepackage[utf8x]{inputenc}
-  \def\hyperparamadd{pdfcreator=DBLaTeX-devel}
-  \usepackage[french]{babel}
-  \usepackage[hyperlink]{docbook}
-  \lstset{inputencoding=utf8x, extendedchars=\true}
-* \documentclass[12pt,a4paper]{article}
-  %\usepackage[encapsulated]{CJK}
-  \usepackage{CJK}
-  \usepackage{pinyin}
-  \begin{document}
-  \begin{CJK}{UTF8}{cyberbit}
-  ...
-  \clearpage
-  \end{CJK}
-  \end{document}
 * Bug #1642442
   - \author{John MaddockPaul A. BristowXiaogang Zhang}
   - Missing character &#x3a0; $\Pi
@@ -61,6 +43,26 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
     Missing character &#x393; $\Gamma
     Missing character &#x3c7; $\chi
     Missing character &#x200b;
+* support bibliomset
+
+Release 0.2.6:
+--------------
+
+- Headings code refactored.
+- Unnumbered sections (e.g. preface) can be put in TOC. Add the parameters:
+  * preface.tocdepth
+  * dedication.tocdepth
+  * colophon.tocdepth
+- Basic <itermset> support
+- Basic <beginpage> support (start a new page only at the current page)
+- Fix display of several <glossseealso>s in <glossentry>
+- Fix <para> output in list items (<listitem>, <step>)
+- Fix unicode bug in <step>/<title>s
+- Fix <footnoteref> bug in <table>s
+- Fix setup.py to make bdist_rpm work (thanks to Tim Fuehner's patch)
+- Fix some missing characters (euro, etc.) by using the pifont and textcomp
+  packages.
+- Fix unicode bug in some verbatim environment.
 
 
 Release 0.2.5:
