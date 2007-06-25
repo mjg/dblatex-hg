@@ -13,7 +13,8 @@
 <xsl:param name="doc.collab.show">1</xsl:param>
 <xsl:param name="doc.alignment"/>
 <xsl:param name="set.book.num">1</xsl:param>
-<xsl:param name="draft.mode">no</xsl:param>
+<xsl:param name="draft.mode">maybe</xsl:param>
+<xsl:param name="draft.watermark">1</xsl:param>
 
 
 <xsl:variable name="latex.begindocument">
@@ -171,9 +172,33 @@
     <xsl:value-of select="$pdf.annot.options"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <xsl:if test="$draft.mode='no'">
-    <xsl:text>\renewcommand{\DBKreleaseinfo}{}&#10;</xsl:text>
-  </xsl:if>
+
+  <xsl:variable name="draft">
+    <xsl:choose>
+    <xsl:when test="$draft.mode='yes'">1</xsl:when>
+    <xsl:when test="$draft.mode='no'">0</xsl:when>
+    <xsl:when test="$draft.mode='maybe' and
+                    @status and @status='draft'">1</xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  
+  <xsl:choose>
+    <xsl:when test="$draft='0'">
+      <xsl:text>\renewcommand{\DBKreleaseinfo}{}&#10;</xsl:text>
+    </xsl:when>
+    <xsl:when test="$draft.watermark!='0'">
+      <xsl:text>\showwatermark{</xsl:text>
+      <!--
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'Draft'"/>
+      </xsl:call-template>
+      -->
+      <xsl:text>DRAFT</xsl:text>
+      <xsl:text>}&#10;</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+
   <xsl:if test="$latex.output.revhistory=0">
     <xsl:text>\renewcommand{\DBKrevhistory}{}&#10;</xsl:text>
   </xsl:if>
@@ -200,12 +225,12 @@
 \DBKinditem{\writtenby}{</xsl:text>
     <xsl:value-of select="$authors"/>
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select=".//othercredit"/>
+    <xsl:apply-templates select=".//othercredit" mode="collab"/>
     <xsl:text>&#10;\end{DBKindtable}&#10;}&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="othercredit">
+<xsl:template match="othercredit" mode="collab">
   <xsl:text>\DBKinditem{</xsl:text>
   <xsl:value-of select="contrib"/>
   <xsl:text>}{</xsl:text>
@@ -245,7 +270,17 @@
 </xsl:template>
 
 <xsl:template match="releaseinfo" mode="docinfo">
-  <xsl:if test="$draft.mode!='no'">
+  <xsl:variable name="draft">
+    <xsl:choose>
+    <xsl:when test="$draft.mode='yes'">1</xsl:when>
+    <xsl:when test="$draft.mode='no'">0</xsl:when>
+    <xsl:when test="$draft.mode='maybe' and
+                  ancestor-or-self::*[@status][1]/@status='draft'">1</xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:if test="$draft='1'">
     <xsl:text>\renewcommand{\DBKreleaseinfo}{</xsl:text>
     <xsl:apply-templates select="."/>
     <xsl:text>}&#10;</xsl:text>

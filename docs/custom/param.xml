@@ -74,6 +74,20 @@ Set to 0 the links are not shown.</entry>
 </row>
 <!-- -->
 <row>
+<entry>colophon.tocdepth</entry>
+<entry>Same than <parameter>preface.tocdepth</parameter> for colophon sections.
+</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
+<entry>dedication.tocdepth</entry>
+<entry>Same than <parameter>preface.tocdepth</parameter> for dedication sections.
+</entry>
+<entry>0</entry>
+</row>
+<!-- -->
+<row>
 <entry>doc.alignment</entry>
 <entry>Defines the text alignment for the whole document. The valid values
 are: "left", "center", "right", "justify". An empty string is equivalent to
@@ -130,9 +144,19 @@ if the parameter is set to 1.</entry>
 <entry>Print <sgmltag>releaseinfo</sgmltag> in a framed box in the header, when the
 parameter is set to 'yes'.
 The <sgmltag>releaseinfo</sgmltag> is ignored if the parameter is set to 'no',
-or if the releaseinfo content is empty.
+or if the releaseinfo content is empty. When the parameter is set to 'maybe',
+the draft mode is deduced from the <sgmltag>status</sgmltag> attribute of the
+root element if set to 'draft'.
 </entry>
-<entry>no</entry>
+<entry>maybe</entry>
+</row>
+<!-- -->
+<row>
+<entry>draft.watermark</entry>
+<entry>Print the draft text (that is, "DRAFT") as a watermark on each page, if
+the document is in draft mode and if the parameter is set to '1'.
+</entry>
+<entry>1</entry>
 </row>
 <!-- -->
 <row>
@@ -383,6 +407,16 @@ more suited for colored tables.</entry>
 options are width, height, depth. The options must be comma separated like:
 <literal>width=5cm,depth=10cm</literal>.</entry>
 <entry>Empty</entry>
+</row>
+<!-- -->
+<row>
+<entry>preface.tocdepth</entry>
+<entry>When greater than -1, the preface sections appear in the TOC. The
+parameter value define the preface section numbering depth. If set to 0, all the
+sections are unnumbered. If set to 1, only the chapter level section is
+numbered, and so on. When the parameter is negative, the sections are unnumbered
+and not shown in the TOC.</entry>
+<entry>0</entry>
 </row>
 <!-- -->
 <row>

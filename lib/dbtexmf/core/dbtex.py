@@ -25,7 +25,7 @@ def suffix_replace(path, oldext, newext=""):
 
 def path_to_uri(path):
     if os.name == 'nt':
-        return 'file:///' + urllib.pathname2url(path).replace('|', ':', 1)
+        return 'file:' + urllib.pathname2url(path).replace('|', ':', 1)
     else:
         return urllib.pathname2url(path)
 

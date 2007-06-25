@@ -118,7 +118,8 @@
      ############## -->
 
 <xsl:template match="glossentry">
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="*[not(self::glosssee or self::glossdef)]"/>
+  <xsl:apply-templates select="glosssee|glossdef"/>
   <xsl:text>&#10;&#10;</xsl:text>
 </xsl:template>
 
@@ -134,7 +135,7 @@
     <xsl:apply-templates/>
   </xsl:variable>
   <xsl:value-of select="normalize-space($term)"/>
-  <xsl:text>}] </xsl:text>
+  <xsl:text>}]~ </xsl:text>
 </xsl:template>
 
 <xsl:template match="glossentry/acronym">
@@ -163,6 +164,9 @@
   </xsl:variable>
   <xsl:text> </xsl:text>
   <xsl:if test="position()=1">
+    <xsl:if test="self::glosssee">
+      <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:if>
     <xsl:call-template name="gentext.element.name"/>
     <xsl:call-template name="gentext.space"/>
   </xsl:if>

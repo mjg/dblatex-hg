@@ -75,6 +75,21 @@
 \newcommand{\DBKlegaltitle}{}
 \newcommand{\DBKcopyright}{}
 
+% Display ``DRAFT'' as a water mark:
+\usepackage{ifpdf}
+\ifpdf
+\usepackage{pdfpages}
+\usepackage{color}
+\def\showwatermark#1{%
+  \AddToShipoutPicture{
+  \AtTextCenter{%
+  \makebox(0,0)[c]{\resizebox{\textwidth}{!}{%
+  \rotatebox{45}{\textsf{\textbf{\color[gray]{0.8}#1}}}}}%
+  }}
+}
+\else
+\def\showwatermark#1{}%
+\fi
 
 % --------------------------
 % Title and Bookinfo display

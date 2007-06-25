@@ -6,6 +6,7 @@
     ############################################################################ -->
 
 <xsl:param name="filename.as.url">1</xsl:param>
+<xsl:param name="monoseq.hyphenation">1</xsl:param>
 
 
 <xsl:template name="inline.boldseq">
@@ -79,9 +80,16 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{</xsl:text>
-  <xsl:text>&lt;h&gt;</xsl:text>
-  <xsl:copy-of select="$content"/>
-  <xsl:text>&lt;/h&gt;</xsl:text>
+  <xsl:choose>
+  <xsl:when test="$monoseq.hyphenation='1'">
+    <xsl:text>&lt;h&gt;</xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>&lt;/h&gt;</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:copy-of select="$content"/>
+  </xsl:otherwise>
+  </xsl:choose>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -90,9 +98,16 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{\emph{\small{</xsl:text>
-  <xsl:text>&lt;h&gt;</xsl:text>
-  <xsl:copy-of select="$content"/>
-  <xsl:text>&lt;/h&gt;</xsl:text>
+  <xsl:choose>
+  <xsl:when test="$monoseq.hyphenation='1'">
+    <xsl:text>&lt;h&gt;</xsl:text>
+    <xsl:copy-of select="$content"/>
+    <xsl:text>&lt;/h&gt;</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:copy-of select="$content"/>
+  </xsl:otherwise>
+  </xsl:choose>
   <xsl:text>}}}</xsl:text>
 </xsl:template>
 

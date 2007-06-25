@@ -1,5 +1,9 @@
 <sect1  xmlns:xi="http://www.w3.org/2001/XInclude"
         id="sec-changes"><title>Changes</title>
+  <sect2 id="sec-changes-026"><title>Release 0.2.6</title>
+  <para>Bug fix release.</para>
+  <xi:include href="changes-0.2.6.xml"/>
+  </sect2>
   <sect2 id="sec-changes-025"><title>Release 0.2.5</title>
   <para>Contains some deep changes even if the list of changes is small.</para>
   <xi:include href="changes-0.2.5.xml"/>
