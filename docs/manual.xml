@@ -234,6 +234,7 @@
  <para>Changes: see <xref linkend="sec-changes-025"/></para>
 </revdescription>
 </revision>
+<revision>
 <revnumber>&edition;</revnumber><date>22/06/07</date>
 <authorinitials>B. Guillon</authorinitials>
 <revdescription>

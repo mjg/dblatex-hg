@@ -411,11 +411,13 @@ options are width, height, depth. The options must be comma separated like:
 <!-- -->
 <row>
 <entry>preface.tocdepth</entry>
-<entry>When greater than -1, the preface sections appear in the TOC. The
-parameter value define the preface section numbering depth. If set to 0, all the
-sections are unnumbered. If set to 1, only the chapter level section is
-numbered, and so on. When the parameter is negative, the sections are unnumbered
-and not shown in the TOC.</entry>
+<entry>When greater than 0, the preface headings appear in the TOC. The
+parameter value define the preface section depth appearing in the TOC and in the
+bookmarks. If set to 0, none of the sections are put in the TOC.
+If set to 1, only the chapter level appears in the TOC and bookmarks, and so on.
+When the parameter is negative, it behaves like with 0, but it uses
+the previous implementation (use of unnumbered sections, that is, with latex
+heading commands ending with '*').</entry>
 <entry>0</entry>
 </row>
 <!-- -->
