@@ -216,7 +216,8 @@
 
 <xsl:template name="collab.setup">
   <xsl:param name="authors"/>
-  <xsl:if test="$doc.collab.show!='0'">
+  <xsl:choose>
+  <xsl:when test="$doc.collab.show!='0'">
     <xsl:text>% ------------------
 % Collaborators
 % ------------------
@@ -227,7 +228,11 @@
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select=".//othercredit" mode="collab"/>
     <xsl:text>&#10;\end{DBKindtable}&#10;}&#10;</xsl:text>
-  </xsl:if>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\renewcommand{\DBKindexation}{}&#10;</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="othercredit" mode="collab">
