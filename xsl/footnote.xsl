@@ -28,7 +28,7 @@
 </xsl:template>
 
 <xsl:template match="footnoteref">
-  <!-- <xsl:text>\ref{</xsl:text> -->
+  <!-- Works only with footmisc -->
   <xsl:text>\footref{</xsl:text>
   <xsl:value-of select="@linkend"/>
   <xsl:text>}</xsl:text>
