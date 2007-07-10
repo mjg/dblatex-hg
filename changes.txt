@@ -1,3 +1,7 @@
+[ben@venus xsl]$ ls sh/
+docbook-sh.xsl          inlined-sh.xsl          latex_book_fast-sh.xsl
+fasttext-sh.xsl         latex_book-sh.xsl
+
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
 x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
@@ -22,6 +26,15 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * <set> avec attachfile
 * support bibliomset
 
+Release 0.2.7:
+--------------
+- dblatex accept input data from stdin
+- bug with german babel (e.g '"S' becomes 'SS')
+- newtbl.bgcolor.thead added, to change the default table header color
+- author listing bug fix
+- <screen> in <footnote>s is possible in simple cases.
+
+
 Release 0.2.6:
 --------------
 
@@ -36,14 +49,14 @@ Release 0.2.6:
   - Parameter monoseq.hyphenation added to handle SF bug #1727482
   - Add draft.watermark={0|1} and draft.mode=maybe, allowing to deduce the
     draft mode from the @status='draft' attribute, and allowing to print
-    the "DRAFT" text as a watermark on every page. (thanks to Colin Marquardt
+    the "DRAFT" text as a watermark on every page. (thanks to Colin Marquardt's
     patch)
 
 * Bug fixes:
   - Fix display of several <glossseealso>s in <glossentry>
   - Fix <para> output in list items (<listitem>, <step>)
   - Fix unicode bug in <step>/<title>s
-  - Fix <footnoteref> bug in <table>s (thanks to Colin Marquardt patch)
+  - Fix <footnoteref> bug in <table>s (thanks to Colin Marquardt's patch)
   - Fix setup.py to make bdist_rpm work (thanks to Tim Fuehner's patch)
   - Fix some missing characters (euro, etc.) by using the pifont and textcomp
     packages.

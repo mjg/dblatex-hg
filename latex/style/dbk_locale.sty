@@ -187,6 +187,11 @@
   \renewcommand\shorthandsspanish{}
 }
 
+\babelsetup{de}{%
+  % Remove those messy "x shorthands
+  \AtBeginDocument{\languageshorthands{none}}
+}
+
 %% Apply default locale setup
 \setuplocale{en}
 

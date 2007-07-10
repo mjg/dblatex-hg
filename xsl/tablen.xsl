@@ -12,6 +12,7 @@
 <xsl:param name="newtbl.format.thead">\bfseries%&#10;</xsl:param>
 <xsl:param name="newtbl.format.tbody"/>
 <xsl:param name="newtbl.format.tfoot"/>
+<xsl:param name="newtbl.bgcolor.thead"/>
 <xsl:param name="newtbl.default.colsep" select="'1'"/>
 <xsl:param name="newtbl.default.rowsep" select="'1'"/>
 <xsl:param name="newtbl.use.hhline" select="'0'"/>

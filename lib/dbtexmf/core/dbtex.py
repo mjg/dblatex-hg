@@ -43,6 +43,8 @@ class DbTex:
         self.xslparams = []
         self.xsluser = ""
         self.flags = self.USE_MKLISTINGS
+        self.stdindir = ""
+        self.inputdir = ""
         self.input = ""
         self.input_format = "xml"
         self.output = ""
@@ -216,7 +218,10 @@ class DbTex:
         self.set_xslt()
         self.cwdir = os.getcwd()
         self.tmpdir = self.tmpdir_user or tempfile.mkdtemp()
-        self.inputdir = os.path.dirname(self.input)
+        if self.input:
+            self.inputdir = os.path.dirname(self.input)
+        else:
+            self._stdin_write()
         os.chdir(self.tmpdir)
         try:
             donefile = self._compile()
@@ -228,6 +233,17 @@ class DbTex:
                 shutil.rmtree(self.tmpdir)
             else:
                 print "%s not removed" % self.tmpdir
+
+    def _stdin_write(self):
+        # Find out the stdin working directory
+        self.inputdir = self.stdindir or self.cwdir
+
+        # Need to dump the stdin input, because of the two passes
+        self.input = os.path.join(self.tmpdir, "stdin.xml")
+        f = open(self.input, "w")
+        for line in sys.stdin:
+            f.write(line)
+        f.close()
 
     def _compile(self):
         # The temporary output file
@@ -290,6 +306,8 @@ class DbTexCommand:
                           help="All the tex output is printed")
         parser.add_option("-c", "-S", "--config",
                           help="Configuration file")
+        parser.add_option("-C", "--changedir",
+                          help="Standard input working directory")
         parser.add_option("-d", "--debug", action="store_true",
                           help="Debug mode. Keep the temporary directory in "
                                "which %s actually works" % prog)
@@ -516,7 +534,15 @@ class DbTexCommand:
         # Verbose mode
         run.log = logger(self.prog, run.verbose)
 
-        input = os.path.realpath(args[0])
+        # Data from standard input?
+        if args[0] == "-":
+            if not(options.output):
+                failed_exit("Error: -o expected when input from stdin")
+            input = ""
+            if options.changedir:
+                run.stdindir = os.path.realpath(options.changedir)
+        else:
+            input = os.path.realpath(args[0])
 
         # The output name can be deduced from the input one:
         # /path/to/input.xml -> /path/to/input.{tex|pdf|dvi|ps}

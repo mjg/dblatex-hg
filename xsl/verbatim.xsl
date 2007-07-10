@@ -11,6 +11,11 @@
 <xsl:param name="literal.lines.showall">1</xsl:param>
 
 
+<xsl:template name="verbatim.setup">
+  <xsl:apply-templates select="//screen|//programlisting"
+                       mode="save.verbatim.preamble"/>
+</xsl:template>
+
 <xsl:template match="address|literallayout|literallayout[@class='monospaced']">
   <xsl:call-template name="output.verbatim"/>
 </xsl:template>
@@ -205,6 +210,19 @@
 </xsl:template>
 
 
+<!-- Global listing saving, for listings in footnotes, since we never know
+     in which context the footnotes are used. A check is done to not cover
+     the other saving points in tables. -->
+
+<xsl:template match="programlisting|screen"
+              mode="save.verbatim.preamble">
+  <xsl:if test="not(ancestor::table or ancestor::informaltable) and
+                ancestor::footnote">
+    <xsl:apply-templates select="." mode="save.verbatim"/>
+  </xsl:if>
+</xsl:template>
+
+
 <!-- Listings does not work in tables, even for external files. So, we
      use the fancyvrb verbatim coupled to listings for the rendering stuff.
      This mode assumes that all the verbatim data is in an external
@@ -216,6 +234,7 @@
   <xsl:if test="not(descendant::imagedata[@format='linespecific']|
                     descendant::inlinegraphic[@format='linespecific']|
                     descendant::textdata)">
+    <xsl:variable name="str1" select="."/>
     <xsl:variable name="str">
       <xsl:apply-templates mode="latex.programlisting"/>
     </xsl:variable>
@@ -224,15 +243,15 @@
     <xsl:value-of select="generate-id()"/>
     <xsl:text>}</xsl:text>
     <!-- some text just after the open tag must be put on a new line -->
-    <xsl:if test="not(contains($str,'&#10;')) or
-           string-length(normalize-space(substring-before($str,'&#10;')))&gt;0">
+    <xsl:if test="not(contains($str1,'&#10;')) or
+           string-length(normalize-space(substring-before($str1,'&#10;')))&gt;0">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
     <xsl:value-of select="$str"/>
     <!-- put a \n only if needed -->
-    <xsl:if test="substring($str,string-length($str))!='&#10;' and
+    <xsl:if test="substring($str1,string-length($str1))!='&#10;' and
                   string-length(substring-after(
-                    concat(substring-after($str,normalize-space($str)),'&#10;'),
+                    concat(substring-after($str1,normalize-space($str1)),'&#10;'),
                     '&#10;'))=0">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
@@ -241,8 +260,12 @@
 </xsl:template>
 
 
-<xsl:template match="programlisting[ancestor::entry or ancestor::entrytbl]|
-                     screen[ancestor::entry or ancestor::entrytbl]">
+<xsl:template match="programlisting[ancestor::entry or
+                                    ancestor::entrytbl or
+                                    ancestor::footnote]|
+                     screen[ancestor::entry or
+                            ancestor::entrytbl or
+                            ancestor::footnote]">
 
   <xsl:variable name="lsopt">
     <!-- language option is only for programlisting -->

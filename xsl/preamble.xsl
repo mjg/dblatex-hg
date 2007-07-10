@@ -92,14 +92,18 @@
 
   <!-- Get the Authors -->
   <xsl:variable name="authors">
-    <xsl:choose>
-      <xsl:when test="$info and $info/authorgroup/author">
-        <xsl:apply-templates select="$info/authorgroup"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="$info/author"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="$info">
+      <xsl:choose>
+        <xsl:when test="$info/authorgroup/author">
+          <xsl:apply-templates select="$info/authorgroup"/>
+        </xsl:when>
+        <xsl:when test="$info/author">
+          <xsl:call-template name="person.name.list">
+            <xsl:with-param name="person.list" select="$info/author"/>
+          </xsl:call-template>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
   </xsl:variable>
 
   <xsl:text>\author{</xsl:text>
@@ -116,6 +120,8 @@
 
   <!-- Apply the revision history here -->
   <xsl:apply-templates select="$info/revhistory"/>
+
+  <xsl:call-template name="verbatim.setup"/>
 </xsl:template>
 
 <!-- ##################################

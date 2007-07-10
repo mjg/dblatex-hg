@@ -893,14 +893,25 @@
   <xsl:param name="oldentries"/>
   <xsl:param name="rowstack"/>
 
-  <xsl:variable name="rowcolor">
+  <xsl:variable name="picolor">
     <xsl:call-template name="pi-attribute">
       <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
       <xsl:with-param name="attribute" select="'bgcolor'"/>
     </xsl:call-template>
   </xsl:variable>
-  
-  <!-- Build the entry node-set -->
+
+  <xsl:variable name="rowcolor">
+    <xsl:choose>
+      <xsl:when test="$picolor!=''">
+        <xsl:value-of select="$picolor"/>
+      </xsl:when>
+      <xsl:when test="ancestor::thead">
+        <xsl:value-of select="$newtbl.bgcolor.thead"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+
+   <!-- Build the entry node-set -->
   <xsl:variable name="entries">
     <xsl:choose>
       <xsl:when test="(entry|entrytbl)[1]">
