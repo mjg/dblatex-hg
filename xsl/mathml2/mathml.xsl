@@ -30,7 +30,7 @@
   <xsl:when test="ancestor::informalequation">
     <xsl:text>&#10;\[&#10;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>&#10;\]&#10;</xsl:text>
+    <xsl:text> \]&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>
     <xsl:apply-imports/>

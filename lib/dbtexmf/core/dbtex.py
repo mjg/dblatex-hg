@@ -41,7 +41,7 @@ class DbTex:
             self.set_base(base)
         self.xslopts = []
         self.xslparams = []
-        self.xsluser = ""
+        self.xslusers = []
         self.flags = self.USE_MKLISTINGS
         self.stdindir = ""
         self.inputdir = ""
@@ -122,7 +122,7 @@ class DbTex:
             return "unknown"
 
     def build_stylesheet(self, wrapper="custom.xsl"):
-        if not(self.xslparams or self.xsluser):
+        if not(self.xslparams or self.xslusers):
             self.xslbuild = self.xslmain
             return
 
@@ -133,8 +133,8 @@ class DbTex:
                 version="1.0">
                 \n""")
         f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
-        if self.xsluser:
-            f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xsluser))
+        for xsluser in self.xslusers:
+            f.write('<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
 
         for param in self.xslparams:
             v = param.split("=", 1)
@@ -334,7 +334,7 @@ class DbTexCommand:
         parser.add_option("-o", "--output", dest="output",
                           help="Output filename. When not used, the input filename "
                                "is used, with the suffix of the output format")
-        parser.add_option("-p", "--xsl-user",
+        parser.add_option("-p", "--xsl-user", action="append",
                           help="XSL user configuration file to use")
         parser.add_option("-P", "--param", dest="xslparams",
                           action="append", metavar="PARAM=VALUE",
@@ -444,10 +444,11 @@ class DbTexCommand:
             run.backend = options.backend
 
         if options.xsl_user:
-            xsluser = os.path.realpath(options.xsl_user)
-            if not(os.path.isfile(xsluser)):
-                failed_exit("Error: '%s' does not exist" % options.xsl_user)
-            run.xsluser = xsluser
+            for xfile in options.xsl_user:
+                xsluser = os.path.realpath(xfile)
+                if not(os.path.isfile(xsluser)):
+                    failed_exit("Error: '%s' does not exist" % options.xsl_user)
+                run.xslusers.append(xsluser)
 
         if options.texpost:
             path = os.path.realpath(options.texpost)

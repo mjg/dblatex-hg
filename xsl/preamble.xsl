@@ -68,6 +68,7 @@
     <xsl:with-param name="lang" select="$lang"/>
   </xsl:call-template>
   <xsl:call-template name="lang.setup"/>
+  <xsl:call-template name="image.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="biblio.setup"/>
   <xsl:call-template name="annotation.setup"/>

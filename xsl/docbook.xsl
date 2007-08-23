@@ -9,9 +9,13 @@
 
 <xsl:output method="text" encoding="UTF-8" indent="yes"/>
 
-<xsl:include href="common.xsl"/>
 <xsl:include href="common/l10n.xsl"/>
 <xsl:include href="common/common.xsl"/>
+<xsl:include href="common/gentext.xsl"/>
+<xsl:include href="common/labels.xsl"/>
+<xsl:include href="common/olink.xsl"/>
+<xsl:include href="common/lib.xsl"/>
+<xsl:include href="common/titles.xsl"/>
 <xsl:include href="chapter.xsl"/>
 <xsl:include href="bridgehead.xsl"/>
 <xsl:include href="color.xsl"/>

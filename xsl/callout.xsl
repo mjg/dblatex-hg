@@ -55,6 +55,7 @@
 <xsl:template name="coref.link.create">
   <xsl:param name="ref"/>
   <xsl:param name="rnode" select="/"/>
+  <xsl:param name="circled" select="0"/>
   <xsl:variable name="coval">
     <!-- Cannot use directly id() because it must work on several RTF -->
     <xsl:apply-templates select="$rnode//*[@id=$ref]" mode="conumber"/>
@@ -63,6 +64,11 @@
   <!-- The markup can be a bubble or a simple number -->
   <xsl:variable name="markup">
     <xsl:choose>
+    <xsl:when test="$circled != 0">
+      <xsl:text>\conum{</xsl:text>
+      <xsl:value-of select="$coval"/>
+      <xsl:text>}</xsl:text>
+    </xsl:when>
     <xsl:when test="$callout.markup.circled='1' and self::callout">
       <xsl:text>\conum{</xsl:text>
       <xsl:value-of select="$coval"/>
@@ -247,6 +253,20 @@
   </xsl:call-template>
   <!-- Ask to latex to let the title with its list -->
   <xsl:text>\nopagebreak&#10;</xsl:text>
+</xsl:template>
+
+
+<!-- Callout numbering -->
+<xsl:template match="co|callout" mode="conumber">
+  <xsl:number from="literallayout|programlisting|screen|synopsis|calloutlist"
+              level="any"
+              format="1"/>
+</xsl:template>
+
+<xsl:template match="area" mode="conumber">
+  <xsl:number from="areaspec"
+              level="any"
+              format="1"/>
 </xsl:template>
 
 </xsl:stylesheet>

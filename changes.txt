@@ -29,10 +29,12 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 Release 0.2.7:
 --------------
 - dblatex accept input data from stdin
-- bug with german babel (e.g '"S' becomes 'SS')
+- Bug with german babel (e.g '"S' becomes 'SS')
 - newtbl.bgcolor.thead added, to change the default table header color
-- author listing bug fix
+- Author listing bug fix
 - <screen> in <footnote>s is possible in simple cases.
+- Olink and xrefstyle support added.
+- Italian translation added.
 
 
 Release 0.2.6:

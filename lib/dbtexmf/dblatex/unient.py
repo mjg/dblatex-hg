@@ -135,6 +135,7 @@ unicode_map = {
 0x00261: r"g", # LATIN SMALL LETTER SCRIPT G
 0x00278: r"\textphi{}", # LATIN SMALL LETTER PHI
 0x0029E: r"\textturnk{}", # LATIN SMALL LETTER TURNED K
+0x002A4: r"\textdyoghlig{}", # LATIN SMALL LETTER DEZH DIGRAPH
 0x002BC: r"'", # MODIFIER LETTER APOSTROPHE
 0x002C7: r"\textasciicaron{}", # CARON
 0x002D8: r"\textasciibreve{}", # BREVE

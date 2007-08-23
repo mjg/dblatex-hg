@@ -15,7 +15,9 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>\footnote{</xsl:text>
-    <xsl:call-template name="label.id"/>
+    <xsl:call-template name="label.id">
+      <xsl:with-param name="inline" select="1"/>
+    </xsl:call-template>
     <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
   </xsl:otherwise>

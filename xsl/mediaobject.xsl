@@ -446,7 +446,7 @@
   <xsl:value-of select="$filename"/>
   <xsl:text>}</xsl:text>
   <xsl:value-of select="$graphic.end"/>
-  <xsl:text>}\quad&#10;</xsl:text>
+  <xsl:text>}&#10;</xsl:text>
   <xsl:if test="$viewport=1">
     <xsl:text>\end{minipage}&#10;</xsl:text>
   </xsl:if>

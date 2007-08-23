@@ -378,6 +378,11 @@
   <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
+<!-- Text in bibliomixed/bibliomset must be processed as normal (scaped) -->
+
+<xsl:template match="text()" mode="bibliography.mode">
+  <xsl:apply-templates select="."/>
+</xsl:template>
 
 <!-- by default no specific behaviour -->
 

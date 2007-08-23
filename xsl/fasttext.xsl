@@ -7,13 +7,6 @@
 <!ENTITY v1 "&#x370;u">
 <!ENTITY v2 "&#x371;u">
 ]>
-<!--
-Old separators were:
-<!ENTITY t1 "&lt;t&gt;">
-<!ENTITY t2 "&lt;/t&gt;">
-<!ENTITY u1 "&lt;u&gt;">
-<!ENTITY u2 "&lt;/u&gt;">
--->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
                 version='1.0'>

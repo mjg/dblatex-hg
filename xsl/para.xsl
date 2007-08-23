@@ -8,6 +8,7 @@
 
 <xsl:template match="para|simpara">
   <xsl:text>&#10;</xsl:text>
+  <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
   <xsl:text>&#10;</xsl:text>
 </xsl:template>

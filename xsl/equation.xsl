@@ -5,8 +5,17 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:param name="tex.math.in.alt" select="'latex'"/>
+
 <xsl:template match="inlineequation|informalequation">
-  <xsl:apply-templates/>
+  <xsl:choose>
+  <xsl:when test="alt and ($tex.math.in.alt='latex' or count(child::*)=1)">
+    <xsl:apply-templates select="alt"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:apply-templates select="*[not(self::alt)]"/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="equation">

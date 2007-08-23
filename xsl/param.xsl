@@ -34,17 +34,38 @@
 <!-- "Common" parameters -->
 
 <xsl:param name="author.othername.in.middle" select="1"/>
-<xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="section.label.includes.component.label" select="0"/>
+<xsl:param name="component.label.includes.part.label" select="0"/>
+<xsl:param name="label.from.part" select="0"/>
+<xsl:param name="section.autolabel" select="1"/>
 <xsl:param name="chapter.autolabel" select="1"/>
 <xsl:param name="preface.autolabel" select="0"/>
 <xsl:param name="part.autolabel" select="1"/>
+<xsl:param name="appendix.autolabel" select="1"/>
 <xsl:param name="qandadiv.autolabel" select="1"/>
 <xsl:param name="qanda.inherit.numeration" select="1"/>
 <xsl:param name="qanda.defaultlabel">number</xsl:param>
 <xsl:param name="graphic.default.extension"/>
 <xsl:param name="make.single.year.ranges" select="0"/>
 <xsl:param name="make.year.ranges" select="0"/>
+<xsl:param name="l10n.gentext.language" select="''"/>
+<xsl:param name="l10n.gentext.default.language" select="'en'"/>
+<xsl:param name="l10n.gentext.use.xref.language" select="0"/>
+<xsl:param name="section.autolabel.max.depth" select="8"/>
+<xsl:param name="xref.with.number.and.title" select="0"/>
+<xsl:param name="insert.xref.page.number">no</xsl:param>
+
+<xsl:param name="target.database.document" select="''"/>
+<xsl:param name="targets.filename" select="'target.db'"/>
+<xsl:param name="use.local.olink.style" select="0"/> 
+<xsl:param name="olink.doctitle" select="'yes'"/> 
+<xsl:param name="olink.base.uri" select="''"/> 
+<xsl:param name="olink.debug" select="0"/>
+<xsl:param name="olink.lang.fallback.sequence" select="''"/> 
+<xsl:param name="prefer.internal.olink" select="0"/>
+<xsl:param name="insert.olink.page.number">yes</xsl:param>
+<xsl:param name="insert.olink.pdf.frag" select="1"/>
+<xsl:param name="current.docid"/>
 
 
 <xsl:variable name="latex.book.afterauthor">
