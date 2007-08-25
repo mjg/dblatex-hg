@@ -1095,9 +1095,6 @@
     </xsl:for-each>
   </xsl:variable>
 
-<xsl:message>docname=<xsl:value-of select="$docname"/></xsl:message>
-<xsl:message>rootptr=<xsl:value-of select="$rootptr"/></xsl:message>
-<xsl:message>targetptr=<xsl:value-of select="$targetptr"/></xsl:message>
 
   <xsl:if test="not(starts-with(normalize-space($xrefstyle), 'select:') 
               and (contains($xrefstyle, 'docname')))
@@ -1106,7 +1103,6 @@
               and $rootptr != $targetptr
               and $current.docid != $targetdoc
               and $docname != ''">
-<xsl:message>here</xsl:message>
     <xsl:call-template name="substitute-markup">
       <xsl:with-param name="template">
         <xsl:call-template name="gentext.template">

@@ -453,7 +453,6 @@
   <xsl:param name="referrer"/>
   <xsl:param name="verbose"/>
 
-<xsl:message>!!docname=<xsl:value-of select="$docname"/></xsl:message>
   <xsl:choose>
     <xsl:when test="contains($template, '%')">
       <xsl:call-template name="scape">
@@ -532,7 +531,6 @@
           </xsl:apply-templates>
         </xsl:when>
         <xsl:when test="$candidate = 'o'">
-<xsl:message>!!!docname=<xsl:value-of select="$docname"/></xsl:message>
           <!-- olink target document title -->
           <xsl:apply-templates select="." mode="insert.olink.docname.markup">
             <xsl:with-param name="purpose" select="$purpose"/>
