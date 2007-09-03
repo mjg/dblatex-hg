@@ -172,6 +172,19 @@
 }{\typeout{WARNING: truncate.sty wasn't available and functionality was skipped.}}
 \pagestyle{fancy}
 
+% Define front/main/back matter if not available
+\makeatletter
+\@ifundefined{frontmatter}{
+  \def\frontmatter{\cleardoublepage\pagenumbering{roman}}
+}{}
+\@ifundefined{mainmatter}{
+  \def\mainmatter{\cleardoublepage\pagenumbering{arabic}}
+}{}
+\@ifundefined{backmatter}{
+  \def\backmatter{\if@openright\cleardoublepage\else\clearpage\fi}
+}{}
+\makeatother
+
 % ---------------------- 
 % Most Common Packages   
 % ---------------------- 
@@ -331,11 +344,6 @@
   \floatname{algorithm}{Algorithm}
 }
 \makeatother
-%\ifpdf
-%\DeclareGraphicsExtensions{.pdf,.png,.jpg}
-%\else
-%\DeclareGraphicsExtensions{.eps}
-%\fi
 
 % --------------------------------------------
 % $latex.caption.swapskip enabled for $formal.title.placement support

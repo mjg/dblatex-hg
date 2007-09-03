@@ -27,6 +27,12 @@
 % Watermark command
 \def\showwatermark#1{}
 
+% Front/main/back matter macros
+\@ifundefined{frontmatter}{ \let\frontmatter\relax }{}
+\@ifundefined{mainmatter}{ \let\mainmatter\relax }{}
+\@ifundefined{backmatter}{ \let\backmatter\relax }{}
+
+
 %
 % Main latex <revhistory> command. It will be redefined by the XSL stylesheets.
 %

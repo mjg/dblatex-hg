@@ -14,10 +14,10 @@
     \def\hyperparamadd{}
   }{}
   \ifpdf
-    \usepackage[pdftex,\hyperparam,\hyperparamadd]{hyperref}
+    \usepackage[pdftex,plainpages=false,\hyperparam,\hyperparamadd]{hyperref}
     \def\hyperlabel#1{\hypertarget{#1}{}}
   \else
-    \usepackage[dvips,\hyperparam,\hyperparamadd]{hyperref}
+    \usepackage[dvips,plainpages=false,\hyperparam,\hyperparamadd]{hyperref}
     \def\hyperlabel#1{\Hy@raisedlink{\hyper@anchorstart{#1}\hyper@anchorend}}
   \fi
 }{

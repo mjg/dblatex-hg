@@ -254,7 +254,6 @@
     \addcontentsline{toc}{chapter}{\numberline{\thechapter}\indexname}
   }
 }{
-  \label{LastPage}%
   \end{stdindex}
 }
 
@@ -266,10 +265,8 @@
          65 rotate /Times-Roman findfont 216 scalefont setfont %
          0 0 moveto 0.8 setgray (DRAFT) show grestore}def end}}
 
-\AtEndDocument{%
-  \label{LastPage}%
-}
 \usepackage{refcount}
+\usepackage{lastpage}
 
 \usepackage{dbk_locale}
 \usepackage{dbk_title}
