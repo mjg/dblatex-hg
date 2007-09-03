@@ -161,6 +161,9 @@
   </section>
 
   <section><title>Installing on Windows</title>
+  <para>The following packages to install and the procedure is for a native
+  Windows installation. If you want to use dblatex via Cygwin instead, you
+  should consider it like a unix like install.</para>
 
   <section><title>Dependencies</title>
   <para>The following applications are required:
