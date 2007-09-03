@@ -7,6 +7,7 @@
 
 <xsl:param name="filename.as.url">1</xsl:param>
 <xsl:param name="monoseq.hyphenation">1</xsl:param>
+<xsl:param name="monoseq.small">0</xsl:param>
 
 
 <xsl:template name="inline.boldseq">
@@ -80,6 +81,9 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{</xsl:text>
+  <xsl:if test="not($monoseq.small = '0')">
+    <xsl:text>\small{</xsl:text>
+  </xsl:if>
   <xsl:choose>
   <xsl:when test="$monoseq.hyphenation='1'">
     <xsl:text>&lt;h&gt;</xsl:text>
@@ -90,6 +94,9 @@
     <xsl:copy-of select="$content"/>
   </xsl:otherwise>
   </xsl:choose>
+  <xsl:if test="not($monoseq.small = '0')">
+    <xsl:text>}</xsl:text>
+  </xsl:if>
   <xsl:text>}</xsl:text>
 </xsl:template>
 

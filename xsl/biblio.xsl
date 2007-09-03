@@ -379,18 +379,19 @@
 </xsl:template>
 
 <!-- Text in bibliomixed/bibliomset must be processed as normal (scaped) -->
-
 <xsl:template match="text()" mode="bibliography.mode">
   <xsl:apply-templates select="."/>
 </xsl:template>
 
 <!-- by default no specific behaviour -->
-
 <xsl:template match="*" mode="bibliography.mode">
   <xsl:apply-templates mode="bibliography.mode"/>
 </xsl:template>
 
-<!-- specific behaviour for bibliography -->
+<!-- want hot links -->
+<xsl:template match="ulink" mode="bibliography.mode">
+  <xsl:apply-templates select="."/>
+</xsl:template>
 
 <xsl:template match="biblioset" mode="bibliography.mode">
   <xsl:if test="author|authorgroup">

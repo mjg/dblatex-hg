@@ -28,7 +28,7 @@
   <xsl:variable name="revnumber" select=".//revnumber"/>
   <xsl:variable name="revdate"   select=".//date"/>
   <xsl:variable name="revremark" select=".//revremark|.//revdescription"/>
-  <xsl:variable name="revauthor" select=".//authorinitials"/>
+  <xsl:variable name="revauthor" select=".//authorinitials|.//author"/>
   <xsl:text>~\par&#10;</xsl:text>
   <!-- Elements de la revision -->
   <xsl:if test="$revnumber">

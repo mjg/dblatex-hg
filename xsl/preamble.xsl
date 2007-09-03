@@ -25,6 +25,9 @@
   <xsl:text>&#10;\end{document}&#10;</xsl:text>
 </xsl:variable>
 
+<xsl:variable name="frontmatter" select="'\frontmatter&#10;'"/>
+<xsl:variable name="mainmatter" select="'\mainmatter&#10;'"/>
+<xsl:variable name="backmatter" select="'\backmatter&#10;'"/>
 
 <xsl:template match="book|article" mode="preamble">
   <xsl:param name="lang"/>
@@ -311,6 +314,13 @@
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
+<!-- For backward compatibility, used only if pubsnumber not used -->
+<xsl:template match="biblioid[not(parent::*/pubsnumber)]" mode="docinfo">
+  <xsl:text>\renewcommand{\DBKreference}{</xsl:text>
+  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:text>}&#10;</xsl:text>
+</xsl:template>
+
 <xsl:template match="edition" mode="docinfo">
   <xsl:text>\renewcommand{\DBKedition}{</xsl:text>
   <xsl:call-template name="normalize-scape">
@@ -393,17 +403,22 @@
     <xsl:with-param name="nodes" select="$info/legalnotice"/>
   </xsl:call-template>
 
+  <xsl:value-of select="$frontmatter"/>
   <xsl:text>\maketitle&#10;</xsl:text>
 
   <!-- Print the TOC/LOTs -->
   <xsl:apply-templates select="." mode="toc_lots"/>
   <xsl:call-template name="label.id"/>
 
-  <!-- Print the abstract -->
+  <!-- Print the abstract and front matter content -->
   <xsl:apply-templates select="(abstract|$info/abstract)[1]"/>
+  <xsl:apply-templates select="dedication|preface"/>
 
   <!-- Body content -->
-  <xsl:apply-templates select="*[not(self::abstract)]"/>
+  <xsl:value-of select="$mainmatter"/>
+  <xsl:apply-templates select="*[not(self::abstract or
+                                     self::preface or
+                                     self::dedication)]"/>
   <xsl:if test="*//indexterm|*//keyword">
     <xsl:text>\printindex&#10;</xsl:text>
   </xsl:if>

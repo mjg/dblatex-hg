@@ -69,7 +69,7 @@
     </xsl:when>
     <xsl:otherwise>
       <xsl:message>
-      <xsl:text>*** Error: cannot find indexterm[@startref='</xsl:text>
+      <xsl:text>Error: cannot find indexterm[@startref='</xsl:text>
       <xsl:value-of select="$id"/>
       <xsl:text>'] end of range</xsl:text>
       </xsl:message>
@@ -78,6 +78,11 @@
   </xsl:when>
   </xsl:choose>
   <xsl:text>}</xsl:text>
+  <!-- don't want to be stuck to the next para -->
+  <xsl:if test="following-sibling::*[1][self::para or self::formalpara or
+                                        self::simpara]">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <!-- simply duplicate the referenced starting range indexterm, and close the

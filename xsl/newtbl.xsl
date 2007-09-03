@@ -998,7 +998,8 @@
     <xsl:otherwise>
       <!-- Ask to table to end the head -->
       <xsl:if test="$context = 'thead'">
-        <xsl:apply-templates select="ancestor::table|ancestor::informaltable"
+        <xsl:apply-templates select="(ancestor::table
+                                     |ancestor::informaltable)[last()]"
                              mode="newtbl.endhead">
           <xsl:with-param name="tabletype" select="$tabletype"/>
           <xsl:with-param name="headrows" select="$row-output"/>
@@ -1279,7 +1280,8 @@
   <xsl:text>}</xsl:text>
 
   <xsl:if test="not(thead)">
-    <xsl:apply-templates select="ancestor::table|ancestor::informaltable"
+    <xsl:apply-templates select="(ancestor::table
+                                 |ancestor::informaltable)[last()]"
                          mode="newtbl.endhead">
       <xsl:with-param name="tabletype" select="$tabletype"/>
     </xsl:apply-templates>
