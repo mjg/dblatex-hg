@@ -32,7 +32,7 @@ native db2latex simple: version.xml profile
 
 # Build the manpage
 %.1.gz: %.1
-	gzip $<
+	gzip -f $<
 
 %.1: %.1.xml
 	$(XSLTPROC) --param profile.attribute "'output'" \

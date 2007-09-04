@@ -233,7 +233,8 @@
         </term>
         <listitem>
           <simpara>
-            An <application>XSL</application> user stylesheet to use.
+            An <application>XSL</application> user stylesheet to use. Several
+            user stylesheets can be specified, but the option order is meaningful.
             <phrase output="manual">See <xref linkend="sec-param"/>.</phrase>
           </simpara>
         </listitem>
@@ -423,6 +424,14 @@
       To apply your own latex style:
       <screen>dblatex -s mystyle myfile.xml
 dblatex -s /path/to/mystyle.sty myfile.xml</screen>
+    </para>
+    <para>
+      To use <command>dblatex</command> and profiling:
+      <screen>
+xsltproc --param profile.attribute "'output'" \
+         --param profile.value "'pdf'" /path/to/profiling/profile.xsl \
+         myfile.xml | dblatex -o myfile.pdf -
+</screen>
     </para>
   </refsect1>
 
