@@ -304,16 +304,36 @@
     <xsl:value-of select="normalize-space(@xreflabel)"/> 
   </xsl:when>
   <xsl:when test="abbrev">
-    <xsl:apply-templates select="abbrev" mode="bibliography.mode"/> 
+    <xsl:apply-templates select="abbrev" mode="biblio.label.mode"/> 
+  </xsl:when>
+  <xsl:when test="@id">
+    <xsl:value-of select="normalize-space(@id)"/> 
+  </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<!-- The biblio entry ID must follow the label, to match citation text -->
+<xsl:template name="bibitem.id">
+  <xsl:choose>
+  <xsl:when test="@xreflabel">
+    <xsl:value-of select="normalize-space(@xreflabel)"/> 
+  </xsl:when>
+  <xsl:when test="abbrev">
+    <xsl:apply-templates select="abbrev" mode="biblio.label.mode"/> 
   </xsl:when>
   <xsl:when test="@id">
     <xsl:value-of select="normalize-space(@id)"/> 
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>UNKNOWN</xsl:text>
+    <xsl:value-of select="generate-id()"/>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<xsl:template match="abbrev" mode="biblio.label.mode"> 
+  <xsl:value-of select="."/>
+</xsl:template>
+
 
 <xsl:template name="bibitem">
   <xsl:variable name="tag">
@@ -321,7 +341,7 @@
   </xsl:variable>
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\bibitem</xsl:text>
-  <xsl:if test="$tag!='UNKNOWN'">
+  <xsl:if test="$tag != ''">
     <xsl:text>[</xsl:text>
     <xsl:call-template name="normalize-scape">
       <xsl:with-param name="string" select="$tag"/>
@@ -329,8 +349,13 @@
     <xsl:text>]</xsl:text> 
   </xsl:if>
   <xsl:text>{</xsl:text>
-  <xsl:value-of select="$tag"/>
-  <xsl:text>}&#10;</xsl:text> 
+  <xsl:call-template name="bibitem.id"/>
+  <xsl:text>}</xsl:text>
+  <!-- Add labels, in case of xrefs to here -->
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="inline" select="1"/>
+  </xsl:call-template>
+  <xsl:text>&#10;</xsl:text> 
 </xsl:template>
 
 <xsl:template name="biblioentry.output">
@@ -368,7 +393,6 @@
     <xsl:text>&#10;&#10;</xsl:text>
     <xsl:apply-templates select="." mode="bibliography.mode"/>
   </xsl:for-each>
-  <xsl:call-template name="label.id"/> 
   <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
@@ -392,6 +416,10 @@
 <xsl:template match="ulink" mode="bibliography.mode">
   <xsl:apply-templates select="."/>
 </xsl:template>
+
+<!-- abbrev not displayed  -->
+<xsl:template match="abbrev" mode="bibliography.mode"/>
+
 
 <xsl:template match="biblioset" mode="bibliography.mode">
   <xsl:if test="author|authorgroup">

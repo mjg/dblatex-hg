@@ -626,8 +626,10 @@
       <!-- Get the xref text for this record -->
       <xsl:variable name="xref.text" >
         <xsl:for-each select="$target.database" >
-          <xsl:copy-of 
+          <xsl:call-template name="scape">
+            <xsl:with-param name="string" 
                   select="key('targetptr-key', $olink.key)/xreftext/node()" />
+          </xsl:call-template>
         </xsl:for-each>
       </xsl:variable>
 
@@ -853,7 +855,10 @@
             <xsl:with-param name="template" select="$template"/>
             <xsl:with-param name="title">
               <xsl:for-each select="$target.database" >
-                <xsl:value-of select="key('targetptr-key', $olink.key)/ttl" />
+                <xsl:call-template name="scape">
+                  <xsl:with-param name="string"
+                                  select="key('targetptr-key', $olink.key)/ttl" />
+                </xsl:call-template>
               </xsl:for-each>
             </xsl:with-param>
             <xsl:with-param name="label">
@@ -870,8 +875,10 @@
             </xsl:with-param>
             <xsl:with-param name="docname">
               <xsl:for-each select="$target.database" >
-                <xsl:value-of 
+                <xsl:call-template name="scape">
+                  <xsl:with-param name="string" 
                        select="key('targetdoc-key', $targetdoc)/div[1]/ttl" />
+                </xsl:call-template>
               </xsl:for-each>
             </xsl:with-param>
           </xsl:call-template>
@@ -891,7 +898,10 @@
             <xsl:with-param name="template" select="$template"/>
             <xsl:with-param name="title">
               <xsl:for-each select="$target.database" >
-                <xsl:value-of select="key('targetptr-key', $olink.key)/ttl" />
+                <xsl:call-template name="scape">
+                  <xsl:with-param name="string"
+                                  select="key('targetptr-key', $olink.key)/ttl" />
+                </xsl:call-template>
               </xsl:for-each>
             </xsl:with-param>
             <xsl:with-param name="label">
@@ -1090,8 +1100,10 @@
 
   <xsl:variable name="docname">
     <xsl:for-each select="$target.database" >
-      <xsl:value-of 
+      <xsl:call-template name="scape">
+        <xsl:with-param name="string" 
              select="key('targetdoc-key', $targetdoc)/div[1]/ttl" />
+      </xsl:call-template>
     </xsl:for-each>
   </xsl:variable>
 

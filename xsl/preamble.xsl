@@ -79,7 +79,7 @@
   <xsl:apply-templates select="." mode="docinfo"/>
 
   <!-- Document title -->
-  <xsl:text>\title{</xsl:text>
+  <xsl:variable name="title">
     <xsl:call-template name="normalize-scape">
       <xsl:with-param name="string">
         <xsl:choose>
@@ -92,7 +92,7 @@
         </xsl:choose>
       </xsl:with-param>
     </xsl:call-template>
-  <xsl:text>}&#10;</xsl:text>
+  </xsl:variable>
 
   <!-- Get the Authors -->
   <xsl:variable name="authors">
@@ -110,8 +110,25 @@
     </xsl:if>
   </xsl:variable>
 
+  <xsl:text>\title{</xsl:text>
+  <xsl:value-of select="$title"/>
+  <xsl:text>}&#10;</xsl:text>
   <xsl:text>\author{</xsl:text>
   <xsl:value-of select="$authors"/>
+  <xsl:text>}&#10;</xsl:text>
+
+  <xsl:text>\hypersetup{%&#10;</xsl:text>
+  <xsl:if test="$doc.pdfcreator.show='1'">
+    <xsl:text>pdfcreator={DBLaTeX-</xsl:text>
+    <xsl:value-of select="$version"/>
+    <xsl:text>},%&#10;</xsl:text>
+  </xsl:if>
+  <xsl:text>pdftitle={</xsl:text>
+  <xsl:value-of select="$title"/>
+  <xsl:text>},%&#10;</xsl:text>
+  <xsl:text>pdfauthor={</xsl:text>
+  <xsl:value-of select="$authors"/>
+  <xsl:text>}%&#10;</xsl:text>
   <xsl:text>}&#10;</xsl:text>
 
   <!-- Set the collaborator table -->
@@ -139,12 +156,14 @@
     <xsl:value-of select="$latex.hyperparam"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
+  <!--
   <xsl:if test="$doc.pdfcreator.show='1'">
     <xsl:text>\def\hyperparamadd{</xsl:text>
     <xsl:text>pdfcreator=DBLaTeX-</xsl:text>
     <xsl:value-of select="$version"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
+  -->
   <xsl:if test="$doc.publisher.show='1'">
     <xsl:text>\def\DBKpublisher{</xsl:text>
     <xsl:text>\includegraphics{dblatex}</xsl:text>
@@ -280,7 +299,8 @@
 
 <xsl:template match="address" mode="docinfo">
   <xsl:text>\renewcommand{\DBKsite}{</xsl:text>
-  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
@@ -304,20 +324,23 @@
 
 <xsl:template match="pubdate" mode="docinfo">
   <xsl:text>\renewcommand{\DBKpubdate}{</xsl:text>
-  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="pubsnumber" mode="docinfo">
   <xsl:text>\renewcommand{\DBKreference}{</xsl:text>
-  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
 <!-- For backward compatibility, used only if pubsnumber not used -->
 <xsl:template match="biblioid[not(parent::*/pubsnumber)]" mode="docinfo">
   <xsl:text>\renewcommand{\DBKreference}{</xsl:text>
-  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
@@ -332,7 +355,8 @@
 <xsl:template match="date" mode="docinfo">
   <!-- Override the date definition if specified -->
   <xsl:text>\renewcommand{\DBKdate}{</xsl:text>
-  <xsl:value-of select="normalize-space(.)"/>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
@@ -350,6 +374,9 @@
 
 <xsl:template match="holder" mode="titlepage.mode">
   <xsl:apply-templates/>
+  <xsl:if test="position() &lt; last()">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="copyright" mode="titlepage.mode">
@@ -418,10 +445,14 @@
   <xsl:value-of select="$mainmatter"/>
   <xsl:apply-templates select="*[not(self::abstract or
                                      self::preface or
-                                     self::dedication)]"/>
+                                     self::dedication or
+                                     self::colophon)]"/>
+
+  <!-- Back matter -->
   <xsl:if test="*//indexterm|*//keyword">
     <xsl:text>\printindex&#10;</xsl:text>
   </xsl:if>
+  <xsl:apply-templates select="colophon"/>
   <xsl:call-template name="lang.document.end">
     <xsl:with-param name="lang" select="$lang"/>
   </xsl:call-template>

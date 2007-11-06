@@ -152,7 +152,8 @@
   </xsl:otherwise>
   </xsl:choose>
 
-  <xsl:text>\textit{</xsl:text>
+  <!-- don't use textit since we can have several paragraphs -->
+  <xsl:text>{\it </xsl:text>
   <xsl:apply-templates/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>

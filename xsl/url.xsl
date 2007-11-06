@@ -14,6 +14,49 @@
   <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- The funny thing is that in table cells, it fails if the URL ends with a
+     '\'. The workaround is to append a space. Moreover, the problem occurs only
+     if the ending '\'s are non a multiple of 2!
+-->
+<xsl:template name="nolinkurl2">
+  <xsl:param name="url" select="@url"/>
+  <xsl:variable name="bscount">
+    <xsl:call-template name="bslash-end-count">
+      <xsl:with-param name="url" select="$url"/>
+    </xsl:call-template>
+  </xsl:variable>
+  <xsl:text>\nolinkurl{</xsl:text>
+  <xsl:call-template name="scape-encode">
+    <xsl:with-param name="string" select="$url"/>
+  </xsl:call-template>
+  <xsl:if test="$bscount mod 2">
+    <xsl:text> </xsl:text>
+  </xsl:if>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+
+<!-- Count the number of '\' ending the url (only for entries) -->
+<xsl:template name="bslash-end-count">
+  <xsl:param name="count" select="0"/>
+  <xsl:param name="url"/>
+
+  <xsl:choose>
+  <xsl:when test="$url = ''">
+    <xsl:value-of select="$count"/>
+  </xsl:when>
+  <xsl:when test="substring($url,string-length($url))='\'">
+    <xsl:call-template name="bslash-end-count">
+      <xsl:with-param name="url" select="substring($url,1,string-length($url)-1)"/>
+      <xsl:with-param name="count" select="$count + 1"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$count"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <!-- Only URLs in table cells must be escaped (mostly because of multicolumn) -->
 <xsl:template name="nolinkurl-output">
@@ -94,7 +137,7 @@
       <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:if test="$len != 0">
-      <xsl:call-template name="nolinkurl">
+      <xsl:call-template name="nolinkurl2">
         <xsl:with-param name="url" select="$url"/>
       </xsl:call-template>
     </xsl:if>
@@ -112,7 +155,7 @@
       <xsl:value-of select="$escchars"/>
       <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:call-template name="nolinkurl">
+    <xsl:call-template name="nolinkurl2">
       <xsl:with-param name="url" select="substring($url, 1, $pos)"/>
     </xsl:call-template>
     <xsl:call-template name="nolinkurl-escape">

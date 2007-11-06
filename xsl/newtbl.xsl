@@ -330,6 +330,33 @@
 </xsl:template>
 
 
+<!-- Check the entry column range is valid -->
+<xsl:template name="check-colrange">
+  <xsl:param name="colnum"/>
+  <xsl:param name="rownum"/>
+  <xsl:param name="colend"/>
+  <xsl:param name="colstart"/>
+
+  <xsl:variable name="msg">
+    <xsl:text>Invalid table entry row=</xsl:text>
+    <xsl:value-of select="$rownum"/>
+    <xsl:text>/column=</xsl:text>
+    <xsl:value-of select="$colnum"/>
+  </xsl:variable>
+  <xsl:if test="string(number($colend))='NaN'">
+    <xsl:message terminate="yes">
+      <xsl:value-of select="$msg"/>
+      <xsl:text> (@colend)</xsl:text>
+    </xsl:message>
+  </xsl:if>
+  <xsl:if test="string(number($colstart))='NaN'">
+    <xsl:message terminate="yes">
+      <xsl:value-of select="$msg"/>
+      <xsl:text> (@colstart)</xsl:text>
+    </xsl:message>
+  </xsl:if>
+</xsl:template>
+
 
 <!-- Returns a RTF of entry elements. rowsep, colsep and align are all -->
 <!-- extracted from spanspec/colspec as required -->
@@ -427,6 +454,14 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
+
+      <!-- Check column consistency -->
+      <xsl:call-template name="check-colrange">
+        <xsl:with-param name="colnum" select="$colnum"/>
+        <xsl:with-param name="rownum" select="$rownum"/>
+        <xsl:with-param name="colstart" select="$colstart"/>
+        <xsl:with-param name="colend" select="$colend"/>
+      </xsl:call-template>
 
       <!-- No offset between column and cell content for entrytbl -->
       <xsl:variable name="coloff">

@@ -32,10 +32,12 @@
  |  Especial Cases Do not add Linefeed 
  +============================================================================-->
 
-<xsl:template match="listitem/para|step/para|listitem/simpara|step/simpara">
+<xsl:template match="listitem/para|step/para|entry/para
+                    |listitem/simpara|step/simpara|entry/simpara">
   <xsl:if test="preceding-sibling::*">
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
+  <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
   <xsl:text>&#10;</xsl:text>
 </xsl:template>

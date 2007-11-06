@@ -4,7 +4,6 @@ fasttext-sh.xsl         latex_book-sh.xsl
 
 * Utiliser listings pour faire <funcsynopsis>
 * Mettre <literallayout> avec <programlisting> -> à voir !!
-x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * Patch biblio à intégrer (~/archives/tmp/biblio_patch)
 * Bug table
 * Problèmes table in example
@@ -26,21 +25,74 @@ x * Bug#398516: http://perso.enstimac.fr/~gaborit/latex/latex-in-french.html
 * <set> avec attachfile
 * support bibliomset
 
+Release 0.2.8:
+--------------
+- Fix UTF-8 encoding in olink target.db data (like <ttl>)
+- Fix <colophon> after the index. (Debian bug #447607)
+- Fix <title> in <sidebar>s. (Debian bug #447616)
+- Fix stuck <holder>s in <copyright> (Debian bug #446871)
+- Fix <question> italic bug. (#1800469)
+- Fix an <xref> bug to a biblioentry.
+- Fix setup.py to allow the --skip-build option. (#1790229)
+- Fix the portugese babel loading. (#1797774)
+- Fix <xref> to a <part>.
+- Fix some missing parameters used by gentext.xsl.
+- Fix a weird behaviour with \nolinkurl{} used in a table cell.
+- Fix the page.citation mode shown when $insert.xref.page.number = 'yes'.
+- Fix missing punct.honorific parameter.
+- Fix the <refentry> sections to the right nested level. (#1792996)
+- A list preamble (before the list items) is now processed. (#1783455)
+- Add lastpage.sty under latex/misc, for MikTeX distribs.
+- Add some table <entry> consistency check.
+- Add the parameters: equation.default.position and example.default.position.
+- Add the parameter: cjk.font.
+- Add pdftitle and pdfauthor in PDF document infos.
+
 Release 0.2.7:
 --------------
-- dblatex accept input data from stdin
-- Bug with german babel (e.g '"S' becomes 'SS')
-- newtbl.bgcolor.thead added, to change the default table header color
-- Author listing bug fix
-- <screen> in <footnote>s is possible in simple cases.
-- Olink and xrefstyle support added.
-- Italian translation added.
+
+* Improvements:
+  - Xref completely refactored to work with the common
+    DocBook Project XSL stylesheets version 1.72. 
+  - Olink and xrefstyle support added.
+
+* Minor changes:
+  - dblatex accepts input data from stdin.
+  - newtbl.bgcolor.thead added, to change the default table header color.
+  - Italian translation added.
+  - Several user stylesheets (option -p) can be passed.
+  - In the docbook styles, the front matter page numbers are now in roman.
+  - <biblioid> can be used instead of <pubsnumber> in the doc info, mostly for
+    docbook 5 files.
+  - monoseq.small parameter added (Michael Smith's patch)
+
+* Bug fixes:
+  - Fix bug with german babel (e.g '"S' becomes 'SS').
+  - Fix Author listing bug.
+  - Fix <screen> in <footnote>s, in simple cases.
+  - Fix footmisc package inclusion bug (must be loaded before hyperref).
+  - Fix bibliomixed/bibliomset text bug (tex characters must be escaped).
+  - Fix xref to a callout.
+  - Fix the use of <alt> in equations: when <alt> is used, the other
+    elements must not be processed. Parameter tex.math.in.alt added
+    to choose if <alt> should be used by default.
+  - Fix empty MathML equation case.
+  - Fix bug #1778655: added anchors in <para> having an id
+  - Fix bug #1777645: footnotes with id handled correctly
+  - Fix bug #1777575: an <indexterm> between paragraphs don't stick the
+    paragraphs anymore.
+  - Fix bug #1777364: <thead> no more duplicated in nested tables.
+  - Fix bug #1745309: <author>s under docinfo are not concatenated.
+  - Fix the last page bug shown with a recent texlive
+  - Fix bug about changebars for consecutive paragraphs
+  - Ulinks shown as hot links in biblio enties.
+  - Fix index bug to front matter pages (when front page numbers are in roman). 
 
 
 Release 0.2.6:
 --------------
 
-* Minor improvements
+* Minor improvements:
   - Headings code refactored.
   - Unnumbered sections (e.g. preface) can be put in TOC. Add the parameters:
     * preface.tocdepth

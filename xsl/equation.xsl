@@ -6,6 +6,8 @@
     ############################################################################ -->
 
 <xsl:param name="tex.math.in.alt" select="'latex'"/>
+<xsl:param name="equation.default.position">[H]</xsl:param>
+
 
 <xsl:template match="inlineequation|informalequation">
   <xsl:choose>
@@ -21,7 +23,17 @@
 <xsl:template match="equation">
   <xsl:choose>
   <xsl:when test="title">
-    <xsl:text>&#10;\begin{dbequation}[H]&#10;</xsl:text>
+    <xsl:text>&#10;\begin{dbequation}</xsl:text>
+    <!-- float placement preference -->
+    <xsl:choose>
+      <xsl:when test="@floatstyle != ''">
+        <xsl:value-of select="@floatstyle"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$equation.default.position"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>&#10;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>&#10;\caption{</xsl:text>
     <xsl:call-template name="normalize-scape">

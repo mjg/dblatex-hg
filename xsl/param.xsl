@@ -52,8 +52,12 @@
 <xsl:param name="l10n.gentext.default.language" select="'en'"/>
 <xsl:param name="l10n.gentext.use.xref.language" select="0"/>
 <xsl:param name="section.autolabel.max.depth" select="8"/>
+<xsl:param name="xref.label-page.separator"><xsl:text> </xsl:text></xsl:param>
+<xsl:param name="xref.label-title.separator">: </xsl:param>
+<xsl:param name="xref.title-page.separator"><xsl:text> </xsl:text></xsl:param>
 <xsl:param name="xref.with.number.and.title" select="0"/>
 <xsl:param name="insert.xref.page.number">no</xsl:param>
+<xsl:param name="punct.honorific" select="'.'"/>
 
 <xsl:param name="target.database.document" select="''"/>
 <xsl:param name="targets.filename" select="'target.db'"/>

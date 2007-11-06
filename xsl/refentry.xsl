@@ -5,6 +5,29 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:template name="refsect.level">
+  <xsl:param name="n" select="."/>
+  <xsl:variable name="level">
+    <xsl:call-template name="get.sect.level">
+      <xsl:with-param name="n" select="$n/ancestor::refentry"/>
+    </xsl:call-template>
+  </xsl:variable>
+  
+  <xsl:variable name="offset">
+    <xsl:choose>
+    <xsl:when test="local-name($n)='refsynopsisdiv'">1</xsl:when>
+    <xsl:when test="local-name($n)='refsect1'">1</xsl:when>
+    <xsl:when test="local-name($n)='refsect2'">2</xsl:when>
+    <xsl:when test="local-name($n)='refsect3'">3</xsl:when>
+    <xsl:when test="local-name($n)='refsection'">
+      <xsl:value-of select="count($n/ancestor::refsection)+1"/>
+    </xsl:when>
+    <xsl:otherwise>1</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:value-of select="$level + $offset"/>
+</xsl:template>
+
 <!-- #############
      # reference #
      ############# -->
@@ -79,16 +102,16 @@
      # refsynopsis #
      ############### -->
 
+<!-- A refsynopsisdiv with a title is handled like a refsectx -->
 <xsl:template match="refsynopsisdiv">
-  <xsl:text>&#10;\subsection*{</xsl:text>
-  <xsl:choose>
-  <xsl:when test="title">
-    <xsl:value-of select="title"/>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:value-of select="$refsynopsis.title"/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="map.sect.level">
+    <xsl:with-param name="num" select="'0'"/>
+    <xsl:with-param name="level">
+      <xsl:call-template name="refsect.level"/>
+    </xsl:with-param>
+  </xsl:call-template>
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$refsynopsis.title"/>
   <xsl:text>}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
   <xsl:apply-templates/>
@@ -102,16 +125,22 @@
      ############## -->
 
 <xsl:template match="refnamediv">
-  <xsl:text>&#10;\subsection*{</xsl:text>
+  <xsl:call-template name="map.sect.level">
+    <xsl:with-param name="num" select="'0'"/>
+    <xsl:with-param name="level">
+      <xsl:call-template name="refsect.level"/>
+    </xsl:with-param>
+  </xsl:call-template>
+  <xsl:text>{</xsl:text>
   <xsl:choose>
-  <xsl:when test="$refnamediv.title=''">
-    <xsl:call-template name="gentext.element.name">
-      <xsl:with-param name="element.name" select="'refname'"/>
-    </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:value-of select= "$refnamediv.title"/>
-  </xsl:otherwise>
+    <xsl:when test="$refnamediv.title=''">
+      <xsl:call-template name="gentext.element.name">
+        <xsl:with-param name="element.name" select="'refname'"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select= "$refnamediv.title"/>
+    </xsl:otherwise>
   </xsl:choose>
   <xsl:text>}</xsl:text>
   <xsl:call-template name="label.id"/>
@@ -157,11 +186,6 @@
      # refsectx #
      ############ -->
 
-<xsl:template match="refsect1|refsect2|refsect3">
-  <xsl:call-template name="mapheading"/>
-  <xsl:apply-templates/>
-</xsl:template>
-
 <xsl:template match="refsect1/title"/>
 <xsl:template match="refsect2/title"/>
 <xsl:template match="refsect3/title"/>
@@ -170,10 +194,12 @@
 <xsl:template match="refsect2info"/>
 <xsl:template match="refsect3info"/>
 
-<xsl:template match="refsection">
+<xsl:template match="refsection|refsect1|refsect2|refsect3|
+                     refsynopsisdiv[title]">
   <xsl:call-template name="makeheading">
-    <!-- its starts from subsection, so level+1 -->
-    <xsl:with-param name="level" select="count(ancestor::refsection)+2"/>
+    <xsl:with-param name="level">
+      <xsl:call-template name="refsect.level"/>
+    </xsl:with-param>
     <xsl:with-param name="num" select="0"/>
   </xsl:call-template>
   <xsl:apply-templates/>

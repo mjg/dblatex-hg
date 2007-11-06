@@ -11,12 +11,15 @@
 <xsl:template match="sidebar">
   <xsl:text>&#10;&#10;\begin{sidebar}&#10;</xsl:text>
   <xsl:call-template name="label.id"/>
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="title"/>
+  <xsl:apply-templates select="*[not(self::title)]"/>
   <xsl:text>\end{sidebar}&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="sidebar/title">
+  <xsl:text>\textbf{</xsl:text>
   <xsl:apply-templates/>
+  <xsl:text>}&#10;&#10;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

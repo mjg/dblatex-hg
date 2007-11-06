@@ -93,10 +93,11 @@
   <xsl:when test="$n/parent::sect5">6</xsl:when>
   <xsl:when test="$n/parent::reference">1</xsl:when>
   <xsl:when test="$n/parent::preface">1</xsl:when>
-  <xsl:when test="$n/parent::simplesect">
+  <xsl:when test="$n/parent::simplesect or
+                  $n/parent::refentry">
     <xsl:variable name="l">
       <xsl:call-template name="get.sect.level">
-        <xsl:with-param name="n" select="$n/parent::simplesect"/>
+        <xsl:with-param name="n" select="$n/parent::*"/>
       </xsl:call-template>
     </xsl:variable>
     <xsl:value-of select="$l+1"/>

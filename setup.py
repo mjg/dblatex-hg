@@ -296,6 +296,10 @@ class Install(install):
                 print >>sys.stderr, "Error: %s" % e
                 sys.exit(1)
 
+        # If no build is required, at least build the script
+        if self.skip_build:
+            self.run_command('build_scripts')
+
         install.run(self)
 
 

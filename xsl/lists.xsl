@@ -52,6 +52,9 @@
 
 <xsl:template match="itemizedlist" mode="print">
   <xsl:apply-templates select="title"/>
+  <xsl:apply-templates select="*[not(self::title or
+                                     self::titleabbrev or
+                                     self::listitem)]"/>
   <xsl:text>\begin{itemize}</xsl:text>
   <!-- Process the option -->
   <xsl:call-template name="opt.group">
@@ -65,6 +68,9 @@
 
 <xsl:template match="orderedlist" mode="print">
   <xsl:apply-templates select="title"/>
+  <xsl:apply-templates select="*[not(self::title or
+                                     self::titleabbrev or
+                                     self::listitem)]"/>
   <xsl:text>\begin{enumerate}</xsl:text>
   <!-- Process the options -->
   <xsl:call-template name="opt.group">
@@ -78,6 +84,9 @@
 
 <xsl:template match="variablelist" mode="print">
   <xsl:apply-templates select="title"/>
+  <xsl:apply-templates select="*[not(self::title or
+                                     self::titleabbrev or
+                                     self::varlistentry)]"/>
   <xsl:text>&#10;\noindent&#10;</xsl:text> 
   <xsl:text>\begin{description}&#10;</xsl:text>
   <xsl:apply-templates select="varlistentry"/>

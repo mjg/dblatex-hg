@@ -7,6 +7,7 @@
 
 <xsl:param name="latex.encoding">latin1</xsl:param>
 <xsl:param name="korean.package">CJK</xsl:param>
+<xsl:param name="cjk.font">cyberbit</xsl:param>
 
 
 <xsl:template name="babel.setup">
@@ -106,8 +107,8 @@
     <xsl:when test="starts-with($lang,'pl')">polish</xsl:when>
     <xsl:when test="starts-with($lang,'pt')">
       <xsl:choose>
-        <xsl:when test="starts-with($lang,'pt-BR')">brazil</xsl:when>
-        <xsl:otherwise>portugese</xsl:otherwise>
+        <xsl:when test="starts-with($lang,'pt_br')">brazil</xsl:when>
+        <xsl:otherwise>portuges</xsl:otherwise>
       </xsl:choose>
     </xsl:when>
     <xsl:when test="starts-with($lang,'ro')">romanian</xsl:when>
@@ -126,7 +127,9 @@
   <xsl:if test="starts-with($lang,'zh') or
                 starts-with($lang,'ja') or
                 (starts-with($lang,'ko') and $korean.package='CJK')">
-    <xsl:text>\begin{CJK}{UTF8}{cyberbit}&#10;</xsl:text>
+    <xsl:text>\begin{CJK}{UTF8}{</xsl:text>
+    <xsl:value-of select="$cjk.font"/>
+    <xsl:text>}&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
@@ -192,6 +195,7 @@
     <xsl:text>\usepackage[T2A,T2D,T1]{fontenc}&#10;</xsl:text>
     <xsl:text>\usepackage{ucs}&#10;</xsl:text>
     <xsl:text>\usepackage[utf8x]{inputenc}&#10;</xsl:text>
+    <xsl:text>\def\hyperparamadd{unicode=true}&#10;</xsl:text>
   </xsl:when>
   </xsl:choose>
 </xsl:template>

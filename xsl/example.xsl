@@ -5,9 +5,21 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
+<xsl:param name="example.default.position">[H]</xsl:param>
+
 
 <xsl:template match="example">
-  <xsl:text>&#10;\begin{example}[H]&#10;</xsl:text>
+  <xsl:text>&#10;\begin{example}</xsl:text>
+  <!-- float placement preference -->
+  <xsl:choose>
+    <xsl:when test="@floatstyle != ''">
+      <xsl:value-of select="@floatstyle"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$example.default.position"/>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:text>&#10;</xsl:text>
   <xsl:apply-templates />
   <xsl:choose> 
     <xsl:when test="title">

@@ -403,16 +403,9 @@
   <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="biblioentry" mode="xref-to">
+<xsl:template match="biblioentry|bibliomixed" mode="xref-to">
   <xsl:text>\cite{</xsl:text>
-  <xsl:choose>
-  <xsl:when test="abbrev">
-    <xsl:value-of select="abbrev[1]"/>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:value-of select="@id"/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="bibitem.id"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -711,6 +704,21 @@
 
 <!-- ==================================================================== -->
 
+<xsl:template match="*" mode="page.citation">
+  <xsl:param name="id" select="'???'"/>
+
+  <xsl:call-template name="substitute-markup">
+    <xsl:with-param name="template">
+      <xsl:call-template name="gentext.template">
+        <xsl:with-param name="name" select="'page.citation'"/>
+        <xsl:with-param name="context" select="'xref'"/>
+      </xsl:call-template>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
 <xsl:template match="link" mode="no.anchor.mode">
   <xsl:apply-templates select="." mode="xref.text"/>
 </xsl:template>
@@ -722,7 +730,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:template match="chapter|appendix|
+<xsl:template match="part|chapter|appendix|
                      sect1|sect2|sect3|sect4|sect5|section" mode="label.markup">
   <xsl:text>\ref{</xsl:text>
   <xsl:value-of select="@id"/>
@@ -797,7 +805,7 @@
   <xsl:param name="docname" select="''"/>
   
   <xsl:text>\emph{</xsl:text>
-  <xsl:value-of select="$docname"/>
+  <xsl:copy-of select="$docname"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
