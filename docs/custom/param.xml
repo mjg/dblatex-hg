@@ -81,6 +81,14 @@ Set to 0 the links are not shown.</entry>
 </row>
 <!-- -->
 <row>
+<entry>cjk.font</entry>
+<entry>Fonts to use in CJK environments (i.e. for Chinese, Japanese or Korean
+documents handled by the CJK package).
+</entry>
+<entry>cyberbit</entry>
+</row>
+<!-- -->
+<row>
 <entry>dedication.tocdepth</entry>
 <entry>Same than <parameter>preface.tocdepth</parameter> for dedication sections.
 </entry>
@@ -157,6 +165,22 @@ root element if set to 'draft'.
 the document is in draft mode and if the parameter is set to '1'.
 </entry>
 <entry>1</entry>
+</row>
+<!-- -->
+<row>
+<entry>equation.default.position</entry>
+<entry>Default equation float placement algorithm to apply. See
+figure.default.position for more details about how to use latex float
+specifications.</entry>
+<entry>[H]</entry>
+</row>
+<!-- -->
+<row>
+<entry>example.default.position</entry>
+<entry>Default example float placement algorithm to apply. See
+figure.default.position for more details about how to use latex float
+specifications.</entry>
+<entry>[H]</entry>
 </row>
 <!-- -->
 <row>

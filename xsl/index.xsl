@@ -99,6 +99,18 @@
 <xsl:template match="indexentry"/>
 <xsl:template match="primaryie|secondaryie|tertiaryie|seeie|seealsoie"/>
 
+
+<!-- in a programlisting -->
+<xsl:template match="indexterm" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+
+  <xsl:value-of select="$co-tagin"/>
+  <xsl:apply-templates select="."/>
+  <xsl:value-of select="$co.tagout"/>
+</xsl:template>
+
+
 <!-- todo -->
 <xsl:template match="index|setindex">
 <!--

@@ -123,7 +123,9 @@
   <!-- get the listing escape sequence if needed -->
   <xsl:variable name="co-tagin">
     <xsl:if test="descendant::co|
-                  descendant::footnote">
+                  descendant::footnote|
+                  descendant::indexterm|
+                  descendant::userinput">
       <xsl:call-template name="co-tagin-gen"/>
     </xsl:if>
   </xsl:variable>

@@ -616,4 +616,17 @@
   <xsl:call-template name="inline.charseq"/>
 </xsl:template>
 
+<!-- ==================================================================== -->
+<!-- inline elements in program listings -->
+
+<xsl:template match="userinput" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+
+  <xsl:value-of select="$co-tagin"/>
+  <xsl:call-template name="inline.boldseq"/>
+  <xsl:value-of select="$co.tagout"/>
+</xsl:template>
+
+
 </xsl:stylesheet>

@@ -27,9 +27,9 @@ fasttext-sh.xsl         latex_book-sh.xsl
 
 Release 0.2.8:
 --------------
-- Fix <foreignphrase> in <example> title (#1831385)
-- Fix <literal> in <example> title (#1831391)
 - Fix <userinput> in <programlisting> (#1832623)
+- Fix <literal> in <example> title (#1831391)
+- Fix <foreignphrase> in <example> title (#1831385)
 - Fix <indexterm> in <programlisting> (#1831374)
 - Fix UTF-8 encoding in olink target.db data (like <ttl>)
 - Fix <colophon> after the index. (Debian bug #447607)

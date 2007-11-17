@@ -20,21 +20,9 @@
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text>&#10;</xsl:text>
-  <xsl:apply-templates />
-  <xsl:choose> 
-    <xsl:when test="title">
-      <xsl:text>&#10;\caption{</xsl:text>
-        <xsl:call-template name="normalize-scape"> 
-          <xsl:with-param name="string" select="title"/>
-        </xsl:call-template>
-      <xsl:text>}&#10;</xsl:text>
-    </xsl:when> 
-    <xsl:otherwise>
-      <xsl:text>&#10;\caption{</xsl:text>
-      <xsl:text>*** Missing title ***}&#10;</xsl:text>
-    </xsl:otherwise> 
-  </xsl:choose>
-  <xsl:call-template name="label.id"/>
+  <xsl:apply-templates select="*[not(self::title)]"/>
+  <!-- caption -->
+  <xsl:apply-templates select="title"/>
   <xsl:text>&#10;\end{example}&#10;</xsl:text>
 </xsl:template>
 
@@ -43,6 +31,12 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template match="example/title"/>
+<xsl:template match="example/title">
+  <xsl:text>\caption</xsl:text>
+  <xsl:apply-templates select="." mode="format.title"/>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select="parent::example"/>
+  </xsl:call-template>
+</xsl:template>
 
 </xsl:stylesheet>

@@ -28,6 +28,7 @@
       <xsl:text>\usepackage[</xsl:text>
       <xsl:value-of select="$babel"/>
       <xsl:text>]{babel}&#10;</xsl:text>
+      <xsl:text>\usepackage{cmap}&#10;</xsl:text>
     </xsl:if>
   </xsl:if>
 </xsl:template>

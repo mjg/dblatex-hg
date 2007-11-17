@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
                       "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
 [
-<!ENTITY edition "21">
+<!ENTITY edition "22">
 ]>
 
 <book lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -243,10 +243,17 @@
 </revdescription>
 </revision>
 <revision>
-<revnumber>&edition;</revnumber><date>04/09/07</date>
+<revnumber>21</revnumber><date>04/09/07</date>
 <authorinitials>B. Guillon</authorinitials>
 <revdescription>
  <para>Changes: see <xref linkend="sec-changes-027"/></para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>&edition;</revnumber><date>15/11/07</date>
+<authorinitials>B. Guillon</authorinitials>
+<revdescription>
+ <para>Changes: see <xref linkend="sec-changes-028"/></para>
 </revdescription>
 </revision>
 </revhistory>
