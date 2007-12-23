@@ -12,12 +12,22 @@
 <xsl:template match="colophon">
   <xsl:call-template name="section.unnumbered">
     <xsl:with-param name="tocdepth" select="number($colophon.tocdepth)"/>
+    <xsl:with-param name="title">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'Colophon'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="dedication">
   <xsl:call-template name="section.unnumbered">
     <xsl:with-param name="tocdepth" select="number($dedication.tocdepth)"/>
+    <xsl:with-param name="title">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'Dedication'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -29,6 +39,7 @@
 
 <xsl:template name="section.unnumbered">
   <xsl:param name="tocdepth" select="0"/>
+  <xsl:param name="title"/>
   <xsl:choose>
   <xsl:when test="number($tocdepth) = -1">
     <xsl:call-template name="mapheading"/>
@@ -40,10 +51,22 @@
     <xsl:call-template name="set-tocdepth">
       <xsl:with-param name="depth" select="$tocdepth - 1"/>
     </xsl:call-template>
-    <xsl:call-template name="makeheading">
-      <xsl:with-param name="level" select="'0'"/>
-      <xsl:with-param name="allnum" select="'1'"/>
-    </xsl:call-template>
+    <!-- those sections have optional title -->
+    <xsl:choose>
+      <xsl:when test="title">
+        <xsl:call-template name="makeheading">
+          <xsl:with-param name="level" select="'0'"/>
+          <xsl:with-param name="allnum" select="'1'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="maketitle">
+          <xsl:with-param name="level" select="'0'"/>
+          <xsl:with-param name="allnum" select="'1'"/>
+          <xsl:with-param name="title" select="$title"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates/>
     <!-- restore the initial counters -->
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>

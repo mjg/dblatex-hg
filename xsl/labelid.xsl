@@ -50,6 +50,37 @@
   <xsl:apply-templates select="title" mode="foottext"/>
 </xsl:template>
 
+<xsl:template name="maketitle">
+  <xsl:param name="num" select="'1'"/>
+  <xsl:param name="allnum" select="'0'"/>
+  <xsl:param name="level"/>
+  <xsl:param name="name"/>
+  <xsl:param name="command"/>
+  <xsl:param name="title"/>
+
+  <xsl:variable name="rcommand">
+    <xsl:choose>
+    <xsl:when test="$command=''">
+      <xsl:call-template name="map.sect.level">
+        <xsl:with-param name="name" select="$name"/>
+        <xsl:with-param name="level" select="$level"/>
+        <xsl:with-param name="num" select="$num"/>
+        <xsl:with-param name="allnum" select="$allnum"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$command"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:value-of select="$rcommand"/>
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$title"/>
+  <xsl:text>}&#10;</xsl:text>
+  <xsl:call-template name="label.id"/>
+</xsl:template>
+
 
 <xsl:template name="label.id">
   <xsl:param name="object" select="."/>
