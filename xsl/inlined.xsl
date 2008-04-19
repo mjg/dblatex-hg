@@ -53,7 +53,7 @@
   <xsl:param name="content">
     <xsl:apply-templates/>
   </xsl:param>
-  <xsl:text>{\bf {\tt </xsl:text>
+  <xsl:text>{\ttfamily\bfseries{</xsl:text>
   <xsl:copy-of select="$content"/>
   <xsl:text>}}</xsl:text>
 </xsl:template>
@@ -628,5 +628,13 @@
   <xsl:value-of select="$co.tagout"/>
 </xsl:template>
 
+<xsl:template match="emphasis" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+
+  <xsl:value-of select="$co-tagin"/>
+  <xsl:apply-templates select="."/>
+  <xsl:value-of select="$co.tagout"/>
+</xsl:template>
 
 </xsl:stylesheet>

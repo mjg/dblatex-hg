@@ -1,3 +1,8 @@
+\usepackage{ifxetex}
+\ifxetex
+% to have the \text macro
+\usepackage{amstext}
+\else
 
 % Math Support
 \usepackage{mathrsfs}
@@ -23,3 +28,4 @@
 \usepackage{pifont}
 \usepackage{textcomp}
 
+\fi

@@ -4,6 +4,9 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<xsl:param name="refentry.tocdepth">5</xsl:param>
+<xsl:param name="refentry.numbered">1</xsl:param>
+
 
 <xsl:template name="refsect.level">
   <xsl:param name="n" select="."/>
@@ -70,16 +73,28 @@
   <xsl:text>% Refentry &#10;</xsl:text>
   <xsl:text>% ---------&#10;</xsl:text>
 
-  <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="level">
-      <xsl:call-template name="get.sect.level"/>
-    </xsl:with-param>
-  </xsl:call-template>
-  <xsl:text>{</xsl:text>
-  <xsl:value-of select="$title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
-  <xsl:apply-templates/>
+  <xsl:variable name="level">
+    <xsl:call-template name="get.sect.level"/>
+  </xsl:variable>
+
+  <xsl:choose>
+  <xsl:when test="$refentry.numbered = '0'">
+    <!-- Unumbered refentry title (but in TOC) -->
+    <xsl:call-template name="section.unnumbered">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="title" select="$title"/>
+      <xsl:with-param name="tocdepth" select="$refentry.tocdepth"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- Numbered refentry title -->
+    <xsl:call-template name="maketitle">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="title" select="$title"/>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="refmeta">

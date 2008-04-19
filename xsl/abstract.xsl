@@ -21,7 +21,7 @@
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:text>\begin{abstract}&#10;</xsl:text>
-  <xsl:apply-templates/>
+  <xsl:apply-templates select="*[not(self::title)]"/>
   <xsl:text>&#10;\end{abstract}&#10;</xsl:text>
   <xsl:if test="title">
     <xsl:text>\let\abstractname=\savabstractname&#10;</xsl:text>

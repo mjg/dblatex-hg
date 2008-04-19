@@ -367,6 +367,7 @@
                                     address|
                                     copyright|
                                     publisher|
+                                    date|
                                     pubdate|
                                     pagenums|
                                     isbn|
@@ -426,13 +427,14 @@
     <xsl:apply-templates select="author|authorgroup" mode="bibliography.mode"/>
     <xsl:value-of select="$biblioentry.item.separator"/>
   </xsl:if>
-  <xsl:apply-templates select="title" mode="bibliography.mode"/>
+  <xsl:apply-templates select="title|citetitle" mode="bibliography.mode"/>
   <xsl:for-each select="subtitle|
                         volumenum|
                         edition|
                         address|
                         copyright|
                         publisher|
+                        date|
                         pubdate|
                         pagenums|
                         isbn|
@@ -449,7 +451,7 @@
               mode="bibliography.mode">
   <xsl:variable name="relation" select="../@relation"/>
   <xsl:choose>
-    <xsl:when test="$relation='article'">
+    <xsl:when test="$relation='article' or @pubwork='article'">
       <xsl:call-template name="dingbat">
         <xsl:with-param name="dingbat">ldquo</xsl:with-param>
       </xsl:call-template>
@@ -538,7 +540,7 @@
 
 <!-- to manage entities correctly (such as &amp;) -->
 <xsl:template match="subtitle|volumenum|edition|
-                     pubdate|pagenums|isbn|issn|
+                     date|pubdate|pagenums|isbn|issn|
                      holder|publishername|releaseinfo|address"
               mode="bibliography.mode">
   <xsl:apply-templates/>

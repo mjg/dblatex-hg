@@ -25,6 +25,33 @@ fasttext-sh.xsl         latex_book-sh.xsl
 * <set> avec attachfile
 * support bibliomset
 
+Release 0.2.9:
+--------------
+- Fix bug #1838293: <dedication> and <colophon> support where <title>s are
+  optional.
+- Fix bug #1833581 (biblio elements).
+- Fix bug #1832623 (<userinput> rendering in normal mode).
+- Fix bug #1769020 (date in <biblioentry>).
+- Fix bug #1745318 with a minipage in \author{}.
+  Fix the similar debian bug #465221.
+- Fix bug #1642442 (missing unicode characters).
+- Fix debian bug #466162 (German localization).
+- Fix debian bug #461919 (rendering abstract titles).
+- Fix debian bug #459474 (simplesect in appendix).
+- Fix unicode character encoding in TeX equations in <alt>.
+- Fix bug that transforms "<<" to french quotation marks.
+- Fix spurious spaces in inline graphics.
+- Fix to have frenchb 2.x support (option macros changed).
+- Add refentry.numbered and refentry.tocdepth parameters to have the
+  refentry titles numbered (default) or not.
+- Add <partintro>s handling. 
+- Add linking to <areaset>.
+- Add <emphasis> rendering in <programlisting> and <screen>.
+- Add some logic to handle the graphics in equations.
+  Add the use.alt parameter.
+- Add some XeTeX support. One can use -b xetex to compile with
+  xelatex.
+
 Release 0.2.8:
 --------------
 - Fix <userinput> in <programlisting> (#1832623)
@@ -66,8 +93,8 @@ Release 0.2.7:
   - Italian translation added.
   - Several user stylesheets (option -p) can be passed.
   - In the docbook styles, the front matter page numbers are now in roman.
-  - <biblioid> can be used instead of <pubsnumber> in the doc info, mostly for
-    docbook 5 files.
+  - <biblioid> can be used instead of <pubsnumber> in the doc info,
+    mostly for docbook 5 files.
   - monoseq.small parameter added (Michael Smith's patch)
 
 * Bug fixes:
@@ -90,7 +117,8 @@ Release 0.2.7:
   - Fix the last page bug shown with a recent texlive
   - Fix bug about changebars for consecutive paragraphs
   - Ulinks shown as hot links in biblio enties.
-  - Fix index bug to front matter pages (when front page numbers are in roman). 
+  - Fix index bug to front matter pages (when front page numbers are in
+    roman). 
 
 
 Release 0.2.6:

@@ -1,10 +1,10 @@
 %%
-%% Définition du tableau d'indexation
+%% Index table definitions
 %%
 
 \usepackage{longtable}
 
-% Element de la table d'indexation (intervenant et role)
+% Index table row
 \def\DBKinditem#1#2{
   & & & & \tabularnewline
   #1  & #2 & \DBKdate &  & \ \tabularnewline
@@ -12,7 +12,11 @@
   \hline
 }
 
-% Environnement lié à la table d'indexation
+\def\referencetitle{
+  \ifthenelse{\equal{\DBKreference}{}}%
+    {}{\emph{\DBKrefname} :}}
+
+% Index table environment
 \newenvironment{DBKindtable}{
 \begin{center}
 \begin{tabular}{ |>{\centering}p{3cm} |>{\centering}p{3cm} |>{\centering}p{3.5cm}
@@ -23,7 +27,7 @@
   \multicolumn{5}{c}{\ } \tabularnewline
   \hline
   \multicolumn{1}{|l|}{} & \multicolumn{2}{l|}{\emph{\titlename} :}
-  & \multicolumn{2}{l|}{\emph{REFERENCE} :}\tabularnewline
+  & \multicolumn{2}{l|}{\referencetitle}\tabularnewline
   & \multicolumn{2}{l|}{} & \multicolumn{2}{l|}{} \tabularnewline
   \multicolumn{1}{|p{3cm}|}{} & \multicolumn{2}{p{6.5cm}|}{\DBKtitle}
   & \multicolumn{2}{p{3cm}|}{\DBKreference}\tabularnewline
@@ -40,7 +44,7 @@
 }
 
 %%
-%% Définition des révisions et du tableau de révision.
+%% Revision history table and rows
 %%
 
 \def\DBKrevitem#1#2#3#4{

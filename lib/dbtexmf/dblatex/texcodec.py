@@ -93,7 +93,8 @@ class LatexCodec(TexCodec):
             (re.compile("^[\s\n]*$"), r" "),
             # TeX escapes (the order is important)
             (re.compile(r"([{}%_^$&#])"), r"\\\1"),
-            (re.compile(r"([-^])"), r"\1{}"),
+            # '<' and '>' in the list to avoid french quotation mark symptoms
+            (re.compile(r"([-^<>])"), r"\1{}"),
             (re.compile(r"~"), r"\\textasciitilde{}"))
    
     def encode(self, text):

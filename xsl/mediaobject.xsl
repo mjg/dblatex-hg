@@ -298,7 +298,8 @@
     <xsl:choose>
     <xsl:when test="@contentwidth and contains(@contentwidth, '%') and
                     substring-after(@contentwidth, '%')=''">
-      <xsl:value-of select="number(substring-before(@contentwidth, '%')) div 100"/>
+      <xsl:value-of select="number(substring-before(@contentwidth, '%'))
+                            div 100"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="0"/>
@@ -309,7 +310,8 @@
     <xsl:choose>
     <xsl:when test="@contentdepth and contains(@contentdepth, '%') and
                     substring-after(@contentdepth, '%')=''">
-      <xsl:value-of select="number(substring-before(@contentdepth, '%')) div 100"/>
+      <xsl:value-of select="number(substring-before(@contentdepth, '%'))
+                            div 100"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="0"/>
@@ -446,11 +448,11 @@
   <xsl:value-of select="$filename"/>
   <xsl:text>}</xsl:text>
   <xsl:value-of select="$graphic.end"/>
-  <xsl:text>}&#10;</xsl:text>
+  <xsl:text>}</xsl:text>
   <xsl:if test="$viewport=1">
     <xsl:text>\end{minipage}&#10;</xsl:text>
   </xsl:if>
-  <xsl:text>}&#10;</xsl:text>
+  <xsl:text>}</xsl:text>
 </xsl:template>
 
 

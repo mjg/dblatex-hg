@@ -132,12 +132,15 @@ unicode_map = {
 0x0019E: r"\textnrleg{}", # LATIN SMALL LETTER N WITH LONG RIGHT LEG
 0x001C2: r"\textdoublepipe{}", # LATIN LETTER ALVEOLAR CLICK
 0x001F5: r"\'{g}", # LATIN SMALL LETTER G WITH ACUTE
+0x00259: r"$\Elzschwa$", # LATIN SMALL LETTER SCHWA
 0x00261: r"g", # LATIN SMALL LETTER SCRIPT G
 0x00278: r"\textphi{}", # LATIN SMALL LETTER PHI
 0x0029E: r"\textturnk{}", # LATIN SMALL LETTER TURNED K
 0x002A4: r"\textdyoghlig{}", # LATIN SMALL LETTER DEZH DIGRAPH
+0x0025B: r"\textvarepsilon{}", # LATIN SMALL LETTER OPEN E
 0x002BC: r"'", # MODIFIER LETTER APOSTROPHE
 0x002C7: r"\textasciicaron{}", # CARON
+0x002C8: r"$\Elzverts$", # MODIFIER LETTER VERTICAL LINE
 0x002D8: r"\textasciibreve{}", # BREVE
 0x002D9: r"\textperiodcentered{}", # DOT ABOVE
 0x002DA: r"\r{}", # RING ABOVE
@@ -170,6 +173,7 @@ unicode_map = {
 0x00393: r"$\Gamma$", # GREEK CAPITAL LETTER GAMMA
 0x00394: r"$\Delta$", # GREEK CAPITAL LETTER DELTA
 0x00395: r"$\Epsilon$", # GREEK CAPITAL LETTER EPSILON
+0x0039B: r"$\Lambda$", # GREEK CAPITAL LETTER LAMDA
 0x003A0: r"$\Pi$", # GREEK CAPITAL LETTER PI
 0x003A3: r"$\Sigma$", # GREEK CAPITAL LETTER SIGMA
 0x003A4: r"$\Tau$", # GREEK CAPITAL LETTER TAU
@@ -407,6 +411,7 @@ unicode_map = {
 0x02007: r"\hphantom{0}", # FIGURE SPACE
 0x02008: r"\hphantom{,}", # PUNCTUATION SPACE
 0x02009: r"\hspace{0.167em}", # THIN SPACE
+0x0200B: r"\hspace{0em}", # ZERO WIDTH SPACE
 0x02010: r"-", # HYPHEN
 0x02013: r"\textendash{}", # EN DASH
 0x02014: r"\textemdash{}", # EM DASH

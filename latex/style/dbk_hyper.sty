@@ -16,10 +16,13 @@
   \ifpdf
     \usepackage[pdftex,plainpages=false,\hyperparam,\hyperparamadd]{hyperref}
     \def\hyperlabel#1{\hypertarget{#1}{}}
+  \else\ifxetex
+    \usepackage[xetex,plainpages=false,\hyperparam,\hyperparamadd]{hyperref}
+    \def\hyperlabel#1{\hypertarget{#1}{}}
   \else
     \usepackage[dvips,plainpages=false,\hyperparam,\hyperparamadd]{hyperref}
     \def\hyperlabel#1{\Hy@raisedlink{\hyper@anchorstart{#1}\hyper@anchorend}}
-  \fi
+  \fi\fi
 }{
   \usepackage{hyperref}
   \def\hyperlabel#1{}

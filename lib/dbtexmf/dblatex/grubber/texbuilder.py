@@ -54,11 +54,14 @@ class LatexBuilder:
             idx.style = self.index_style
 
         # Adapt the modules to load, depending on the output format
-        if (self.format == "pdf" and self.backend == "pdftex"):
-            self.tex.modules.register("pdftex")
-        elif (self.format == "pdf"):
-            self.tex.modules.register("dvips")
-            self.tex.modules.register("ps2pdf")
+        if (self.format == "pdf"):
+            if (self.backend == "pdftex"):
+                self.tex.modules.register("pdftex")
+            elif (self.backend == "xetex"):
+                self.tex.modules.register("xetex")
+            else:
+                self.tex.modules.register("dvips")
+                self.tex.modules.register("ps2pdf")
         elif (self.format == "ps"):
             self.tex.modules.register("dvips")
 

@@ -51,14 +51,29 @@
 </xsl:template>
 
 
-<!-- Create the link to a <co> or a <callout> -->
+<!-- Create the link to the referenced element -->
 <xsl:template name="coref.link.create">
   <xsl:param name="ref"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="circled" select="0"/>
+
+  <!-- Cannot use directly id() because it must work on several RTF -->
+  <!-- The element is also searched in the root tree for things stripped
+       in the RTF, like <areaset>s -->
+  <xsl:variable name="coitem" select="($rnode//*[@id=$ref]|//*[@id=$ref])[1]"/>
+  <xsl:apply-templates select="$coitem" mode="coref.link">
+    <xsl:with-param name="circled" select="$circled"/>
+    <xsl:with-param name="from" select="local-name(.)"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- Create the link to a <co> (maybe via <area>) or a <callout> -->
+<xsl:template match="co|area|callout" mode="coref.link">
+  <xsl:param name="circled" select="0"/>
+  <xsl:param name="from"/>
   <xsl:variable name="coval">
-    <!-- Cannot use directly id() because it must work on several RTF -->
-    <xsl:apply-templates select="$rnode//*[@id=$ref]" mode="conumber"/>
+    <xsl:apply-templates select="." mode="conumber"/>
   </xsl:variable>
 
   <!-- The markup can be a bubble or a simple number -->
@@ -69,7 +84,7 @@
       <xsl:value-of select="$coval"/>
       <xsl:text>}</xsl:text>
     </xsl:when>
-    <xsl:when test="$callout.markup.circled='1' and self::callout">
+    <xsl:when test="$from='callout' and $callout.markup.circled='1'">
       <xsl:text>\conum{</xsl:text>
       <xsl:value-of select="$coval"/>
       <xsl:text>}</xsl:text>
@@ -82,17 +97,32 @@
 
   <!-- In <callout> the markup can be not hot -->
   <xsl:choose>
-  <xsl:when test="$callout.linkends.hot='0' and self::callout">
+  <xsl:when test="$callout.linkends.hot='0' and $from='callout'">
     <xsl:value-of select="$markup"/>
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>\hyperref[</xsl:text>
-    <xsl:value-of select="$ref"/>
+    <xsl:value-of select="@id"/>
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$markup"/>
     <xsl:text>}</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- A link to an areaset means linking to each contained <area> -->
+<xsl:template match="areaset" mode="coref.link">
+  <xsl:param name="circled" select="0"/>
+  <xsl:param name="from"/>
+  <xsl:for-each select="area">
+    <xsl:apply-templates select="." mode="coref.link">
+      <xsl:with-param name="circled" select="$circled"/>
+      <xsl:with-param name="from" select="$from"/>
+    </xsl:apply-templates>
+    <xsl:if test="position()!=last()">
+      <xsl:text>, </xsl:text>
+    </xsl:if>
+  </xsl:for-each>
 </xsl:template>
 
 

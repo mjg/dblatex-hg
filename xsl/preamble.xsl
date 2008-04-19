@@ -156,14 +156,6 @@
     <xsl:value-of select="$latex.hyperparam"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
-  <!--
-  <xsl:if test="$doc.pdfcreator.show='1'">
-    <xsl:text>\def\hyperparamadd{</xsl:text>
-    <xsl:text>pdfcreator=DBLaTeX-</xsl:text>
-    <xsl:value-of select="$version"/>
-    <xsl:text>}&#10;</xsl:text>
-  </xsl:if>
-  -->
   <xsl:if test="$doc.publisher.show='1'">
     <xsl:text>\def\DBKpublisher{</xsl:text>
     <xsl:text>\includegraphics{dblatex}</xsl:text>

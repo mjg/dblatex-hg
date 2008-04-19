@@ -114,7 +114,8 @@
     <xsl:call-template name="scape-encode">
       <xsl:with-param name="string">
         <xsl:choose>
-        <xsl:when test="ancestor::entry or ancestor::revision">
+        <xsl:when test="ancestor::entry or ancestor::revision or
+                        ancestor::footnote">
           <xsl:call-template name="string-replace">
             <xsl:with-param name="string">
               <xsl:call-template name="string-replace">

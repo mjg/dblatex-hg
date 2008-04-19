@@ -23,12 +23,15 @@ class RawLatex:
         self.image = Imagedata()
         self.parsers = []
         self.format = None
+        self.backend = None
 
     def set_fig_paths(self, paths):
         self.image.paths = paths
 
     def set_parsers(self, input, output_encoding=""):
-        if not(output_encoding):
+        if self.backend == "xetex":
+            output_encoding = "utf8"
+        elif not(output_encoding):
             f = file(input)
             params = {}
             started = 0
@@ -54,6 +57,12 @@ class RawLatex:
         if figformats.has_key(format):
             self.image.output_format = figformats[format]
             self.format = format
+        # There can be a mismatch between PDF-1.4 images and PDF-1.3
+        # document produced by XeTeX
+        if (format == "pdf" and backend == "xetex"):
+            self.image.output_format = "png"
+
+        self.backend = backend
 
     def fig_format(self, format):
         # TODO: consistency check?

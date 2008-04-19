@@ -11,4 +11,9 @@
 <!-- Options used for documentclass -->
 <xsl:param name="latex.class.options">a4paper,10pt,twoside,openright</xsl:param>
 
+<!-- DB2LaTeX requires Palatino like fonts -->
+<xsl:param name="xetex.font">
+  <xsl:text>\setmainfont{URW Palladio L}&#10;</xsl:text>
+</xsl:param>
+
 </xsl:stylesheet>

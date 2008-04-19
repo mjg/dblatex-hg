@@ -16,7 +16,11 @@
 <xsl:template match="part/docinfo"/>
 <xsl:template match="part/title"/>
 <xsl:template match="part/subtitle"/>
-<xsl:template match="partintro"/>
+
+<xsl:template match="partintro">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="partintro/title"/>
 <xsl:template match="partintro/subtitle"/>
 <xsl:template match="partintro/titleabbrev"/>

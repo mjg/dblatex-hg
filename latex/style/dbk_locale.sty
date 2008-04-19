@@ -39,6 +39,7 @@
   \def\writtenby{VERFASST DURCH}
   \def\projname{PROJEKT}
   \def\titlename{TITEL}
+  \def\DBKrefname{REFERENZ}
   \def\DBKindname{NAME}
   \def\DBKindtitle{MITWIRKENDE}
   \def\DBKrevtitle{VERSIONSGESCHICHTE}
@@ -69,6 +70,7 @@
   \def\projname{PROJET}
   \def\titlename{TITRE}
   \def\writtenby{R\'EDIG\'E PAR}
+  \def\DBKrefname{R\'EFERENCE}
   \def\DBKindname{NOM}
   \def\DBKindtitle{INDEXATION DU DOCUMENT}
   \def\DBKrevtitle{SUIVI DU DOCUMENT}
@@ -112,15 +114,15 @@
 \langsetupdbk{es}{
   \def\refname{Referencia}%
   \def\abstractname{Resumen}%
-  \def\bibname{Bibliografía}%
+  \def\bibname{Bibliograf\'ia}%
   \def\prefacename{Prefacio}%
-  \def\chaptername{Capítulo}%
+  \def\chaptername{Cap\'itulo}%
   \def\appendixname{Apéndice}%
-  \def\contentsname{Índice de contenido}%
-  \def\listfigurename{Índice de ilustraciones}%
-  \def\listtablename{Índice de tablas}%
-  \def\indexname{Índice de palabras clave}%
-  \def\figurename{{\scshape Ilustración }}%
+  \def\contentsname{\'Indice de contenido}%
+  \def\listfigurename{\'Indice de ilustraciones}%
+  \def\listtablename{\'Indice de tablas}%
+  \def\indexname{\'Indice de palabras clave}%
+  \def\figurename{{\scshape Ilustraci\'on }}%
   \def\tablename{{\scshape Tabla }}%
    
   \def\examplename{Ejemplo}
@@ -133,10 +135,10 @@
   \def\DBKindtitle{COLABORADORES}
   \def\DBKrevtitle{HISTORIAL DE REVISIONES}
   \def\DBKrevdesc{MODIFICACIONES}
-  \def\DBKrevnumber{NÚMERO}
+  \def\DBKrevnumber{N\'UMERO}
   \def\DBKrevname{NOMBRE}
   \def\DBKrevdate{FECHA}
-  \def\DBKcontrib{ACCIÓN}
+  \def\DBKcontrib{ACCI\'ON}
   \def\DBKsignature{FIRMA}
 }
 % Last-Translator: Giuseppe Sacco <eppesuig@debian.org>
@@ -179,6 +181,7 @@
   \def\writtenby{WRITTEN BY}
   \def\projname{PROJECT}
   \def\titlename{TITLE}
+  \def\DBKrefname{REFERENCE}
   \def\DBKindname{NAME}
   \def\DBKindtitle{COLLABORATORS}
   \def\DBKrevtitle{REVISION HISTORY}
@@ -208,7 +211,7 @@
 \babelsetup{fr}{%
   \NoAutoSpaceBeforeFDP
   % Avoid mess between enumitem and french redefinition
-  \FrenchItemizeSpacingfalse
+  \@ifundefined{ifFrenchItemizeSpacing}{}{\FrenchItemizeSpacingfalse}
 }
 
 \babelsetup{es}{%
@@ -223,6 +226,11 @@
 \babelsetup{de}{%
   % Remove those messy "x shorthands
   \AtBeginDocument{\languageshorthands{none}}
+}
+
+\babelsetup{ru}{%
+  % XeTeX works with russian babel only if xecyr is provided
+  \ifxetex\usepackage{xecyr}\fi
 }
 
 %% Apply default locale setup

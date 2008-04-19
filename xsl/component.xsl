@@ -39,6 +39,7 @@
 
 <xsl:template name="section.unnumbered">
   <xsl:param name="tocdepth" select="0"/>
+  <xsl:param name="level" select="'0'"/>
   <xsl:param name="title"/>
   <xsl:choose>
   <xsl:when test="number($tocdepth) = -1">
@@ -55,13 +56,13 @@
     <xsl:choose>
       <xsl:when test="title">
         <xsl:call-template name="makeheading">
-          <xsl:with-param name="level" select="'0'"/>
+          <xsl:with-param name="level" select="$level"/>
           <xsl:with-param name="allnum" select="'1'"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="maketitle">
-          <xsl:with-param name="level" select="'0'"/>
+          <xsl:with-param name="level" select="$level"/>
           <xsl:with-param name="allnum" select="'1'"/>
           <xsl:with-param name="title" select="$title"/>
         </xsl:call-template>

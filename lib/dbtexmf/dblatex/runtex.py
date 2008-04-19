@@ -32,7 +32,8 @@ class RunLatex:
 
         if paths_blank:
             texinputs = os.pathsep.join(paths_blank)
-            os.environ["TEXINPUTS"] = os.getenv("TEXINPUTS") + os.pathsep + texinputs
+            os.environ["TEXINPUTS"] = os.getenv("TEXINPUTS") + os.pathsep + \
+                                      texinputs
 
         paths = paths_input
 
@@ -47,13 +48,13 @@ class RunLatex:
         # Just set BIBINPUTS and/or BSTINPUTS
         if bibpaths:
             os.environ["BIBINPUTS"] = os.pathsep.join(bibpaths +
-                                                      [os.getenv("BIBINPUTS", "")])
+                                                   [os.getenv("BIBINPUTS", "")])
         if bstpaths:
             os.environ["BSTINPUTS"] = os.pathsep.join(bstpaths +
-                                                      [os.getenv("BSTINPUTS", "")])
+                                                   [os.getenv("BSTINPUTS", "")])
 
     def set_backend(self, backend):
-        if not(backend in ("dvips", "pdftex")):
+        if not(backend in ("dvips", "pdftex", "xetex")):
             raise ValueError("'%s': invalid backend" % backend)
         self.backend = backend
 

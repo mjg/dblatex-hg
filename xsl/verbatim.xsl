@@ -125,6 +125,7 @@
     <xsl:if test="descendant::co|
                   descendant::footnote|
                   descendant::indexterm|
+                  descendant::emphasis|
                   descendant::userinput">
       <xsl:call-template name="co-tagin-gen"/>
     </xsl:if>

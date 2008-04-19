@@ -8,6 +8,10 @@
 <xsl:param name="latex.encoding">latin1</xsl:param>
 <xsl:param name="korean.package">CJK</xsl:param>
 <xsl:param name="cjk.font">cyberbit</xsl:param>
+<xsl:param name="xetex.font">
+  <xsl:text>\setmainfont{DejaVu Serif}&#10;</xsl:text>
+  <xsl:text>\setsansfont{DejaVu Sans}&#10;</xsl:text>
+</xsl:param>
 
 
 <xsl:template name="babel.setup">
@@ -186,6 +190,16 @@
       <xsl:with-param name="lang" select="$lang"/>
     </xsl:call-template>
   </xsl:variable>
+
+  <!-- XeTeX preamble to handle fonts -->
+  <xsl:text>\usepackage{ifxetex}&#10;</xsl:text>
+  <xsl:text>\ifxetex&#10;</xsl:text>
+  <xsl:text>\usepackage{fontspec}&#10;</xsl:text>
+  <xsl:text>\usepackage{xltxtra}&#10;</xsl:text>
+  <xsl:value-of select="$xetex.font"/>
+  <xsl:text>\else&#10;</xsl:text>
+
+  <!-- Standard latex font setup -->
   <xsl:choose>
   <xsl:when test="$use-unicode='1'"/>
   <xsl:when test="$latex.encoding='latin1'">
@@ -199,6 +213,8 @@
     <xsl:text>\def\hyperparamadd{unicode=true}&#10;</xsl:text>
   </xsl:when>
   </xsl:choose>
+
+  <xsl:text>\fi&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template name="encode.after.style">

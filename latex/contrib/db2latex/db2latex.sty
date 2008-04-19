@@ -105,7 +105,7 @@
 \let\stdauthor=\author
 \def\author#1{
   \def\DBKauthor{#1}
-  \stdauthor{#1}%
+  \stdauthor{\begin{minipage}{10cm}\centering #1\end{minipage}}%
 }
 
 \let\stdmaketitle=\maketitle
@@ -139,7 +139,6 @@
 % --------------------------------------------
 % Check for PDFLaTeX/LaTeX 
 % --------------------------------------------
-% \usepackage{ifpdf}
 \usepackage{anysize}
 \marginsize{3cm}{2cm}{1.25cm}{1.25cm}
 
@@ -210,37 +209,25 @@
 % --------------------------------------------
 % Math support                                
 % --------------------------------------------
-\usepackage{amsmath,amsthm,amsfonts,amssymb,amsxtra,amsopn}
- \newcommand{\bysame}{\mbox{\rule{3em}{.4pt}}\,}
- \newcommand{\A}{\mathcal{A}}
- \newcommand{\B}{\mathcal{B}}
- \newcommand{\XcY}{{(X,Y)}}
- \newcommand{\SX}{{S_X}}
- \newcommand{\SY}{{S_Y}}
- \newcommand{\SXY}{{S_{X,Y}}}
- \newcommand{\SXgYy}{{S_{X|Y}(y)}}
- \newcommand{\Cw}[1]{{\hat C_#1(X|Y)}}
- \newcommand{\G}{{G(X|Y)}}
- \newcommand{\PY}{{P_{\mathcal{Y}}}}
- \newcommand{\X}{\mathcal{X}}
- \newcommand{\wt}{\widetilde}
- \newcommand{\wh}{\widehat}
- % --------------------------------------------
- %\DeclareMathOperator{\per}{per}
- \DeclareMathOperator{\cov}{cov}
- \DeclareMathOperator{\non}{non}
- \DeclareMathOperator{\cf}{cf}
- \DeclareMathOperator{\add}{add}
- \DeclareMathOperator{\Cham}{Cham}
- \DeclareMathOperator{\IM}{Im}
- \DeclareMathOperator{\esssup}{ess\,sup}
- \DeclareMathOperator{\meas}{meas}
- \DeclareMathOperator{\seg}{seg}
+%\usepackage{amsmath,amsthm,amsfonts,amssymb,amsxtra,amsopn}
+\usepackage{amsmath,amsthm,amsfonts,amsxtra,amsopn}
+
+% --------------------------------------------
+\DeclareMathOperator{\per}{per}
+\DeclareMathOperator{\cov}{cov}
+\DeclareMathOperator{\non}{non}
+\DeclareMathOperator{\cf}{cf}
+\DeclareMathOperator{\add}{add}
+\DeclareMathOperator{\Cham}{Cham}
+\DeclareMathOperator{\IM}{Im}
+\DeclareMathOperator{\esssup}{ess\,sup}
 
 % ---------------
 % Document Font  
 % ---------------
+\ifxetex\else
 \usepackage{palatino}
+\fi
 
 % ----------------------------------------------
 % Define a new LaTeX environment (adminipage)

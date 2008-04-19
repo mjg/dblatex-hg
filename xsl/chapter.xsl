@@ -18,6 +18,7 @@
 <xsl:template match="chapter/title"/>
 <xsl:template match="chapter/titleabbrev"/>
 <xsl:template match="chapter/subtitle"/>
+<xsl:template match="chapterinfo/pubdate"/>
 <xsl:template match="chapter/docinfo|chapterinfo">
   <xsl:apply-templates/>
 </xsl:template>

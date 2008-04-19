@@ -11,10 +11,15 @@
 </xsl:template>
 
 <xsl:template match="sect1/title"/>
+<xsl:template match="sect1/subtitle"/>
 <xsl:template match="sect2/title"/>
+<xsl:template match="sect2/subtitle"/>
 <xsl:template match="sect3/title"/>
+<xsl:template match="sect3/subtitle"/>
 <xsl:template match="sect4/title"/>
+<xsl:template match="sect4/subtitle"/>
 <xsl:template match="sect5/title"/>
+<xsl:template match="sect5/subtitle"/>
 
 <xsl:template name="map.sect.level">
   <xsl:param name="level" select="''"/>
@@ -44,7 +49,7 @@
     </xsl:choose>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:message>*** section level &gt; 6 not well supported</xsl:message> 
+    <xsl:message>Section level &gt; 6 not well supported</xsl:message> 
     <xsl:text>\subparagraph</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
@@ -104,6 +109,12 @@
   </xsl:when>
   <xsl:when test="$n/parent::book">0</xsl:when>
   <xsl:when test="$n/parent::part">0</xsl:when>
+  <xsl:when test="$n/parent::appendix">
+    <xsl:choose>
+    <xsl:when test="$n/ancestor::book">1</xsl:when>
+    <xsl:otherwise>2</xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
   <xsl:otherwise>7</xsl:otherwise>
   </xsl:choose>
 </xsl:template>

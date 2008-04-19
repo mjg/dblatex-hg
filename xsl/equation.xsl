@@ -6,12 +6,17 @@
     ############################################################################ -->
 
 <xsl:param name="tex.math.in.alt" select="'latex'"/>
+<xsl:param name="alt.use" select="0"/>
 <xsl:param name="equation.default.position">[H]</xsl:param>
 
 
-<xsl:template match="inlineequation|informalequation">
+<xsl:template match="inlineequation|informalequation" name="equation">
   <xsl:choose>
-  <xsl:when test="alt and ($tex.math.in.alt='latex' or count(child::*)=1)">
+  <xsl:when test="alt and $tex.math.in.alt='latex'">
+    <xsl:apply-templates select="alt" mode="latex"/>
+  </xsl:when>
+  <xsl:when test="alt and (count(child::*)=1 or $alt.use='1')">
+    <!-- alt is simply some text -->
     <xsl:apply-templates select="alt"/>
   </xsl:when>
   <xsl:otherwise>
@@ -34,7 +39,7 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text>&#10;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:call-template name="equation"/>
     <xsl:text>&#10;\caption{</xsl:text>
     <xsl:call-template name="normalize-scape">
        <xsl:with-param name="string" select="title"/>
@@ -47,50 +52,56 @@
     <!-- This is an actual LaTeX equation -->
     <xsl:text>&#10;\begin{equation}&#10;</xsl:text>
     <xsl:call-template name="label.id"/>
-    <xsl:apply-templates/>
+    <xsl:call-template name="equation"/>
     <xsl:text>&#10;\end{equation}&#10;</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 
 
-<xsl:template match="inlineequation/graphic"/>
-<xsl:template match="informalequation/graphic"/>
-<xsl:template match="equation/graphic"/>
+<xsl:template match="alt|mathphrase">
+  <xsl:apply-templates/>
+</xsl:template>
 <xsl:template match="equation/title"/>
-<xsl:template match="mathphrase"/>
 
 <!-- Direct copy of the content -->
 
-<xsl:template match="alt">
-  <xsl:choose>
-  <xsl:when test="ancestor::equation[not(child::title)]">
-    <!-- Remove any math mode in an equation environment -->
-    <xsl:variable name="text" select="normalize-space(.)"/>
-    <xsl:variable name="len" select="string-length($text)"/>
+<xsl:template match="alt" mode="latex">
+  <xsl:variable name="tex">
     <xsl:choose>
-    <xsl:when test="starts-with($text,'$') and substring($text,$len,$len)='$'">
-      <xsl:copy-of select="substring($text, 2, $len - 2)"/>
+    <xsl:when test="ancestor::equation[not(child::title)]">
+      <!-- Remove any math mode in an equation environment -->
+      <xsl:variable name="text" select="normalize-space(.)"/>
+      <xsl:variable name="len" select="string-length($text)"/>
+      <xsl:choose>
+      <xsl:when test="starts-with($text,'$') and
+                      substring($text,$len,$len)='$'">
+        <xsl:copy-of select="substring($text, 2, $len - 2)"/>
+      </xsl:when>
+      <xsl:when test="(starts-with($text,'\[') and
+                       substring($text,$len - 1,$len)='\]') or
+                      (starts-with($text,'\(') and
+                       substring($text,$len - 1,$len)='\)')">
+        <xsl:copy-of select="substring($text, 3, $len - 4)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="."/>
+      </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
-    <xsl:when test="(starts-with($text,'\[') and
-                     substring($text,$len - 1,$len)='\]') or
-                    (starts-with($text,'\(') and
-                     substring($text,$len - 1,$len)='\)')">
-      <xsl:copy-of select="substring($text, 3, $len - 4)"/>
-    </xsl:when>
-    <xsl:otherwise>
+    <!-- Test to be DB5 compatible, where <alt> can be in other elements -->
+    <xsl:when test="ancestor::equation or
+                    ancestor::informalequation or
+                    ancestor::inlineequation">
       <xsl:copy-of select="."/>
-    </xsl:otherwise>
+    </xsl:when>
+    <xsl:otherwise/>
     </xsl:choose>
-  </xsl:when>
-  <!-- Test to be DB5 compatible, where <alt> can be in other elements -->
-  <xsl:when test="ancestor::equation or
-                  ancestor::informalequation or
-                  ancestor::inlineequation">
-    <xsl:copy-of select="."/>
-  </xsl:when>
-  <xsl:otherwise/>
-  </xsl:choose>
+  </xsl:variable>
+  <!-- Encode it properly -->
+  <xsl:call-template name="scape-encode">
+    <xsl:with-param name="string" select="$tex"/>
+  </xsl:call-template>
 </xsl:template>
 
 </xsl:stylesheet>
