@@ -13,4 +13,7 @@
 <!-- DocBook like description -->
 <xsl:param name="term.breakline">1</xsl:param>
 
+<!-- Manpage titles not numbered -->
+<xsl:param name="refentry.numbered">0</xsl:param>
+
 </xsl:stylesheet>

@@ -1,9 +1,9 @@
-<sect1>
+<section>
   <title>Writing a Bibliography</title>
   <para>
    A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter or a section and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections or subsections.
   </para>
-  <sect2><title>Using Bibliography Entries</title>
+  <section><title>Using Bibliography Entries</title>
   <para>
    The writer selects information that describes each bibliography entry (<sgmltag>biblioentry</sgmltag>), and chooses the presentation order. The titles and authors are displayed first.
   </para>
@@ -30,8 +30,8 @@
 </bibliography>
 ]]>  </programlisting>
 </example>
-</sect2>
-<sect2 id="sec-bibtex"><title>Using BibTeX Databases</title>
+</section>
+<section id="sec-bibtex"><title>Using BibTeX Databases</title>
 
 <para>Instead of writing the bibliographic materials in DocBook you can reuse
 some already available BibTeX databases. Of course, this feature is specific to
@@ -114,8 +114,8 @@ linkend="eg-bibmixed"/>.</para>
 ]]>  </programlisting>
 </example>
 
-</sect2>
-<sect2 id="sec-natbib"><title>Natbib Citations</title>
+</section>
+<section id="sec-natbib"><title>Natbib Citations</title>
 
 <para>You can apply natbib citation styles by playing with the citation role
 attribute, or with a <literal>dblatex</literal> processing instruction. The
@@ -144,5 +144,5 @@ the whole text with "{ }" to protect them (as you would do in latex).</para>
 <parameter>citation.default.style</parameter> parameter. By default the
 parameter is empty, and therefor is not used.</para>
 
-</sect2>
-</sect1>
+</section>
+</section>

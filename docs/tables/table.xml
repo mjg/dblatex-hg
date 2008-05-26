@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-  <sect1 xmlns:xi="http://www.w3.org/2001/XInclude">
+  <section xmlns:xi="http://www.w3.org/2001/XInclude">
    <title>Creating Tables</title>
   <para>
    DocBook tables can be quite complex, but <command>dblatex</command> should be able
@@ -56,7 +56,7 @@
    </para>
   </listitem>
   </itemizedlist>
-   <sect2> <title>Limitations</title>
+   <section> <title>Limitations</title>
    <para>Currently the following things are known to fail with tables:
   <itemizedlist>
    <listitem><para>program listings and screens cannot be embedded in tables.
@@ -69,8 +69,8 @@
    </para></listitem>
   </itemizedlist>
    </para>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Tables without colwidth</title>
    <para>
     When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given.
@@ -78,8 +78,8 @@
    <xi:include href="table-eg00.xml"/>
    <xi:include href="table-eg01.xml"/>
    <xi:include href="table-eg02.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Tables with mixed colspec</title>
    <para>
     A table can have <sgmltag>colspec</sgmltag> elements containing <sgmltag>colwidth</sgmltag> attribute mixed with <sgmltag>colspec</sgmltag> elements without <sgmltag>colwidth</sgmltag>. The following XML source: 
@@ -102,8 +102,8 @@
     is rendered like this:
    </para>
    <xi:include href="table-eg1.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Tables with proportional and fixed colwidth</title>
    <para>
     Proportional column widths are supported. The following XML source:
@@ -126,8 +126,8 @@
     gives this table:
    </para>
    <xi:include href="table-eg2.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Tables with fixed colwidths</title>
    <para>
     All the columns can have fixed size, like this: 
@@ -149,8 +149,8 @@
     It gives the following table:
    </para>
    <xi:include href="table-eg3.xml"/>
-   </sect2>
-   <sect2 id="sec-newtbl-autowidth">
+   </section>
+   <section id="sec-newtbl-autowidth">
    <title>Automatic column width</title>
    <para>In the previous sections the columns widths are computed from a
    proportional basis, when no colwidth is specified or when the colwidths
@@ -181,8 +181,8 @@
    Using automatic width is handy in some situations but there is no more
    control if the tables fit in the page or not, since in this case the column
    is as wide as its content, with no more paragraph breaking.</para>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Tables with morerows</title>
    <para>
     A table can contain entries that cover several lines. The following XML source contains an entry covering 4 lines: 
@@ -203,8 +203,8 @@
     Here is an example of table containing several entries with morerows attribute:
    </para>
    <xi:include href="table-eg4.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>
     Landscape tables
    </title>
@@ -226,8 +226,8 @@
     Here is how it is displayed.
    </para>
    <xi:include href="table-land.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Smaller tables</title>
    <para>
     For big tables it can be usefull to have smaller text, so that the table is not too large or too long and it can be displayed within a page. It is possible to specify smaller table text by using the <sgmltag>role</sgmltag> attribute of the elements <sgmltag>table</sgmltag> or <sgmltag>informaltable</sgmltag>.
@@ -267,8 +267,8 @@
    <xi:include href="table-small2.xml"/>
    <xi:include href="table-small3.xml"/>
    <xi:include href="table-small4.xml"/>
-   </sect2>
-<sect2>
+   </section>
+<section>
 <title>Coloured tables</title>
 <para>You can color all the table by setting its <sgmltag>bgcolor</sgmltag>
 attribute.</para>
@@ -280,12 +280,13 @@ beginning of a <sgmltag>row</sgmltag>, or to cells when put in a
 <para>The entry colour has precedence over the row colour,
 that has precedence over the column colour, that has precedence over the table
 colour.</para>
-<para>The color expression must be understood by the
+<para>The color can be expressed in hexadecimal notation like for HTML (e.g.
+<literal>#C0C0C0</literal>) or in a syntax understood by the
 <filename>colortbl</filename> latex package.</para>
 <para>Here is an example.</para>
 <xi:include href="coloured.xml"/>
 <para>This table is coded like this:</para>
 <programlisting><textobject><textdata
 fileref="tables/coloured.xml"/></textobject></programlisting>
-</sect2>
-</sect1>
+</section>
+</section>

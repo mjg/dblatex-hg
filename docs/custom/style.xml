@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<sect1 id="sec-style"><title>Output Formatting Style</title>
+<section id="sec-style"><title>Output Formatting Style</title>
 <para>The output rendering done by <command>dblatex</command> can be widely
 customized like explained in <xref linkend="sec-custom"/>. By default several
 rendering styles are provided, that one can choose by using the option
@@ -32,7 +32,7 @@ around the default latex packages is very thin.</para>
 dblatex -T db2latex file.xml
 ]]></programlisting>
 </example>
-<sect2><title>How it works</title>
+<section><title>How it works</title>
 <para>The rendering style stuff is under the <filename>latex/</filename>
 directory. You can see the XSL stylesheets under <filename>xsl/</filename> as the
 way to produce latex with as little as possible docbook specific things (even if a
@@ -91,8 +91,8 @@ linkend="sec-specs"/>.
 </listitem>
 </varlistentry>
 </variablelist>
-</sect2>
-<sect2><title>Adding a New Formatting Style</title>
+</section>
+<section><title>Adding a New Formatting Style</title>
 <para>To add a new formatting style, do the following steps:</para>
 <procedure>
 <step><para>Let's create the style directores that will contain all the specific
@@ -138,6 +138,6 @@ $ dblatex -T mystyle file.xml
 </step>
 </procedure>
 
-</sect2>
-</sect1>
+</section>
+</section>
 

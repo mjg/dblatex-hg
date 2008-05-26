@@ -22,6 +22,8 @@
     <copyright>
       <year>2005</year>
       <year>2006</year>
+      <year>2007</year>
+      <year>2008</year>
       <holder>Andreas Hoenen</holder>
     </copyright>
     <legalnotice>
@@ -40,7 +42,7 @@
         <filename>/usr/share/common-licenses/GPL</filename>.
       </para>
     </legalnotice>
-    <date>October 6, 2006</date>
+    <date>May 6, 2008</date>
   </refentryinfo>
 
   <refmeta>
@@ -65,7 +67,7 @@
     </cmdsynopsis>
   </refsynopsisdiv>
 
-  <refsect1>
+  <refsection>
     <title>Description</title>
 
     <para output="manpage">
@@ -85,9 +87,9 @@
       <phrase output="manpage">It started as a clone of
       <application>DB2LaTeX</application>.</phrase>
     </para>
-  </refsect1>
+  </refsection>
 
-  <refsect1>
+  <refsection>
     <title>Options</title>
 
     <para>
@@ -109,8 +111,9 @@
         </term>
         <listitem>
           <simpara>
-            Backend driver to use: <parameter>pdftex</parameter>,
-            <parameter>dvips</parameter> (default). <phrase output="manual">
+            Backend driver to use: <parameter>pdftex</parameter> (default),
+            <parameter>dvips</parameter>, or <parameter>xetex</parameter>.
+            <phrase output="manual">
             See also <xref linkend="sec-process"/>.</phrase>
           </simpara>
         </listitem>
@@ -133,11 +136,21 @@
       </varlistentry>
       <varlistentry>
         <term><option>-d</option></term>
+        <term><option>--debug</option></term>
         <listitem>
           <simpara>
             Debug mode: Keep the temporary directory in which dblatex actually
             works. <phrase output="manual"><xref linkend="sec-debug"/> explains how
             you can use it.</phrase>
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-D</option></term>
+        <term><option>--dump</option></term>
+        <listitem>
+          <simpara>
+            Dump the error stack when an error occurs (debug purpose).
           </simpara>
         </listitem>
       </varlistentry>
@@ -363,9 +376,9 @@
         </listitem>
       </varlistentry>
     </variablelist>
-  </refsect1>
+  </refsection>
 
-  <refsect1>
+  <refsection>
     <title>Files and Directories</title>
     <variablelist>
       <varlistentry>
@@ -387,9 +400,9 @@
     </variablelist>
     <para>The predefined output styles are located in the installed package
     directory.</para>
-  </refsect1>
+  </refsection>
 
-  <refsect1>
+  <refsection>
     <title>Environment Variables</title>
     <variablelist>
       <varlistentry>
@@ -402,9 +415,9 @@
         </listitem>
       </varlistentry>
     </variablelist>
-  </refsect1>
+  </refsection>
 
-  <refsect1>
+  <refsection>
     <title>Examples</title>
 
     <para>
@@ -433,9 +446,9 @@ xsltproc --param profile.attribute "'output'" \
          myfile.xml | dblatex -o myfile.pdf -
 </screen>
     </para>
-  </refsect1>
+  </refsection>
 
-  <refsect1 output="manpage">
+  <refsection output="manpage">
     <title>See also</title>
 
     <para>
@@ -443,6 +456,6 @@ xsltproc --param profile.attribute "'output'" \
       - User Manual"</citetitle> available in the package's documentation
       directory.
     </para>
-  </refsect1>
+  </refsection>
 
 </refentry>

@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<sect1>
+<section>
    <title>
    Publishing with dblatex
   </title>
   <para>
    To publish your document, you just need to use the script <filename>dblatex</filename>. 
   </para>
-   <sect2>
+   <section>
     <title>
     Synopsis
    </title>
    <programlisting>
 <![CDATA[dblatex [-t {tex|dvi|ps|pdf}] [-b {dvips|pdftex}] [-o output] [other options] file.{xml|sgml}
 ]]>   </programlisting>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>
     Description
    </title>
    <para>
     The script works on an XML or SGML file and can produce LaTeX, DVI, Postscript and PDF output. By default (i.e. without option) a PDF file is produced in the same directory where the input file is, with the same base name.
    </para>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>
     Options
    </title>
@@ -123,14 +123,14 @@ documents.
    </listitem>
    </varlistentry>
    </variablelist>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>
     Other options
    </title>
    <para>
     Other options are defined to customize the tool, but they should be used in exceptional cases, for test or debug purpose. These options are defined in section <xref linkend="sec-specs"/> and should normaly be set through a specification file.
    </para>
-   </sect2>
-  </sect1>
+   </section>
+  </section>
 

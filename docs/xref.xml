@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<sect1 id="sec-xref">
+<section id="sec-xref">
 <title>Using XRefsyle and Olinks</title>
 
 <para>With version 0.2.7 you can use the <sgmltag>xrefstyle</sgmltag> attribute
@@ -20,4 +20,4 @@ dblatex to handle all of these features.</para>
 </itemizedlist>
 </para>
 
-</sect1>
+</section>

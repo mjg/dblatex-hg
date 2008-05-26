@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<sect1 xmlns:xi="http://www.w3.org/2001/XInclude">
+<section xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Locale Support</title>
 
-<sect2 id="sec-doc-encode">
+<section id="sec-doc-encode">
 <title>Document Encoding</title>
 
 <para>By default the latex document produced by <command>dblatex</command> is
@@ -31,8 +31,8 @@ encoded in UTF8, that is compiled in UTF8. It requires to have the
 must be in UTF8. Therefore, the UTF8 encoding is forced for these languages
 whatever the parameter values are.</para>
 
-</sect2>
-<sect2><title>Babel Languages</title>
+</section>
+<section><title>Babel Languages</title>
 
 <para>Dblatex should be able to handle most of the languages supported by the
 babel package. Just set the
@@ -40,8 +40,8 @@ babel package. Just set the
 document element and dblatex will load
 the appropriate babel language.</para>
 
-</sect2>
-<sect2><title>CJK Languages</title>
+</section>
+<section><title>CJK Languages</title>
 
 <para>Dblatex can handle the CJK languages thanks to the CJK package. The CJK
 package must be installed to have this support available.</para>
@@ -53,16 +53,16 @@ in UTF8. Moreover, the Cyberbit fonts are then used.</para>
 <ulink url="http://kile.sourceforge.net/Documentation/html/cjk.html"/>.
 </para>
 
-<sect3><title>Korean Support</title>
+<section><title>Korean Support</title>
 
 <para>Dblatex does not use the HLatex package to drive Korean documents. It does
 not use the <command>hmakeindex</command> nor the <command>hbibtex</command> tool.
 Currently, Korean is handled like Chinese and Japanese with the CJK package.</para>
 
-</sect3>
-</sect2>
+</section>
+</section>
 
-<sect2><title>Mixing the languages</title>
+<section><title>Mixing the languages</title>
 
 <para>Dblatex cannot handle correctly a document containing several elements
 with different <sgmltag>lang</sgmltag> values. In particular, if the main
@@ -70,5 +70,5 @@ document lang is not one of the CJK language, a portion of text written in CJK
 will not be handled correctly and it can result in a compilation crash.</para>
 <para>Even if the langs mixed do not end to a compilation failure, only the
 main document lang will be taken into account.</para>
-</sect2>
-</sect1>
+</section>
+</section>

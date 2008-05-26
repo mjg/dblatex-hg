@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE sect1 PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-  <sect1 id="sec-figinclude">
+  <section id="sec-figinclude">
    <title>
    Figure Inclusion
   </title>
-   <sect2>
+   <section>
     <title>
     Presentation
    </title>
@@ -46,8 +46,8 @@
 ]]><![CDATA[</figure>
 ]]>   </programlisting>
 </example>
-   </sect2>
-   <sect2 id="sec-figconv">
+   </section>
+   <section id="sec-figconv">
     <title>
     Converting on the fly
    </title>
@@ -89,8 +89,8 @@
 <![CDATA[% dblatex -f fig mydoc.sgml
 ]]>   </programlisting>
 </example>
-   </sect2>
-   <sect2 id="sec-lookup">
+   </section>
+   <section id="sec-lookup">
     <title>
     Paths Lookup
    </title>
@@ -139,5 +139,5 @@
    </listitem>
    </itemizedlist>
 </example>
-   </sect2>
-  </sect1>
+   </section>
+  </section>

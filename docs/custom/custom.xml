@@ -33,14 +33,14 @@
  <para>
   All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs"/>) to create a new tool dedicated to your needs.
  </para>
-  <sect1 id="sec-param">
+  <section id="sec-param">
    <title>XSL Parameters</title>
   <para>
    The PDF rendering can be customised by using some XSL configuration parameters.
    The available configuration parameters are the following:
   </para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="param.xml"/>
-   <sect2 id="sec-defaultscale">
+   <section id="sec-defaultscale">
     <title>imagedata.default.scale</title>
     <para>Default scale to apply to every <sgmltag>imagedata</sgmltag> that does not
 contain any scaling attribute.</para>
@@ -59,8 +59,8 @@ comma separated list.</para>
 </para>
 <para>Except these special reserved values, the expected value of the parameter
 must be some valid options passed to the \includegraphics command.</para>
-</sect2>
-   <sect2 id="sec-hyperparam">
+</section>
+   <section id="sec-hyperparam">
     <title>latex.hyperparam</title>
    <para>
     This parameter gives the options to pass to the LaTeX hyperref package. No validity check is done. 
@@ -80,10 +80,10 @@ must be some valid options passed to the \includegraphics command.</para>
 ]]><![CDATA[</xsl:stylesheet>
 ]]>   </programlisting>
 </example>
-  </sect2>
-  </sect1>
+  </section>
+  </section>
 
-<sect1 id="sec-param-value"><title>Setting Command line Parameters</title>
+<section id="sec-param-value"><title>Setting Command line Parameters</title>
   <para>You can set some XSL parameters directly from the command
   line without creating a configuration parameter stylesheet, with the
   <option>-P <replaceable>parameter=value</replaceable></option> option.</para>
@@ -92,16 +92,16 @@ must be some valid options passed to the \includegraphics command.</para>
 <![CDATA[  dblatex -P latex.hyperparam=colorlinks,linkcolor=blue myfile.xml
 ]]></programlisting>
   </para>
-</sect1>
+</section>
 
-<sect1>
+<section>
 <title>XSL User Stylesheet</title>
   <para>You can provide your own XSL stylesheet to set some of the XSL parameters,
   and/or to override some of the dblatex XSL templates. The user stylesheet is
   specified by using the option
   <option>-p <replaceable>custom.xsl</replaceable></option>.</para>
 
-<sect2 id="sec-param-stylesheet">
+<section id="sec-param-stylesheet">
 <title>Changing the XSL parameter values</title>
   <para>
    The parameters can be stored in a user defined XSL stylesheet. An example of
@@ -109,8 +109,8 @@ must be some valid options passed to the \includegraphics command.</para>
   </para>
   <programlisting><textobject><textdata
   fileref="myparam.xsl"/></textobject></programlisting>
-  </sect2>
-  <sect2 id="sec-custom-stylesheet">
+  </section>
+  <section id="sec-custom-stylesheet">
    <title>Overriding some templates</title>
   <para>
    You can directly put the overriding templates in your XSL stylesheet, but do not
@@ -139,9 +139,9 @@ must be some valid options passed to the \includegraphics command.</para>
 </xsl:stylesheet>
 ]]>  </programlisting>
 </example>
-  </sect2>
-  </sect1>
-  <sect1 id="sec-custom-latex">
+  </section>
+  </section>
+  <section id="sec-custom-latex">
    <title>Customized LaTeX style</title>
   <para>
    The actual output rendering is done by the latex style package used, and not by the XSL stylesheets whose role is only to translate to latex. Users can provide their own LaTeX style file, in respect of some rules:
@@ -179,7 +179,7 @@ dblatex --texstyle=mystyle file.xml
 # Give the full package path. The TEXINPUTS is then updated by dblatex
 dblatex --texstyle=./mystyle.sty file.xml
 </programlisting>
-<sect2><title>Reusing an existing LaTeX style</title>
+<section><title>Reusing an existing LaTeX style</title>
 <para>You can either create your latex style from scratch, in respect of the
 interfaces described in the following sections, or you can simply reuse an
 already existing style and override what you want. The latter method is easier
@@ -190,28 +190,28 @@ style:</para>
 <programlisting><textobject><textdata fileref="mystyle.sty"/></textobject>
 </programlisting>
 </example>
-</sect2>
-   <sect2>
+</section>
+   <section>
     <title>Package options</title>
    <para>A compliant LaTeX style package supports the following options. The options are
    provided by the XSL stylesheets according to the document attributes.</para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="styoption.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>Needed packages</title>
    <para>A LaTeX style package must at least include the following packages.</para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stypackage.xml"/>
-   </sect2>
-   <sect2>
+   </section>
+   <section>
     <title>DocBook interface</title>
    <para>
     All the latex commands beginning with DBK are related to elements under <sgmltag>bookinfo</sgmltag> or <sgmltag>articleinfo</sgmltag>.
    </para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stycommand.xml"/>
-   </sect2>
+   </section>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="stydebug.xml"/>
-  </sect1>
-  <sect1 id="sec-texpost">
+  </section>
+  <section id="sec-texpost">
    <title>Latex post process script</title>
   <para>
    Extra user actions can be processed on the latex file produced by the XSL stylesheets or on its temporary working files produced by the latex compilation. 
@@ -222,7 +222,7 @@ style:</para>
   <para>
    The post process script is called just before the last latex compilation, and takes one parameter, the latex file compiled by the tool.
   </para>
-  <sect2><title>Post latex compilations</title>
+  <section><title>Post latex compilations</title>
   <para>
    The latex compilations done once the script is called depend on the return code
    of the script:
@@ -251,16 +251,16 @@ style:</para>
   </listitem>
   </itemizedlist>
   </para>
-  </sect2>
-  </sect1>
-  <sect1 id="sec-specs">
+  </section>
+  </section>
+  <section id="sec-specs">
    <title>Dblatex Configuration File</title>
   <para>
    A master configuration file, also called a specification file, can be used to list
    all the customizations and options to apply. Such a file is passed by using the
    option <option>-S <replaceable>config_file</replaceable></option>.
   </para>
-  <sect2><title>Configuration File Format</title>
+  <section><title>Configuration File Format</title>
   <para>
    The format of the file is the following:
   </para>
@@ -310,23 +310,23 @@ style:</para>
 <programlisting><textobject><textdata fileref="manual.specs"/></textobject>
 </programlisting>
 </example>
-  </sect2>
-  <sect2 id="sec-conf-path"><title>Configuration Paths</title>
+  </section>
+  <section id="sec-conf-path"><title>Configuration Paths</title>
   <para>By default <command>dblatex</command> tries to find the configuration files
   in the following paths, in respect of the order:</para>
   <orderedlist>
   <listitem><para>The current directory</para></listitem>
-  <listitem><filename>$HOME/.dblatex</filename></listitem>
-  <listitem><filename>/etc/dblatex</filename></listitem>
+  <listitem><para><filename>$HOME/.dblatex</filename></para></listitem>
+  <listitem><para><filename>/etc/dblatex</filename></para></listitem>
   <listitem><para>The dblatex package configuration directories.</para></listitem>
   </orderedlist>
   <para>You can add some extra paths where to look for by setting the
   <envar>DBLATEX_CONFIG_FILES</envar> environment variable. The paths are
   separated by ":" in Unix like systems, and by ";" on Windows. These paths are used
   only when nothing is found in the default paths.</para>
-  </sect2>
-  </sect1>
-  <sect1>
+  </section>
+  </section>
+  <section>
    <title>Customization Precedence</title>
   <para>
    All the customization queries are translated to the corresponding command line options. Thus, using several customization methods can be unconsistent because each of them override the same option with another value. 
@@ -390,5 +390,5 @@ style:</para>
   </listitem>
   </itemizedlist>
 </example>
-  </sect1>
+  </section>
  </chapter>

@@ -1,433 +1,466 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-                      "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"
-[
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 <!ENTITY edition "22">
 ]>
+<book lang="en">
+<bookinfo>
+<title>DocBook to LaTeX Publishing</title>
 
-<book lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
- <bookinfo>
-  <title>DocBook to LaTeX Publishing</title>
- <author>
-  <firstname>Benoît</firstname><surname>Guillon</surname>
- </author>
- <date>
-  4 Sep 2007
- </date>
+<author>
+<firstname>BenoÃ®t</firstname>
+
+<surname>Guillon</surname>
+</author>
+
+<date>20 May 2008</date>
+
 <subtitle>User Manual</subtitle>
+
 <pubsnumber>Ref A0</pubsnumber>
+
 <address>Toulon</address>
-<edition>&edition;</edition>
-<releaseinfo>$Id$</releaseinfo>
+
+<edition>23</edition>
+
+<releaseinfo>$Id: manual.xml,v 1.21 2007-11-17 18:13:08 ben Exp
+$</releaseinfo>
+
 <othercredit>
-<firstname>Jean-Yves</firstname><surname>Le Ruyet</surname>
+<firstname>Jean-Yves</firstname>
+
+<surname>Le Ruyet</surname>
+
 <contrib>REVIEWED BY</contrib>
 </othercredit>
+
 <othercredit>
-<firstname></firstname><surname></surname>
+<firstname></firstname>
+
+<surname></surname>
+
 <contrib>APPROVED BY</contrib>
 </othercredit>
+
 <revhistory>
 <revision>
 <revnumber>1</revnumber>
+
 <date>20/01/03</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  First release of the package.
- </para>
-</revdescription></revision>
-<revision>
-<revnumber>2</revnumber><date>30/04/03</date>
-<authorinitials>B. Guillon</authorinitials>
-<revdescription>
- <para>
-  Changes:
- </para>
- <itemizedlist>
-  <listitem>
-  <para>
-  The script <filename>configure</filename> now checks the latex package dependencies, i.e. it checks that the packages used by the default DocBook latex style are available.
-  </para>
- </listitem>
-  <listitem>
-  <para>
-  The tool can be heavily customized thanks to a specification file and/or new extra options (cf. <xref linkend="sec-custom"/>).
-  </para>
- </listitem>
- </itemizedlist>
+<para>First release of the package.</para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>3</revnumber><date>11/06/03</date>
+<revnumber>2</revnumber>
+
+<date>30/04/03</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes:
- </para>
- <itemizedlist>
-  <listitem>
-  <para>
-  The <ulink url="http://xsltml.sourceforge.net">xsltml</ulink> library is included in the package to have a strong and consistent support of the MathML 2.0 specification.
-  </para>
- </listitem>
-  <listitem>
-  <para>
-  A large excerpt fo the MathML Test Suite 2.0 is now available to validate the MathML stylesheets.
-  </para>
- </listitem>
- </itemizedlist>
-</revdescription>
-</revision> 
-<revision>
-<revnumber>4</revnumber><date>03/07/03</date>
-<authorinitials>B. Guillon</authorinitials>
-<revdescription>
- <para>
-  Changes:
- </para>
- <itemizedlist>
-  <listitem>
-  <para>
-  Dutch language is supported by the default latex stylesheets.
-  </para>
- </listitem>
-  <listitem>
-  <para>
-  The <sgmltag>subtitle</sgmltag> element is displayed on the cover page.
-  </para>
- </listitem>
-  <listitem>
-  <para>
-  Tables can be displayed in landscape, through the <sgmltag>orient</sgmltag> attribute. In addition, the table text size can be specified to be smaller by using the <sgmltag>role</sgmltag> attribute.
-  </para>
- </listitem>
-  <listitem>
-  <para>
-  Hyphenation is forced in tables, so that no words can cover several cells.
-  </para>
- </listitem>
- </itemizedlist>
+<para>Changes:</para>
+
+<itemizedlist>
+<listitem>
+<para>The script <filename>configure</filename> now checks the latex package
+dependencies, i.e. it checks that the packages used by the default DocBook
+latex style are available.</para>
+</listitem>
+
+<listitem>
+<para>The tool can be heavily customized thanks to a specification file and/or
+new extra options (cf. <xref linkend="sec-custom" />).</para>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>5</revnumber><date>03/05/04</date>
+<revnumber>3</revnumber>
+
+<date>11/06/03</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-014"/>
- </para>
+<para>Changes:</para>
+
+<itemizedlist>
+<listitem>
+<para>The <ulink url="http://xsltml.sourceforge.net">xsltml</ulink> library is
+included in the package to have a strong and consistent support of the MathML
+2.0 specification.</para>
+</listitem>
+
+<listitem>
+<para>A large excerpt fo the MathML Test Suite 2.0 is now available to
+validate the MathML stylesheets.</para>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>6</revnumber><date>15/06/04</date>
+<revnumber>4</revnumber>
+
+<date>03/07/03</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-0141"/>
- </para>
+<para>Changes:</para>
+
+<itemizedlist>
+<listitem>
+<para>Dutch language is supported by the default latex stylesheets.</para>
+</listitem>
+
+<listitem>
+<para>The <sgmltag>subtitle</sgmltag> element is displayed on the cover
+page.</para>
+</listitem>
+
+<listitem>
+<para>Tables can be displayed in landscape, through the
+<sgmltag>orient</sgmltag> attribute. In addition, the table text size can be
+specified to be smaller by using the <sgmltag>role</sgmltag> attribute.</para>
+</listitem>
+
+<listitem>
+<para>Hyphenation is forced in tables, so that no words can cover several
+cells.</para>
+</listitem>
+</itemizedlist>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>7</revnumber><date>15/07/05</date>
+<revnumber>5</revnumber>
+
+<date>03/05/04</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-015"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-014" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>8</revnumber><date>25/09/05</date>
+<revnumber>6</revnumber>
+
+<date>15/06/04</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-016"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-0141" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>9</revnumber><date>20/10/05</date>
+<revnumber>7</revnumber>
+
+<date>15/07/05</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-017"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-015" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>10</revnumber><date>28/11/05</date>
+<revnumber>8</revnumber>
+
+<date>25/09/05</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-018"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-016" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>11</revnumber><date>28/04/06</date>
+<revnumber>9</revnumber>
+
+<date>20/10/05</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-019"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-017" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>12</revnumber><date>21/07/06</date>
+<revnumber>10</revnumber>
+
+<date>28/11/05</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-0110"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-018" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>13</revnumber><date>27/09/06</date>
+<revnumber>11</revnumber>
+
+<date>28/04/06</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-02pre"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-019" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>14</revnumber><date>27/10/06</date>
+<revnumber>12</revnumber>
+
+<date>21/07/06</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>
-  Changes: see <xref linkend="sec-changes-020"/>
- </para>
+<para>Changes: see <xref linkend="sec-changes-0110" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>15</revnumber><date>24/11/06</date>
+<revnumber>13</revnumber>
+
+<date>27/09/06</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-021"/></para>
+<para>Changes: see <xref linkend="sec-changes-02pre" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>16</revnumber><date>23/12/06</date>
+<revnumber>14</revnumber>
+
+<date>27/10/06</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-022"/></para>
+<para>Changes: see <xref linkend="sec-changes-020" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>17</revnumber><date>21/01/07</date>
+<revnumber>15</revnumber>
+
+<date>24/11/06</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-023"/></para>
+<para>Changes: see <xref linkend="sec-changes-021" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>18</revnumber><date>24/02/07</date>
+<revnumber>16</revnumber>
+
+<date>23/12/06</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-024"/></para>
+<para>Changes: see <xref linkend="sec-changes-022" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>19</revnumber><date>25/04/07</date>
+<revnumber>17</revnumber>
+
+<date>21/01/07</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-025"/></para>
+<para>Changes: see <xref linkend="sec-changes-023" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>20</revnumber><date>22/06/07</date>
+<revnumber>18</revnumber>
+
+<date>24/02/07</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-026"/></para>
+<para>Changes: see <xref linkend="sec-changes-024" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>21</revnumber><date>04/09/07</date>
+<revnumber>19</revnumber>
+
+<date>25/04/07</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-027"/></para>
+<para>Changes: see <xref linkend="sec-changes-025" /></para>
 </revdescription>
 </revision>
+
 <revision>
-<revnumber>&edition;</revnumber><date>15/11/07</date>
+<revnumber>20</revnumber>
+
+<date>22/06/07</date>
+
 <authorinitials>B. Guillon</authorinitials>
+
 <revdescription>
- <para>Changes: see <xref linkend="sec-changes-028"/></para>
+<para>Changes: see <xref linkend="sec-changes-026" /></para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>21</revnumber>
+
+<date>04/09/07</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Changes: see <xref linkend="sec-changes-027" /></para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>22</revnumber>
+
+<date>15/11/07</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Changes: see <xref linkend="sec-changes-028" /></para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>23</revnumber>
+
+<date>20/05/08</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Changes: see <xref linkend="sec-changes-029" /></para>
 </revdescription>
 </revision>
 </revhistory>
 </bookinfo>
-<bibliography><title>Documentation</title>
-<bibliodiv><title>Reference</title>
-<biblioentry> 
-<abbrev>TDG</abbrev> 
-<title>DocBook: The Definitive Guide</title> 
-<authorgroup><author><firstname>Norman</firstname><surname>Walsh</surname></author>
-<author><firstname>Leonard</firstname><surname>Muellner</surname></author></authorgroup> 
-<copyright><year>1999, 2000, 2001</year> <holder>O'Reilly &amp; Associates, Inc.</holder></copyright> 
-<isbn>156592-580-7</isbn> 
-<publisher><publishername>O'Reilly</publishername> </publisher> 
+
+<bibliography>
+<title>Documentation</title>
+
+<bibliodiv>
+<title>Reference</title>
+
+<biblioentry>
+<abbrev>TDG</abbrev>
+
+<title>DocBook: The Definitive Guide</title>
+
+<authorgroup>
+<author>
+<firstname>Norman</firstname>
+
+<surname>Walsh</surname>
+</author>
+
+<author>
+<firstname>Leonard</firstname>
+
+<surname>Muellner</surname>
+</author>
+</authorgroup>
+
+<copyright>
+<year>1999, 2000, 2001</year>
+
+<holder>O'Reilly &amp; Associates, Inc.</holder>
+</copyright>
+
+<isbn>156592-580-7</isbn>
+
+<publisher>
+<publishername>O'Reilly</publishername>
+</publisher>
 </biblioentry>
 </bibliodiv>
 </bibliography>
-<xi:include href="introduction.xml"/>
-<xi:include href="install.xml"/>
- <chapter>
-  <title>Using dblatex</title>
-<xi:include href="manpage/dblatex-doc.xml"/>
-<xi:include href="custom/style.xml"/>
-<xi:include href="figure.xml"/>
-<xi:include href="tables/table.xml"/>
-  <sect1>
-   <title>Writing LaTeX Mathematical Equations</title>
-   <sect2>
-    <title>Presentation</title>
-   <para>
-    DocBook doesn't define elements for writing mathematical equations. Only few elements exist that tell how equation should be displayed (inlined, block):
-   </para>
-   <itemizedlist>
-    <listitem>
-    <para>
-    <sgmltag>inlineequation</sgmltag> tells that the equation is inlined,
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    <sgmltag>informalequation</sgmltag> tells that the equation is displayed as a block, without a title.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    <sgmltag>equation</sgmltag> tells that the equation is displayed as a block, with or without a title.
-    </para>
-   </listitem>
-   </itemizedlist>
-   <para>
-    These tags include a graphic (<sgmltag>graphic</sgmltag> or <sgmltag>mediaobject</sgmltag>) or an alternative text equation, as shown by the example.
-   </para>
-<example><title>Equation taken from TDG</title>
-   <programlisting>
-<![CDATA[<equation><title>Last Theorem of Fermat</title> 
-]]><![CDATA[  <alt>x^n + y^n &ne; z^n &forall; n &ne; 2</alt>
-]]><![CDATA[  <graphic fileref="figures/fermat"></graphic>
-]]><![CDATA[</equation>
-]]>   </programlisting>
-</example>
-   </sect2>
-   <sect2>
-    <title>Implementation choice</title>
-   <para>
-    The principle is to use only the <sgmltag>alt</sgmltag> element. If initially <sgmltag>alt</sgmltag> contains actually the text to print, it is chosen to use this element to embed LaTeX mathematical equations. This choice has the following advantages:
-   </para>
-   <itemizedlist>
-    <listitem>
-    <para>
-    The translation done by dblatex is really easy, since the equation is already written in LaTeX.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    LaTeX is one of the best word processor to render mathematical formulas.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    One doesn't need to write the equations in MathML.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    This method isn't specific to this tool (see the following section).
-    </para>
-   </listitem>
-   </itemizedlist>
-   <para>
-    Besides, the implementation is as light as possible. This is why it is up to the writer to properly use the mathematical delimiters (&dollar;, &bsol;(, &bsol;), &bsol;&lsqb;, &bsol;&rsqb;). By this way the writer fully controls how he writes equations.
-   </para>
-   </sect2>
-   <sect2>
-    <title>Compatibility</title>
-   <para>
-    This implementation is not contradictory nor specific. In partticular, the <ulink url="http://ricardo.ecn.wfu.edu/~cottrell/dbtexmath/">DBTeXMath</ulink> proposal to extend the DSSSL stylesheets used by jade follows the same approach, and is integrated in the Norman Walsh XSL stylesheets.
-   </para>
-   </sect2>
-   <sect2>
-    <title>Examples</title>
-   <para>
-    The following examples show how to write the equations.
-   </para>
-<example><title>Inlined Equation</title>
-<xi:include href="math/equation-eg1.xml"/>
-<programlisting><textobject><textdata fileref="math/equation-eg1.xml"/></textobject>
-</programlisting>
-</example>
-<example><title>Equation in a block</title>
-<xi:include href="math/equation-eg2.xml"/>
-<programlisting><textobject><textdata fileref="math/equation-eg2.xml"/></textobject>
-</programlisting>
-</example>
-<example><title>Equation in a float</title>
-<xi:include href="math/equation-eg3.xml"/>
-<programlisting><textobject><textdata fileref="math/equation-eg3.xml"/></textobject>
-</programlisting>
-</example>
-<example><title>Equation without a title</title>
-<xi:include href="math/equation-eg4.xml"/>
-<programlisting><textobject><textdata fileref="math/equation-eg4.xml"/></textobject>
-</programlisting>
-</example>
-   </sect2>
-  </sect1>
-<xi:include href="math/mathml.xml"/>
-  <sect1>
-   <title>Creating an Index</title>
-  <para>
-   An index is automatically generated if some index entries (<sgmltag>indexterm</sgmltag>), telling the terms to put in the index, are written in the document. The <sgmltag>keyword</sgmltag> elements are not printed but are also added to the index.
-  </para>
-<example><title>Index Entry</title>
-  <programlisting>
-<![CDATA[<para>In this paragraph is described the function 
-]]><![CDATA[<function>strcpy</function><indexterm><primary>strcpy</primary></indexterm>.
-]]><![CDATA[</para>
-]]>  </programlisting>
-</example>
-  <para>
-   The index is put at the end of the document. It is not possible to put it somewhere else.
-  </para>
-  </sect1>
-<xi:include href="biblio.xml"/>
-  <sect1><title>Document Revisions</title>
-  <para>
-   The attribute <sgmltag>revisionflag</sgmltag> is usefull to identify the changes between two revisions of a document. This information is managed by dblatex, that adds revision bars in the margin of the paragraphs changed, such like in this <phrase revisionflag="changed">paragraph</phrase>.
-  </para>
-  <para>
-   Adding the revision flags can be manual, but its is tedious and error prone. The perl script <ulink url="http://www.sun.com/xml/developers/diffmk/">diffmk</ulink> by Norman Walsh can do the work for you. It works fine, but it depends on several Perl modules.
-  </para>
-<note><para>
-With old changebar packages the revision bars only appear when using the "dvips"
-driver. This limitation has been fixed with changebar greater or equal 
-to v3.5c.
-</para></note>
-  </sect1>
-<xi:include href="locale.xml"/>
-<xi:include href="xref.xml"/>
- </chapter>
-<xi:include href="custom/custom.xml"/>
-<xi:include href="faq.xml"/>
- <chapter>
-  <title>Thanks</title>
- <para>
-  Thanks to the people who contributed to the project at its early age: Jean-Yves Le
-  Ruyet, precursory and hard-working user, Julien Ducourthial for his precious help,
-  Vincent Hottier who asked for the embedded LaTeX equations support.</para>
-  <para>Thanks also to the current contributors: David Hedley (newtbl
-  implementor), Andreas Hoenen (Debian maintainer), and Nicolas Pernetty
-  (Windows port).</para>
-  <para>Special thanks to the KDE documentation team, especially Philip Rodrigues,
-  Michael Smith from the DocBook Project, and Kai Brommann, for their
-  feedbacks, encouragements, and advice.
- </para>
- </chapter>
 
+<xi:include href="introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="install.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<chapter>
+<title>Using dblatex</title>
+
+<section>
+<title>Reference</title>
+
+<xi:include href="manpage/dblatex-doc.xml"
+            xmlns:xi="http://www.w3.org/2001/XInclude" />
+</section>
+
+<xi:include href="custom/style.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="figure.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="tables/table.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="math/math.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="index.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="biblio.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="revision.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="locale.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="xref.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</chapter>
+
+<xi:include href="custom/custom.xml"
+            xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="faq.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<chapter>
+<title>Thanks</title>
+
+<para>Thanks to the people who contributed to the project at its early age:
+Jean-Yves Le Ruyet, precursory and hard-working user, Julien Ducourthial for
+his precious help, Vincent Hottier who asked for the embedded LaTeX equations
+support.</para>
+
+<para>Thanks also to the current contributors: David Hedley (newtbl
+implementor), Andreas Hoenen (Debian maintainer), and Nicolas Pernetty
+(Windows port).</para>
+
+<para>Special thanks to the KDE documentation team, especially Philip
+Rodrigues, Michael Smith from the DocBook Project, and Kai Brommann, for their
+feedbacks, encouragements, and advice.</para>
+</chapter>
 </book>
