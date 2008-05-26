@@ -300,8 +300,8 @@ class DbTexCommand:
         usage = "%s [options] file" % prog
         parser = OptionParser(usage=usage)
         parser.add_option("-b", "--backend",
-                          help="Backend driver to use. The available drivers are "
-                               "'pdftex' and 'dvips'.")
+                          help="Backend driver to use. The available drivers"
+                               " are 'pdftex' (default), 'dvips' and 'xetex'.")
         parser.add_option("-B", "--no-batch", action="store_true",
                           help="All the tex output is printed")
         parser.add_option("-c", "-S", "--config",
@@ -314,8 +314,8 @@ class DbTexCommand:
         parser.add_option("-D", "--dump", action="store_true",
                           help="Dump error stack (debug purpose)")
         parser.add_option("-f", "--fig-format",
-                          help="Input figure format, used when not deduced from "
-                               "figure extension")
+                          help="Input figure format, used when not deduced "
+                               "from figure extension")
         parser.add_option("-F", "--input-format",
                           help="Input file format: sgml, xml. (default=xml)")
         parser.add_option("-i", "--texinputs", action="append",
@@ -332,7 +332,8 @@ class DbTexCommand:
         parser.add_option("-m", "--xslt",
                           help="XSLT engine to use. (default=xsltproc)")
         parser.add_option("-o", "--output", dest="output",
-                          help="Output filename. When not used, the input filename "
+                          help="Output filename. "
+                               "When not used, the input filename "
                                "is used, with the suffix of the output format")
         parser.add_option("-p", "--xsl-user", action="append",
                           help="XSL user configuration file to use")
