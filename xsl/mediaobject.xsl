@@ -262,6 +262,12 @@
   <xsl:variable name="graphic.end">
     <xsl:call-template name="graphic.end.get"/>
   </xsl:variable>
+  <xsl:variable name="piangle">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="../processing-instruction('dblatex')"/>
+      <xsl:with-param name="attribute" select="'angle'"/>
+    </xsl:call-template>
+  </xsl:variable>
 
   <xsl:variable name="filename">
     <xsl:apply-templates select="." mode="filename.get"/>
@@ -441,9 +447,16 @@
       <xsl:call-template name="image.default.set"/>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:if test="@format = 'PRN'">
+  <!-- rotate the image? -->
+  <xsl:choose>
+  <xsl:when test="@format = 'PRN'">
     <xsl:text>,angle=270</xsl:text>
-  </xsl:if>
+  </xsl:when>
+  <xsl:when test="$piangle != ''">
+    <xsl:text>,angle=</xsl:text>
+    <xsl:value-of select="$piangle"/>
+  </xsl:when>
+  </xsl:choose>
   <xsl:text>]{</xsl:text>
   <xsl:value-of select="$filename"/>
   <xsl:text>}</xsl:text>

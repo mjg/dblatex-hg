@@ -10,6 +10,12 @@
 <xsl:param name="monoseq.small">0</xsl:param>
 
 
+<xsl:template name="inline.setup">
+  <xsl:if test="$monoseq.hyphenation='nohyphen'">
+    <xsl:text>\sloppy&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template name="inline.boldseq">
   <xsl:param name="content">
     <xsl:apply-templates/>

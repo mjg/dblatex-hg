@@ -76,6 +76,7 @@
   <xsl:call-template name="biblio.setup"/>
   <xsl:call-template name="annotation.setup"/>
   <xsl:call-template name="user.params.set2"/>
+  <xsl:call-template name="inline.setup"/>
   <xsl:apply-templates select="." mode="docinfo"/>
 
   <!-- Document title -->
