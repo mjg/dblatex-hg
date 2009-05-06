@@ -286,7 +286,6 @@ colour.</para>
 <para>Here is an example.</para>
 <xi:include href="coloured.xml"/>
 <para>This table is coded like this:</para>
-<programlisting><textobject><textdata
-fileref="tables/coloured.xml"/></textobject></programlisting>
+<programlisting><xi:include href="coloured.xml" parse="text"/></programlisting>
 </section>
 </section>

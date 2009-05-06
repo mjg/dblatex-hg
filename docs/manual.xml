@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
-<!ENTITY edition "22">
-]>
-<book lang="en">
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<book lang="en" id="usermanual">
 <bookinfo>
 <title>DocBook to LaTeX Publishing</title>
 
@@ -13,15 +11,15 @@
 <surname>Guillon</surname>
 </author>
 
-<date>20 May 2008</date>
+<date>5 May 2009</date>
 
 <subtitle>User Manual</subtitle>
 
-<pubsnumber>Ref A0</pubsnumber>
+<pubsnumber>Ref A1</pubsnumber>
 
 <address>Toulon</address>
 
-<edition>23</edition>
+<edition>01</edition>
 
 <releaseinfo>$Id: manual.xml,v 1.21 2007-11-17 18:13:08 ben Exp
 $</releaseinfo>
@@ -44,328 +42,18 @@ $</releaseinfo>
 
 <revhistory>
 <revision>
-<revnumber>1</revnumber>
+<revnumber>01</revnumber>
 
-<date>20/01/03</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>First release of the package.</para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>2</revnumber>
-
-<date>30/04/03</date>
+<date>05/05/2009</date>
 
 <authorinitials>B. Guillon</authorinitials>
 
 <revdescription>
-<para>Changes:</para>
-
-<itemizedlist>
-<listitem>
-<para>The script <filename>configure</filename> now checks the latex package
-dependencies, i.e. it checks that the packages used by the default DocBook
-latex style are available.</para>
-</listitem>
-
-<listitem>
-<para>The tool can be heavily customized thanks to a specification file and/or
-new extra options (cf. <xref linkend="sec-custom" />).</para>
-</listitem>
-</itemizedlist>
+<para>The manual does not include the change history anymore. The change
+history is now in the release note</para>
 </revdescription>
 </revision>
 
-<revision>
-<revnumber>3</revnumber>
-
-<date>11/06/03</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes:</para>
-
-<itemizedlist>
-<listitem>
-<para>The <ulink url="http://xsltml.sourceforge.net">xsltml</ulink> library is
-included in the package to have a strong and consistent support of the MathML
-2.0 specification.</para>
-</listitem>
-
-<listitem>
-<para>A large excerpt fo the MathML Test Suite 2.0 is now available to
-validate the MathML stylesheets.</para>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>4</revnumber>
-
-<date>03/07/03</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes:</para>
-
-<itemizedlist>
-<listitem>
-<para>Dutch language is supported by the default latex stylesheets.</para>
-</listitem>
-
-<listitem>
-<para>The <sgmltag>subtitle</sgmltag> element is displayed on the cover
-page.</para>
-</listitem>
-
-<listitem>
-<para>Tables can be displayed in landscape, through the
-<sgmltag>orient</sgmltag> attribute. In addition, the table text size can be
-specified to be smaller by using the <sgmltag>role</sgmltag> attribute.</para>
-</listitem>
-
-<listitem>
-<para>Hyphenation is forced in tables, so that no words can cover several
-cells.</para>
-</listitem>
-</itemizedlist>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>5</revnumber>
-
-<date>03/05/04</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-014" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>6</revnumber>
-
-<date>15/06/04</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-0141" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>7</revnumber>
-
-<date>15/07/05</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-015" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>8</revnumber>
-
-<date>25/09/05</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-016" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>9</revnumber>
-
-<date>20/10/05</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-017" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>10</revnumber>
-
-<date>28/11/05</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-018" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>11</revnumber>
-
-<date>28/04/06</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-019" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>12</revnumber>
-
-<date>21/07/06</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-0110" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>13</revnumber>
-
-<date>27/09/06</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-02pre" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>14</revnumber>
-
-<date>27/10/06</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-020" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>15</revnumber>
-
-<date>24/11/06</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-021" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>16</revnumber>
-
-<date>23/12/06</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-022" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>17</revnumber>
-
-<date>21/01/07</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-023" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>18</revnumber>
-
-<date>24/02/07</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-024" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>19</revnumber>
-
-<date>25/04/07</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-025" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>20</revnumber>
-
-<date>22/06/07</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-026" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>21</revnumber>
-
-<date>04/09/07</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-027" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>22</revnumber>
-
-<date>15/11/07</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-028" /></para>
-</revdescription>
-</revision>
-
-<revision>
-<revnumber>23</revnumber>
-
-<date>20/05/08</date>
-
-<authorinitials>B. Guillon</authorinitials>
-
-<revdescription>
-<para>Changes: see <xref linkend="sec-changes-029" /></para>
-</revdescription>
-</revision>
 </revhistory>
 </bookinfo>
 

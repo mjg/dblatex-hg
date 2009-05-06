@@ -110,8 +110,11 @@ to produce DVI, PostScript and PDF files,</para>
 xmlns:xi="http://www.w3.org/2001/XInclude" />.</para>
 </section>
 
-<xi:include href="changes/changes.xml"
-            xmlns:xi="http://www.w3.org/2001/XInclude" />
+<section>
+<title>Change History</title>
+
+<para>See the <olink targetdoc="releasenotes" targetptr="intro">Release Notes</olink> to have the dblatex change history.</para>
+</section>
 
 <section>
 <title>Publishing Principles</title>

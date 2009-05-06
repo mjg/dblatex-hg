@@ -81,7 +81,7 @@ up to the writer to properly use the mathematical delimiters ($, \(, \), \[,
 <section>
 <title>Compatibility</title>
 
-<para>This implementation is not contradictory nor specific. In partticular,
+<para>This implementation is not contradictory nor specific. In particular,
 the <ulink
 url="http://ricardo.ecn.wfu.edu/~cottrell/dbtexmath/">DBTeXMath</ulink>
 proposal to extend the DSSSL stylesheets used by jade follows the same
@@ -98,7 +98,9 @@ approach, and is integrated in the Norman Walsh XSL stylesheets.</para>
 
 <xi:include href="equation-eg1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<programlisting><textobject><textdata fileref="math/equation-eg1.xml" /></textobject>
+<programlisting>
+<xi:include href="equation-eg1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+            parse="text"/>
 </programlisting>
 </example>
 
@@ -107,7 +109,9 @@ approach, and is integrated in the Norman Walsh XSL stylesheets.</para>
 
 <xi:include href="equation-eg2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<programlisting><textobject><textdata fileref="math/equation-eg2.xml" /></textobject>
+<programlisting>
+<xi:include href="equation-eg2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+            parse="text"/>
 </programlisting>
 </example>
 
@@ -116,7 +120,9 @@ approach, and is integrated in the Norman Walsh XSL stylesheets.</para>
 
 <xi:include href="equation-eg3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<programlisting><textobject><textdata fileref="math/equation-eg3.xml" /></textobject>
+<programlisting>
+<xi:include href="equation-eg3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+            parse="text"/>
 </programlisting>
 </example>
 
@@ -125,7 +131,9 @@ approach, and is integrated in the Norman Walsh XSL stylesheets.</para>
 
 <xi:include href="equation-eg4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-<programlisting><textobject><textdata fileref="math/equation-eg4.xml" /></textobject>
+<programlisting>
+<xi:include href="equation-eg4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+            parse="text"/>
 </programlisting>
 </example>
 </section>

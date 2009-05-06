@@ -1,6 +1,15 @@
 <?xml version='1.0' encoding="iso-8859-1"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
 
+<!-- Target Database set by the command line
+
+<xsl:param name="target.database.document">olinkdb.xml</xsl:param>
+-->
+
+<!-- Use the Bob Stayton's Tip related to olinking -->
+<xsl:param name="current.docid" select="/*/@id"/>
+
+
 <!-- We want the TOC links in the titles, and in blue. -->
 <xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue,pdfstartview=FitH</xsl:param>
 

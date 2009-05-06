@@ -1,9 +1,9 @@
 <itemizedlist>
-<listitem><para>BibTeX support added. See <xref linkend="sec-bibtex"/> for more
+<listitem><para>BibTeX support added. See <olink targetdoc="usermanual" targetptr="sec-bibtex"/> for more
 details.</para></listitem>
 
 <listitem><para>A better bibliography support, and natbib citation styles can be
-used (see <xref linkend="sec-natbib"/>).</para></listitem>
+used (see <olink targetdoc="usermanual" targetptr="sec-natbib"/>).</para></listitem>
 
 <listitem><para>Some table improvements:
   <itemizedlist>

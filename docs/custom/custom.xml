@@ -107,8 +107,8 @@ must be some valid options passed to the \includegraphics command.</para>
    The parameters can be stored in a user defined XSL stylesheet. An example of
    configuration stylesheet is given with this manual:
   </para>
-  <programlisting><textobject><textdata
-  fileref="myparam.xsl"/></textobject></programlisting>
+  <programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+                   parse="text" href="../manual.xsl"/></programlisting>
   </section>
   <section id="sec-custom-stylesheet">
    <title>Overriding some templates</title>
@@ -187,7 +187,9 @@ for small things to change.</para>
 <para>Here is an example of a style package reusing the default docbook
 style:</para>
 <example><title>Reused LaTeX style</title>
-<programlisting><textobject><textdata fileref="mystyle.sty"/></textobject>
+<programlisting>
+<xi:include href="mystyle.sty" xmlns:xi="http://www.w3.org/2001/XInclude"
+            parse="text" encoding="ISO-8859-1"/>
 </programlisting>
 </example>
 </section>
@@ -307,8 +309,8 @@ style:</para>
    Here is the specification file used for this manual.
   </para>
 <example><title>User Manual Configuration File</title>
-<programlisting><textobject><textdata fileref="manual.specs"/></textobject>
-</programlisting>
+<programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+                 parse="text" href="../manual.specs"/></programlisting>
 </example>
   </section>
   <section id="sec-conf-path"><title>Configuration Paths</title>

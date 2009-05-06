@@ -5,6 +5,6 @@
   <equation id="eq-with-title">
   <title>Simple Formula</title>
     <alt>\[C = \alpha + \beta Y^{\gamma} + \epsilon\]</alt>
-    <graphic fileref="figures/eq3"/>
+    <graphic fileref="figures/eq1"/>
   </equation>
-is displayed in a block with a title. Its SGML source is:</para>
+is displayed in a block with a title. Its XML source is:</para>

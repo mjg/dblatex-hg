@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section id="sec-changes" xmlns:xi="http://www.w3.org/2001/XInclude">
-<title>Changes</title>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article id="releasenotes" xmlns:xi="http://www.w3.org/2001/XInclude">
+<articleinfo>
+<title>Release Notes for dblatex</title>
+
+<author>
+<firstname>Benoît</firstname>
+
+<surname>Guillon</surname>
+</author>
+</articleinfo>
+
+<section id="intro">
+<title>Introduction</title>
+
+<para>This document provides a per-release list of enhancements and changes to
+the dblatex project. <xref linkend="changes-txt"/> dumps the entire change log, since it may
+contain details omitted in the release sections, like the precise list of the
+bugs fixed.</para>
+
+<para>For releases prior or equal to version 0.2.9 the changes were listed in
+the dblatex manual. The full change history is now stored in this release
+note.</para>
+</section>
+
+<section id="sec-changes-0210">
+<title>Release 0.2.10</title>
+
+<para>Bug fix release.</para>
+
+<xi:include href="changes-0.2.10.xml" />
+</section>
 
 <section id="sec-changes-029">
 <title>Release 0.2.9</title>
@@ -133,4 +164,14 @@
 
 <xi:include href="changes-0.1.4.xml" />
 </section>
-</section>
+
+<appendix id="changes-txt">
+<title>Change Log</title>
+
+<para>The listing below contains all the raw data used to write each release
+change section. It is provided since it may contain additional details.</para>
+
+<programlisting><xi:include href="changes.txt" parse="text"/>
+</programlisting>
+</appendix>
+</article>
