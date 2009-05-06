@@ -107,7 +107,7 @@ history is now in the release note</para>
 <section>
 <title>Reference</title>
 
-<xi:include href="manpage/dblatex-doc.xml"
+<xi:include href="manpage/dblatex.1.xml"
             xmlns:xi="http://www.w3.org/2001/XInclude" />
 </section>
 

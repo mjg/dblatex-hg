@@ -113,7 +113,7 @@ xmlns:xi="http://www.w3.org/2001/XInclude" />.</para>
 <section>
 <title>Change History</title>
 
-<para>See the <olink targetdoc="releasenotes" targetptr="intro">Release Notes</olink> to have the dblatex change history.</para>
+<para>See the <olink output="pdf" targetdoc="releasenotes" targetptr="intro">Release Notes</olink><ulink output="html" url="http://dblatex.sourceforge.net/release-notes.html">Release Notes</ulink> to have the dblatex change history.</para>
 </section>
 
 <section>

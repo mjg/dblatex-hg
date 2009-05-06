@@ -23,8 +23,6 @@
       <document targetdoc="usermanual"
                 baseuri="manual.pdf">
                 &umtargets;
-        <xi:include href="manual.db"  
-                    xmlns:xi="http://www.w3.org/2001/XInclude"/>
       </document>
       <document targetdoc="releasenotes"
                 baseuri="release-notes.pdf">
