@@ -160,7 +160,7 @@ class DbTex:
             param = {"current.dir": self.inputdir}
             self.xsltproc.use_catalogs = 0
             self.xsltproc.run(self.xsllist, self.input,
-                              self.listings, params=param)
+                              self.listings, opts=self.xslopts, params=param)
         else:
             self.log.info("No external file support")
             f = file(self.listings, "w")

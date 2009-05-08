@@ -132,7 +132,7 @@ unicode_map = {
 0x0019E: r"\textnrleg{}", # LATIN SMALL LETTER N WITH LONG RIGHT LEG
 0x001C2: r"\textdoublepipe{}", # LATIN LETTER ALVEOLAR CLICK
 0x001F5: r"\'{g}", # LATIN SMALL LETTER G WITH ACUTE
-0x00259: r"$\Elzschwa$", # LATIN SMALL LETTER SCHWA
+0x00259: r"\ensuremath{\Elzschwa}", # LATIN SMALL LETTER SCHWA
 0x00261: r"g", # LATIN SMALL LETTER SCRIPT G
 0x00278: r"\textphi{}", # LATIN SMALL LETTER PHI
 0x0029E: r"\textturnk{}", # LATIN SMALL LETTER TURNED K
@@ -140,7 +140,7 @@ unicode_map = {
 0x0025B: r"\textvarepsilon{}", # LATIN SMALL LETTER OPEN E
 0x002BC: r"'", # MODIFIER LETTER APOSTROPHE
 0x002C7: r"\textasciicaron{}", # CARON
-0x002C8: r"$\Elzverts$", # MODIFIER LETTER VERTICAL LINE
+0x002C8: r"\ensuremath{\Elzverts}", # MODIFIER LETTER VERTICAL LINE
 0x002D8: r"\textasciibreve{}", # BREVE
 0x002D9: r"\textperiodcentered{}", # DOT ABOVE
 0x002DA: r"\r{}", # RING ABOVE
@@ -170,49 +170,49 @@ unicode_map = {
 0x00389: r"\'{H}", # GREEK CAPITAL LETTER ETA WITH TONOS
 0x0038A: r"\'{}{I}", # GREEK CAPITAL LETTER IOTA WITH TONOS
 0x0038C: r"\'{}O", # GREEK CAPITAL LETTER OMICRON WITH TONOS
-0x00393: r"$\Gamma$", # GREEK CAPITAL LETTER GAMMA
-0x00394: r"$\Delta$", # GREEK CAPITAL LETTER DELTA
-0x00395: r"$\Epsilon$", # GREEK CAPITAL LETTER EPSILON
-0x0039B: r"$\Lambda$", # GREEK CAPITAL LETTER LAMDA
-0x003A0: r"$\Pi$", # GREEK CAPITAL LETTER PI
-0x003A3: r"$\Sigma$", # GREEK CAPITAL LETTER SIGMA
-0x003A4: r"$\Tau$", # GREEK CAPITAL LETTER TAU
-0x003A5: r"$\Upsilon$", # GREEK CAPITAL LETTER UPSILON
-0x003A6: r"$\Phi$", # GREEK CAPITAL LETTER PHI
-0x003AC: r"\'{$\alpha$}", # GREEK SMALL LETTER ALPHA WITH TONOS
-0x003AD: r"$\acute{\epsilon}$", # GREEK SMALL LETTER EPSILON WITH TONOS
-0x003AE: r"$\acute{\eta}$", # GREEK SMALL LETTER ETA WITH TONOS
-0x003AF: r"$\acute{\iota}$", # GREEK SMALL LETTER IOTA WITH TONOS
-0x003B0: r"$\acute{\ddot{\upsilon}}$", # GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS
-0x003B1: r"$\alpha$", # GREEK SMALL LETTER ALPHA
-0x003B2: r"$\beta$", # GREEK SMALL LETTER BETA
-0x003B3: r"$\gamma$", # GREEK SMALL LETTER GAMMA
-0x003B4: r"$\delta$", # GREEK SMALL LETTER DELTA
-0x003B5: r"$\epsilon$", # GREEK SMALL LETTER EPSILON
-0x003B6: r"$\zeta$", # GREEK SMALL LETTER ZETA
-0x003B7: r"$\eta$", # GREEK SMALL LETTER ETA
+0x00393: r"\ensuremath{\Gamma}", # GREEK CAPITAL LETTER GAMMA
+0x00394: r"\ensuremath{\Delta}", # GREEK CAPITAL LETTER DELTA
+0x00395: r"\ensuremath{\Epsilon}", # GREEK CAPITAL LETTER EPSILON
+0x0039B: r"\ensuremath{\Lambda}", # GREEK CAPITAL LETTER LAMDA
+0x003A0: r"\ensuremath{\Pi}", # GREEK CAPITAL LETTER PI
+0x003A3: r"\ensuremath{\Sigma}", # GREEK CAPITAL LETTER SIGMA
+0x003A4: r"\ensuremath{\Tau}", # GREEK CAPITAL LETTER TAU
+0x003A5: r"\ensuremath{\Upsilon}", # GREEK CAPITAL LETTER UPSILON
+0x003A6: r"\ensuremath{\Phi}", # GREEK CAPITAL LETTER PHI
+0x003AC: r"\'{\ensuremath{\alpha}}", # GREEK SMALL LETTER ALPHA WITH TONOS
+0x003AD: r"\ensuremath{\acute{\epsilon}}", # GREEK SMALL LETTER EPSILON WITH TONOS
+0x003AE: r"\ensuremath{\acute{\eta}}", # GREEK SMALL LETTER ETA WITH TONOS
+0x003AF: r"\ensuremath{\acute{\iota}}", # GREEK SMALL LETTER IOTA WITH TONOS
+0x003B0: r"\ensuremath{\acute{\ddot{\upsilon}}}", # GREEK SMALL LETTER UPSILON WITH DIALYTIKA AND TONOS
+0x003B1: r"\ensuremath{\alpha}", # GREEK SMALL LETTER ALPHA
+0x003B2: r"\ensuremath{\beta}", # GREEK SMALL LETTER BETA
+0x003B3: r"\ensuremath{\gamma}", # GREEK SMALL LETTER GAMMA
+0x003B4: r"\ensuremath{\delta}", # GREEK SMALL LETTER DELTA
+0x003B5: r"\ensuremath{\epsilon}", # GREEK SMALL LETTER EPSILON
+0x003B6: r"\ensuremath{\zeta}", # GREEK SMALL LETTER ZETA
+0x003B7: r"\ensuremath{\eta}", # GREEK SMALL LETTER ETA
 0x003B8: r"\texttheta{}", # GREEK SMALL LETTER THETA
-0x003B9: r"$\iota$", # GREEK SMALL LETTER IOTA
-0x003BA: r"$\kappa$", # GREEK SMALL LETTER KAPPA
-0x003BB: r"$\lambda$", # GREEK SMALL LETTER LAMDA
-0x003BC: r"$\mu$", # GREEK SMALL LETTER MU
-0x003BD: r"$\nu$", # GREEK SMALL LETTER NU
-0x003BE: r"$\xi$", # GREEK SMALL LETTER XI
-0x003BF: r"$o$", # GREEK SMALL LETTER OMICRON
-0x003C0: r"$\pi$", # GREEK SMALL LETTER PI
-0x003C1: r"$\rho$", # GREEK SMALL LETTER RHO
-0x003C3: r"$\sigma$", # GREEK SMALL LETTER SIGMA
-0x003C4: r"$\tau$", # GREEK SMALL LETTER TAU
-0x003C5: r"$\upsilon$", # GREEK SMALL LETTER UPSILON
-0x003C6: r"$\varphi$", # GREEK SMALL LETTER PHI
-0x003C7: r"$\chi$", # GREEK SMALL LETTER CHI
-0x003C8: r"$\psi$", # GREEK SMALL LETTER PSI
-0x003C9: r"$\omega$", # GREEK SMALL LETTER OMEGA
-0x003CA: r"$\ddot{\iota}$", # GREEK SMALL LETTER IOTA WITH DIALYTIKA
-0x003CB: r"$\ddot{\upsilon}$", # GREEK SMALL LETTER UPSILON WITH DIALYTIKA
+0x003B9: r"\ensuremath{\iota}", # GREEK SMALL LETTER IOTA
+0x003BA: r"\ensuremath{\kappa}", # GREEK SMALL LETTER KAPPA
+0x003BB: r"\ensuremath{\lambda}", # GREEK SMALL LETTER LAMDA
+0x003BC: r"\ensuremath{\mu}", # GREEK SMALL LETTER MU
+0x003BD: r"\ensuremath{\nu}", # GREEK SMALL LETTER NU
+0x003BE: r"\ensuremath{\xi}", # GREEK SMALL LETTER XI
+0x003BF: r"\ensuremath{o}", # GREEK SMALL LETTER OMICRON
+0x003C0: r"\ensuremath{\pi}", # GREEK SMALL LETTER PI
+0x003C1: r"\ensuremath{\rho}", # GREEK SMALL LETTER RHO
+0x003C3: r"\ensuremath{\sigma}", # GREEK SMALL LETTER SIGMA
+0x003C4: r"\ensuremath{\tau}", # GREEK SMALL LETTER TAU
+0x003C5: r"\ensuremath{\upsilon}", # GREEK SMALL LETTER UPSILON
+0x003C6: r"\ensuremath{\varphi}", # GREEK SMALL LETTER PHI
+0x003C7: r"\ensuremath{\chi}", # GREEK SMALL LETTER CHI
+0x003C8: r"\ensuremath{\psi}", # GREEK SMALL LETTER PSI
+0x003C9: r"\ensuremath{\omega}", # GREEK SMALL LETTER OMEGA
+0x003CA: r"\ensuremath{\ddot{\iota}}", # GREEK SMALL LETTER IOTA WITH DIALYTIKA
+0x003CB: r"\ensuremath{\ddot{\upsilon}}", # GREEK SMALL LETTER UPSILON WITH DIALYTIKA
 0x003CC: r"\'{o}", # GREEK SMALL LETTER OMICRON WITH TONOS
 0x003D1: r"\textvartheta{}", # GREEK THETA SYMBOL
-0x003D5: r"$\phi$", # GREEK PHI SYMBOL
+0x003D5: r"\ensuremath{\phi}", # GREEK PHI SYMBOL
 0x00401: r"\cyrchar\CYRYO{}", # CYRILLIC CAPITAL LETTER IO
 0x00402: r"\cyrchar\CYRDJE{}", # CYRILLIC CAPITAL LETTER DJE
 0x00403: r"\cyrchar{\'\CYRG}", # CYRILLIC CAPITAL LETTER GJE
@@ -435,293 +435,293 @@ unicode_map = {
 0x02122: r"\texttrademark{}", # TRADE MARK SIGN
 0x0212B: r"\AA{}", # ANGSTROM SIGN
 
-0x02190: r"$\leftarrow$", # LEFTWARDS ARROW
-0x02191: r"$\uparrow$", # UPWARDS ARROW
-0x02192: r"$\rightarrow$", # RIGHTWARDS ARROW
-0x02193: r"$\downarrow$", # DOWNWARDS ARROW
-0x02194: r"$\leftrightarrow$", # LEFT RIGHT ARROW
-0x02195: r"$\updownarrow$", # UP DOWN ARROW
-0x02196: r"$\nwarrow$", # NORTH WEST ARROW
-0x02197: r"$\nearrow$", # NORTH EAST ARROW
-0x02198: r"$\searrow$", # SOUTH EAST ARROW
-0x02199: r"$\swarrow$", # SOUTH WEST ARROW
-0x0219A: r"$\nleftarrow$", # LEFTWARDS ARROW WITH STROKE
-0x0219B: r"$\nrightarrow$", # RIGHTWARDS ARROW WITH STROKE
-0x0219C: r"$\arrowwaveright$", # LEFTWARDS WAVE ARROW
-0x0219D: r"$\arrowwaveright$", # RIGHTWARDS WAVE ARROW
-0x0219E: r"$\twoheadleftarrow$", # LEFTWARDS TWO HEADED ARROW
-0x021A0: r"$\twoheadrightarrow$", # RIGHTWARDS TWO HEADED ARROW
-0x021A2: r"$\leftarrowtail$", # LEFTWARDS ARROW WITH TAIL
-0x021A3: r"$\rightarrowtail$", # RIGHTWARDS ARROW WITH TAIL
-0x021A6: r"$\mapsto$", # RIGHTWARDS ARROW FROM BAR
-0x021A9: r"$\hookleftarrow$", # LEFTWARDS ARROW WITH HOOK
-0x021AA: r"$\hookrightarrow$", # RIGHTWARDS ARROW WITH HOOK
-0x021AB: r"$\looparrowleft$", # LEFTWARDS ARROW WITH LOOP
-0x021AC: r"$\looparrowright$", # RIGHTWARDS ARROW WITH LOOP
-0x021AD: r"$\leftrightsquigarrow$", # LEFT RIGHT WAVE ARROW
-0x021AE: r"$\nleftrightarrow$", # LEFT RIGHT ARROW WITH STROKE
-0x021B0: r"$\Lsh$", # UPWARDS ARROW WITH TIP LEFTWARDS
-0x021B1: r"$\Rsh$", # UPWARDS ARROW WITH TIP RIGHTWARDS
-0x021B3: r"$\ElsevierGlyph{21B3}$", # DOWNWARDS ARROW WITH TIP RIGHTWARDS
-0x021B6: r"$\curvearrowleft$", # ANTICLOCKWISE TOP SEMICIRCLE ARROW
-0x021B7: r"$\curvearrowright$", # CLOCKWISE TOP SEMICIRCLE ARROW
-0x021BA: r"$\circlearrowleft$", # ANTICLOCKWISE OPEN CIRCLE ARROW
-0x021BB: r"$\circlearrowright$", # CLOCKWISE OPEN CIRCLE ARROW
-0x021BC: r"$\leftharpoonup$", # LEFTWARDS HARPOON WITH BARB UPWARDS
-0x021BD: r"$\leftharpoondown$", # LEFTWARDS HARPOON WITH BARB DOWNWARDS
-0x021BE: r"$\upharpoonright$", # UPWARDS HARPOON WITH BARB RIGHTWARDS
-0x021BF: r"$\upharpoonleft$", # UPWARDS HARPOON WITH BARB LEFTWARDS
-0x021C0: r"$\rightharpoonup$", # RIGHTWARDS HARPOON WITH BARB UPWARDS
-0x021C1: r"$\rightharpoondown$", # RIGHTWARDS HARPOON WITH BARB DOWNWARDS
-0x021C2: r"$\downharpoonright$", # DOWNWARDS HARPOON WITH BARB RIGHTWARDS
-0x021C3: r"$\downharpoonleft$", # DOWNWARDS HARPOON WITH BARB LEFTWARDS
-0x021C4: r"$\rightleftarrows$", # RIGHTWARDS ARROW OVER LEFTWARDS ARROW
-0x021C5: r"$\dblarrowupdown$", # UPWARDS ARROW LEFTWARDS OF DOWNWARDS ARROW
-0x021C6: r"$\leftrightarrows$", # LEFTWARDS ARROW OVER RIGHTWARDS ARROW
-0x021C7: r"$\leftleftarrows$", # LEFTWARDS PAIRED ARROWS
-0x021C8: r"$\upuparrows$", # UPWARDS PAIRED ARROWS
-0x021C9: r"$\rightrightarrows$", # RIGHTWARDS PAIRED ARROWS
-0x021CA: r"$\downdownarrows$", # DOWNWARDS PAIRED ARROWS
-0x021CB: r"$\leftrightharpoons$", # LEFTWARDS HARPOON OVER RIGHTWARDS HARPOON
-0x021CC: r"$\rightleftharpoons$", # RIGHTWARDS HARPOON OVER LEFTWARDS HARPOON
-0x021CD: r"$\nLeftarrow$", # LEFTWARDS DOUBLE ARROW WITH STROKE
-0x021CE: r"$\nLeftrightarrow$", # LEFT RIGHT DOUBLE ARROW WITH STROKE
-0x021CF: r"$\nRightarrow$", # RIGHTWARDS DOUBLE ARROW WITH STROKE
-0x021D0: r"$\Leftarrow$", # LEFTWARDS DOUBLE ARROW
-0x021D1: r"$\Uparrow$", # UPWARDS DOUBLE ARROW
-0x021D2: r"$\Rightarrow$", # RIGHTWARDS DOUBLE ARROW
-0x021D3: r"$\Downarrow$", # DOWNWARDS DOUBLE ARROW
-0x021D4: r"$\Leftrightarrow$", # LEFT RIGHT DOUBLE ARROW
-0x021D5: r"$\Updownarrow$", # UP DOWN DOUBLE ARROW
-0x021DA: r"$\Lleftarrow$", # LEFTWARDS TRIPLE ARROW
-0x021DB: r"$\Rrightarrow$", # RIGHTWARDS TRIPLE ARROW
-0x021DD: r"$\rightsquigarrow$", # RIGHTWARDS SQUIGGLE ARROW
-0x021F5: r"$\DownArrowUpArrow$", # DOWNWARDS ARROW LEFTWARDS OF UPWARDS ARROW
-0x02200: r"$\forall$", # FOR ALL
-0x02201: r"$\complement$", # COMPLEMENT
-0x02202: r"$\partial$", # PARTIAL DIFFERENTIAL
-0x02203: r"$\exists$", # THERE EXISTS
-0x02204: r"$\nexists$", # THERE DOES NOT EXIST
-0x02205: r"$\varnothing$", # EMPTY SET
-0x02207: r"$\nabla$", # NABLA
-0x02208: r"$\in$", # ELEMENT OF
-0x02209: r"$\not\in$", # NOT AN ELEMENT OF
-0x0220B: r"$\ni$", # CONTAINS AS MEMBER
-0x0220C: r"$\not\ni$", # DOES NOT CONTAIN AS MEMBER
-0x0220F: r"$\prod$", # N-ARY PRODUCT
-0x02210: r"$\coprod$", # N-ARY COPRODUCT
-0x02211: r"$\sum$", # N-ARY SUMMATION
+0x02190: r"\ensuremath{\leftarrow}", # LEFTWARDS ARROW
+0x02191: r"\ensuremath{\uparrow}", # UPWARDS ARROW
+0x02192: r"\ensuremath{\rightarrow}", # RIGHTWARDS ARROW
+0x02193: r"\ensuremath{\downarrow}", # DOWNWARDS ARROW
+0x02194: r"\ensuremath{\leftrightarrow}", # LEFT RIGHT ARROW
+0x02195: r"\ensuremath{\updownarrow}", # UP DOWN ARROW
+0x02196: r"\ensuremath{\nwarrow}", # NORTH WEST ARROW
+0x02197: r"\ensuremath{\nearrow}", # NORTH EAST ARROW
+0x02198: r"\ensuremath{\searrow}", # SOUTH EAST ARROW
+0x02199: r"\ensuremath{\swarrow}", # SOUTH WEST ARROW
+0x0219A: r"\ensuremath{\nleftarrow}", # LEFTWARDS ARROW WITH STROKE
+0x0219B: r"\ensuremath{\nrightarrow}", # RIGHTWARDS ARROW WITH STROKE
+0x0219C: r"\ensuremath{\arrowwaveright}", # LEFTWARDS WAVE ARROW
+0x0219D: r"\ensuremath{\arrowwaveright}", # RIGHTWARDS WAVE ARROW
+0x0219E: r"\ensuremath{\twoheadleftarrow}", # LEFTWARDS TWO HEADED ARROW
+0x021A0: r"\ensuremath{\twoheadrightarrow}", # RIGHTWARDS TWO HEADED ARROW
+0x021A2: r"\ensuremath{\leftarrowtail}", # LEFTWARDS ARROW WITH TAIL
+0x021A3: r"\ensuremath{\rightarrowtail}", # RIGHTWARDS ARROW WITH TAIL
+0x021A6: r"\ensuremath{\mapsto}", # RIGHTWARDS ARROW FROM BAR
+0x021A9: r"\ensuremath{\hookleftarrow}", # LEFTWARDS ARROW WITH HOOK
+0x021AA: r"\ensuremath{\hookrightarrow}", # RIGHTWARDS ARROW WITH HOOK
+0x021AB: r"\ensuremath{\looparrowleft}", # LEFTWARDS ARROW WITH LOOP
+0x021AC: r"\ensuremath{\looparrowright}", # RIGHTWARDS ARROW WITH LOOP
+0x021AD: r"\ensuremath{\leftrightsquigarrow}", # LEFT RIGHT WAVE ARROW
+0x021AE: r"\ensuremath{\nleftrightarrow}", # LEFT RIGHT ARROW WITH STROKE
+0x021B0: r"\ensuremath{\Lsh}", # UPWARDS ARROW WITH TIP LEFTWARDS
+0x021B1: r"\ensuremath{\Rsh}", # UPWARDS ARROW WITH TIP RIGHTWARDS
+0x021B3: r"\ensuremath{\ElsevierGlyph{21B3}}", # DOWNWARDS ARROW WITH TIP RIGHTWARDS
+0x021B6: r"\ensuremath{\curvearrowleft}", # ANTICLOCKWISE TOP SEMICIRCLE ARROW
+0x021B7: r"\ensuremath{\curvearrowright}", # CLOCKWISE TOP SEMICIRCLE ARROW
+0x021BA: r"\ensuremath{\circlearrowleft}", # ANTICLOCKWISE OPEN CIRCLE ARROW
+0x021BB: r"\ensuremath{\circlearrowright}", # CLOCKWISE OPEN CIRCLE ARROW
+0x021BC: r"\ensuremath{\leftharpoonup}", # LEFTWARDS HARPOON WITH BARB UPWARDS
+0x021BD: r"\ensuremath{\leftharpoondown}", # LEFTWARDS HARPOON WITH BARB DOWNWARDS
+0x021BE: r"\ensuremath{\upharpoonright}", # UPWARDS HARPOON WITH BARB RIGHTWARDS
+0x021BF: r"\ensuremath{\upharpoonleft}", # UPWARDS HARPOON WITH BARB LEFTWARDS
+0x021C0: r"\ensuremath{\rightharpoonup}", # RIGHTWARDS HARPOON WITH BARB UPWARDS
+0x021C1: r"\ensuremath{\rightharpoondown}", # RIGHTWARDS HARPOON WITH BARB DOWNWARDS
+0x021C2: r"\ensuremath{\downharpoonright}", # DOWNWARDS HARPOON WITH BARB RIGHTWARDS
+0x021C3: r"\ensuremath{\downharpoonleft}", # DOWNWARDS HARPOON WITH BARB LEFTWARDS
+0x021C4: r"\ensuremath{\rightleftarrows}", # RIGHTWARDS ARROW OVER LEFTWARDS ARROW
+0x021C5: r"\ensuremath{\dblarrowupdown}", # UPWARDS ARROW LEFTWARDS OF DOWNWARDS ARROW
+0x021C6: r"\ensuremath{\leftrightarrows}", # LEFTWARDS ARROW OVER RIGHTWARDS ARROW
+0x021C7: r"\ensuremath{\leftleftarrows}", # LEFTWARDS PAIRED ARROWS
+0x021C8: r"\ensuremath{\upuparrows}", # UPWARDS PAIRED ARROWS
+0x021C9: r"\ensuremath{\rightrightarrows}", # RIGHTWARDS PAIRED ARROWS
+0x021CA: r"\ensuremath{\downdownarrows}", # DOWNWARDS PAIRED ARROWS
+0x021CB: r"\ensuremath{\leftrightharpoons}", # LEFTWARDS HARPOON OVER RIGHTWARDS HARPOON
+0x021CC: r"\ensuremath{\rightleftharpoons}", # RIGHTWARDS HARPOON OVER LEFTWARDS HARPOON
+0x021CD: r"\ensuremath{\nLeftarrow}", # LEFTWARDS DOUBLE ARROW WITH STROKE
+0x021CE: r"\ensuremath{\nLeftrightarrow}", # LEFT RIGHT DOUBLE ARROW WITH STROKE
+0x021CF: r"\ensuremath{\nRightarrow}", # RIGHTWARDS DOUBLE ARROW WITH STROKE
+0x021D0: r"\ensuremath{\Leftarrow}", # LEFTWARDS DOUBLE ARROW
+0x021D1: r"\ensuremath{\Uparrow}", # UPWARDS DOUBLE ARROW
+0x021D2: r"\ensuremath{\Rightarrow}", # RIGHTWARDS DOUBLE ARROW
+0x021D3: r"\ensuremath{\Downarrow}", # DOWNWARDS DOUBLE ARROW
+0x021D4: r"\ensuremath{\Leftrightarrow}", # LEFT RIGHT DOUBLE ARROW
+0x021D5: r"\ensuremath{\Updownarrow}", # UP DOWN DOUBLE ARROW
+0x021DA: r"\ensuremath{\Lleftarrow}", # LEFTWARDS TRIPLE ARROW
+0x021DB: r"\ensuremath{\Rrightarrow}", # RIGHTWARDS TRIPLE ARROW
+0x021DD: r"\ensuremath{\rightsquigarrow}", # RIGHTWARDS SQUIGGLE ARROW
+0x021F5: r"\ensuremath{\DownArrowUpArrow}", # DOWNWARDS ARROW LEFTWARDS OF UPWARDS ARROW
+0x02200: r"\ensuremath{\forall}", # FOR ALL
+0x02201: r"\ensuremath{\complement}", # COMPLEMENT
+0x02202: r"\ensuremath{\partial}", # PARTIAL DIFFERENTIAL
+0x02203: r"\ensuremath{\exists}", # THERE EXISTS
+0x02204: r"\ensuremath{\nexists}", # THERE DOES NOT EXIST
+0x02205: r"\ensuremath{\varnothing}", # EMPTY SET
+0x02207: r"\ensuremath{\nabla}", # NABLA
+0x02208: r"\ensuremath{\in}", # ELEMENT OF
+0x02209: r"\ensuremath{\not\in}", # NOT AN ELEMENT OF
+0x0220B: r"\ensuremath{\ni}", # CONTAINS AS MEMBER
+0x0220C: r"\ensuremath{\not\ni}", # DOES NOT CONTAIN AS MEMBER
+0x0220F: r"\ensuremath{\prod}", # N-ARY PRODUCT
+0x02210: r"\ensuremath{\coprod}", # N-ARY COPRODUCT
+0x02211: r"\ensuremath{\sum}", # N-ARY SUMMATION
 0x02212: r"-", # MINUS SIGN
-0x02213: r"$\mp$", # MINUS-OR-PLUS SIGN
-0x02214: r"$\dotplus$", # DOT PLUS
-0x02216: r"$\setminus$", # SET MINUS
-0x02217: r"${_\ast}$", # ASTERISK OPERATOR
-0x02218: r"$\circ$", # RING OPERATOR
-0x02219: r"$\bullet$", # BULLET OPERATOR
-0x0221A: r"$\surd$", # SQUARE ROOT
-0x0221D: r"$\propto$", # PROPORTIONAL TO
-0x0221E: r"$\infty$", # INFINITY
-0x0221F: r"$\rightangle$", # RIGHT ANGLE
-0x02220: r"$\angle$", # ANGLE
-0x02221: r"$\measuredangle$", # MEASURED ANGLE
-0x02222: r"$\sphericalangle$", # SPHERICAL ANGLE
-0x02223: r"$\mid$", # DIVIDES
-0x02224: r"$\nmid$", # DOES NOT DIVIDE
-0x02225: r"$\parallel$", # PARALLEL TO
-0x02226: r"$\nparallel$", # NOT PARALLEL TO
-0x02227: r"$\wedge$", # LOGICAL AND
-0x02228: r"$\vee$", # LOGICAL OR
-0x02229: r"$\cap$", # INTERSECTION
-0x0222A: r"$\cup$", # UNION
-0x0222B: r"$\int$", # INTEGRAL
-0x0222C: r"$\int\!\int$", # DOUBLE INTEGRAL
-0x0222D: r"$\int\!\int\!\int$", # TRIPLE INTEGRAL
-0x0222E: r"$\oint$", # CONTOUR INTEGRAL
-0x0222F: r"$\surfintegral$", # SURFACE INTEGRAL
-0x02230: r"$\volintegral$", # VOLUME INTEGRAL
-0x02231: r"$\clwintegral$", # CLOCKWISE INTEGRAL
-0x02232: r"$\ElsevierGlyph{2232}$", # CLOCKWISE CONTOUR INTEGRAL
-0x02233: r"$\ElsevierGlyph{2233}$", # ANTICLOCKWISE CONTOUR INTEGRAL
-0x02234: r"$\therefore$", # THEREFORE
-0x02235: r"$\because$", # BECAUSE
-0x02237: r"$\Colon$", # PROPORTION
-0x02238: r"$\ElsevierGlyph{2238}$", # DOT MINUS
-0x0223A: r"$\mathbin{{:}\!\!{-}\!\!{:}}$", # GEOMETRIC PROPORTION
-0x0223B: r"$\homothetic$", # HOMOTHETIC
-0x0223C: r"$\sim$", # TILDE OPERATOR
-0x0223D: r"$\backsim$", # REVERSED TILDE
-0x0223E: r"$\lazysinv$", # INVERTED LAZY S
-0x02240: r"$\wr$", # WREATH PRODUCT
-0x02241: r"$\not\sim$", # NOT TILDE
-0x02242: r"$\ElsevierGlyph{2242}$", # MINUS TILDE
-0x02243: r"$\simeq$", # ASYMPTOTICALLY EQUAL TO
-0x02244: r"$\not\simeq$", # NOT ASYMPTOTICALLY EQUAL TO
-0x02245: r"$\cong$", # APPROXIMATELY EQUAL TO
-0x02246: r"$\approxnotequal$", # APPROXIMATELY BUT NOT ACTUALLY EQUAL TO
-0x02247: r"$\not\cong$", # NEITHER APPROXIMATELY NOR ACTUALLY EQUAL TO
-0x02248: r"$\approx$", # ALMOST EQUAL TO
-0x02249: r"$\not\approx$", # NOT ALMOST EQUAL TO
-0x0224A: r"$\approxeq$", # ALMOST EQUAL OR EQUAL TO
-0x0224B: r"$\tildetrpl$", # TRIPLE TILDE
-0x0224C: r"$\allequal$", # ALL EQUAL TO
-0x0224D: r"$\asymp$", # EQUIVALENT TO
-0x0224E: r"$\Bumpeq$", # GEOMETRICALLY EQUIVALENT TO
-0x0224F: r"$\bumpeq$", # DIFFERENCE BETWEEN
-0x02250: r"$\doteq$", # APPROACHES THE LIMIT
-0x02251: r"$\doteqdot$", # GEOMETRICALLY EQUAL TO
-0x02252: r"$\fallingdotseq$", # APPROXIMATELY EQUAL TO OR THE IMAGE OF
-0x02253: r"$\risingdotseq$", # IMAGE OF OR APPROXIMATELY EQUAL TO
+0x02213: r"\ensuremath{\mp}", # MINUS-OR-PLUS SIGN
+0x02214: r"\ensuremath{\dotplus}", # DOT PLUS
+0x02216: r"\ensuremath{\setminus}", # SET MINUS
+0x02217: r"\ensuremath{{_\ast}}", # ASTERISK OPERATOR
+0x02218: r"\ensuremath{\circ}", # RING OPERATOR
+0x02219: r"\ensuremath{\bullet}", # BULLET OPERATOR
+0x0221A: r"\ensuremath{\surd}", # SQUARE ROOT
+0x0221D: r"\ensuremath{\propto}", # PROPORTIONAL TO
+0x0221E: r"\ensuremath{\infty}", # INFINITY
+0x0221F: r"\ensuremath{\rightangle}", # RIGHT ANGLE
+0x02220: r"\ensuremath{\angle}", # ANGLE
+0x02221: r"\ensuremath{\measuredangle}", # MEASURED ANGLE
+0x02222: r"\ensuremath{\sphericalangle}", # SPHERICAL ANGLE
+0x02223: r"\ensuremath{\mid}", # DIVIDES
+0x02224: r"\ensuremath{\nmid}", # DOES NOT DIVIDE
+0x02225: r"\ensuremath{\parallel}", # PARALLEL TO
+0x02226: r"\ensuremath{\nparallel}", # NOT PARALLEL TO
+0x02227: r"\ensuremath{\wedge}", # LOGICAL AND
+0x02228: r"\ensuremath{\vee}", # LOGICAL OR
+0x02229: r"\ensuremath{\cap}", # INTERSECTION
+0x0222A: r"\ensuremath{\cup}", # UNION
+0x0222B: r"\ensuremath{\int}", # INTEGRAL
+0x0222C: r"\ensuremath{\int\!\int}", # DOUBLE INTEGRAL
+0x0222D: r"\ensuremath{\int\!\int\!\int}", # TRIPLE INTEGRAL
+0x0222E: r"\ensuremath{\oint}", # CONTOUR INTEGRAL
+0x0222F: r"\ensuremath{\surfintegral}", # SURFACE INTEGRAL
+0x02230: r"\ensuremath{\volintegral}", # VOLUME INTEGRAL
+0x02231: r"\ensuremath{\clwintegral}", # CLOCKWISE INTEGRAL
+0x02232: r"\ensuremath{\ElsevierGlyph{2232}}", # CLOCKWISE CONTOUR INTEGRAL
+0x02233: r"\ensuremath{\ElsevierGlyph{2233}}", # ANTICLOCKWISE CONTOUR INTEGRAL
+0x02234: r"\ensuremath{\therefore}", # THEREFORE
+0x02235: r"\ensuremath{\because}", # BECAUSE
+0x02237: r"\ensuremath{\Colon}", # PROPORTION
+0x02238: r"\ensuremath{\ElsevierGlyph{2238}}", # DOT MINUS
+0x0223A: r"\ensuremath{\mathbin{{:}\!\!{-}\!\!{:}}}", # GEOMETRIC PROPORTION
+0x0223B: r"\ensuremath{\homothetic}", # HOMOTHETIC
+0x0223C: r"\ensuremath{\sim}", # TILDE OPERATOR
+0x0223D: r"\ensuremath{\backsim}", # REVERSED TILDE
+0x0223E: r"\ensuremath{\lazysinv}", # INVERTED LAZY S
+0x02240: r"\ensuremath{\wr}", # WREATH PRODUCT
+0x02241: r"\ensuremath{\not\sim}", # NOT TILDE
+0x02242: r"\ensuremath{\ElsevierGlyph{2242}}", # MINUS TILDE
+0x02243: r"\ensuremath{\simeq}", # ASYMPTOTICALLY EQUAL TO
+0x02244: r"\ensuremath{\not\simeq}", # NOT ASYMPTOTICALLY EQUAL TO
+0x02245: r"\ensuremath{\cong}", # APPROXIMATELY EQUAL TO
+0x02246: r"\ensuremath{\approxnotequal}", # APPROXIMATELY BUT NOT ACTUALLY EQUAL TO
+0x02247: r"\ensuremath{\not\cong}", # NEITHER APPROXIMATELY NOR ACTUALLY EQUAL TO
+0x02248: r"\ensuremath{\approx}", # ALMOST EQUAL TO
+0x02249: r"\ensuremath{\not\approx}", # NOT ALMOST EQUAL TO
+0x0224A: r"\ensuremath{\approxeq}", # ALMOST EQUAL OR EQUAL TO
+0x0224B: r"\ensuremath{\tildetrpl}", # TRIPLE TILDE
+0x0224C: r"\ensuremath{\allequal}", # ALL EQUAL TO
+0x0224D: r"\ensuremath{\asymp}", # EQUIVALENT TO
+0x0224E: r"\ensuremath{\Bumpeq}", # GEOMETRICALLY EQUIVALENT TO
+0x0224F: r"\ensuremath{\bumpeq}", # DIFFERENCE BETWEEN
+0x02250: r"\ensuremath{\doteq}", # APPROACHES THE LIMIT
+0x02251: r"\ensuremath{\doteqdot}", # GEOMETRICALLY EQUAL TO
+0x02252: r"\ensuremath{\fallingdotseq}", # APPROXIMATELY EQUAL TO OR THE IMAGE OF
+0x02253: r"\ensuremath{\risingdotseq}", # IMAGE OF OR APPROXIMATELY EQUAL TO
 0x02254: r":=", # COLON EQUALS
-0x02260: r"$\neq$", # NOT EQUAL TO
-0x02261: r"$\equiv$", # IDENTICAL TO
-0x02262: r"$\not\equiv$", # NOT IDENTICAL TO
-0x02264: r"$\leq$", # LESS-THAN OR EQUAL TO
-0x02265: r"$\geq$", # GREATER-THAN OR EQUAL TO
-0x02266: r"$\leqq$", # LESS-THAN OVER EQUAL TO
-0x02267: r"$\geqq$", # GREATER-THAN OVER EQUAL TO
-0x02268: r"$\lneqq$", # LESS-THAN BUT NOT EQUAL TO
-0x02269: r"$\gneqq$", # GREATER-THAN BUT NOT EQUAL TO
-0x0226A: r"$\ll$", # MUCH LESS-THAN
-0x0226B: r"$\gg$", # MUCH GREATER-THAN
-0x0226C: r"$\between$", # BETWEEN
-0x0226D: r"$\not\kern-0.3em\times$", # NOT EQUIVALENT TO
-0x0226E: r"$\not<$", # NOT LESS-THAN
-0x0226F: r"$\not>$", # NOT GREATER-THAN
-0x02270: r"$\not\leq$", # NEITHER LESS-THAN NOR EQUAL TO
-0x02271: r"$\not\geq$", # NEITHER GREATER-THAN NOR EQUAL TO
-0x02272: r"$\lessequivlnt$", # LESS-THAN OR EQUIVALENT TO
-0x02273: r"$\greaterequivlnt$", # GREATER-THAN OR EQUIVALENT TO
-0x02274: r"$\ElsevierGlyph{2274}$", # NEITHER LESS-THAN NOR EQUIVALENT TO
-0x02275: r"$\ElsevierGlyph{2275}$", # NEITHER GREATER-THAN NOR EQUIVALENT TO
-0x02276: r"$\lessgtr$", # LESS-THAN OR GREATER-THAN
-0x02277: r"$\gtrless$", # GREATER-THAN OR LESS-THAN
-0x02278: r"$\notlessgreater$", # NEITHER LESS-THAN NOR GREATER-THAN
-0x02279: r"$\notgreaterless$", # NEITHER GREATER-THAN NOR LESS-THAN
-0x0227A: r"$\prec$", # PRECEDES
-0x0227B: r"$\succ$", # SUCCEEDS
-0x0227C: r"$\preccurlyeq$", # PRECEDES OR EQUAL TO
-0x0227D: r"$\succcurlyeq$", # SUCCEEDS OR EQUAL TO
-0x0227E: r"$\precapprox$", # PRECEDES OR EQUIVALENT TO
-0x0227F: r"$\succapprox$", # SUCCEEDS OR EQUIVALENT TO
-0x02280: r"$\not\prec$", # DOES NOT PRECEDE
-0x02281: r"$\not\succ$", # DOES NOT SUCCEED
-0x02282: r"$\subset$", # SUBSET OF
-0x02283: r"$\supset$", # SUPERSET OF
-0x02284: r"$\not\subset$", # NOT A SUBSET OF
-0x02285: r"$\not\supset$", # NOT A SUPERSET OF
-0x02286: r"$\subseteq$", # SUBSET OF OR EQUAL TO
-0x02287: r"$\supseteq$", # SUPERSET OF OR EQUAL TO
-0x02288: r"$\not\subseteq$", # NEITHER A SUBSET OF NOR EQUAL TO
-0x02289: r"$\not\supseteq$", # NEITHER A SUPERSET OF NOR EQUAL TO
-0x0228A: r"$\subsetneq$", # SUBSET OF WITH NOT EQUAL TO
-0x0228B: r"$\supsetneq$", # SUPERSET OF WITH NOT EQUAL TO
-0x0228E: r"$\uplus$", # MULTISET UNION
-0x0228F: r"$\sqsubset$", # SQUARE IMAGE OF
-0x02290: r"$\sqsupset$", # SQUARE ORIGINAL OF
-0x02291: r"$\sqsubseteq$", # SQUARE IMAGE OF OR EQUAL TO
-0x02292: r"$\sqsupseteq$", # SQUARE ORIGINAL OF OR EQUAL TO
-0x02293: r"$\sqcap$", # SQUARE CAP
-0x02294: r"$\sqcup$", # SQUARE CUP
-0x02295: r"$\oplus$", # CIRCLED PLUS
-0x02296: r"$\ominus$", # CIRCLED MINUS
-0x02297: r"$\otimes$", # CIRCLED TIMES
-0x02298: r"$\oslash$", # CIRCLED DIVISION SLASH
-0x02299: r"$\odot$", # CIRCLED DOT OPERATOR
-0x0229A: r"$\circledcirc$", # CIRCLED RING OPERATOR
-0x0229B: r"$\circledast$", # CIRCLED ASTERISK OPERATOR
-0x0229D: r"$\circleddash$", # CIRCLED DASH
-0x0229E: r"$\boxplus$", # SQUARED PLUS
-0x0229F: r"$\boxminus$", # SQUARED MINUS
-0x022A0: r"$\boxtimes$", # SQUARED TIMES
-0x022A1: r"$\boxdot$", # SQUARED DOT OPERATOR
-0x022A2: r"$\vdash$", # RIGHT TACK
-0x022A3: r"$\dashv$", # LEFT TACK
-0x022A4: r"$\top$", # DOWN TACK
-0x022A5: r"$\perp$", # UP TACK
-0x022A7: r"$\truestate$", # MODELS
-0x022A8: r"$\forcesextra$", # TRUE
-0x022A9: r"$\Vdash$", # FORCES
-0x022AA: r"$\Vvdash$", # TRIPLE VERTICAL BAR RIGHT TURNSTILE
-0x022AB: r"$\VDash$", # DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
-0x022AC: r"$\nvdash$", # DOES NOT PROVE
-0x022AD: r"$\nvDash$", # NOT TRUE
-0x022AE: r"$\nVdash$", # DOES NOT FORCE
-0x022AF: r"$\nVDash$", # NEGATED DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
-0x022B2: r"$\vartriangleleft$", # NORMAL SUBGROUP OF
-0x022B3: r"$\vartriangleright$", # CONTAINS AS NORMAL SUBGROUP
-0x022B4: r"$\trianglelefteq$", # NORMAL SUBGROUP OF OR EQUAL TO
-0x022B5: r"$\trianglerighteq$", # CONTAINS AS NORMAL SUBGROUP OR EQUAL TO
-0x022B6: r"$\original$", # ORIGINAL OF
-0x022B7: r"$\image$", # IMAGE OF
-0x022B8: r"$\multimap$", # MULTIMAP
-0x022B9: r"$\hermitconjmatrix$", # HERMITIAN CONJUGATE MATRIX
-0x022BA: r"$\intercal$", # INTERCALATE
-0x022BB: r"$\veebar$", # XOR
-0x022BE: r"$\rightanglearc$", # RIGHT ANGLE WITH ARC
-0x022C0: r"$\ElsevierGlyph{22C0}$", # N-ARY LOGICAL AND
-0x022C1: r"$\ElsevierGlyph{22C1}$", # N-ARY LOGICAL OR
-0x022C2: r"$\bigcap$", # N-ARY INTERSECTION
-0x022C3: r"$\bigcup$", # N-ARY UNION
-0x022C4: r"$\diamond$", # DIAMOND OPERATOR
-0x022C5: r"$\cdot$", # DOT OPERATOR
-0x022C6: r"$\star$", # STAR OPERATOR
-0x022C7: r"$\divideontimes$", # DIVISION TIMES
-0x022C8: r"$\bowtie$", # BOWTIE
-0x022C9: r"$\ltimes$", # LEFT NORMAL FACTOR SEMIDIRECT PRODUCT
-0x022CA: r"$\rtimes$", # RIGHT NORMAL FACTOR SEMIDIRECT PRODUCT
-0x022CB: r"$\leftthreetimes$", # LEFT SEMIDIRECT PRODUCT
-0x022CC: r"$\rightthreetimes$", # RIGHT SEMIDIRECT PRODUCT
-0x022CD: r"$\backsimeq$", # REVERSED TILDE EQUALS
-0x022CE: r"$\curlyvee$", # CURLY LOGICAL OR
-0x022CF: r"$\curlywedge$", # CURLY LOGICAL AND
-0x022D0: r"$\Subset$", # DOUBLE SUBSET
-0x022D1: r"$\Supset$", # DOUBLE SUPERSET
-0x022D2: r"$\Cap$", # DOUBLE INTERSECTION
-0x022D3: r"$\Cup$", # DOUBLE UNION
-0x022D4: r"$\pitchfork$", # PITCHFORK
-0x022D6: r"$\lessdot$", # LESS-THAN WITH DOT
-0x022D7: r"$\gtrdot$", # GREATER-THAN WITH DOT
-0x022D8: r"$\verymuchless$", # VERY MUCH LESS-THAN
-0x022D9: r"$\verymuchgreater$", # VERY MUCH GREATER-THAN
-0x022DA: r"$\lesseqgtr$", # LESS-THAN EQUAL TO OR GREATER-THAN
-0x022DB: r"$\gtreqless$", # GREATER-THAN EQUAL TO OR LESS-THAN
-0x022DE: r"$\curlyeqprec$", # EQUAL TO OR PRECEDES
-0x022DF: r"$\curlyeqsucc$", # EQUAL TO OR SUCCEEDS
-0x022E2: r"$\not\sqsubseteq$", # NOT SQUARE IMAGE OF OR EQUAL TO
-0x022E3: r"$\not\sqsupseteq$", # NOT SQUARE ORIGINAL OF OR EQUAL TO
-0x022E5: r"$\Elzsqspne$", # SQUARE ORIGINAL OF OR NOT EQUAL TO
-0x022E6: r"$\lnsim$", # LESS-THAN BUT NOT EQUIVALENT TO
-0x022E7: r"$\gnsim$", # GREATER-THAN BUT NOT EQUIVALENT TO
-0x022E8: r"$\precedesnotsimilar$", # PRECEDES BUT NOT EQUIVALENT TO
-0x022E9: r"$\succnsim$", # SUCCEEDS BUT NOT EQUIVALENT TO
-0x022EA: r"$\ntriangleleft$", # NOT NORMAL SUBGROUP OF
-0x022EB: r"$\ntriangleright$", # DOES NOT CONTAIN AS NORMAL SUBGROUP
-0x022EC: r"$\ntrianglelefteq$", # NOT NORMAL SUBGROUP OF OR EQUAL TO
-0x022ED: r"$\ntrianglerighteq$", # DOES NOT CONTAIN AS NORMAL SUBGROUP OR EQUAL
-0x022EE: r"$\vdots$", # VERTICAL ELLIPSIS
-0x022EF: r"$\cdots$", # MIDLINE HORIZONTAL ELLIPSIS
-0x022F0: r"$\upslopeellipsis$", # UP RIGHT DIAGONAL ELLIPSIS
-0x022F1: r"$\downslopeellipsis$", # DOWN RIGHT DIAGONAL ELLIPSIS
-0x02306: r"$\perspcorrespond$", # PERSPECTIVE
-0x02308: r"$\lceil$", # LEFT CEILING
-0x02309: r"$\rceil$", # RIGHT CEILING
-0x0230A: r"$\lfloor$", # LEFT FLOOR
-0x0230B: r"$\rfloor$", # RIGHT FLOOR
+0x02260: r"\ensuremath{\neq}", # NOT EQUAL TO
+0x02261: r"\ensuremath{\equiv}", # IDENTICAL TO
+0x02262: r"\ensuremath{\not\equiv}", # NOT IDENTICAL TO
+0x02264: r"\ensuremath{\leq}", # LESS-THAN OR EQUAL TO
+0x02265: r"\ensuremath{\geq}", # GREATER-THAN OR EQUAL TO
+0x02266: r"\ensuremath{\leqq}", # LESS-THAN OVER EQUAL TO
+0x02267: r"\ensuremath{\geqq}", # GREATER-THAN OVER EQUAL TO
+0x02268: r"\ensuremath{\lneqq}", # LESS-THAN BUT NOT EQUAL TO
+0x02269: r"\ensuremath{\gneqq}", # GREATER-THAN BUT NOT EQUAL TO
+0x0226A: r"\ensuremath{\ll}", # MUCH LESS-THAN
+0x0226B: r"\ensuremath{\gg}", # MUCH GREATER-THAN
+0x0226C: r"\ensuremath{\between}", # BETWEEN
+0x0226D: r"\ensuremath{\not\kern-0.3em\times}", # NOT EQUIVALENT TO
+0x0226E: r"\ensuremath{\not<}", # NOT LESS-THAN
+0x0226F: r"\ensuremath{\not>}", # NOT GREATER-THAN
+0x02270: r"\ensuremath{\not\leq}", # NEITHER LESS-THAN NOR EQUAL TO
+0x02271: r"\ensuremath{\not\geq}", # NEITHER GREATER-THAN NOR EQUAL TO
+0x02272: r"\ensuremath{\lessequivlnt}", # LESS-THAN OR EQUIVALENT TO
+0x02273: r"\ensuremath{\greaterequivlnt}", # GREATER-THAN OR EQUIVALENT TO
+0x02274: r"\ensuremath{\ElsevierGlyph{2274}}", # NEITHER LESS-THAN NOR EQUIVALENT TO
+0x02275: r"\ensuremath{\ElsevierGlyph{2275}}", # NEITHER GREATER-THAN NOR EQUIVALENT TO
+0x02276: r"\ensuremath{\lessgtr}", # LESS-THAN OR GREATER-THAN
+0x02277: r"\ensuremath{\gtrless}", # GREATER-THAN OR LESS-THAN
+0x02278: r"\ensuremath{\notlessgreater}", # NEITHER LESS-THAN NOR GREATER-THAN
+0x02279: r"\ensuremath{\notgreaterless}", # NEITHER GREATER-THAN NOR LESS-THAN
+0x0227A: r"\ensuremath{\prec}", # PRECEDES
+0x0227B: r"\ensuremath{\succ}", # SUCCEEDS
+0x0227C: r"\ensuremath{\preccurlyeq}", # PRECEDES OR EQUAL TO
+0x0227D: r"\ensuremath{\succcurlyeq}", # SUCCEEDS OR EQUAL TO
+0x0227E: r"\ensuremath{\precapprox}", # PRECEDES OR EQUIVALENT TO
+0x0227F: r"\ensuremath{\succapprox}", # SUCCEEDS OR EQUIVALENT TO
+0x02280: r"\ensuremath{\not\prec}", # DOES NOT PRECEDE
+0x02281: r"\ensuremath{\not\succ}", # DOES NOT SUCCEED
+0x02282: r"\ensuremath{\subset}", # SUBSET OF
+0x02283: r"\ensuremath{\supset}", # SUPERSET OF
+0x02284: r"\ensuremath{\not\subset}", # NOT A SUBSET OF
+0x02285: r"\ensuremath{\not\supset}", # NOT A SUPERSET OF
+0x02286: r"\ensuremath{\subseteq}", # SUBSET OF OR EQUAL TO
+0x02287: r"\ensuremath{\supseteq}", # SUPERSET OF OR EQUAL TO
+0x02288: r"\ensuremath{\not\subseteq}", # NEITHER A SUBSET OF NOR EQUAL TO
+0x02289: r"\ensuremath{\not\supseteq}", # NEITHER A SUPERSET OF NOR EQUAL TO
+0x0228A: r"\ensuremath{\subsetneq}", # SUBSET OF WITH NOT EQUAL TO
+0x0228B: r"\ensuremath{\supsetneq}", # SUPERSET OF WITH NOT EQUAL TO
+0x0228E: r"\ensuremath{\uplus}", # MULTISET UNION
+0x0228F: r"\ensuremath{\sqsubset}", # SQUARE IMAGE OF
+0x02290: r"\ensuremath{\sqsupset}", # SQUARE ORIGINAL OF
+0x02291: r"\ensuremath{\sqsubseteq}", # SQUARE IMAGE OF OR EQUAL TO
+0x02292: r"\ensuremath{\sqsupseteq}", # SQUARE ORIGINAL OF OR EQUAL TO
+0x02293: r"\ensuremath{\sqcap}", # SQUARE CAP
+0x02294: r"\ensuremath{\sqcup}", # SQUARE CUP
+0x02295: r"\ensuremath{\oplus}", # CIRCLED PLUS
+0x02296: r"\ensuremath{\ominus}", # CIRCLED MINUS
+0x02297: r"\ensuremath{\otimes}", # CIRCLED TIMES
+0x02298: r"\ensuremath{\oslash}", # CIRCLED DIVISION SLASH
+0x02299: r"\ensuremath{\odot}", # CIRCLED DOT OPERATOR
+0x0229A: r"\ensuremath{\circledcirc}", # CIRCLED RING OPERATOR
+0x0229B: r"\ensuremath{\circledast}", # CIRCLED ASTERISK OPERATOR
+0x0229D: r"\ensuremath{\circleddash}", # CIRCLED DASH
+0x0229E: r"\ensuremath{\boxplus}", # SQUARED PLUS
+0x0229F: r"\ensuremath{\boxminus}", # SQUARED MINUS
+0x022A0: r"\ensuremath{\boxtimes}", # SQUARED TIMES
+0x022A1: r"\ensuremath{\boxdot}", # SQUARED DOT OPERATOR
+0x022A2: r"\ensuremath{\vdash}", # RIGHT TACK
+0x022A3: r"\ensuremath{\dashv}", # LEFT TACK
+0x022A4: r"\ensuremath{\top}", # DOWN TACK
+0x022A5: r"\ensuremath{\perp}", # UP TACK
+0x022A7: r"\ensuremath{\truestate}", # MODELS
+0x022A8: r"\ensuremath{\forcesextra}", # TRUE
+0x022A9: r"\ensuremath{\Vdash}", # FORCES
+0x022AA: r"\ensuremath{\Vvdash}", # TRIPLE VERTICAL BAR RIGHT TURNSTILE
+0x022AB: r"\ensuremath{\VDash}", # DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+0x022AC: r"\ensuremath{\nvdash}", # DOES NOT PROVE
+0x022AD: r"\ensuremath{\nvDash}", # NOT TRUE
+0x022AE: r"\ensuremath{\nVdash}", # DOES NOT FORCE
+0x022AF: r"\ensuremath{\nVDash}", # NEGATED DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+0x022B2: r"\ensuremath{\vartriangleleft}", # NORMAL SUBGROUP OF
+0x022B3: r"\ensuremath{\vartriangleright}", # CONTAINS AS NORMAL SUBGROUP
+0x022B4: r"\ensuremath{\trianglelefteq}", # NORMAL SUBGROUP OF OR EQUAL TO
+0x022B5: r"\ensuremath{\trianglerighteq}", # CONTAINS AS NORMAL SUBGROUP OR EQUAL TO
+0x022B6: r"\ensuremath{\original}", # ORIGINAL OF
+0x022B7: r"\ensuremath{\image}", # IMAGE OF
+0x022B8: r"\ensuremath{\multimap}", # MULTIMAP
+0x022B9: r"\ensuremath{\hermitconjmatrix}", # HERMITIAN CONJUGATE MATRIX
+0x022BA: r"\ensuremath{\intercal}", # INTERCALATE
+0x022BB: r"\ensuremath{\veebar}", # XOR
+0x022BE: r"\ensuremath{\rightanglearc}", # RIGHT ANGLE WITH ARC
+0x022C0: r"\ensuremath{\ElsevierGlyph{22C0}}", # N-ARY LOGICAL AND
+0x022C1: r"\ensuremath{\ElsevierGlyph{22C1}}", # N-ARY LOGICAL OR
+0x022C2: r"\ensuremath{\bigcap}", # N-ARY INTERSECTION
+0x022C3: r"\ensuremath{\bigcup}", # N-ARY UNION
+0x022C4: r"\ensuremath{\diamond}", # DIAMOND OPERATOR
+0x022C5: r"\ensuremath{\cdot}", # DOT OPERATOR
+0x022C6: r"\ensuremath{\star}", # STAR OPERATOR
+0x022C7: r"\ensuremath{\divideontimes}", # DIVISION TIMES
+0x022C8: r"\ensuremath{\bowtie}", # BOWTIE
+0x022C9: r"\ensuremath{\ltimes}", # LEFT NORMAL FACTOR SEMIDIRECT PRODUCT
+0x022CA: r"\ensuremath{\rtimes}", # RIGHT NORMAL FACTOR SEMIDIRECT PRODUCT
+0x022CB: r"\ensuremath{\leftthreetimes}", # LEFT SEMIDIRECT PRODUCT
+0x022CC: r"\ensuremath{\rightthreetimes}", # RIGHT SEMIDIRECT PRODUCT
+0x022CD: r"\ensuremath{\backsimeq}", # REVERSED TILDE EQUALS
+0x022CE: r"\ensuremath{\curlyvee}", # CURLY LOGICAL OR
+0x022CF: r"\ensuremath{\curlywedge}", # CURLY LOGICAL AND
+0x022D0: r"\ensuremath{\Subset}", # DOUBLE SUBSET
+0x022D1: r"\ensuremath{\Supset}", # DOUBLE SUPERSET
+0x022D2: r"\ensuremath{\Cap}", # DOUBLE INTERSECTION
+0x022D3: r"\ensuremath{\Cup}", # DOUBLE UNION
+0x022D4: r"\ensuremath{\pitchfork}", # PITCHFORK
+0x022D6: r"\ensuremath{\lessdot}", # LESS-THAN WITH DOT
+0x022D7: r"\ensuremath{\gtrdot}", # GREATER-THAN WITH DOT
+0x022D8: r"\ensuremath{\verymuchless}", # VERY MUCH LESS-THAN
+0x022D9: r"\ensuremath{\verymuchgreater}", # VERY MUCH GREATER-THAN
+0x022DA: r"\ensuremath{\lesseqgtr}", # LESS-THAN EQUAL TO OR GREATER-THAN
+0x022DB: r"\ensuremath{\gtreqless}", # GREATER-THAN EQUAL TO OR LESS-THAN
+0x022DE: r"\ensuremath{\curlyeqprec}", # EQUAL TO OR PRECEDES
+0x022DF: r"\ensuremath{\curlyeqsucc}", # EQUAL TO OR SUCCEEDS
+0x022E2: r"\ensuremath{\not\sqsubseteq}", # NOT SQUARE IMAGE OF OR EQUAL TO
+0x022E3: r"\ensuremath{\not\sqsupseteq}", # NOT SQUARE ORIGINAL OF OR EQUAL TO
+0x022E5: r"\ensuremath{\Elzsqspne}", # SQUARE ORIGINAL OF OR NOT EQUAL TO
+0x022E6: r"\ensuremath{\lnsim}", # LESS-THAN BUT NOT EQUIVALENT TO
+0x022E7: r"\ensuremath{\gnsim}", # GREATER-THAN BUT NOT EQUIVALENT TO
+0x022E8: r"\ensuremath{\precedesnotsimilar}", # PRECEDES BUT NOT EQUIVALENT TO
+0x022E9: r"\ensuremath{\succnsim}", # SUCCEEDS BUT NOT EQUIVALENT TO
+0x022EA: r"\ensuremath{\ntriangleleft}", # NOT NORMAL SUBGROUP OF
+0x022EB: r"\ensuremath{\ntriangleright}", # DOES NOT CONTAIN AS NORMAL SUBGROUP
+0x022EC: r"\ensuremath{\ntrianglelefteq}", # NOT NORMAL SUBGROUP OF OR EQUAL TO
+0x022ED: r"\ensuremath{\ntrianglerighteq}", # DOES NOT CONTAIN AS NORMAL SUBGROUP OR EQUAL
+0x022EE: r"\ensuremath{\vdots}", # VERTICAL ELLIPSIS
+0x022EF: r"\ensuremath{\cdots}", # MIDLINE HORIZONTAL ELLIPSIS
+0x022F0: r"\ensuremath{\upslopeellipsis}", # UP RIGHT DIAGONAL ELLIPSIS
+0x022F1: r"\ensuremath{\downslopeellipsis}", # DOWN RIGHT DIAGONAL ELLIPSIS
+0x02306: r"\ensuremath{\perspcorrespond}", # PERSPECTIVE
+0x02308: r"\ensuremath{\lceil}", # LEFT CEILING
+0x02309: r"\ensuremath{\rceil}", # RIGHT CEILING
+0x0230A: r"\ensuremath{\lfloor}", # LEFT FLOOR
+0x0230B: r"\ensuremath{\rfloor}", # RIGHT FLOOR
 
-0x02315: r"$\recorder$", # TELEPHONE RECORDER
-0x02316: r'$\mathchar"2208$', # POSITION INDICATOR
-0x0231C: r"$\ulcorner$", # TOP LEFT CORNER
-0x0231D: r"$\urcorner$", # TOP RIGHT CORNER
-0x0231E: r"$\llcorner$", # BOTTOM LEFT CORNER
-0x0231F: r"$\lrcorner$", # BOTTOM RIGHT CORNER
-0x02322: r"$\frown$", # FROWN
-0x02323: r"$\smile$", # SMILE
-0x02329: r"$\langle$", # LEFT-POINTING ANGLE BRACKET
-0x0232A: r"$\rangle$", # RIGHT-POINTING ANGLE BRACKET
-0x0233D: r"$\ElsevierGlyph{E838}$", # APL FUNCTIONAL SYMBOL CIRCLE STILE
-0x023A3: r"$\Elzdlcorn$", # LEFT SQUARE BRACKET LOWER CORNER
-0x023B0: r"$\lmoustache$", # UPPER LEFT OR LOWER RIGHT CURLY BRACKET SECTION
-0x023B1: r"$\rmoustache$", # UPPER RIGHT OR LOWER LEFT CURLY BRACKET SECTION
+0x02315: r"\ensuremath{\recorder}", # TELEPHONE RECORDER
+0x02316: r'\ensuremath{\mathchar"2208}', # POSITION INDICATOR
+0x0231C: r"\ensuremath{\ulcorner}", # TOP LEFT CORNER
+0x0231D: r"\ensuremath{\urcorner}", # TOP RIGHT CORNER
+0x0231E: r"\ensuremath{\llcorner}", # BOTTOM LEFT CORNER
+0x0231F: r"\ensuremath{\lrcorner}", # BOTTOM RIGHT CORNER
+0x02322: r"\ensuremath{\frown}", # FROWN
+0x02323: r"\ensuremath{\smile}", # SMILE
+0x02329: r"\ensuremath{\langle}", # LEFT-POINTING ANGLE BRACKET
+0x0232A: r"\ensuremath{\rangle}", # RIGHT-POINTING ANGLE BRACKET
+0x0233D: r"\ensuremath{\ElsevierGlyph{E838}}", # APL FUNCTIONAL SYMBOL CIRCLE STILE
+0x023A3: r"\ensuremath{\Elzdlcorn}", # LEFT SQUARE BRACKET LOWER CORNER
+0x023B0: r"\ensuremath{\lmoustache}", # UPPER LEFT OR LOWER RIGHT CURLY BRACKET SECTION
+0x023B1: r"\ensuremath{\rmoustache}", # UPPER RIGHT OR LOWER LEFT CURLY BRACKET SECTION
 0x02423: r"\textvisiblespace{}", # OPEN BOX
 0x02460: r"\ding{172}", # CIRCLED DIGIT ONE
 0x02461: r"\ding{173}", # CIRCLED DIGIT TWO
@@ -734,26 +734,26 @@ unicode_map = {
 0x02468: r"\ding{180}", # CIRCLED DIGIT NINE
 0x02469: r"\ding{181}", # CIRCLED NUMBER TEN
 0x025A0: r"\ding{110}", # BLACK SQUARE
-0x025A1: r"$\square$", # WHITE SQUARE
-0x025AA: r"$\blacksquare$", # BLACK SMALL SQUARE
+0x025A1: r"\ensuremath{\square}", # WHITE SQUARE
+0x025AA: r"\ensuremath{\blacksquare}", # BLACK SMALL SQUARE
 0x025AD: r"\fbox{~~}", # WHITE RECTANGLE
-0x025AF: r"$\Elzvrecto$", # WHITE VERTICAL RECTANGLE
-0x025B1: r"$\ElsevierGlyph{E381}$", # WHITE PARALLELOGRAM
+0x025AF: r"\ensuremath{\Elzvrecto}", # WHITE VERTICAL RECTANGLE
+0x025B1: r"\ensuremath{\ElsevierGlyph{E381}}", # WHITE PARALLELOGRAM
 0x025B2: r"\ding{115}", # BLACK UP-POINTING TRIANGLE
-0x025B3: r"$\bigtriangleup$", # WHITE UP-POINTING TRIANGLE
-0x025B4: r"$\blacktriangle$", # BLACK UP-POINTING SMALL TRIANGLE
-0x025B5: r"$\vartriangle$", # WHITE UP-POINTING SMALL TRIANGLE
-0x025B8: r"$\blacktriangleright$", # BLACK RIGHT-POINTING SMALL TRIANGLE
-0x025B9: r"$\triangleright$", # WHITE RIGHT-POINTING SMALL TRIANGLE
+0x025B3: r"\ensuremath{\bigtriangleup}", # WHITE UP-POINTING TRIANGLE
+0x025B4: r"\ensuremath{\blacktriangle}", # BLACK UP-POINTING SMALL TRIANGLE
+0x025B5: r"\ensuremath{\vartriangle}", # WHITE UP-POINTING SMALL TRIANGLE
+0x025B8: r"\ensuremath{\blacktriangleright}", # BLACK RIGHT-POINTING SMALL TRIANGLE
+0x025B9: r"\ensuremath{\triangleright}", # WHITE RIGHT-POINTING SMALL TRIANGLE
 0x025BC: r"\ding{116}", # BLACK DOWN-POINTING TRIANGLE
-0x025BD: r"$\bigtriangledown$", # WHITE DOWN-POINTING TRIANGLE
-0x025BE: r"$\blacktriangledown$", # BLACK DOWN-POINTING SMALL TRIANGLE
-0x025BF: r"$\triangledown$", # WHITE DOWN-POINTING SMALL TRIANGLE
-0x025C2: r"$\blacktriangleleft$", # BLACK LEFT-POINTING SMALL TRIANGLE
-0x025C3: r"$\triangleleft$", # WHITE LEFT-POINTING SMALL TRIANGLE
+0x025BD: r"\ensuremath{\bigtriangledown}", # WHITE DOWN-POINTING TRIANGLE
+0x025BE: r"\ensuremath{\blacktriangledown}", # BLACK DOWN-POINTING SMALL TRIANGLE
+0x025BF: r"\ensuremath{\triangledown}", # WHITE DOWN-POINTING SMALL TRIANGLE
+0x025C2: r"\ensuremath{\blacktriangleleft}", # BLACK LEFT-POINTING SMALL TRIANGLE
+0x025C3: r"\ensuremath{\triangleleft}", # WHITE LEFT-POINTING SMALL TRIANGLE
 0x025C6: r"\ding{117}", # BLACK DIAMOND
-0x025CA: r"$\lozenge$", # LOZENGE
-0x025CB: r"$\bigcirc$", # WHITE CIRCLE
+0x025CA: r"\ensuremath{\lozenge}", # LOZENGE
+0x025CB: r"\ensuremath{\bigcirc}", # WHITE CIRCLE
 0x025CF: r"\ding{108}", # BLACK CIRCLE
 0x025D7: r"\ding{119}", # RIGHT HALF BLACK CIRCLE
 0x02605: r"\ding{72}", # BLACK STAR
@@ -942,36 +942,36 @@ unicode_map = {
 0x027BD: r"\ding{253}", # HEAVY WEDGE-TAILED RIGHTWARDS ARROW
 0x027BE: r"\ding{254}", # OPEN-OUTLINED RIGHTWARDS ARROW
 
-0x02A6E: r"$\stackrel{*}{=}$", # EQUALS WITH ASTERISK
-0x02A75: r"$\Equal$", # TWO CONSECUTIVE EQUALS SIGNS
-0x02A7D: r"$\leqslant$", # LESS-THAN OR SLANTED EQUAL TO
-0x02A7E: r"$\geqslant$", # GREATER-THAN OR SLANTED EQUAL TO
-0x02A85: r"$\lessapprox$", # LESS-THAN OR APPROXIMATE
-0x02A86: r"$\gtrapprox$", # GREATER-THAN OR APPROXIMATE
-0x02A87: r"$\lneq$", # LESS-THAN AND SINGLE-LINE NOT EQUAL TO
-0x02A88: r"$\gneq$", # GREATER-THAN AND SINGLE-LINE NOT EQUAL TO
-0x02A89: r"$\lnapprox$", # LESS-THAN AND NOT APPROXIMATE
-0x02A8A: r"$\gnapprox$", # GREATER-THAN AND NOT APPROXIMATE
-0x02A8B: r"$\lesseqqgtr$", # LESS-THAN ABOVE DOUBLE-LINE EQUAL ABOVE GREATER-THAN
-0x02A8C: r"$\gtreqqless$", # GREATER-THAN ABOVE DOUBLE-LINE EQUAL ABOVE LESS-THAN
-0x02A95: r"$\eqslantless$", # SLANTED EQUAL TO OR LESS-THAN
-0x02A96: r"$\eqslantgtr$", # SLANTED EQUAL TO OR GREATER-THAN
-0x02A9D: r"$\Pisymbol{ppi020}{117}$", # SIMILAR OR LESS-THAN
-0x02A9E: r"$\Pisymbol{ppi020}{105}$", # SIMILAR OR GREATER-THAN
-0x02AA1: r"$\NestedLessLess$", # DOUBLE NESTED LESS-THAN
-0x02AA2: r"$\NestedGreaterGreater$", # DOUBLE NESTED GREATER-THAN
-0x02AAF: r"$\preceq$", # PRECEDES ABOVE SINGLE-LINE EQUALS SIGN
-0x02AB0: r"$\succeq$", # SUCCEEDS ABOVE SINGLE-LINE EQUALS SIGN
-0x02AB5: r"$\precneqq$", # PRECEDES ABOVE NOT EQUAL TO
-0x02AB6: r"$\succneqq$", # SUCCEEDS ABOVE NOT EQUAL TO
-0x02AB7: r"$\precapprox$", # PRECEDES ABOVE ALMOST EQUAL TO
-0x02AB8: r"$\succapprox$", # SUCCEEDS ABOVE ALMOST EQUAL TO
-0x02AB9: r"$\precnapprox$", # PRECEDES ABOVE NOT ALMOST EQUAL TO
-0x02ABA: r"$\succnapprox$", # SUCCEEDS ABOVE NOT ALMOST EQUAL TO
-0x02AC5: r"$\subseteqq$", # SUBSET OF ABOVE EQUALS SIGN
-0x02AC6: r"$\supseteqq$", # SUPERSET OF ABOVE EQUALS SIGN
-0x02ACB: r"$\subsetneqq$", # SUBSET OF ABOVE NOT EQUAL TO
-0x02ACC: r"$\supsetneqq$", # SUPERSET OF ABOVE NOT EQUAL TO
+0x02A6E: r"\ensuremath{\stackrel{*}{=}}", # EQUALS WITH ASTERISK
+0x02A75: r"\ensuremath{\Equal}", # TWO CONSECUTIVE EQUALS SIGNS
+0x02A7D: r"\ensuremath{\leqslant}", # LESS-THAN OR SLANTED EQUAL TO
+0x02A7E: r"\ensuremath{\geqslant}", # GREATER-THAN OR SLANTED EQUAL TO
+0x02A85: r"\ensuremath{\lessapprox}", # LESS-THAN OR APPROXIMATE
+0x02A86: r"\ensuremath{\gtrapprox}", # GREATER-THAN OR APPROXIMATE
+0x02A87: r"\ensuremath{\lneq}", # LESS-THAN AND SINGLE-LINE NOT EQUAL TO
+0x02A88: r"\ensuremath{\gneq}", # GREATER-THAN AND SINGLE-LINE NOT EQUAL TO
+0x02A89: r"\ensuremath{\lnapprox}", # LESS-THAN AND NOT APPROXIMATE
+0x02A8A: r"\ensuremath{\gnapprox}", # GREATER-THAN AND NOT APPROXIMATE
+0x02A8B: r"\ensuremath{\lesseqqgtr}", # LESS-THAN ABOVE DOUBLE-LINE EQUAL ABOVE GREATER-THAN
+0x02A8C: r"\ensuremath{\gtreqqless}", # GREATER-THAN ABOVE DOUBLE-LINE EQUAL ABOVE LESS-THAN
+0x02A95: r"\ensuremath{\eqslantless}", # SLANTED EQUAL TO OR LESS-THAN
+0x02A96: r"\ensuremath{\eqslantgtr}", # SLANTED EQUAL TO OR GREATER-THAN
+0x02A9D: r"\ensuremath{\Pisymbol{ppi020}{117}}", # SIMILAR OR LESS-THAN
+0x02A9E: r"\ensuremath{\Pisymbol{ppi020}{105}}", # SIMILAR OR GREATER-THAN
+0x02AA1: r"\ensuremath{\NestedLessLess}", # DOUBLE NESTED LESS-THAN
+0x02AA2: r"\ensuremath{\NestedGreaterGreater}", # DOUBLE NESTED GREATER-THAN
+0x02AAF: r"\ensuremath{\preceq}", # PRECEDES ABOVE SINGLE-LINE EQUALS SIGN
+0x02AB0: r"\ensuremath{\succeq}", # SUCCEEDS ABOVE SINGLE-LINE EQUALS SIGN
+0x02AB5: r"\ensuremath{\precneqq}", # PRECEDES ABOVE NOT EQUAL TO
+0x02AB6: r"\ensuremath{\succneqq}", # SUCCEEDS ABOVE NOT EQUAL TO
+0x02AB7: r"\ensuremath{\precapprox}", # PRECEDES ABOVE ALMOST EQUAL TO
+0x02AB8: r"\ensuremath{\succapprox}", # SUCCEEDS ABOVE ALMOST EQUAL TO
+0x02AB9: r"\ensuremath{\precnapprox}", # PRECEDES ABOVE NOT ALMOST EQUAL TO
+0x02ABA: r"\ensuremath{\succnapprox}", # SUCCEEDS ABOVE NOT ALMOST EQUAL TO
+0x02AC5: r"\ensuremath{\subseteqq}", # SUBSET OF ABOVE EQUALS SIGN
+0x02AC6: r"\ensuremath{\supseteqq}", # SUPERSET OF ABOVE EQUALS SIGN
+0x02ACB: r"\ensuremath{\subsetneqq}", # SUBSET OF ABOVE NOT EQUAL TO
+0x02ACC: r"\ensuremath{\supsetneqq}", # SUPERSET OF ABOVE NOT EQUAL TO
 
 0x0FB00: r"ff", # LATIN SMALL LIGATURE FF
 0x0FB01: r"fi", # LATIN SMALL LIGATURE FI
@@ -985,6 +985,7 @@ unicode_map = {
 0x1D6E0: r"\mathbf{\varrho}", # MATHEMATICAL BOLD RHO SYMBOL
 0x1D6E1: r"\mathbf{\varpi}", # MATHEMATICAL BOLD PI SYMBOL
 0x1D6F3: r"\mathsl{\vartheta}", # MATHEMATICAL ITALIC CAPITAL THETA SYMBOL
+0x1D6FD: r"\ensuremath{\beta}", # MATHEMATICAL ITALIC SMALL BETA
 0x1D717: r"\mathsl{\vartheta}", # MATHEMATICAL ITALIC THETA SYMBOL
 0x1D718: r"\mathsl{\varkappa}", # MATHEMATICAL ITALIC KAPPA SYMBOL
 0x1D719: r"\mathsl{\phi}", # MATHEMATICAL ITALIC PHI SYMBOL

@@ -15,11 +15,11 @@
 \vspace{2.5cm}
 \begin{center}
   \huge{\textbf{\DBKtitle}}\\ %
-  \ifthenelse{\equal{\DBKsubtitle}{}}{}{
-  % \underline{\ \ \ \ \ \ \ \ \ \ \ }\\ %
-  \ \\ %
-  \huge{\textbf{\DBKsubtitle}}\\ %
-  }
+  \ifx\DBKsubtitle\relax\else%
+    \underline{\ \ \ \ \ \ \ \ \ \ \ }\\ %
+    \ \\ %
+    \huge{\textbf{\DBKsubtitle}}\\ %
+  \fi
 \end{center}
 \vfill
 \setlength{\baselineskip}{\oldbaselineskip}

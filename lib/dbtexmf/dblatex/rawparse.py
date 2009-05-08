@@ -34,7 +34,8 @@ class RawLatexParser:
             self.key_out.pos = line.find(self.key_out.key)
 
             if (self.key_out.pos == -1 or
-                (self.key_in.pos >= 0 and (self.key_in.pos < self.key_out.pos))):
+                (self.key_in.pos >= 0 and
+                (self.key_in.pos < self.key_out.pos))):
                 key = self.key_in
             else:
                 key = self.key_out

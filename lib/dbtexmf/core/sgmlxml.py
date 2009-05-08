@@ -5,6 +5,7 @@
 import os
 import sys
 import re
+import logging
 from subprocess import call
 
 class Osx:
@@ -14,10 +15,11 @@ class Osx:
                      "-xempty",
                      "-xno-expand-internal",
                      "-xid"] # To have id() working without a DTD
+        self.log = logging.getLogger("dblatex")
 
     def replace_entities(self, entfile, mapfile, outfile=None):
         # Find out the SDATA entities to replace
-        re_ent = re.compile("<!ENTITY +([^\s]+) +\[([^\s]+) *\]>")
+        re_ent = re.compile('<!ENTITY +([^\s]+) +"?\[([^\s"]+) *\]"?>')
         f = open(entfile)
         lines = f.readlines()
         f.close()
@@ -29,22 +31,25 @@ class Osx:
         ents = []
         for line in lines:
             ents += re_ent.findall(line)
+        self.log.debug("Entities to map: %s" % ents)
 
-        # Now, get their mapping
-        entpat = "(%s)\s+[^\s]+\s+0(x[^\s]+)" % "|".join([x for x, y in ents])
+        # Now, get their Unicode mapping
+        entpat = "^(%s)\s+[^\s]+\s+0(x[^\s]+)" % "|".join([x for x, y in ents])
         re_map = re.compile(entpat)
         entmap = []
         f = open(mapfile)
         for line in f:
             entmap += re_map.findall(line.split("#")[0])
         f.close()
+        self.log.debug("Entity map: %s" % entmap)
 
+        # Replace the entity definitions by their Unicode equivalent
         entdict = {}
         for ent, uval in entmap:
-            entdict[ent] = (re.compile("<!ENTITY\s+%s\s+\[[^\]]+\]\s*>" % ent),
+            entdict[ent] = \
+                (re.compile('<!ENTITY\s+%s\s+"?\[[^\]]+\]"?\s*>' % ent),
                             '<!ENTITY %s "&#%s;">' % (ent, uval))
 
-        # Replace the entities
         nlines = []
         for line in lines:
             mapped = []

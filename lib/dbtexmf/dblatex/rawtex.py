@@ -10,6 +10,7 @@ import re
 
 from rawparse import RawLatexParser, RawUtfParser
 from rawverb import VerbParser
+from xetex.codec import XetexCodec
 from dbtexmf.core.imagedata import *
 
 
@@ -29,8 +30,10 @@ class RawLatex:
         self.image.paths = paths
 
     def set_parsers(self, input, output_encoding=""):
+        codec = None
         if self.backend == "xetex":
             output_encoding = "utf8"
+            codec = XetexCodec()
         elif not(output_encoding):
             f = file(input)
             params = {}
@@ -46,7 +49,8 @@ class RawLatex:
             output_encoding = params.get("latex.encoding", "latin-1")
 
         self.parsers = [VerbParser(output_encoding=output_encoding),
-                        RawLatexParser(output_encoding=output_encoding),
+                        RawLatexParser(codec=codec,
+                                       output_encoding=output_encoding),
                         RawUtfParser(output_encoding=output_encoding)]
 
     def set_format(self, format, backend=None):

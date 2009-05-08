@@ -1,6 +1,6 @@
 #
-# The Latex Codec handles the encoding from UFT-8 text to latin1 latex compatible
-# text.
+# The Latex Codec handles the encoding from UFT-8 text to latin1
+# latex compatible text.
 #
 import re
 import codecs
@@ -38,7 +38,7 @@ class TexCodec:
               "\xa5": r"$\yen$",
               # "\xa6": r"\textbrokenbar{}",
               "\xac": r"\ensuremath{\lnot}",
-              "\xb0": "\\ensuremath{\xb0}",
+              "\xb0": r"\textdegree{}",
               "\xb1": r"\ensuremath{\pm}",
               "\xb2": r"$^2$",
               "\xb3": r"$^3$",
@@ -95,15 +95,22 @@ class LatexCodec(TexCodec):
             (re.compile(r"([{}%_^$&#])"), r"\\\1"),
             # '<' and '>' in the list to avoid french quotation mark symptoms
             (re.compile(r"([-^<>])"), r"\1{}"),
+            # backtick (`) must not be confused with &#x2018;
+            (re.compile(r"`"), r"\\`{}"),
+            # tilde (~) must not be confused with &nbsp;
             (re.compile(r"~"), r"\\textasciitilde{}"))
-   
+
+    def _texescape(self, text):
+        for r, s in self.texres:
+            text = r.sub(s, text)
+        return text
+
     def encode(self, text):
         # Preliminary backslash substitution
         text = text.replace("\\", r"\textbackslash")
 
         # Basic TeX escape
-        for r, s in self.texres:
-            text = r.sub(s, text)
+        text = self._texescape(text)
 
         # Encode UTF-8 -> Latin-1 + latex specific
         text = self._encode(text, self._errors)[0]

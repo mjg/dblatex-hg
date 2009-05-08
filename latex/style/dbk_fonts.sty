@@ -1,7 +1,45 @@
-\usepackage{ifxetex}
+
 \ifxetex
 % to have the \text macro
 \usepackage{amstext}
+%\makeatletter
+\def\sf@sfdefault{sf}
+\def\sf@rmdefault{rm}
+\def\sf@ttdefault{tt}
+
+\def\savefont{%
+  %\bgroup%
+  \expandafter\edef\expandafter\sf@series\expandafter{\f@series}%
+  \expandafter\edef\expandafter\sf@shape\expandafter{\f@shape}%
+  %\sf@series
+  \ifx\f@family\sfdefault
+    \let\sf@family\sf@sfdefault
+  \else\ifx\f@family\rmdefault
+    \let\sf@family\sf@rmdefault
+  \else\ifx\f@family\ttdefault
+    \let\sf@family\sf@ttdefault
+  \else
+    \ifthenelse{\equal{\f@family}{\ttdefault}}{
+      \let\sf@family\sf@ttdefault }{ \let\sf@family\relax }
+  \fi\fi\fi%
+  %\egroup%
+}
+\def\restorefont{%
+  %\bgroup%
+  \def\f@series{\sf@series}%
+  \def\f@shape{\sf@shape}%
+  \ifx\sf@family\sf@sfdefault
+    \sffamily
+  \else\ifx\sf@family\sf@rmdefault
+    \rmfamily
+  \else\ifx\sf@family\sf@ttdefault
+    \ttfamily
+  \fi\fi\fi%
+  \selectfont%
+  %\egroup%
+}
+%\makeatother
+
 \else
 
 % Math Support

@@ -18,8 +18,13 @@ Release 0.2.10:
 - Fix SGML to XML conversion through osx
 - Use Info/title to render qansaset headings
 - Use \ensuremath{} to make latin1 from UTF8 conversion more robust
-- Add the doc.layout parameter to configure the overall document layout
-  (deciding if it contains a coverpage, a toc, a frontmatter etc.)
+- Add the parameters:
+  * doc.layout: configure the overall document layout
+    (deciding if it contains a coverpage, a toc, a frontmatter etc.)
+  * variablelist.term.separator,
+  * refentry.generate.name,
+  * ulink.show,
+  * ulink.footnotes.
 - By default, a document subset (i.e. no <article> or <book> root element
   is no more wrapped with an <article>. No more unexpected cover page and
   front matter.

@@ -259,7 +259,7 @@ class Install(install):
         used_stys.sort()
 
         # Dirty...
-        for f in ("truncate", "elfonts", "CJKutf8", "pinyin"):
+        for f in ("truncate", "elfonts", "CJKutf8", "pinyin", "ifxetex"):
             try:
                 used_stys.remove(f)
             except:
@@ -338,6 +338,8 @@ def get_version():
 
 
 if __name__ == "__main__":
+    docs = glob.glob(os.path.join("docs", "*.pdf"))
+    
     setup(name="dblatex",
         version=get_version(),
         description='DocBook to LaTeX/ConTeXt Publishing',
@@ -352,7 +354,7 @@ if __name__ == "__main__":
         package_dir={'dbtexmf':'lib/dbtexmf'},
         package_data={'dbtexmf.core':['sgmlent.txt']},
         data_files=[('share/dblatex', ['xsl', 'latex']),
-                    ('share/doc/dblatex', ['docs/manual.pdf']),
+                    ('share/doc/dblatex', docs),
                     ('share/man/man1', ['docs/manpage/dblatex.1.gz'])],
         scripts=['scripts/dblatex'],
         cmdclass={'build_scripts': BuildScripts,

@@ -194,17 +194,30 @@
 }
 \langsetupdbk{ko}{
 %  \usepackage{hfont}
+  \ifxetex
+  \newenvironment{CJK}{}{}
+  \else
   \hypersetup{unicode}
   \usepackage{CJKutf8}
+  \fi
 }
 \langsetupdbk{zh}{
+  \ifxetex
+  \newenvironment{CJK}{}{}
+  \else
   \hypersetup{unicode}
   \usepackage{CJKutf8}
   \usepackage{pinyin}
+  \fi
+  %\newenvironment{CJK}{}{}
 }
 \langsetupdbk{ja}{
+  \ifxetex
+  \newenvironment{CJK}{}{}
+  \else
   \hypersetup{unicode}
   \usepackage{CJKutf8}
+  \fi
 }
 
 %% Define the babel setups in docbook
@@ -225,11 +238,18 @@
 
 \babelsetup{de}{%
   % Remove those messy "x shorthands
-  \AtBeginDocument{\languageshorthands{none}}
+  % \languageshorthands{none} does not work for lot/lof files
+  \AtBeginDocument{\shorthandoff{"}}
 }
 
 \babelsetup{ru}{%
   % XeTeX works with russian babel only if xecyr is provided
+  \ifxetex\usepackage{xecyr}\fi
+  \AtBeginDocument{\shorthandoff{"}}
+}
+
+\babelsetup{uk}{%
+  % XeTeX works with ukrainian babel only if xecyr is provided
   \ifxetex\usepackage{xecyr}\fi
 }
 

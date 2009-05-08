@@ -33,7 +33,8 @@ class VerbParser:
         self.encoding = output_encoding
         self.default_esc_start = "<:"
         self.default_esc_stop = ":>"
-        self.default_codec = VerbCodec(self.default_esc_start, self.default_esc_stop,
+        self.default_codec = VerbCodec(self.default_esc_start,
+                                       self.default_esc_stop,
                                        output_encoding=output_encoding)
 
     def parse(self, line):
