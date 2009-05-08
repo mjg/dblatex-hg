@@ -4,12 +4,15 @@
 <section id="sec-xref">
 <title>Using XRefsyle and Olinks</title>
 
-<para>With version 0.2.7 you can use the <sgmltag>xrefstyle</sgmltag> attribute
-like you would do with the DocBook Project stylesheets for HTML output.
-Furthermore, you can also use <sgmltag>olink</sgmltag>s.</para>
+<para>Since version 0.2.7 you can use the <sgmltag>xrefstyle</sgmltag> attribute
+like you would do with the DocBook Project stylesheets for HTML output.</para>
 
-<para>Actually, the common DocBook Project stylesheets version 1.72 are now used by
-dblatex to handle all of these features.</para>
+<para>Furthermore, you can also use <sgmltag>olink</sgmltag>s. Note that
+Olinking is used in the PDF version of this manual,
+in <xref linkend="sec-changelog"/>.</para>
+
+<para>Actually, the common DocBook Project stylesheets version 1.72 are now
+used by dblatex to handle all of these features.</para>
 
 <para>These features are fully described in the <ulink url="http://www.sagehill.net/docbookxsl/index.html">DocBook XSL: The Complete Guide</ulink> book by Bob Stayton. In particular, the following sections cover these topics:
 

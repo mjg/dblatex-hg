@@ -50,7 +50,8 @@ $</releaseinfo>
 
 <revdescription>
 <para>The manual does not include the change history anymore. The change
-history is now in the release note</para>
+history is now in the release note. The XSL Parameters are now described as
+reference entries.</para>
 </revdescription>
 </revision>
 
@@ -135,20 +136,8 @@ history is now in the release note</para>
 
 <xi:include href="faq.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-<chapter>
-<title>Thanks</title>
+<xi:include href="thanks.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-<para>Thanks to the people who contributed to the project at its early age:
-Jean-Yves Le Ruyet, precursory and hard-working user, Julien Ducourthial for
-his precious help, Vincent Hottier who asked for the embedded LaTeX equations
-support.</para>
+<xi:include href="params/param.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
-<para>Thanks also to the current contributors: David Hedley (newtbl
-implementor), Andreas Hoenen (Debian maintainer), and Nicolas Pernetty
-(Windows port).</para>
-
-<para>Special thanks to the KDE documentation team, especially Philip
-Rodrigues, Michael Smith from the DocBook Project, and Kai Brommann, for their
-feedbacks, encouragements, and advice.</para>
-</chapter>
 </book>

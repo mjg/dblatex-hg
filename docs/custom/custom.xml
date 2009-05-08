@@ -26,62 +26,22 @@
  </listitem>
   <listitem>
   <para>
-  using a LaTeX post process script.
+  using a <link linkend="sec-texpost">LaTeX post process script</link>.
   </para>
  </listitem>
  </itemizedlist>
  <para>
   All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs"/>) to create a new tool dedicated to your needs.
  </para>
-  <section id="sec-param">
-   <title>XSL Parameters</title>
+<section id="sec-param">
+   <title>Using XSL Parameters</title>
   <para>
-   The PDF rendering can be customised by using some XSL configuration parameters.
-   The available configuration parameters are the following:
+   The PDF rendering can be customised by using some XSL configuration
+   parameters.
+   <xref linkend="sec-params"/> contains the reference documentation of
+   the available user-configurable parameters.
   </para>
-<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="param.xml"/>
-   <section id="sec-defaultscale">
-    <title>imagedata.default.scale</title>
-    <para>Default scale to apply to every <sgmltag>imagedata</sgmltag> that does not
-contain any scaling attribute.</para>
-<para>By default this parameter is set to `pagebound`
-so that the included images keep their natural size up to the page
-boundaries.</para>
-<para>Two other special parameters are available:
-'maxwidth=<replaceable>width</replaceable>' and
-'maxheight=<replaceable>height</replaceable>' where <replaceable>width</replaceable>
-and <replaceable>height</replaceable> define the maximum image
-dimensions, i.e. the image keeps its natural size up to the specified
-maximum dimension. Both 'maxwidth' and 'maxheight' settings can be combined in a
-comma separated list.</para>
-<para>Example:
-<programlisting>dblatex -P imagedata.default.scale=maxwidth=10cm,maxheight=8cm file.xml</programlisting>
-</para>
-<para>Except these special reserved values, the expected value of the parameter
-must be some valid options passed to the \includegraphics command.</para>
 </section>
-   <section id="sec-hyperparam">
-    <title>latex.hyperparam</title>
-   <para>
-    This parameter gives the options to pass to the LaTeX hyperref package. No validity check is done. 
-   </para>
-   <para>
-    For instance, the Table of Content rendering (link color, etc.) can be changed. Look at the hyperref.sty documentation to know all the hyperref options available. 
-   </para>
-<example><title>Configuring with latex.hyperparam</title>
-   <programlisting>
-<![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
-]]><![CDATA[<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
-]]><![CDATA[ 
-]]><![CDATA[<!-- We want TOC links in the titles (not in the page numbers), and blue. 
-]]><![CDATA[ -->
-]]><![CDATA[<xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue</xsl:param>
-]]><![CDATA[
-]]><![CDATA[</xsl:stylesheet>
-]]>   </programlisting>
-</example>
-  </section>
-  </section>
 
 <section id="sec-param-value"><title>Setting Command line Parameters</title>
   <para>You can set some XSL parameters directly from the command
@@ -168,8 +128,8 @@ must be some valid options passed to the \includegraphics command.</para>
   </para>
   <para>
    The <option>--texstyle <replaceable>latex_style</replaceable></option> option
-   accepts a package name (no path and no <filename>.sty</filename> extension) or a
-   full style file path. If a full path is used,
+   accepts a package name (no path and no <filename>.sty</filename> extension)
+   or a full style file path. If a full path is used,
    the filename must ends with <filename>.sty</filename>.
    </para>
    <programlisting>

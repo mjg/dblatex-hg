@@ -110,7 +110,7 @@ to produce DVI, PostScript and PDF files,</para>
 xmlns:xi="http://www.w3.org/2001/XInclude" />.</para>
 </section>
 
-<section>
+<section id="sec-changelog">
 <title>Change History</title>
 
 <para>See the <olink output="pdf" targetdoc="releasenotes" targetptr="intro">Release Notes</olink><ulink output="html" url="http://dblatex.sourceforge.net/release-notes.html">Release Notes</ulink> to have the dblatex change history.</para>

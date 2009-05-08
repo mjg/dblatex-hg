@@ -1,5 +1,5 @@
 <para>The formula 
-  <inlineequation>
+  <inlineequation id="eg-inlineequation">
     <alt>$C = \alpha + \beta Y^{\gamma} + \epsilon$</alt>
     <graphic fileref="figures/eq1"/>
   </inlineequation>
