@@ -3,7 +3,7 @@
 details.</para></listitem>
 
 <listitem><para>A better bibliography support, and natbib citation styles can be
-used (see <olink targetdoc="usermanual" targetptr="sec-natbib"/>).</para></listitem>
+used (see <phrase output="pdf"><olink targetdoc="usermanual" targetptr="sec-natbib"/></phrase><phrase output="html"><ulink url="../manual/index.html">The User Manual</ulink></phrase>).</para></listitem>
 
 <listitem><para>Some table improvements:
   <itemizedlist>

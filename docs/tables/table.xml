@@ -73,16 +73,18 @@
    <section>
     <title>Tables without colwidth</title>
    <para>
-    When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given.
+    When none of the <sgmltag>colspec</sgmltag> elements contains the <sgmltag>colwidth</sgmltag> attribute, all the columns have the same size, and the table width is fixed to the maximum available size. Several examples of these tables are given<phrase output="html"> in the PDF version of this manual</phrase>.
    </para>
+   <para output="pdf">
    <xi:include href="table-eg00.xml"/>
    <xi:include href="table-eg01.xml"/>
    <xi:include href="table-eg02.xml"/>
+   </para>
    </section>
    <section>
     <title>Tables with mixed colspec</title>
    <para>
-    A table can have <sgmltag>colspec</sgmltag> elements containing <sgmltag>colwidth</sgmltag> attribute mixed with <sgmltag>colspec</sgmltag> elements without <sgmltag>colwidth</sgmltag>. The following XML source: 
+    A table can have <sgmltag>colspec</sgmltag> elements containing <sgmltag>colwidth</sgmltag> attribute mixed with <sgmltag>colspec</sgmltag> elements without <sgmltag>colwidth</sgmltag>. Here is an XML source example:
    </para>
    <programlisting>
 <![CDATA[<informaltable>
@@ -98,15 +100,18 @@
   </tgroup>
 </informaltable>
 ]]>   </programlisting>
-   <para>
-    is rendered like this:
+   <para output="pdf">
+    It is rendered like this:
+    <xi:include href="table-eg1.xml"/>
    </para>
-   <xi:include href="table-eg1.xml"/>
+   <para output="html">
+   See the PDF version of this manual to see how it is rendered.
+   </para>
    </section>
    <section>
     <title>Tables with proportional and fixed colwidth</title>
    <para>
-    Proportional column widths are supported. The following XML source:
+    Proportional column widths are supported. Here is an example:
    </para>
    <programlisting>
 <![CDATA[<informaltable>
@@ -122,10 +127,10 @@
   </tgroup>
 </informaltable>
 ]]>   </programlisting>
-   <para>
-    gives this table:
-   </para>
+   <para output="pdf">
+    It gives this table:
    <xi:include href="table-eg2.xml"/>
+   </para>
    </section>
    <section>
     <title>Tables with fixed colwidths</title>
@@ -145,10 +150,10 @@
   </tgroup>
 </informaltable>
 ]]>   </programlisting>
-   <para>
+   <para output="pdf">
     It gives the following table:
-   </para>
    <xi:include href="table-eg3.xml"/>
+   </para>
    </section>
    <section id="sec-newtbl-autowidth">
    <title>Automatic column width</title>
@@ -199,17 +204,15 @@
   </tgroup>
 </informaltable>
 ]]>   </programlisting>
-   <para>
+   <para output="pdf">
     Here is an example of table containing several entries with morerows attribute:
-   </para>
    <xi:include href="table-eg4.xml"/>
+   </para>
    </section>
    <section>
-    <title>
-    Landscape tables
-   </title>
+    <title>Landscape tables</title>
    <para>
-    A table can be displayed in a lanscape format by using the <sgmltag>orient</sgmltag> attribute. The following XML source is an example. 
+    A table can be displayed in a lanscape format by using the <sgmltag>orient</sgmltag> attribute. Here is an XML source example:
    </para>
    <programlisting>
 <![CDATA[<informaltable orient="land">
@@ -222,10 +225,10 @@
   </tgroup>
 </informaltable>
 ]]>   </programlisting>
-   <para>
+   <para output="pdf">
     Here is how it is displayed.
-   </para>
    <xi:include href="table-land.xml"/>
+   </para>
    </section>
    <section>
     <title>Smaller tables</title>
@@ -260,13 +263,13 @@
     </para>
    </listitem>
    </itemizedlist>
-   <para>
+   <para output="pdf">
     Here are examples for each size.
-   </para>
    <xi:include href="table-small1.xml"/>
    <xi:include href="table-small2.xml"/>
    <xi:include href="table-small3.xml"/>
    <xi:include href="table-small4.xml"/>
+   </para>
    </section>
 <section>
 <title>Coloured tables</title>
@@ -283,8 +286,18 @@ colour.</para>
 <para>The color can be expressed in hexadecimal notation like for HTML (e.g.
 <literal>#C0C0C0</literal>) or in a syntax understood by the
 <filename>colortbl</filename> latex package.</para>
-<para>Here is an example.</para>
-<xi:include href="coloured.xml"/>
+<para>Here is a<phrase output="pdf">n</phrase><phrase output="html"> PDF output</phrase> example.</para>
+<para output="pdf"><xi:include href="coloured.xml"/></para>
+
+<!-- The image img-tbl-color.png was built with the command line:
+     ../tools/imagefrom manual.xml tbl-color 
+-->
+<mediaobject output="html">
+  <imageobject>
+    <imagedata align="center" fileref="img-tbl-color"/>
+  </imageobject>
+</mediaobject>
+
 <para>This table is coded like this:</para>
 <programlisting><xi:include href="coloured.xml" parse="text"/></programlisting>
 </section>

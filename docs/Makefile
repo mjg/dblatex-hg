@@ -9,11 +9,21 @@ XSLMAN = $(XSLDBK)/manpages/docbook.xsl
 XSLHTML = $(XSLDBK)/html/chunk.xsl
 XSLPROFH = $(XSLDBK)/html/profile-chunk.xsl
 XSLOLINK = $(XSLDBK)/html/docbook.xsl
-HTMLDIR = html/
+HTMLDIRUM = html/manual/
+HTMLDIRRN = html/release-notes/
 CP = cp
 HERE = $(shell pwd)
 
-# Where to fing the manual and the release notes
+HTML_PARAMS = --param ignore.image.scaling "'1'" \
+	      --param graphic.default.extension "'png'" \
+	      --param refentry.generate.name "0" \
+	      --param refentry.generate.title "1" \
+	      --param profile.attribute "'output'" \
+              --param profile.value "'manual;html'" \
+	      --param generate.section.toc.level "3" \
+	      --param html.stylesheet "'manual.css'" \
+
+# Where to find the manual and the release notes
 vpath %.xml . changes
 
 all: olink manual.pdf manpagegz release-notes.pdf
@@ -22,26 +32,29 @@ allstyle: all native db2latex simple
 
 olink: manual.db release-notes.db
 
-# profile:
+# Build and zip the Manpage
 manpagegz:
 	@$(MAKE) -C manpage -f ../Makefile dblatex.1.gz
 
-htmldir: manual.xml
-	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIR)'" \
-	                  --param ignore.image.scaling "'1'" \
-	                  --param graphic.default.extension "'png'" \
-			  --param profile.attribute "'output'" \
-                          --param profile.value "'manual;html'" \
-			  --param html.stylesheet "'manual.css'" \
+manual.html: manual.xml
+	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRUM)'" \
+			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<
-	convert -trim -rotate 90 processus.fig $(HTMLDIR)/processus.png
-	$(CP) -r math/figures $(HTMLDIR)/.
-	$(CP) manual.css $(HTMLDIR)/.
+	convert -trim -rotate 90 processus.fig $(HTMLDIRUM)/processus.png
+	$(CP) tables/*.png $(HTMLDIRUM)/.
+	$(CP) -r math/figures $(HTMLDIRUM)/.
+	$(CP) manual.css $(HTMLDIRUM)/.
+
+changes.html: release-notes.xml
+	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRRN)'" \
+			  $(HTML_PARAMS) \
+			  $(XSLPROFH) $<
+	$(CP) manual.css $(HTMLDIRRN)/.
 
 clean:
 	$(RM) manual.pdf release-notes.pdf *.db
 	$(RM) $(FIGURES) manpage/dblatex.1.gz
-	$(RM) -r $(HTMLDIR)
+	$(RM) -r $(HTMLDIRUM)
 
 native db2latex simple: version.xml
 	$(XSLTPROC) --xinclude \
