@@ -35,7 +35,9 @@
   </xsl:when>
   <!-- If an xreflabel has been specified for the target -->
   <xsl:when test="$target/@xreflabel">
-    <xsl:value-of select="$target/@xreflabel"/>
+    <xsl:call-template name="scape">
+      <xsl:with-param name="string" select="$target/@xreflabel"/>
+    </xsl:call-template>
   </xsl:when>
   <!-- nothing specified -->
   <xsl:otherwise/>
@@ -108,38 +110,44 @@
 
 <!-- ==================================================================== -->
 
-<xsl:template match="ulink">
+<xsl:template name="ulink-encode">
+  <xsl:param name="escape" select="0"/>
+
   <!-- messy sharp (#) in newtbl table cells, so escape it -->
+  <xsl:call-template name="scape-encode">
+    <xsl:with-param name="string">
+      <xsl:choose>
+      <xsl:when test="$escape != 0 or ancestor::entry or ancestor::revision or
+                      ancestor::footnote or ancestor::term">
+        <xsl:call-template name="string-replace">
+          <xsl:with-param name="string">
+            <xsl:call-template name="string-replace">
+              <xsl:with-param name="string">
+                <xsl:call-template name="string-replace">
+                  <xsl:with-param name="string" select="@url"/>
+                  <xsl:with-param name="from" select="'%'"/>
+                  <xsl:with-param name="to" select="'\%'"/>
+                </xsl:call-template>
+              </xsl:with-param>
+              <xsl:with-param name="from" select="'#'"/>
+              <xsl:with-param name="to" select="'\#'"/>
+            </xsl:call-template>
+          </xsl:with-param>
+          <xsl:with-param name="from" select="'&amp;'"/>
+          <xsl:with-param name="to" select="'\&amp;'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@url"/>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="ulink">
   <xsl:variable name="url">
-    <xsl:call-template name="scape-encode">
-      <xsl:with-param name="string">
-        <xsl:choose>
-        <xsl:when test="ancestor::entry or ancestor::revision or
-                        ancestor::footnote">
-          <xsl:call-template name="string-replace">
-            <xsl:with-param name="string">
-              <xsl:call-template name="string-replace">
-                <xsl:with-param name="string">
-                  <xsl:call-template name="string-replace">
-                    <xsl:with-param name="string" select="@url"/>
-                    <xsl:with-param name="from" select="'%'"/>
-                    <xsl:with-param name="to" select="'\%'"/>
-                  </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="from" select="'#'"/>
-                <xsl:with-param name="to" select="'\#'"/>
-              </xsl:call-template>
-            </xsl:with-param>
-            <xsl:with-param name="from" select="'&amp;'"/>
-            <xsl:with-param name="to" select="'\&amp;'"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@url"/>
-        </xsl:otherwise>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:call-template name="ulink-encode"/>
   </xsl:variable>
 
   <xsl:choose>
@@ -155,6 +163,33 @@
     <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
     <xsl:apply-templates mode="slash.hyphen"/>
     <xsl:text>}</xsl:text>
+
+    <xsl:if test="count(child::node()) != 0
+                  and string(.) != @url
+                  and $ulink.show != 0">
+      <!-- yes, show the URI -->
+      <xsl:choose>
+        <xsl:when test="$ulink.footnotes != 0 and not(ancestor::footnote)">
+          <xsl:text>\footnote{</xsl:text>
+          <xsl:text>\url{</xsl:text>
+          <!-- Beware URL in a footnote -->
+          <xsl:call-template name="ulink-encode">
+            <xsl:with-param name="escape" select="1"/>
+          </xsl:call-template>
+          <xsl:text>}</xsl:text>
+          <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- Append the URL after the hyperlink -->
+          <xsl:text> [</xsl:text>
+          <xsl:text>\url{</xsl:text>
+          <xsl:value-of select="$url"/>
+          <xsl:text>}</xsl:text>
+          <xsl:text>]</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -534,7 +569,7 @@
           <xsl:text>'.</xsl:text>
         </xsl:message>
       </xsl:if>
-    
+
       <xsl:variable name="olink.key">
         <xsl:call-template name="select.olink.key">
           <xsl:with-param name="targetdoc.att" select="$targetdoc.att"/>
