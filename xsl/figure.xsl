@@ -29,6 +29,9 @@
   <xsl:if test="$figure.title.top = '1'">
     <xsl:apply-templates select="title"/>
   </xsl:if>
+  <!--
+  <xsl:text>&#10;\centering&#10;</xsl:text>
+  -->
   <xsl:text>&#10;\begin{center}&#10;</xsl:text>
   <xsl:apply-templates select="*[not(self::title)]"/>
   <xsl:text>&#10;\end{center}&#10;</xsl:text>

@@ -46,7 +46,7 @@
 </xsl:template>
 
 
-<!-- replace some text in a string *as is* the string is already escaped.
+<!-- replace some text in a string *as if* the string is already escaped.
      Here it ends to inserting raw text between tags. -->
 <xsl:template name="scape-replace" >
   <xsl:param name="string"/>

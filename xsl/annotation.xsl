@@ -26,11 +26,11 @@
   <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
   <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
 
-  <xsl:text>\usepackage[hyperlink,article]{</xsl:text>
+  <xsl:call-template name="font.setup"/>
+  <xsl:text>\usepackage[hyperlink]{</xsl:text>
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
 
-  <xsl:call-template name="font.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="lang.setup"/>
 

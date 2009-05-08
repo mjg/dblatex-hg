@@ -34,7 +34,7 @@
 <xsl:template match="/" mode="doc-wrap-with">
   <xsl:param name="root"/>
   <xsl:message>
-    <xsl:text>*** Warning: element wrapped with </xsl:text>
+    <xsl:text>Warning: element wrapped with </xsl:text>
     <xsl:value-of select="$root"/>
   </xsl:message>
 
@@ -62,7 +62,7 @@
 
 <xsl:template match="/" mode="doc-wrap">
   <xsl:message>
-    <xsl:text>*** Warning: the root element is not an article nor a book</xsl:text>
+    <xsl:text>Warning: the root element is not an article nor a book</xsl:text>
   </xsl:message>
   <xsl:variable name="root">
     <xsl:choose>
@@ -80,7 +80,8 @@
     </xsl:apply-templates>
   </xsl:variable>
 
-  <xsl:apply-templates select="exsl:node-set($rnode)/*"/>
+  <!-- Process the DocBook document subset -->
+  <xsl:apply-templates select="exsl:node-set($rnode)/*" mode="wrapper"/>
 </xsl:template>
 
 
@@ -88,8 +89,9 @@
   <xsl:param name="rfs" select="0"/>
   <xsl:if test="$rfs=0">
     <xsl:message>
-    <xsl:text>XSLT stylesheets DocBook -  LaTeX 2e </xsl:text>
-    <xsl:text>(</xsl:text><xsl:value-of select="$version"/><xsl:text>)</xsl:text>
+    <xsl:text>XSLT stylesheets DocBook - LaTeX 2e </xsl:text>
+    <xsl:text>(</xsl:text>
+    <xsl:value-of select="$version"/><xsl:text>)</xsl:text>
     </xsl:message>
     <xsl:message>===================================================</xsl:message>
   </xsl:if>

@@ -25,6 +25,8 @@
   <xsl:param name="level"/>
   <xsl:param name="name"/>
   <xsl:param name="command"/>
+  <!-- Title must be a node -->
+  <xsl:param name="title" select="title"/>
 
   <xsl:variable name="rcommand">
     <xsl:choose>
@@ -43,7 +45,7 @@
   </xsl:variable>
 
   <xsl:value-of select="$rcommand"/>
-  <xsl:apply-templates select="title" mode="format.title">
+  <xsl:apply-templates select="$title" mode="format.title">
     <xsl:with-param name="allnum" select="$allnum"/>
   </xsl:apply-templates>
   <xsl:call-template name="label.id"/>
@@ -86,14 +88,15 @@
   <xsl:param name="object" select="."/>
   <xsl:param name="string" select="''"/>
   <xsl:param name="inline" select="0"/>
+  <!-- object.id cannot be used since it always provide an id -->
   <xsl:variable name="id">
     <xsl:choose>
       <xsl:when test="$object/@id">
         <xsl:value-of select="$object/@id"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="''"/>
-      </xsl:otherwise>
+      <xsl:when test="$object/@xml:id">
+        <xsl:value-of select="$object/@xml:id"/>
+      </xsl:when>
     </xsl:choose>
   </xsl:variable>
 

@@ -6,6 +6,7 @@
     ############################################################################ -->
 <xsl:param name="refentry.tocdepth">5</xsl:param>
 <xsl:param name="refentry.numbered">1</xsl:param>
+<xsl:param name="refentry.generate.name" select="0"/>
 
 
 <xsl:template name="refsect.level">
@@ -140,26 +141,30 @@
      ############## -->
 
 <xsl:template match="refnamediv">
-  <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="num" select="'0'"/>
-    <xsl:with-param name="level">
-      <xsl:call-template name="refsect.level"/>
-    </xsl:with-param>
-  </xsl:call-template>
-  <xsl:text>{</xsl:text>
-  <xsl:choose>
-    <xsl:when test="$refnamediv.title=''">
-      <xsl:call-template name="gentext.element.name">
-        <xsl:with-param name="element.name" select="'refname'"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select= "$refnamediv.title"/>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>}</xsl:text>
-  <xsl:call-template name="label.id"/>
-  <xsl:text>&#10;</xsl:text>
+  <!-- Generate a localized "Name" subheading if is non-zero -->
+  <xsl:if test="$refentry.generate.name != 0">
+    <xsl:call-template name="map.sect.level">
+      <xsl:with-param name="num" select="'0'"/>
+      <xsl:with-param name="level">
+        <xsl:call-template name="refsect.level"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>{</xsl:text>
+    <xsl:choose>
+      <xsl:when test="$refnamediv.title=''">
+        <xsl:call-template name="gentext.element.name">
+          <xsl:with-param name="element.name" select="'refname'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select= "$refnamediv.title"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="label.id"/>
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
+
   <!-- refdescriptor is used only if no refname -->
   <xsl:choose>
   <xsl:when test="refname">

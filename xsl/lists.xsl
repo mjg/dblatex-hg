@@ -7,6 +7,7 @@
 
 <!-- Lists parameters -->
 <xsl:param name="seg.item.separator">, </xsl:param>
+<xsl:param name="variablelist.term.separator">, </xsl:param>
 <xsl:param name="term.breakline">0</xsl:param>
 
 
@@ -118,7 +119,7 @@
 <xsl:template match="varlistentry/term">
   <xsl:apply-templates/>
   <xsl:if test="position()!=last()">
-    <xsl:text>, </xsl:text>
+    <xsl:value-of select="$variablelist.term.separator"/>
   </xsl:if>
 </xsl:template>
 

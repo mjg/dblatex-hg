@@ -72,10 +72,34 @@
       <xsl:with-param name="from">|</xsl:with-param>
       <xsl:with-param name="to">\ensuremath{"|}</xsl:with-param>
       <xsl:with-param name="string">
-        <xsl:call-template name="normalize-scape">
-          <xsl:with-param name="string" select="$string"/>
-        </xsl:call-template>
-      </xsl:with-param>
+        <!-- if '\{' and '\}' count is not in the same in the
+             index term, latex indexing fails.
+             so use a macro to avoid this side effect -->
+        <xsl:call-template name="scape-replace">
+        <xsl:with-param name="from">\tbleft </xsl:with-param>
+        <xsl:with-param name="to">\textbraceleft{}</xsl:with-param>
+        <xsl:with-param name="string">
+          <xsl:call-template name="scape-replace">
+          <xsl:with-param name="from">\tbright </xsl:with-param>
+          <xsl:with-param name="to">\textbraceright{}</xsl:with-param>
+          <xsl:with-param name="string">
+            <!-- need two passes to avoid mess with macro ending with {} -->
+            <xsl:call-template name="scape-replace">
+            <xsl:with-param name="from">{</xsl:with-param>
+            <xsl:with-param name="to">\tbleft </xsl:with-param>
+            <xsl:with-param name="string">
+              <xsl:call-template name="scape-replace">
+              <xsl:with-param name="from">}</xsl:with-param>
+              <xsl:with-param name="to">\tbright </xsl:with-param>
+              <xsl:with-param name="string">
+                <xsl:call-template name="normalize-scape">
+                  <xsl:with-param name="string" select="$string"/>
+                </xsl:call-template>
+              </xsl:with-param>
+              </xsl:call-template></xsl:with-param>
+            </xsl:call-template></xsl:with-param>
+          </xsl:call-template></xsl:with-param>
+        </xsl:call-template></xsl:with-param>
       </xsl:call-template></xsl:with-param>
     </xsl:call-template></xsl:with-param>
   </xsl:call-template>

@@ -19,7 +19,9 @@
 <xsl:template match="*[not(self::indexterm or
                            self::calloutlist or
                            self::programlisting or
-                           self::screen)]">
+                           self::screen or
+                           self::book or
+                           self::article)]">
   <xsl:call-template name="apply-templates"/>
 </xsl:template>
 

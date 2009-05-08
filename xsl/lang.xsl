@@ -11,6 +11,7 @@
 <xsl:param name="xetex.font">
   <xsl:text>\setmainfont{DejaVu Serif}&#10;</xsl:text>
   <xsl:text>\setsansfont{DejaVu Sans}&#10;</xsl:text>
+  <xsl:text>\setmonofont{DejaVu Sans Mono}&#10;</xsl:text>
 </xsl:param>
 
 
@@ -192,7 +193,13 @@
   </xsl:variable>
 
   <!-- XeTeX preamble to handle fonts -->
-  <xsl:text>\usepackage{ifxetex}&#10;</xsl:text>
+  <xsl:text>\IfFileExists{ifxetex.sty}{%
+    \usepackage{ifxetex}%
+  }{%
+    \newif\ifxetex
+    \xetexfalse
+  }
+  </xsl:text>
   <xsl:text>\ifxetex&#10;</xsl:text>
   <xsl:text>\usepackage{fontspec}&#10;</xsl:text>
   <xsl:text>\usepackage{xltxtra}&#10;</xsl:text>
@@ -235,5 +242,15 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Font setup, used by annotation files embedded in main files -->
+<xsl:template name="font.setup">
+  <xsl:param name="lang"/>
+  <xsl:call-template name="encode.before.style">
+    <xsl:with-param name="lang" select="$lang"/>
+  </xsl:call-template>
+  <xsl:call-template name="encode.after.style">
+    <xsl:with-param name="lang" select="$lang"/>
+  </xsl:call-template>
+</xsl:template>
 
 </xsl:stylesheet>

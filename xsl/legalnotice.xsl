@@ -24,7 +24,7 @@
     <xsl:text>&#10;%% Legalnotices&#10;</xsl:text>
     <!-- beware, save verbatim since we use a command -->
     <xsl:apply-templates select="$nodes" mode="save.verbatim"/>
-    <xsl:text>\renewcommand{\DBKlegalblock}{&#10;</xsl:text>
+    <xsl:text>\def\DBKlegalblock{&#10;</xsl:text>
     <xsl:apply-templates select="$nodes"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>

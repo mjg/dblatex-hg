@@ -71,6 +71,8 @@
 <xsl:param name="insert.olink.pdf.frag" select="1"/>
 <xsl:param name="current.docid"/>
 
+<xsl:param name="ulink.footnotes" select="0"/>
+<xsl:param name="ulink.show" select="0"/>
 
 <xsl:variable name="latex.book.afterauthor">
   <xsl:text>% --------------------------------------------&#10;</xsl:text>

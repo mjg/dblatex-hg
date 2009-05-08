@@ -219,7 +219,9 @@
 
 <xsl:template match="filename">
   <xsl:choose>
-  <xsl:when test="$filename.as.url='1' and not(ancestor::title)">
+  <!-- \Url cannot stand in a section heading -->
+  <xsl:when test="$filename.as.url='1' and
+                  not(ancestor::title or ancestor::refentrytitle)">
     <!-- Guess hyperref is always used now. -->
     <xsl:call-template name="nolinkurl-output">
       <xsl:with-param name="url" select="."/>

@@ -49,10 +49,17 @@
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <!-- pgwide usefull in two column mode -->
+  <xsl:variable name="table.env">
+    <xsl:text>table</xsl:text>
+    <xsl:if test="@pgwide='1'">
+      <xsl:text>*</xsl:text>
+    </xsl:if>
+  </xsl:variable>
   <xsl:if test="@orient='land'">
     <xsl:text>\begin{landscape}&#10;</xsl:text>
   </xsl:if>
-  <xsl:text>\begin{table}</xsl:text>
+  <xsl:value-of select="concat('\begin{', $table.env, '}')"/>
   <!-- table placement preference -->
   <xsl:choose>
     <xsl:when test="@floatstyle != ''">
@@ -86,7 +93,7 @@
   <xsl:if test="$table.title.top='0'">
     <xsl:apply-templates select="title"/>
   </xsl:if>
-  <xsl:text>\end{table}&#10;</xsl:text>
+  <xsl:value-of select="concat('\end{', $table.env, '}&#10;')"/>
   <xsl:if test="@orient='land'">
     <xsl:text>\end{landscape}&#10;</xsl:text>
   </xsl:if>

@@ -26,6 +26,16 @@
 </xsl:template>
 
 <xsl:template match="equation">
+  <xsl:variable name="delim">
+    <xsl:if test="descendant::alt/processing-instruction('texmath')">
+      <xsl:call-template name="pi-attribute">
+        <xsl:with-param name="pis"
+                   select="descendant::alt/processing-instruction('texmath')"/>
+        <xsl:with-param name="attribute" select="'delimiters'"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:variable>
+
   <xsl:choose>
   <xsl:when test="title">
     <xsl:text>&#10;\begin{dbequation}</xsl:text>
@@ -48,6 +58,10 @@
     <xsl:call-template name="label.id"/>
     <xsl:text>&#10;\end{dbequation}&#10;</xsl:text>
   </xsl:when>
+  <xsl:when test="$delim='user'">
+    <!-- The user provide its own environment -->
+    <xsl:call-template name="equation"/>
+  </xsl:when>
   <xsl:otherwise>
     <!-- This is an actual LaTeX equation -->
     <xsl:text>&#10;\begin{equation}&#10;</xsl:text>
@@ -67,12 +81,25 @@
 <!-- Direct copy of the content -->
 
 <xsl:template match="alt" mode="latex">
+  <xsl:variable name="delim">
+    <xsl:if test="processing-instruction('texmath')">
+      <xsl:call-template name="pi-attribute">
+        <xsl:with-param name="pis"
+                   select="processing-instruction('texmath')"/>
+        <xsl:with-param name="attribute" select="'delimiters'"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:variable>
+
   <xsl:variable name="tex">
+    <xsl:variable name="text" select="normalize-space(.)"/>
+    <xsl:variable name="len" select="string-length($text)"/>
     <xsl:choose>
+    <xsl:when test="$delim='user'">
+      <xsl:copy-of select="."/>
+    </xsl:when>
     <xsl:when test="ancestor::equation[not(child::title)]">
       <!-- Remove any math mode in an equation environment -->
-      <xsl:variable name="text" select="normalize-space(.)"/>
-      <xsl:variable name="len" select="string-length($text)"/>
       <xsl:choose>
       <xsl:when test="starts-with($text,'$') and
                       substring($text,$len,$len)='$'">
@@ -93,7 +120,21 @@
     <xsl:when test="ancestor::equation or
                     ancestor::informalequation or
                     ancestor::inlineequation">
-      <xsl:copy-of select="."/>
+      <!-- Keep the specified math mode... -->
+      <xsl:choose>
+      <xsl:when test="(starts-with($text,'\[') and
+                       substring($text,$len - 1,$len)='\]') or
+                      (starts-with($text,'\(') and
+                       substring($text,$len - 1,$len)='\)') or
+                      (starts-with($text,'$') and
+                       substring($text,$len,$len)='$')">
+        <xsl:copy-of select="$text"/>
+      </xsl:when>
+      <!-- ...Or wrap in default math mode -->
+      <xsl:otherwise>
+        <xsl:copy-of select="concat('$', $text, '$')"/>
+      </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
     <xsl:otherwise/>
     </xsl:choose>

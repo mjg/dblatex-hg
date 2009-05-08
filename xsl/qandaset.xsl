@@ -11,29 +11,17 @@
 
 <xsl:template match="qandaset">
   <!-- is it displayed as a section? -->
-  <xsl:variable name="title">
-    <xsl:choose>
-    <xsl:when test="title">
-      <xsl:value-of select="title"/>
-    </xsl:when>
-    <xsl:when test="blockinfo/title">
-      <xsl:value-of select="blockinfo/title"/>
-    </xsl:when>
-    <xsl:otherwise></xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
+  <xsl:variable name="title"
+                select="(title|blockinfo/title|info/title)[1]"/>
 
-  <xsl:if test="$title!=''">
-    <xsl:call-template name="map.sect.level">
+  <xsl:if test="$title">
+    <xsl:call-template name="makeheading">
       <xsl:with-param name="level">
         <xsl:call-template name="get.sect.level"/>
       </xsl:with-param>
       <xsl:with-param name="num" select="'0'"/>
+      <xsl:with-param name="title" select="$title"/>
     </xsl:call-template>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$title"/>
-    <xsl:text>}&#10;</xsl:text>
-    <xsl:call-template name="label.id"/>
   </xsl:if>
 
   <xsl:apply-templates/>
@@ -60,10 +48,10 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:call-template name="map.sect.level">
+  <xsl:call-template name="makeheading">
     <xsl:with-param name="level">
       <xsl:choose>
-      <xsl:when test="ancestor::qandaset[title|blockinfo/title]">
+      <xsl:when test="ancestor::qandaset[title|blockinfo/title|info/title]">
         <xsl:value-of select="$l+$lset+1"/>
       </xsl:when>
       <xsl:otherwise>
@@ -72,10 +60,6 @@
       </xsl:choose>
     </xsl:with-param>
   </xsl:call-template>
-  <xsl:text>{</xsl:text>
-  <xsl:value-of select="title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
 
   <xsl:apply-templates/>
 </xsl:template>

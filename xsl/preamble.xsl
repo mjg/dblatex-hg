@@ -12,6 +12,7 @@
 <xsl:param name="doc.publisher.show">0</xsl:param>
 <xsl:param name="doc.collab.show">1</xsl:param>
 <xsl:param name="doc.alignment"/>
+<xsl:param name="doc.layout">coverpage toc frontmatter mainmatter index </xsl:param>
 <xsl:param name="set.book.num">1</xsl:param>
 <xsl:param name="draft.mode">maybe</xsl:param>
 <xsl:param name="draft.watermark">1</xsl:param>
@@ -281,7 +282,7 @@
 <xsl:template match="bookinfo|articleinfo|info" mode="docinfo">
   <!-- special case for copyrights, managed as a group -->
   <xsl:if test="copyright">
-    <xsl:text>\renewcommand{\DBKcopyright}{</xsl:text>
+    <xsl:text>\def\DBKcopyright{</xsl:text>
     <xsl:apply-templates select="copyright" mode="titlepage.mode"/>
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
@@ -354,7 +355,7 @@
 </xsl:template>
 
 <xsl:template match="subtitle" mode="docinfo">
-  <xsl:text>\renewcommand{\DBKsubtitle}{</xsl:text>
+  <xsl:text>\def\DBKsubtitle{</xsl:text>
   <xsl:call-template name="normalize-scape">
     <xsl:with-param name="string" select="."/>
   </xsl:call-template>
@@ -399,7 +400,22 @@
      # Main template #
      ################# -->
 
+<!-- A DocBook subset does not contain coverpage and so on,
+     so use a minimal layout
+-->
+<xsl:template match="book|article" mode="wrapper">
+  <xsl:apply-templates select=".">
+    <xsl:with-param name="layout">
+      <xsl:if test="contains($doc.layout, 'index ')">
+        <xsl:text>index </xsl:text>
+      </xsl:if>
+    </xsl:with-param>
+  </xsl:apply-templates>
+</xsl:template>
+
 <xsl:template match="book|article">
+  <xsl:param name="layout" select="$doc.layout"/>
+
   <xsl:variable name="info" select="bookinfo|articleinfo|artheader|info"/>
   <xsl:variable name="lang">
     <xsl:call-template name="l10n.language">
@@ -423,11 +439,18 @@
     <xsl:with-param name="nodes" select="$info/legalnotice"/>
   </xsl:call-template>
 
-  <xsl:value-of select="$frontmatter"/>
-  <xsl:text>\maketitle&#10;</xsl:text>
+  <xsl:if test="contains($layout, 'frontmatter ')">
+    <xsl:value-of select="$frontmatter"/>
+  </xsl:if>
+
+  <xsl:if test="contains($layout, 'coverpage ')">
+    <xsl:text>\maketitle&#10;</xsl:text>
+  </xsl:if>
 
   <!-- Print the TOC/LOTs -->
-  <xsl:apply-templates select="." mode="toc_lots"/>
+  <xsl:if test="contains($layout, 'toc ')">
+    <xsl:apply-templates select="." mode="toc_lots"/>
+  </xsl:if>
   <xsl:call-template name="label.id"/>
 
   <!-- Print the abstract and front matter content -->
@@ -435,15 +458,19 @@
   <xsl:apply-templates select="dedication|preface"/>
 
   <!-- Body content -->
-  <xsl:value-of select="$mainmatter"/>
+  <xsl:if test="contains($layout, 'mainmatter ')">
+    <xsl:value-of select="$mainmatter"/>
+  </xsl:if>
   <xsl:apply-templates select="*[not(self::abstract or
                                      self::preface or
                                      self::dedication or
                                      self::colophon)]"/>
 
   <!-- Back matter -->
-  <xsl:if test="*//indexterm|*//keyword">
-    <xsl:text>\printindex&#10;</xsl:text>
+  <xsl:if test="contains($layout, 'index ')">
+    <xsl:if test="*//indexterm|*//keyword">
+      <xsl:text>\printindex&#10;</xsl:text>
+    </xsl:if>
   </xsl:if>
   <xsl:apply-templates select="colophon"/>
   <xsl:call-template name="lang.document.end">
