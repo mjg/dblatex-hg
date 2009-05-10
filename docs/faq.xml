@@ -88,4 +88,25 @@ instead.</para>
 cannot be put in another float like an example. You can use an <sgmltag>informaltable</sgmltag> instead.</para>
 </simplesect>
 
+<simplesect><title>I cannot compile my cyrillic document. Why?</title>
+<para>A document using some characters different from the roman alphabet may face some troubles, because latex natively handles only latin1 encoding.</para>
+<para>Try the different unicode supports provided by dblatex:
+
+<itemizedlist>
+<listitem>
+<para>Use the XeTeX backend, a new tex engine that natively supports Unicode
+characters: <literal>dblatex -b xetex file.xml</literal>.</para>
+</listitem>
+<listitem>
+<para>Ask for using the latex unicode support by setting the <parameter>latex.encoding</parameter>=utf8 parameter: <literal>dblatex -P latex.encoding=utf8 file.xml</literal>.</para>
+</listitem>
+<listitem>
+<para>Use the Passivetex extensions by setting the <parameter>latex.unicode.use</parameter>=1 parameter: <literal>dblatex -P latex.unicode.use=1 file.xml</literal>.</para>
+</listitem>
+</itemizedlist>
+
+</para>
+<para>See <xref linkend="sec-doc-encode"/> for more details.</para>
+</simplesect>
+
 </chapter>
