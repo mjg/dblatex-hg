@@ -16,13 +16,14 @@ HERE = $(shell pwd)
 
 HTML_PARAMS = --param ignore.image.scaling "'1'" \
 	      --param graphic.default.extension "'png'" \
+	      --param use.id.as.filename "1" \
 	      --param refentry.generate.name "0" \
 	      --param refentry.generate.title "1" \
 	      --param profile.attribute "'output'" \
               --param profile.value "'manual;html'" \
 	      --param othercredit.like.author.enabled "1" \
 	      --param generate.section.toc.level "3" \
-	      --param html.stylesheet "'manual.css'" \
+	      --param html.stylesheet "'manual.css'"
 
 # Where to find the manual and the release notes
 vpath %.xml . changes

@@ -12,15 +12,41 @@ more robust.</para>
 </listitem>
 
 <listitem>
-<para>Add the <parameter>doc.layout</parameter> parameter to configure the
-overall document layout (deciding if it contains a coverpage, a toc, a
-frontmatter etc.).</para>
+<para>Add the parameters:</para>
+
+<itemizedlist>
+<listitem>
+<para><parameter>doc.layout</parameter> parameter to configure the overall
+document layout (deciding if it contains a coverpage, a toc, a frontmatter
+etc.).</para>
 </listitem>
 
 <listitem>
-<para>By default, a document subset (i.e. the root element is not an <sgmltag>article</sgmltag> nor a
-<sgmltag>book</sgmltag>) is no more wrapped with an
-<sgmltag>article</sgmltag>. No more unexpected cover page and front
+<para><parameter>variablelist.term.separator</parameter> (common with DocBook
+Project),</para>
+</listitem>
+
+<listitem>
+<para><parameter>refentry.generate.name</parameter> (common with DocBook
+Project),</para>
+</listitem>
+
+<listitem>
+<para><parameter>ulink.show</parameter> (mechanism extended with
+@xrefstyle),</para>
+</listitem>
+
+<listitem>
+<para><parameter>ulink.footnotes</parameter> (mechanism extended with
+@xrefstyle).</para>
+</listitem>
+</itemizedlist>
+</listitem>
+
+<listitem>
+<para>By default, a document subset (i.e. the root element is not an
+<sgmltag>article</sgmltag> nor a <sgmltag>book</sgmltag>) is no more wrapped
+with an <sgmltag>article</sgmltag>. No more unexpected cover page and front
 matter.</para>
 </listitem>
 

@@ -44,14 +44,15 @@
     <xsl:when test="$language='cpp'">
       <xsl:apply-templates select="." mode="cpp"/></xsl:when>
     <xsl:otherwise>
-    <xsl:message>
-      <xsl:text>*** Unrecognized language on classsynopsis: </xsl:text>
-      <xsl:value-of select="$language"/>
-    </xsl:message>
-    <xsl:apply-templates select="." mode="content">
-      <xsl:with-param name="language"  select="$classsynopsis.default.language"/>
-    </xsl:apply-templates>
-  </xsl:otherwise>
+      <xsl:message>
+        <xsl:text>Unrecognized language on classsynopsis: </xsl:text>
+        <xsl:value-of select="$language"/>
+      </xsl:message>
+      <xsl:apply-templates select="." mode="content">
+        <xsl:with-param name="language"
+           select="$classsynopsis.default.language"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
 

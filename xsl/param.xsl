@@ -21,8 +21,6 @@
 
 <xsl:param name="biblioentry.item.separator">, </xsl:param>
 <xsl:param name="refentry.xref.manvolnum" select="1"/>
-<xsl:param name="refsynopsis.title">Synopsis</xsl:param>
-<xsl:param name="refnamediv.title"></xsl:param>
 <xsl:param name="funcsynopsis.style">ansi</xsl:param>
 <xsl:param name="funcsynopsis.decoration" select="1"/>
 <xsl:param name="function.parens">0</xsl:param>
@@ -44,7 +42,6 @@
 <xsl:param name="appendix.autolabel" select="1"/>
 <xsl:param name="qandadiv.autolabel" select="1"/>
 <xsl:param name="qanda.inherit.numeration" select="1"/>
-<xsl:param name="qanda.defaultlabel">number</xsl:param>
 <xsl:param name="graphic.default.extension"/>
 <xsl:param name="make.single.year.ranges" select="0"/>
 <xsl:param name="make.year.ranges" select="0"/>

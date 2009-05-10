@@ -23,10 +23,13 @@ Release 0.2.10:
     (deciding if it contains a coverpage, a toc, a frontmatter etc.)
   * variablelist.term.separator,
   * refentry.generate.name,
-  * ulink.show,
+  * ulink.show (mechanism extended with @xrefstyle),
   * ulink.footnotes.
+- Remove useless parameters (rely on localized gentext instead):
+  * refnamediv.title,
+  * refsynopsis.title,
 - Move the 'qandaset.defaultlabel' parameter to 'qanda.defaultlabel' in
-  order to be identical to the DocBook Project XSL parameter.
+  order to be common with the DocBook Project XSL parameter.
 - By default, a document subset (i.e. no <article> or <book> root element
   is no more wrapped with an <article>. No more unexpected cover page and
   front matter.

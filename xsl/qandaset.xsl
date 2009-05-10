@@ -6,7 +6,7 @@
     ############################################################################ -->
 
 <!-- qandaset parameters -->
-<xsl:param name="qandaset.defaultlabel">number</xsl:param>
+<xsl:param name="qanda.defaultlabel">number</xsl:param>
 
 
 <xsl:template match="qandaset">
@@ -79,7 +79,7 @@
       <xsl:value-of select="ancestor::qandaset/@defaultlabel"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="$qandaset.defaultlabel"/>
+      <xsl:value-of select="$qanda.defaultlabel"/>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>

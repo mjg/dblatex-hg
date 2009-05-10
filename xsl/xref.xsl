@@ -145,6 +145,46 @@
   </xsl:call-template>
 </xsl:template>
 
+<!-- Should the URI be shown? @xrefstyle overrides the parameter -->
+<xsl:template name="ulink-show">
+  <xsl:choose>
+    <xsl:when test="starts-with(@xrefstyle, 'url.show')">
+      <xsl:value-of select="1"/>
+    </xsl:when>
+    <xsl:when test="starts-with(@xrefstyle, 'url.hide')">
+      <xsl:value-of select="0"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$ulink.show"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- Should the URI be in a footnote? @xrefstyle overrides the parameter -->
+<xsl:template name="ulink-foot">
+  <!-- assume xrefstyle is in the form: "url[.show][{.infoot|.after}]"
+       $style extract the optional '.infoot' or '.after' part -->
+  <xsl:variable name="style">
+    <xsl:call-template name="string-replace">
+      <xsl:with-param name="string" select="substring-after(@xrefstyle, 'url')"/>
+      <xsl:with-param name="from" select="'.show'"/>
+      <xsl:with-param name="to" select="''"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$style = '.infoot'">
+      <xsl:value-of select="1"/>
+    </xsl:when>
+    <xsl:when test="$style = '.after'">
+      <xsl:value-of select="0"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$ulink.footnotes"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="ulink">
   <xsl:variable name="url">
     <xsl:call-template name="ulink-encode"/>
@@ -164,12 +204,22 @@
     <xsl:apply-templates mode="slash.hyphen"/>
     <xsl:text>}</xsl:text>
 
+    <xsl:variable name="url.show">
+      <xsl:call-template name="ulink-show"/>
+    </xsl:variable>
+
+    <xsl:variable name="url.foot">
+      <xsl:if test="$url.show != 0">
+        <xsl:call-template name="ulink-foot"/>
+      </xsl:if>
+    </xsl:variable>
+
     <xsl:if test="count(child::node()) != 0
                   and string(.) != @url
-                  and $ulink.show != 0">
+                  and $url.show != 0">
       <!-- yes, show the URI -->
       <xsl:choose>
-        <xsl:when test="$ulink.footnotes != 0 and not(ancestor::footnote)">
+        <xsl:when test="$url.foot != 0 and not(ancestor::footnote)">
           <xsl:text>\footnote{</xsl:text>
           <xsl:text>\url{</xsl:text>
           <!-- Beware URL in a footnote -->

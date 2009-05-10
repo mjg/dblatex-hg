@@ -120,16 +120,19 @@
 
 <!-- A refsynopsisdiv with a title is handled like a refsectx -->
 <xsl:template match="refsynopsisdiv">
-  <xsl:call-template name="map.sect.level">
+  <!-- Without title, generate a localized "Synopsis" heading -->
+  <xsl:call-template name="maketitle">
     <xsl:with-param name="num" select="'0'"/>
     <xsl:with-param name="level">
       <xsl:call-template name="refsect.level"/>
     </xsl:with-param>
+    <xsl:with-param name="title">
+      <xsl:call-template name="gentext">
+        <xsl:with-param name="key" select="'RefSynopsisDiv'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
-  <xsl:text>{</xsl:text>
-  <xsl:value-of select="$refsynopsis.title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
+
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -143,26 +146,17 @@
 <xsl:template match="refnamediv">
   <!-- Generate a localized "Name" subheading if is non-zero -->
   <xsl:if test="$refentry.generate.name != 0">
-    <xsl:call-template name="map.sect.level">
+    <xsl:call-template name="maketitle">
       <xsl:with-param name="num" select="'0'"/>
       <xsl:with-param name="level">
         <xsl:call-template name="refsect.level"/>
       </xsl:with-param>
-    </xsl:call-template>
-    <xsl:text>{</xsl:text>
-    <xsl:choose>
-      <xsl:when test="$refnamediv.title=''">
-        <xsl:call-template name="gentext.element.name">
-          <xsl:with-param name="element.name" select="'refname'"/>
+      <xsl:with-param name="title">
+        <xsl:call-template name="gentext">
+          <xsl:with-param name="key" select="'RefName'"/>
         </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select= "$refnamediv.title"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}</xsl:text>
-    <xsl:call-template name="label.id"/>
-    <xsl:text>&#10;</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:if>
 
   <!-- refdescriptor is used only if no refname -->
@@ -214,13 +208,31 @@
 <xsl:template match="refsect2info"/>
 <xsl:template match="refsect3info"/>
 
-<xsl:template match="refsection|refsect1|refsect2|refsect3|
-                     refsynopsisdiv[title]">
+<xsl:template match="refsection|refsect1|refsect2|refsect3">
   <xsl:call-template name="makeheading">
     <xsl:with-param name="level">
       <xsl:call-template name="refsect.level"/>
     </xsl:with-param>
     <xsl:with-param name="num" select="0"/>
+  </xsl:call-template>
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="refsynopsisdiv[title|
+                                    refsynopsisdivinfo/title|
+                                    info/title]">
+  <!-- Select the title node -->
+  <xsl:variable name="title"
+                select="(title|
+                         refsynopsisdivinfo/title|
+                         info/title)[1]"/>
+
+  <xsl:call-template name="makeheading">
+    <xsl:with-param name="level">
+      <xsl:call-template name="refsect.level"/>
+    </xsl:with-param>
+    <xsl:with-param name="num" select="0"/>
+    <xsl:with-param name="title" select="$title"/>
   </xsl:call-template>
   <xsl:apply-templates/>
 </xsl:template>
