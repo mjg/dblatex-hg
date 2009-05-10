@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: ISO-8859-1 -*-
+#
+# dblatex python setup script - See the COPYRIGHT
+#
 import os
 import sys
 import re
@@ -313,13 +316,19 @@ class InstallData(install_data):
             base_files = []
             for path in paths:
                 if os.path.isdir(path):
-                     for root, dirs, files in os.walk(path):
-                         idir = os.path.join(install_base, root)
-                         files = [os.path.join(root, i) for i in files]
-                         if files:
-                             full_data_files += [(idir, files)]
+                    pref = os.path.dirname(path)
+                    for root, dirs, files in os.walk(path):
+                        # Only the last directory is copied, not the full path
+                        if not(pref):
+                            iroot = root
+                        else:
+                            iroot = root.split(pref + os.path.sep)[1]
+                        idir = os.path.join(install_base, iroot)
+                        files = [os.path.join(root, i) for i in files]
+                        if files:
+                            full_data_files += [(idir, files)]
                 else:
-                     base_files.append(path)
+                    base_files.append(path)
 
             if base_files:
                 full_data_files += [(install_base, base_files)]
@@ -338,7 +347,7 @@ def get_version():
 
 
 if __name__ == "__main__":
-    docs = glob.glob(os.path.join("docs", "*.pdf"))
+    pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
     
     setup(name="dblatex",
         version=get_version(),
@@ -350,11 +359,13 @@ if __name__ == "__main__":
                   'dbtexmf.core',
                   'dbtexmf.xslt',
                   'dbtexmf.dblatex',
+                  'dbtexmf.dblatex.xetex',
                   'dbtexmf.dblatex.grubber'],
         package_dir={'dbtexmf':'lib/dbtexmf'},
         package_data={'dbtexmf.core':['sgmlent.txt']},
         data_files=[('share/dblatex', ['xsl', 'latex']),
-                    ('share/doc/dblatex', docs),
+                    ('share/doc/dblatex', pdfdocs),
+                    ('share/doc/dblatex', ['docs/html']),
                     ('share/man/man1', ['docs/manpage/dblatex.1.gz'])],
         scripts=['scripts/dblatex'],
         cmdclass={'build_scripts': BuildScripts,
