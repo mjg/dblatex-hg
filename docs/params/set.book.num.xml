@@ -6,12 +6,12 @@
   </refmeta>
   <refnamediv>
     <refname>set.book.num</refname>
-    <refpurpose>???</refpurpose>
+    <refpurpose>Select the book or article to compile from a
+    <sgmltag>set</sgmltag></refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <programlisting>
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="syn/set.book.num.xml"/>
-    </programlisting>
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="syn/set.book.num.xml"/></programlisting>
   </refsynopsisdiv>
   <refsection>
     <title>Description</title>

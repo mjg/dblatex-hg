@@ -30,6 +30,7 @@ the DocBook Project documentation.</para>
 </section>
 <section><title>ToC/LoT/Index Generation</title>
 
+<xi:include href="doc.lot.show.xml"/>
 <xi:include href="doc.toc.show.xml"/>
 <xi:include href="titleabbrev.in.toc.xml"/>
 <xi:include href="toc.section.depth.xml"/>
@@ -59,14 +60,23 @@ TODO
 -->
 <section><title>Meta/*Info</title>
 
+<xi:include href="doc.pdfcreator.show.xml"/>
 <xi:include href="make.single.year.ranges.xml"/>
 <xi:include href="make.year.ranges.xml"/>
 
 </section>
-<!--
 <section><title>Reference Pages</title>
-</section>
+
+<xi:include href="funcsynopsis.decoration.xml"/>
+<xi:include href="funcsynopsis.style.xml"/>
+<xi:include href="function.parens.xml"/>
+<xi:include href="refentry.generate.name.xml"/>
+<xi:include href="refentry.xref.manvolnum.xml"/>
+<!--
+refentry.pagebreak — Start each refentry on a new page
 -->
+
+</section>
 <section><title>Tables</title>
 
 <xi:include href="newtbl.autowidth.xml"/>
@@ -85,6 +95,7 @@ TODO
 <section><title>Linking</title>
 
 <xi:include href="latex.hyperparam.xml"/>
+<xi:include href="olink.params.xml"/>
 
 </section>
 <!--
@@ -95,21 +106,24 @@ TODO
 <section><title>Lists</title>
 
 <xi:include href="term.breakline.xml"/>
+<xi:include href="variablelist.term.separator.xml"/>
 
 </section>
 <section><title>QAndASet</title>
 
-<xi:include href="qandaset.defaultlabel.xml"/>
+<xi:include href="qanda.defaultlabel.xml"/>
 
 </section>
 <section><title>Bibliography</title>
 
+<xi:include href="biblioentry.item.separator.xml"/>
 <xi:include href="citation.default.style.xml"/>
 <xi:include href="citation.natbib.options.xml"/>
 <xi:include href="citation.natbib.use.xml"/>
 <xi:include href="latex.bibfiles.xml"/>
 <xi:include href="latex.biblio.output.xml"/>
 <xi:include href="latex.biblio.style.xml"/>
+<xi:include href="latex.bibwidelabel.xml"/>
 
 </section>
 <section><title>Glossary</title>
@@ -135,6 +149,9 @@ TODO
 <xi:include href="pdf.annot.options.xml"/>
 <xi:include href="seg.item.separator.xml"/>
 <xi:include href="set.book.num.xml"/>
+<xi:include href="show.comments.xml"/>
+<xi:include href="ulink.footnotes.xml"/>
+<xi:include href="ulink.show.xml"/>
 
 </section>
 <section><title>Graphics</title>
@@ -148,8 +165,7 @@ TODO
 
 <xi:include href="doc.alignment.xml"/>
 <xi:include href="doc.collab.show.xml"/>
-<xi:include href="doc.lot.show.xml"/>
-<xi:include href="doc.pdfcreator.show.xml"/>
+<xi:include href="doc.layout.xml"/>
 <xi:include href="doc.publisher.show.xml"/>
 <xi:include href="draft.mode.xml"/>
 <xi:include href="draft.watermark.xml"/>
@@ -158,6 +174,7 @@ TODO
 <xi:include href="latex.class.options.xml"/>
 <xi:include href="latex.encoding.xml"/>
 <xi:include href="latex.unicode.use.xml"/>
+<xi:include href="latex.output.revhistory.xml"/>
 
 </section>
 <section><title>Font Families</title>

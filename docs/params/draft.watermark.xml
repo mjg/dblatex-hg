@@ -6,7 +6,7 @@
   </refmeta>
   <refnamediv>
     <refname>draft.watermark</refname>
-    <refpurpose>Draft Watermak text to use</refpurpose>
+    <refpurpose>Print a Watermak on each page in draft mode?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <programlisting>

@@ -6,7 +6,7 @@
   </refmeta>
   <refnamediv>
     <refname>doc.pdfcreator.show</refname>
-    <refpurpose>???</refpurpose>
+    <refpurpose>Set the PDF metadata Creator field</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <programlisting>
