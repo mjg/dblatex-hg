@@ -140,7 +140,7 @@ package.</para>
 <section id="sec-process">
 <title>Backend Drivers</title>
 
-<para>The main script allows to use two LaTeX backend drivers:</para>
+<para>The main script supports the following LaTeX backend drivers:</para>
 
 <variablelist>
 <varlistentry>

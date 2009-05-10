@@ -25,6 +25,8 @@ Release 0.2.10:
   * refentry.generate.name,
   * ulink.show,
   * ulink.footnotes.
+- Move the 'qandaset.defaultlabel' parameter to 'qanda.defaultlabel' in
+  order to be identical to the DocBook Project XSL parameter.
 - By default, a document subset (i.e. no <article> or <book> root element
   is no more wrapped with an <article>. No more unexpected cover page and
   front matter.

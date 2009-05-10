@@ -20,13 +20,19 @@ HTML_PARAMS = --param ignore.image.scaling "'1'" \
 	      --param refentry.generate.title "1" \
 	      --param profile.attribute "'output'" \
               --param profile.value "'manual;html'" \
+	      --param othercredit.like.author.enabled "1" \
 	      --param generate.section.toc.level "3" \
 	      --param html.stylesheet "'manual.css'" \
 
 # Where to find the manual and the release notes
 vpath %.xml . changes
 
-all: olink manual.pdf manpagegz release-notes.pdf
+# Main targets
+all: olink manpagegz allpdf allhtml
+
+allpdf: manual.pdf release-notes.pdf
+
+allhtml:manual.html release-notes.html
 
 allstyle: all native db2latex simple
 
@@ -36,6 +42,7 @@ olink: manual.db release-notes.db
 manpagegz:
 	@$(MAKE) -C manpage -f ../Makefile dblatex.1.gz
 
+# Build the HTML version of the documentation
 manual.html: manual.xml
 	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRUM)'" \
 			  $(HTML_PARAMS) \
@@ -45,7 +52,7 @@ manual.html: manual.xml
 	$(CP) -r math/figures $(HTMLDIRUM)/.
 	$(CP) manual.css $(HTMLDIRUM)/.
 
-changes.html: release-notes.xml
+release-notes.html: release-notes.xml
 	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRRN)'" \
 			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<

@@ -1,230 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <chapter>
-  <title>Installing the Package</title>
-  <section>
-   <title>Content</title>
-  <para>
-   The package contains the following:
-  </para>
-  <variablelist>
-   <varlistentry>
-   <term>
-   docs/
-</term><listitem><para>Contains the files of this document.
-   </para>
-  </listitem>
-  </varlistentry>
-   <varlistentry>
-   <term>
-   latex/
-</term><listitem><para>Contains all the latex stuff: LaTeX style files, logos, and scripts to compile the LaTeX output.
-   </para>
-  </listitem>
-  </varlistentry>
-   <varlistentry>
-   <term>scripts/</term>
-   <listitem><para>Several scripts, including the main script of the package.
-   </para>
-  </listitem>
-  </varlistentry>
-   <varlistentry>
-   <term>
-   xsl/
-</term><listitem><para>XSL stylesheets.
-   </para>
-  </listitem>
-  </varlistentry>
-   <varlistentry>
-   <term>
-   tests/
-</term><listitem><para>Test files.
-   </para>
-  </listitem>
-  </varlistentry>
-  </variablelist>
-  </section>
+<title>Installing the Package</title>
 
-  <section><title>Installing on Unix Systems</title>
-  <section>
-   <title>Dependencies</title>
-  <para>
-   To work, the following items must be available:
-  </para>
-  <itemizedlist>
-   <listitem>
-   <para>
-   An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one can
-   also use <ulink url="http://4suite.org">4suite</ulink>.
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   The XML DocBook DTD.
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   A recent LaTeX distribution. The configure script checks that the needed latex packages are available.
-   </para>
-  </listitem>
-   <listitem>
-   <para>
-   Python &gt;= 2.4.
-   </para>
-  </listitem>
-  </itemizedlist>
-  </section>
-  <section>
-   <title>Installation</title>
-   <section>
-    <title>Installing the dependencies</title>
-   <para>
-    To use the package, install properly the dependencies:
-   </para>
-   <orderedlist>
-    <listitem>
-    <para>
-    Install Python if necessary.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Install LaTeX.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Install the XSLT. By default <filename>xsltproc</filename> is used.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Install the XML DocBook DTD.
-    </para>
-   </listitem>
-    <listitem>
-    <para>
-    Create a catalog file, that defines where to find the DTD. Here is an example:
-    </para>
-    <programlisting>
-<![CDATA[PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-]]><![CDATA[    "file:///usr/local/share/xml/docbook/dtd/4.1.2/docbookx.dtd"
-]]>    </programlisting>
-    <para>
-     If the XML Gnome tools are available, it's a good idea to create an XML catalog by using <filename>xmlcatalog</filename> such like this:
-    </para>
-    <programlisting>
-<![CDATA[% xmlcatalog --noout --create mycatalog
+<section>
+<title>Content</title>
+
+<para>The package contains the following:</para>
+
+<variablelist>
+<varlistentry>
+<term>docs/</term>
+
+<listitem>
+<para>Contains the files of this document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>latex/</term>
+
+<listitem>
+<para>Contains all the latex stuff: LaTeX style files, logos, and scripts to
+compile the LaTeX output.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>scripts/</term>
+
+<listitem>
+<para>Several scripts, including the main script of the package.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>xsl/</term>
+
+<listitem>
+<para>XSL stylesheets.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>tests/</term>
+
+<listitem>
+<para>Test files.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</section>
+
+<section>
+<title>Installing on Unix like Systems</title>
+
+<section>
+<title>Dblatex Packages</title>
+
+<para>Dblatex is packaged for these Systems or Distributions:</para>
+
+<itemizedlist>
+<listitem>
+<para><ulink url="http://packages.debian.org/dblatex">Linux Debian</ulink>,
+<ulink
+url="http://packages.ubuntu.com/search?keywords=dblatex">Ubuntu</ulink>,</para>
+</listitem>
+
+<listitem>
+<para><ulink
+url="http://download.opensuse.org/repositories/home:/thomas-schraitle">Linux
+OpenSUSE (RPM)</ulink>, <ulink
+url="https://admin.fedoraproject.org/pkgdb/packages/name/dblatex">Linux Fedora
+(RPM)</ulink>,</para>
+</listitem>
+
+<listitem>
+<para><ulink url="http://www.freshports.org/textproc/dblatex">FreeBSD</ulink>,
+<ulink url="http://pkgsrc.se/textproc/dblatex">NetBSD</ulink>,</para>
+</listitem>
+
+<listitem>
+<para><ulink url="http://pdb.finkproject.org/pdb/package.php/dblatex">Mac OS X
+(Fink)</ulink>.</para>
+</listitem>
+</itemizedlist>
+
+<para> If you are installing on one of these distributions, follow their
+recommended way of installation, and you can safely ignore the next sections
+that give details for installing dblatex from the source tarball.</para>
+</section>
+
+<section>
+<title>Dependencies</title>
+
+<para>To work, the following items must be available:</para>
+
+<itemizedlist>
+<listitem>
+<para>An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one
+can also use <ulink url="http://4suite.org">4suite</ulink>.</para>
+</listitem>
+
+<listitem>
+<para>The XML DocBook DTD.</para>
+</listitem>
+
+<listitem>
+<para>A recent LaTeX distribution. The configure script checks that the needed
+latex packages are available.</para>
+</listitem>
+
+<listitem>
+<para>Python &gt;= 2.4.</para>
+</listitem>
+</itemizedlist>
+</section>
+
+<section>
+<title>Installation</title>
+
+<section>
+<title>Installing the dependencies</title>
+
+<para>To use the package, install properly the dependencies:</para>
+
+<orderedlist>
+<listitem>
+<para>Install Python if necessary.</para>
+</listitem>
+
+<listitem>
+<para>Install LaTeX.</para>
+</listitem>
+
+<listitem>
+<para>Install the XSLT. By default <filename>xsltproc</filename> is
+used.</para>
+</listitem>
+
+<listitem>
+<para>Install the XML DocBook DTD.</para>
+</listitem>
+
+<listitem>
+<para>Create a catalog file, that defines where to find the DTD. Here is an
+example:</para>
+
+<programlisting>
+PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+    "file:///usr/local/share/xml/docbook/dtd/4.1.2/docbookx.dtd"
+    </programlisting>
+
+<para>If the XML Gnome tools are available, it's a good idea to create an XML
+catalog by using <filename>xmlcatalog</filename> such like this:</para>
+
+<programlisting>
+% xmlcatalog --noout --create mycatalog
 % xmlcatalog --noout --add 'public' '-//OASIS//DTD DocBook XML V4.1.2//EN' \
                            'file://path/to/4.1.2/docbookx.dtd' mycatalog
-]]>    </programlisting>
-   </listitem>
-    <listitem>
-    <para>
-    Add the catalog path to the SGML_CATALOG_FILES variable:
-    </para>
-<programlisting><![CDATA[export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:/path/to/mycatalog
-]]></programlisting>
-   <para>
-    You can skip this step if you configure the dblatex installation with the <option>--catalogs</option> option.
-   </para>
-   </listitem>
-   </orderedlist>
-   </section>
-   <section>
-    <title>Installing the tool</title>
-   <para>
-    The steps to follow are the following:
-   </para>
-   <orderedlist>
-    <listitem>
-    <para>
-    Untar the ball. For a bzipped release, do as follow:
-    </para>
-    <programlisting><![CDATA[% tar xvfj dblatex-x.x.x.tar.bz2]]></programlisting>
-   <para>
-    For a gzipped release, do as follow:
-   </para>
-    <programlisting><![CDATA[% tar xvfz dblatex-x.x.x.tar.gz]]></programlisting>
-   </listitem>
-    <listitem>
-    <para>
-    Install the package. The installation script preliminary checks the dependencies. In the example, the <filename>dblatex</filename> script is installed under <filename>/usr/local/bin</filename> and the other files are installed under <filename>/usr/local/share/dblatex</filename>. Besides, the <option>--catalogs</option> option tells where to find the catalogs.
-    </para>
-    <programlisting>
-<![CDATA[% cd dblatex-x.x.x
+    </programlisting>
+</listitem>
+
+<listitem>
+<para>Add the catalog path to the SGML_CATALOG_FILES variable:</para>
+
+<programlisting>export SGML_CATALOG_FILES=$SGML_CATALOG_FILES:/path/to/mycatalog
+</programlisting>
+
+<para>You can skip this step if you configure the dblatex installation with
+the <option>--catalogs</option> option.</para>
+</listitem>
+</orderedlist>
+</section>
+
+<section>
+<title>Installing the tool</title>
+
+<para>The steps to follow are the following:</para>
+
+<orderedlist>
+<listitem>
+<para>Untar the ball. For a bzipped release, do as follow:</para>
+
+<programlisting>% tar xvfj dblatex-x.x.x.tar.bz2</programlisting>
+
+<para>For a gzipped release, do as follow:</para>
+
+<programlisting>% tar xvfz dblatex-x.x.x.tar.gz</programlisting>
+</listitem>
+
+<listitem>
+<para>Install the package. The installation script preliminary checks the
+dependencies. In the example, the <filename>dblatex</filename> script is
+installed under <filename>/usr/local/bin</filename> and the other files are
+installed under <filename>/usr/local/share/dblatex</filename>. Besides, the
+<option>--catalogs</option> option tells where to find the catalogs.</para>
+
+<programlisting>
+% cd dblatex-x.x.x
 % python ./setup.py install --prefix=/usr/local --catalogs=/path/to/mycatalog
-]]></programlisting>
-   </listitem>
-   </orderedlist>
-   </section>
-  </section>
-  </section>
+</programlisting>
+</listitem>
+</orderedlist>
+</section>
+</section>
+</section>
 
-  <section><title>Installing on Windows</title>
-  <para>The following packages to install and the procedure is for a native
-  Windows installation. If you want to use dblatex via Cygwin instead, you
-  should consider it like a unix like install.</para>
+<section>
+<title>Installing on Windows</title>
 
-  <section><title>Dependencies</title>
-  <para>The following applications are required:
-  <itemizedlist>
-   <listitem>
-   <para>
-   An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one can
-   also use <ulink url="http://4suite.org">4suite</ulink>.
-   </para>
-  </listitem>
-   <listitem>
-   <para>The XML DocBook DTD.</para>
-  </listitem>
-   <listitem>
-   <para><ulink url="http://www.miktex.org">MiKTeX</ulink> &gt; 2.5.</para>
-  </listitem>
-   <listitem>
-   <para>
-   <ulink url="http://www.python.org">Python</ulink> &gt;= 2.4.
-   </para>
-  </listitem>
-  </itemizedlist>
-  </para>
-  </section>
+<para>The following packages to install and the procedure is for a native
+Windows installation. If you want to use dblatex via Cygwin instead, you
+should consider it like a unix like install.</para>
 
-  <section><title>Installation</title>
-  <section><title>Installing xsltproc</title>
-  <para>You can download the binaries and getting the installation instructions
-  from: <ulink url="http://www.zlatkovic.com/libxml.en.html"/>.</para>
-  </section>
-  <section><title>Installing MiKTeX</title>
-  <para>Install the minimal distribution, and add the following packages: 
-changebar,
-colortbl,
-fancybox,
-fancyhdr,
-fancyvrb,
-listings,
-overpics,
-rotating,
-subfigure,
-titlesec,
-bibtopic,
-enumitem,
-eepic,
-lm,
-lastpage,
-helvetic,
-times,
-symbol,
-courier.
-  </para>
-  </section>
-  <section><title>Installing dblatex</title>
-  <para>From the unpacked package directory just type:</para>
-  <screen>python setup.py install</screen>
-  <para>If the Python directory is <filename>C:\Python25</filename> you can now
-  try <command>dblatex</command> by typing:</para>
-  <screen>python C:\Python25\Scripts\dblatex file.xml</screen>
-  </section>
-  
-  </section>
-  </section>
- </chapter>
+<section>
+<title>Dependencies</title>
+
+<para>The following applications are required: <itemizedlist>
+<listitem>
+<para>An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one
+can also use <ulink url="http://4suite.org">4suite</ulink>.</para>
+</listitem>
+
+<listitem>
+<para>The XML DocBook DTD.</para>
+</listitem>
+
+<listitem>
+<para><ulink url="http://www.miktex.org">MiKTeX</ulink> &gt; 2.5.</para>
+</listitem>
+
+<listitem>
+<para><ulink url="http://www.python.org">Python</ulink> &gt;= 2.4.</para>
+</listitem>
+</itemizedlist></para>
+</section>
+
+<section>
+<title>Installation</title>
+
+<section>
+<title>Installing xsltproc</title>
+
+<para>You can download the binaries and getting the installation instructions
+from: <ulink url="http://www.zlatkovic.com/libxml.en.html"></ulink>.</para>
+</section>
+
+<section>
+<title>Installing MiKTeX</title>
+
+<para>Install the minimal distribution, and add the following packages:
+changebar, colortbl, fancybox, fancyhdr, fancyvrb, listings, overpics,
+rotating, subfigure, titlesec, bibtopic, enumitem, eepic, lm, lastpage,
+helvetic, times, symbol, courier.</para>
+</section>
+
+<section>
+<title>Installing dblatex</title>
+
+<para>From the unpacked package directory just type:</para>
+
+<screen>python setup.py install</screen>
+
+<para>If the Python directory is <filename>C:\Python25</filename> you can now
+try <command>dblatex</command> by typing:</para>
+
+<screen>python C:\Python25\Scripts\dblatex file.xml</screen>
+</section>
+</section>
+</section>
+</chapter>

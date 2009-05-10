@@ -21,15 +21,16 @@
 
 <edition>01</edition>
 
-<releaseinfo>$Id: manual.xml,v 1.21 2007-11-17 18:13:08 ben Exp
-$</releaseinfo>
+<releaseinfo>v<xi:include href="version.xml"
+xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
 
 <othercredit>
 <firstname>Andreas</firstname>
 
 <surname>Hoenen</surname>
 
-<contrib>REVIEWED BY</contrib>
+<contrib output="html">Reviewed by</contrib>
+<contrib output="pdf">REVIEWED BY</contrib>
 </othercredit>
 
 <revhistory>
