@@ -204,23 +204,11 @@
 \usepackage{rotating}         
 \usepackage{subfigure}         
 \usepackage{tabularx}         
-\usepackage{url}         
 
 % --------------------------------------------
 % Math support                                
 % --------------------------------------------
-%\usepackage{amsmath,amsthm,amsfonts,amssymb,amsxtra,amsopn}
 \usepackage{amsmath,amsthm,amsfonts,amsxtra,amsopn}
-
-% --------------------------------------------
-\DeclareMathOperator{\per}{per}
-\DeclareMathOperator{\cov}{cov}
-\DeclareMathOperator{\non}{non}
-\DeclareMathOperator{\cf}{cf}
-\DeclareMathOperator{\add}{add}
-\DeclareMathOperator{\Cham}{Cham}
-\DeclareMathOperator{\IM}{Im}
-\DeclareMathOperator{\esssup}{ess\,sup}
 
 % ---------------
 % Document Font  
@@ -404,7 +392,6 @@
   }
 
 % index labeling helper
-\newif\ifdocbooktolatexprintindex\docbooktolatexprintindextrue
 \let\dbtolatex@@theindex\theindex
 \let\dbtolatex@@endtheindex\endtheindex
 \renewenvironment{theindex}{
