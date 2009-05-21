@@ -99,10 +99,10 @@ def main():
 
     # This script is useful only in mixed Hg/CVS repositories
     p = Popen("hg root", shell=True, stdout=PIPE)
-    root = p.communicate()[0]
+    root = p.communicate()[0].strip("\n")
     cvsdir = os.path.join(root, "CVS")
     if not(os.path.isdir(cvsdir)):
-        print "Not a CVS working directory"
+        print "%s: Not a CVS working directory" % cvsdir
         sys.exit(0)
 
     # First, pull the changesets
