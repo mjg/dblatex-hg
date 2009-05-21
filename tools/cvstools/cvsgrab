@@ -1,0 +1,57 @@
+#!/usr/bin/python
+#
+# The script grabs all the CVS ditrectory from CVS checkouted project
+# and copy them in the current Mercurial repository.
+#
+import os
+import sys
+from subprocess import Popen, PIPE
+
+
+def main():
+
+    if len(sys.argv) < 2:
+        print "cvsgrab basedir"
+        sys.exit(1)
+
+    p = Popen("hg root", shell=True, stdout=PIPE)
+    roothg = p.communicate()[0].strip("\n")
+    if not(roothg):
+        print "Not in a Mercurial repository"
+        sys.exit(1)
+
+    rootdir = sys.argv[1]
+    if not(os.path.isdir(rootdir)):
+        print "%s: directory not found" % rootdir
+        sys.exit(1)
+
+    cmd = "find %s -name 'CVS'" % rootdir
+    p = Popen(cmd, shell=True, stdout=PIPE)
+    data = p.communicate()[0].strip()
+
+    cvsdirs = data.split("\n")
+    print cvsdirs
+
+    rc = 0
+    copied = []
+    for cvsdir in cvsdirs:
+        if not(cvsdir):
+            continue
+        rdir = cvsdir.split(rootdir)[1][1:]
+        todir = os.path.join(roothg, rdir)
+        if os.path.isdir(todir):
+            print "%s: already exists. Skipped"
+            continue
+        cmd = "cp -rp %s %s" % (cvsdir, todir)
+        rc = os.system(cmd)
+        if rc != 0:
+            break
+        copied.append(todir)
+
+    if rc != 0:
+        # Maybe we should remove already copied CVS?
+        pass
+
+
+if __name__ == "__main__":
+    main()

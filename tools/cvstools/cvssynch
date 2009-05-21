@@ -1,0 +1,133 @@
+#!/usr/bin/python
+import os
+import sys
+from subprocess import Popen, PIPE
+from xml.dom.minidom import parseString
+
+from cvsext import cvscommit, CVSSession
+
+def get_cvsset(from_node, style):
+    cmd = "hg log -r %s:tip --debug --style %s" % (from_node, style)
+    print (cmd)
+    p = Popen(cmd, shell=True, stdout=PIPE)
+    data = p.communicate()[0]
+
+    cvsset = []
+
+    dom3 = parseString("<changegroup>" + data + "</changegroup>")
+    dom3.writexml(open("foo.xml", "w"))
+
+    csets = dom3.getElementsByTagName("changeset")
+    rc = False
+    for cset in csets:
+        cvs = CVSSession()
+        cvscommit(cvs, cset)
+        if cvs.cset == from_node:
+            continue
+        cvsset.append(cvs)
+
+    dom3.unlink()
+    return cvsset
+
+def update_to(cset):
+    os.system("hg update -r %s" % cset)
+
+def cvspendings(cvs, files):
+    for f, mode in files.items():
+        if mode == "?":
+            cvs.adds.append(f)
+        elif mode == "R":
+            cvs.dels.append(f)
+        elif mode == "M":
+            cvs.chgs.append(f)
+
+
+def get_cvs_usync_files():
+    # Find the working files not synched with CVS
+    p = Popen("cvs -n -q update", shell=True, stdout=PIPE)
+    data = p.communicate()[0]
+
+    # Build the list of the files to check, with their mode as a dict
+    files = data.split("\n")
+    pfiles = [ s[2:] for s in files ]
+    tfiles = {}
+    for i in range(0, len(pfiles)):
+        file = pfiles[i]
+        if not(file.strip()):
+            continue
+        if file == ".hgtags":
+            continue
+        tfiles[file] = files[i][0]
+
+    # Actual expected files in the repository
+    p = Popen("hg manifest", shell=True, stdout=PIPE)
+    data = p.communicate()[0]
+    hgfiles = data.split("\n")
+
+    # Strip the unrelevant files (not in the Hg repository)
+    for f in pfiles:
+        if not(f in hgfiles):
+            del tfiles[f]
+
+    # Should be empty if all is OK
+    return tfiles
+
+
+def recover_from(batchfile):
+    rfiles = get_cvs_usync_files()
+    if not(rfiles):
+        return
+
+    # There's some files to recover. Try the CVS queue first
+    cvs = CVSSession()
+    if batchfile and os.path.isfile(batchfile):
+        cvs.runbatch(batchfile)
+        rfiles = get_cvs_usync_files()
+        if not(rfiles):
+            return
+        print "Still manual CVS synch to do:"
+    else:
+        print "No pending CVS commands found. Manual CVS synch to do:"
+
+    cvspendings(cvs, rfiles)
+    cvs.run(dry_run=True)
+
+
+def main():
+    cvsqueue = "cvsqueue.txt"
+    style = os.path.join(os.path.dirname(__file__), "xml.style")
+
+    # This script is useful only in mixed Hg/CVS repositories
+    p = Popen("hg root", shell=True, stdout=PIPE)
+    root = p.communicate()[0]
+    cvsdir = os.path.join(root, "CVS")
+    if not(os.path.isdir(cvsdir)):
+        print "Not a CVS working directory"
+        sys.exit(0)
+
+    # First, pull the changesets
+    os.system("hg pull")
+
+    # Where do we come from?
+    p = Popen("hg parents --template '{node}'", shell=True, stdout=PIPE)
+    starting_node = p.communicate()[0]
+
+    # Recover to a clean state if necessary
+    recover_from(cvsqueue)
+
+    # What are the changesets to commit?
+    cvsset = get_cvsset(starting_node, style)
+
+    # Now run each set in the order
+    for cvs in cvsset:
+        try:
+            print "Sync CVS to changeset %s" % cvs.cset
+            update_to(cvs.cset)
+            cvs.run(batch=cvsqueue)
+            os.unlink(cvsqueue)
+        except:
+            print "foo"
+            break
+
+if __name__ == "__main__":
+    main()
