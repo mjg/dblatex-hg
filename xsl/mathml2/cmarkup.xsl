@@ -5,7 +5,7 @@
 		version='1.0'>
                 
 <!-- ====================================================================== -->
-<!-- $Id$
+<!-- $Id
      This file is part of the XSLT MathML Library distribution.
      See ./README or http://www.raleigh.ru/MathML/mmltex for
      copyright and other information                                        -->
