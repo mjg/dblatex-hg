@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <!-- ********************************************************************
-     $Id$
+     $Id
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
