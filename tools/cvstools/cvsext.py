@@ -103,8 +103,23 @@ class CVSSession:
             commits += self.chgs
 
         if commits:
-            cmds.append("cvs commit -m '%s' %s" % \
-                        (self.desc, " ".join(commits)))
+            # FIXME: characters with accents    
+            desc = self.desc.replace("'", r"'\''")
+            if "\n" in self.desc:
+                # multiline commit logs needs to use a temporary file
+                opt = "-F"
+                arg = "/tmp/commit.log"
+                lines = desc.split("\n")
+                l = lines[0]
+                cmds.append("echo '%s' > %s" % (l, arg))
+                for l in lines[1:]:
+                    cmds.append("echo '%s' >> %s" % (l, arg))
+            else:
+                # use the inline comment option
+                opt = "-m"
+                arg = "'%s'" % desc
+            cmds.append("cvs commit %s %s %s" % \
+                        (opt, arg, " ".join(commits)))
             if self.tag and self.tag != "tip":
                 cmds.append("cvs tag %s" % (self.tag))
         return cmds
