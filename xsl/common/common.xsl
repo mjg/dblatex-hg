@@ -20,7 +20,7 @@
   <info>
     <title>Common » Base Template Reference</title>
     <releaseinfo role="meta">
-      $Id$
+      $Id
     </releaseinfo>
   </info>
   <!-- * yes, partintro is a valid child of a reference... -->
