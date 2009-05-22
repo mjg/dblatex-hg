@@ -1,4 +1,4 @@
-changeset = "Changed in {node|short} [{tags}]:\n{file_adds}{file_dels}{files}\n"
+changeset = "Changed in {rev}:{node|short} [{tags}]:\n{file_adds}{file_dels}{files}\n"
 file = "M {file}\n"
 file_del = "R {file_del}\n"
 file_add = "A {file_add}\n"
