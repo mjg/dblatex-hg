@@ -35,7 +35,7 @@ class UnicodeInterval:
 
     def __str__(self):
         """Dump the instance's data attributes."""
-        string = 'UnicodeInterval: [' + str(self._min_boundary)
+        string = '[' + str(self._min_boundary)
         if self._max_boundary != self._min_boundary:
             string += ',' + str(self._max_boundary)
         string += ']'
@@ -75,6 +75,7 @@ class UnicodeInterval:
         Determine whether the specified character is contained in this
         instance's interval.
         """
+        #print "%d in [%d - %d]?" % (ord(char), self._min_boundary,self._max_boundary)
         return (ord(char) >= self._min_boundary
                 and ord(char) <= self._max_boundary)
 
@@ -103,6 +104,7 @@ class FontSpec:
         self.transitions = {}
         self.fontspecs = [self]
         self.subfont_first = subfont_first
+        self._ignored = []
 
         for type in self.transition_types:
             self.transitions[type] = {}
@@ -188,16 +190,18 @@ class FontSpec:
         """
         s = ''
         for type, font in fonts.items():
-            s += '\set%sfont{%s}' % (type, font)
+            s += '\switch%sfont{%s}' % (type, font)
         if s:
-            s = r"\savefont" + s + r"\restorefont{}"
+            s = r"\savefamily" + s + r"\loadfamily{}"
         return s
 
     def enter(self):
+        print "enter in %s" % self.id
         s = self._switch_to(self.transitions["enter"])
         return s
 
     def exit(self):
+        print "exit from %s" % self.id
         s = self._switch_to(self.transitions["exit"])
         return s
 
@@ -229,6 +233,13 @@ class FontSpec:
                     f.add_uranges(ranges)
         self._intervals.extend(ranges)
 
+    def add_ignored(self, ranges, depth=1):
+        if depth:
+            for f in self.fontspecs:
+                if f != self:
+                    f.add_ignored(ranges)
+        self._ignored.extend(ranges)
+
     def get_uranges(self):
         return self._intervals
 
@@ -240,18 +251,34 @@ class FontSpec:
         else:
             return False
 
+    def isignored(self, char):
+        #print "%s: %s" % (self.id, [ str(a) for a in self._ignored ])
+        for interval in self._ignored:
+            if interval.match(char):
+                return True
+        else:
+            return False
+
+    def _loghas(self, id, char):
+        try:
+            print "%s has '%s'" % (id, str(char))
+        except:
+            print "%s has '%s'" % (id, ord(char))
+
     def match(self, char):
         """Determine whether the font specification matches the specified
         object, thereby considering refmode.
         """
         fontspec = None
+        #print "Lookup in ", self.id
+        if self.isignored(char):
+            self._loghas(self.id, char)
+            return self
+
         for fontspec in self.fontspecs:
+            #print " Look in %s" % fontspec.id
             if fontspec.contains(char):
-                #print "%s has '%s'" % (fontspec.id, char)
-                try:
-                    print "%s has '%s'" % (fontspec.id, str(char))
-                except:
-                    print "%s has '%s'" % (fontspec.id, ord(char))
+                self._loghas(fontspec.id, char)
                 return fontspec
         return None
 
@@ -333,7 +360,7 @@ class FontSpecConfig:
 
         # Insert the characters to ignore in fontspecs
         for f in to_ignore:
-            self.default_fontspec.add_uranges(f.get_uranges())
+            self.default_fontspec.add_ignored(f.get_uranges())
 
     def __str__(self):
         """Dump the instance's data attributes."""
@@ -358,6 +385,11 @@ class FontSpecEncoder:
         """
         self._conf = FontSpecConfig(configuration)
         self._cur_fontspec = None
+        self._ref_stack = [self._conf.default_fontspec]
+
+    def reset(self):
+        # Restart from the default fontspec to avoid a useless 'enter' from None
+        self._cur_fontspec = self._conf.default_fontspec
         self._ref_stack = [self._conf.default_fontspec]
 
     def _switch_to(self, fontspec):
@@ -405,7 +437,7 @@ class FontSpecEncoder:
     def ignorechars(self, charset):
         "Characters to ignore in font selection (maintain the current one)"
         intervals = [ UnicodeInterval().from_char(c) for c in charset ]
-        self._conf.default_fontspec.add_uranges(intervals)
+        self._conf.default_fontspec.add_ignored(intervals)
 
     def encode(self, char):
         """
