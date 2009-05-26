@@ -95,9 +95,6 @@ def recover_from(batchfile):
 
 def main():
     from optparse import OptionParser
-
-    config_file = os.getenv("MS_CONFIG_FILE", "/etc/hpms/config.xml")
-
     parser = OptionParser()
     parser.add_option("-r", "--recover", action="store_true",
                       help="Try to recover from failure state")
