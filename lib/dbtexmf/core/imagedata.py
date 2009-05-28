@@ -2,6 +2,7 @@ import sys
 import os
 import re
 import shutil
+from dbtexmf.core.error import signal_error
 
 #
 # Objects to convert an image format to another. Actually use the underlying
@@ -19,7 +20,8 @@ class ImageConverter:
             print cmd
         if doexec:
             if not(self.fake):
-                os.system(cmd)
+                if (os.system(cmd)):
+                    signal_error(self, cmd)
         else:
             return cmd
 

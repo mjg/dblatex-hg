@@ -14,6 +14,7 @@ from optparse import OptionParser
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse, texstyle_parse
 from dbtexmf.xslt import xslt
 from dbtexmf.core.logger import logger
+from dbtexmf.core.error import signal_error
 
 
 def suffix_replace(path, oldext, newext=""):
@@ -227,6 +228,8 @@ class DbTex:
             donefile = self._compile()
             shutil.move(donefile, self.output)
             print "'%s' successfully built" % os.path.basename(self.output)
+        except:
+            signal_error(self)
         finally:
             os.chdir(self.cwdir)
             if not(self.debug):
@@ -549,7 +552,8 @@ class DbTexCommand:
         # The output name can be deduced from the input one:
         # /path/to/input.xml -> /path/to/input.{tex|pdf|dvi|ps}
         if not(options.output):
-            output = suffix_replace(input, "."+run.input_format, ".%s" % run.format)
+            output = suffix_replace(input, "."+run.input_format,
+                                    ".%s" % run.format)
         else:
             output = os.path.realpath(options.output)
 
