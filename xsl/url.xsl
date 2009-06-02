@@ -47,7 +47,8 @@
   </xsl:when>
   <xsl:when test="substring($url,string-length($url))='\'">
     <xsl:call-template name="bslash-end-count">
-      <xsl:with-param name="url" select="substring($url,1,string-length($url)-1)"/>
+      <xsl:with-param name="url"
+                      select="substring($url,1,string-length($url)-1)"/>
       <xsl:with-param name="count" select="$count + 1"/>
     </xsl:call-template>
   </xsl:when>
@@ -58,7 +59,10 @@
 </xsl:template>
 
 
-<!-- Only URLs in table cells must be escaped (mostly because of multicolumn) -->
+<!-- Only URLs in table cells must be escaped (mostly because of multicolumn)
+     except for spaces that are always skipped by \nolinkurl{}. Note that
+     setting the 'obeyspaces' option to the url package doesn't help.
+     -->
 <xsl:template name="nolinkurl-output">
   <xsl:param name="url" select="@url"/>
   <xsl:choose>
@@ -69,8 +73,9 @@
     <!-- FIXME: do something with '&' and revision if needed -->
   </xsl:when>
   <xsl:otherwise>
-    <xsl:call-template name="nolinkurl">
+    <xsl:call-template name="nolinkurl-escape">
       <xsl:with-param name="url" select="$url"/>
+      <xsl:with-param name="chars" select="' '"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
@@ -80,7 +85,7 @@
 <!-- Find the first special char position in the string -->
 <xsl:template name="find-first">
   <xsl:param name="string"/>
-  <xsl:param name="chars" select="'#%'"/>
+  <xsl:param name="chars" select="'#% '"/>
 
   <xsl:choose>
   <xsl:when test="$string = ''">
@@ -120,12 +125,14 @@
 <xsl:template name="nolinkurl-escape">
   <xsl:param name="escchars"/>
   <xsl:param name="url"/>
+  <xsl:param name="chars" select="'#% '"/>
 
   <xsl:variable name="len" select="string-length($url)"/>
 
   <xsl:variable name="pos">
     <xsl:call-template name="find-first">
       <xsl:with-param name="string" select="$url"/>
+      <xsl:with-param name="chars" select="$chars"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -147,6 +154,7 @@
       <xsl:with-param name="escchars"
                       select="concat($escchars, '\', substring($url,1,1))"/>
       <xsl:with-param name="url" select="substring($url, 2)"/>
+      <xsl:with-param name="chars" select="$chars"/>
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
@@ -162,6 +170,7 @@
       <xsl:with-param name="escchars"
                       select="concat('\', substring($url,$pos+1,1))"/>
       <xsl:with-param name="url" select="substring($url, $pos+2)"/>
+      <xsl:with-param name="chars" select="$chars"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
