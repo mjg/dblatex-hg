@@ -7,7 +7,7 @@
 <xsl:param name="refentry.tocdepth">5</xsl:param>
 <xsl:param name="refentry.numbered">1</xsl:param>
 <xsl:param name="refentry.generate.name" select="0"/>
-
+<xsl:param name="refclass.suppress" select="0"/>
 
 <xsl:template name="refsect.level">
   <xsl:param name="n" select="."/>
@@ -180,7 +180,7 @@
 </xsl:template>
 
 <xsl:template match="refpurpose">
-  <xsl:text> -- </xsl:text>
+  <xsl:text> --- </xsl:text>
   <xsl:apply-templates/>
 </xsl:template>
 
@@ -189,11 +189,16 @@
 </xsl:template>
 
 <xsl:template match="refclass">
-  <xsl:if test="@role">
-    <xsl:value-of select="@role"/>
-    <xsl:text>: </xsl:text>
+  <xsl:if test="$refclass.suppress = 0">
+    <!-- Displayed as block -->
+    <xsl:text>&#10;&#10;</xsl:text>
+    <xsl:if test="@role">
+      <xsl:value-of select="@role"/>
+      <xsl:text>: </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates/>
+    <xsl:text>&#10;</xsl:text>
   </xsl:if>
-  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- ############
