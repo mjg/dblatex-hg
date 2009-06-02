@@ -155,9 +155,9 @@
 
 <!-- load the needed package, and build the annotation files -->
 <xsl:template name="annotation.setup">
-  <xsl:if test="$annotation.support != '0' and //annotation">
+  <xsl:if test="$annotation.support != '0' and .//annotation">
     <xsl:text>\usepackage{attachfile}&#10;</xsl:text>
-    <xsl:apply-templates select="//annotation" mode="build.texfile"/>
+    <xsl:apply-templates select=".//annotation" mode="build.texfile"/>
   </xsl:if>
 </xsl:template>
 
