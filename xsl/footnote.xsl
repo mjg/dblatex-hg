@@ -58,10 +58,12 @@
 <!-- in a programlisting do as normal but in tex-escaped pattern -->
 <xsl:template match="footnote" mode="latex.programlisting">
   <xsl:param name="co-tagin" select="'&lt;:'"/>
-  <xsl:param name="co-tagout" select="$co.tagout"/>
-  <xsl:value-of select="$co-tagin"/>
-  <xsl:apply-templates select="."/>
-  <xsl:value-of select="$co-tagout"/>
+  <xsl:param name="probe" select="0"/>
+
+  <xsl:call-template name="verbatim.embed">
+    <xsl:with-param name="co-taging" select="$co-tagin"/>
+    <xsl:with-param name="probe" select="$probe"/>
+  </xsl:call-template>
 </xsl:template>
 
 

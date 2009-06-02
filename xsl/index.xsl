@@ -104,10 +104,13 @@
 <xsl:template match="indexterm" mode="latex.programlisting">
   <xsl:param name="co-tagin" select="'&lt;:'"/>
   <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
 
-  <xsl:value-of select="$co-tagin"/>
-  <xsl:apply-templates select="."/>
-  <xsl:value-of select="$co.tagout"/>
+  <xsl:call-template name="verbatim.embed">
+    <xsl:with-param name="co-taging" select="$co-tagin"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
+    <xsl:with-param name="probe" select="$probe"/>
+  </xsl:call-template>
 </xsl:template>
 
 

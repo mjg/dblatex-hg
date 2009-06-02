@@ -105,9 +105,16 @@
   </xsl:call-template>
 </xsl:template>
 
-<!-- To do: how to scape tabs? xt plants -->
+<!-- TODO: how to scape tabs? xt plants -->
+<!-- If probing is required the text is silently skipped.
+     See verbatim.xsl for an overview of the verbatim environment design
+     that explains the need of probing.
+-->
 <xsl:template match="text()" mode="latex.programlisting">
-  <xsl:value-of select="."/> 
+  <xsl:param name="probe" select="0"/>
+  <xsl:if test="$probe = 0">
+    <xsl:value-of select="."/> 
+  </xsl:if>
 </xsl:template>
 
 <xsl:template name="normalize-scape" >

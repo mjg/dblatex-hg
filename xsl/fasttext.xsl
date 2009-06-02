@@ -34,9 +34,12 @@
 </xsl:template>
 
 <xsl:template match="text()" mode="latex.programlisting">
-  <xsl:text>&v1;</xsl:text>
-  <xsl:value-of select="."/> 
-  <xsl:text>&v2;</xsl:text>
+  <xsl:param name="probe" select="0"/>
+  <xsl:if test="$probe = 0">
+    <xsl:text>&v1;</xsl:text>
+    <xsl:value-of select="."/> 
+    <xsl:text>&v2;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="text()" mode="latex.verbatim">
@@ -45,6 +48,11 @@
   <xsl:text>&v2;</xsl:text>
 </xsl:template>
 
+<!-- specific handling depending on the context -->
+<xsl:template match="text()[ancestor::ulink]">
+  <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
+  <xsl:apply-templates select="." mode="slash.hyphen"/>
+</xsl:template>
 
 <!-- replace some text in a string *as if* the string is already escaped.
      Here it ends to inserting raw text between tags. -->

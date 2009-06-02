@@ -73,6 +73,60 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
+<!-- Template that must be called by elements that want to be escaped in a
+     programlisting environment. It escapes the tex sequence, *but* prints
+     out the sequence only if probing is not required (i.e. = 0).
+     
+     Probing is used by a parent that wants to know if it contains some
+     element that needs some tex escaping.
+     -->
+
+<xsl:template name="verbatim.embed">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+  <xsl:param name="content"/>
+
+  <xsl:value-of select="$co-tagin"/>
+  <xsl:if test="$probe = 0">
+    <xsl:choose>
+      <xsl:when test="$content != ''">
+        <xsl:value-of select="$content"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
+  <xsl:value-of select="$co.tagout"/>
+</xsl:template>
+
+<!-- By default an element in a programlisting environment just prints out its
+     text() adapted to this environment, and apply to its children the same
+     template. -->
+
+<xsl:template match="*" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+
+  <xsl:message>
+    <xsl:value-of select="local-name(.)"/>
+    <xsl:text> not supported in programlisting or screen</xsl:text>
+  </xsl:message>
+
+  <xsl:apply-templates mode="latex.programlisting">
+    <xsl:with-param name="co-taging" select="$co-tagin"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
+    <xsl:with-param name="probe" select="$probe"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- ==================================================================== -->
+
 <!-- The following templates now works only with the listings package -->
 
 <!-- The listing content is internal to the element, and is not a reference
@@ -95,7 +149,8 @@
   </xsl:if>
   <!-- some text just after the open tag must be put on a new line -->
   <xsl:if test="not(contains(.,'&#10;')) or
-                string-length(normalize-space(substring-before(.,'&#10;')))&gt;0">
+                string-length(normalize-space(
+                  substring-before(.,'&#10;')))&gt;0">
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
   <xsl:apply-templates mode="latex.programlisting">
@@ -120,13 +175,16 @@
     </xsl:if>
   </xsl:variable>
 
+  <!-- is there some elements needing escaping? -->
+  <xsl:variable name="escaped">
+    <xsl:apply-templates mode="latex.programlisting">
+      <xsl:with-param name="probe" select="1"/>
+    </xsl:apply-templates>
+  </xsl:variable>
+
   <!-- get the listing escape sequence if needed -->
   <xsl:variable name="co-tagin">
-    <xsl:if test="descendant::co|
-                  descendant::footnote|
-                  descendant::indexterm|
-                  descendant::emphasis|
-                  descendant::userinput">
+    <xsl:if test="descendant::co or $escaped != ''">
       <xsl:call-template name="co-tagin-gen"/>
     </xsl:if>
   </xsl:variable>
@@ -168,7 +226,7 @@
       <xsl:text>,</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
-    <!-- TeX delimiters if <co>s are embedded -->
+    <!-- TeX delimiters if some tex stuff is embedded (like <co>s) -->
     <xsl:if test="$co-tagin!=''">
       <xsl:text>escapeinside={</xsl:text>
       <xsl:value-of select="$co-tagin"/>
@@ -213,6 +271,8 @@
 </xsl:template>
 
 
+<!-- ==================================================================== -->
+
 <!-- Global listing saving, for listings in footnotes, since we never know
      in which context the footnotes are used. A check is done to not cover
      the other saving points in tables. -->
@@ -247,15 +307,16 @@
     <xsl:text>}</xsl:text>
     <!-- some text just after the open tag must be put on a new line -->
     <xsl:if test="not(contains($str1,'&#10;')) or
-           string-length(normalize-space(substring-before($str1,'&#10;')))&gt;0">
+           string-length(
+             normalize-space(substring-before($str1,'&#10;')))&gt;0">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
     <xsl:value-of select="$str"/>
     <!-- put a \n only if needed -->
     <xsl:if test="substring($str1,string-length($str1))!='&#10;' and
                   string-length(substring-after(
-                    concat(substring-after($str1,normalize-space($str1)),'&#10;'),
-                    '&#10;'))=0">
+                    concat(substring-after(
+                      $str1,normalize-space($str1)),'&#10;'),'&#10;'))=0">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
     <xsl:text>\end{VerbatimOut}&#10;</xsl:text>
