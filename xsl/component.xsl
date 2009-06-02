@@ -68,7 +68,7 @@
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="." mode="section.body"/>
     <!-- restore the initial counters -->
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
     <xsl:value-of select="$doc.section.depth"/>
@@ -78,6 +78,11 @@
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- By default the (unumbered) section body just processes children -->
+<xsl:template match="*" mode="section.body">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="dedication/title"></xsl:template>

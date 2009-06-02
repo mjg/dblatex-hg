@@ -4,55 +4,74 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<xsl:param name="glossary.tocdepth">5</xsl:param>
+<xsl:param name="glossary.numbered">1</xsl:param>
 
 <!-- ############
      # glossary #
      ############ -->
 
 <xsl:template match="glossary">
+  <xsl:text>% --------	&#10;</xsl:text>
+  <xsl:text>% GLOSSARY	&#10;</xsl:text>
+  <xsl:text>% --------	&#10;</xsl:text>
+
+  <xsl:variable name="level">
+    <xsl:call-template name="get.sect.level"/>
+  </xsl:variable>
+
+  <xsl:variable name="title.text">
+    <xsl:call-template name="gentext">
+      <xsl:with-param name="key" select="'Glossary'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:choose>
+  <xsl:when test="$glossary.numbered = '0'">
+    <!-- Unumbered section (but in TOC) -->
+    <xsl:call-template name="section.unnumbered">
+      <xsl:with-param name="tocdepth" select="number($glossary.tocdepth)"/>
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="title" select="$title.text"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:when test="title">
+    <!-- Numbered section from a <title> node -->
+    <xsl:call-template name="makeheading">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="allnum" select="'1'"/>
+    </xsl:call-template>
+    <xsl:apply-templates select="." mode="section.body"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <!-- Numbered section from a generated title -->
+    <xsl:call-template name="maketitle">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="title" select="$title.text"/>
+    </xsl:call-template>
+    <xsl:apply-templates select="." mode="section.body"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="glossary" mode="section.body">
   <xsl:variable name="divs" select="glossdiv"/>
   <xsl:variable name="entries" select="glossentry"/>
   <xsl:variable name="preamble" select="*[not(self::title
                                           or self::subtitle
                                           or self::glossdiv
                                           or self::glossentry)]"/>
-  <xsl:text>% --------	&#10;</xsl:text>
-  <xsl:text>% GLOSSARY	&#10;</xsl:text>
-  <xsl:text>% --------	&#10;</xsl:text>
-
-  <!-- defined or default glossary title? -->
-  <xsl:variable name="title">
-    <xsl:choose>
-    <xsl:when test="title">
-      <xsl:call-template name="normalize-scape">
-      <xsl:with-param name="string" select="title"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="gentext.element.name"/>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <!-- find the appropriate section level -->
-  <xsl:call-template name="map.sect.level">
-    <xsl:with-param name="level">
-      <xsl:call-template name="get.sect.level"/>
-    </xsl:with-param>
-  </xsl:call-template>
-  <xsl:text>{</xsl:text>
-  <xsl:copy-of select="$title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
   <xsl:if test="$preamble">
     <xsl:apply-templates select="$preamble"/>
   </xsl:if>
+
   <xsl:if test="$entries">
     <xsl:text>&#10;\noindent&#10;</xsl:text>
     <xsl:text>\begin{description}&#10;</xsl:text>
     <xsl:apply-templates select="$entries"/>
     <xsl:text>&#10;\end{description}&#10;</xsl:text>
   </xsl:if>
+
   <xsl:if test="$divs">
     <xsl:apply-templates select="$divs"/>
   </xsl:if>
