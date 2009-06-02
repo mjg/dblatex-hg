@@ -166,7 +166,8 @@
        $style extract the optional '.infoot' or '.after' part -->
   <xsl:variable name="style">
     <xsl:call-template name="string-replace">
-      <xsl:with-param name="string" select="substring-after(@xrefstyle, 'url')"/>
+      <xsl:with-param name="string"
+                      select="substring-after(@xrefstyle, 'url')"/>
       <xsl:with-param name="from" select="'.show'"/>
       <xsl:with-param name="to" select="''"/>
     </xsl:call-template>
@@ -200,8 +201,8 @@
     <xsl:text>\href{</xsl:text>
     <xsl:value-of select="$url"/>
     <xsl:text>}{</xsl:text>
-    <!-- LaTeX chars are scaped. Each / except the :// is mapped to a /\- -->
-    <xsl:apply-templates mode="slash.hyphen"/>
+    <!-- text() within ulink is handled somewhere else -->
+    <xsl:apply-templates/>
     <xsl:text>}</xsl:text>
 
     <xsl:variable name="url.show">
