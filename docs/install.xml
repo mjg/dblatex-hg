@@ -252,7 +252,7 @@ from: <ulink url="http://www.zlatkovic.com/libxml.en.html"></ulink>.</para>
 <para>Install the minimal distribution, and add the following packages:
 changebar, colortbl, fancybox, fancyhdr, fancyvrb, listings, overpics,
 rotating, subfigure, titlesec, bibtopic, enumitem, eepic, lm, lastpage,
-helvetic, times, symbol, courier.</para>
+helvetic, times, symbol, courier, footmisc, ifxetex, pdfpages, wasysym.</para>
 </section>
 
 <section>
