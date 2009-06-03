@@ -3,7 +3,7 @@ import os
 import codecs
 
 from dbtexmf.dblatex.texcodec import LatexCodec
-from fontspec import FontSpecEncoder
+from fsencoder import FontSpecEncoder
 
 
 class XetexCodec(LatexCodec):
@@ -44,6 +44,9 @@ class XetexCodec(LatexCodec):
         # Preliminary backslash substitution
         text = text.replace("\\", "\2")
 
+        # Consider that each text sequence is in his own tex group
+        self._fontmgr.reset()
+
         # Handle fonts for this Unicode string. We build a list of
         # strings, where each string is handled by a new font
         switchfonts = []
@@ -68,5 +71,5 @@ class XetexCodec(LatexCodec):
 
         # Things are done, substitute the '\'
         text = text.replace("\2", r"\textbackslash{}")
-        return text
+        return "{" + text + "}"
 

@@ -2,7 +2,7 @@
 \ifxetex
 % to have the \text macro
 \usepackage{amstext}
-%\makeatletter
+
 \def\sf@sfdefault{sf}
 \def\sf@rmdefault{rm}
 \def\sf@ttdefault{tt}
@@ -38,7 +38,45 @@
   \selectfont%
   %\egroup%
 }
-%\makeatother
+
+\def\savefamily{%
+  \ifx\f@family\sfdefault
+    \let\sf@family\sf@sfdefault
+  \else\ifx\f@family\rmdefault
+    \let\sf@family\sf@rmdefault
+  \else\ifx\f@family\ttdefault
+    \let\sf@family\sf@ttdefault
+  \else
+    \ifthenelse{\equal{\f@family}{\ttdefault}}{
+      \let\sf@family\sf@ttdefault}{\let\sf@family\relax}
+  \fi\fi\fi%
+}
+\def\loadfamily{%
+  \ifx\sf@family\sf@sfdefault
+    \sffamily
+  \else\ifx\sf@family\sf@rmdefault
+    \rmfamily
+  \else\ifx\sf@family\sf@ttdefault
+    \ttfamily
+  \else
+    \rmfamily
+  \fi\fi\fi%
+  \selectfont%
+}
+
+% Copy the fontspec macro, but don't switch to normal font
+\newcommand*\switchmainfont[2][]{%
+  \zf@fontspec{#1}{#2}%
+  \let\rmdefault\zf@family
+  \selectfont}
+\newcommand*\switchsansfont[2][]{%
+  \zf@fontspec{#1}{#2}%
+  \let\sfdefault\zf@family
+  \selectfont}
+\newcommand*\switchmonofont[2][]{%
+  \zf@fontspec{#1}{#2}%
+  \let\ttdefault\zf@family
+  \selectfont}
 
 \else
 
