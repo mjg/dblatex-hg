@@ -4,6 +4,7 @@
 #   error handler.
 # - A general API.
 #
+import sys
 
 class ErrorHandler:
     """
@@ -15,10 +16,12 @@ class ErrorHandler:
         pass
 
     def signal(self, object, *args, **kwargs):
-        pass
+        failed_exit("Unexpected error occured")
 
 
 _current_handler = None
+_dump_stack = False
+
 
 #
 # Dblatex Error Handler API
@@ -42,4 +45,14 @@ def set_errhandler(handler):
 
 def signal_error(*args, **kwargs):
     get_errhandler().signal(*args, **kwargs)
+
+def failed_exit(msg, rc=1):
+    global _dump_stack
+    print >>sys.stderr, (msg)
+    if _dump_stack: raise
+    sys.exit(rc)
+
+def dump_stack():
+    global _dump_stack
+    _dump_stack = True
 
