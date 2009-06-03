@@ -70,6 +70,7 @@ TODO
 <xi:include href="funcsynopsis.decoration.xml"/>
 <xi:include href="funcsynopsis.style.xml"/>
 <xi:include href="function.parens.xml"/>
+<xi:include href="refclass.suppress.xml"/>
 <xi:include href="refentry.generate.name.xml"/>
 <xi:include href="refentry.xref.manvolnum.xml"/>
 <!--
