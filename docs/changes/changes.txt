@@ -1,3 +1,26 @@
+Release 0.2.11:
+---------------
+
+- Improve the <set> support: dblatex can build all the PDF files (one per
+  book) and the package xr is used to make cross-references between the books.
+- Improve the xetex font switch macros
+- Format the elements contained in <ulink>s (not only text)
+- Add some hook to external error handlers +
+  Add the Debian error handler in the repository (the maintainer is still
+  A. Hoenen)
+- Change verbatim implementation in order to be able to easily add new
+  elements embeddable in <programlisting>s
+- Fix documentation bug #1997998.
+- Fix bug #1831383: use \ref*{} to display <xref> in a TOC or LOT
+- Fix the <refclass> rendering and add the refclass.suppress parameter
+  and fix the <refpurpose> dash separator (use of &mdash; instead of
+  &ndash;)
+- Fix the bug where \nolinkurl{} strips the spaces
+- Glossary headings are now rendered like refentry headings
+  (add glossary.numbered and glossary.tocdepth parameters)
+- Add scripts to synch SF CVS and Mercurial repositories 
+
+
 Release 0.2.10:
 ---------------
 
