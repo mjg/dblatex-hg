@@ -14,7 +14,7 @@ from optparse import OptionParser
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse, texstyle_parse
 from dbtexmf.xslt import xslt
 from dbtexmf.core.logger import logger
-from dbtexmf.core.error import signal_error
+from dbtexmf.core.error import signal_error, failed_exit, dump_stack
 
 
 def suffix_replace(path, oldext, newext=""):
@@ -29,6 +29,30 @@ def path_to_uri(path):
         return 'file:' + urllib.pathname2url(path).replace('|', ':', 1)
     else:
         return urllib.pathname2url(path)
+
+
+class Document:
+    """
+    Wrapper structure of the files built during the compilation per document
+    """
+    def __init__(self, filename, binfmt="pdf"):
+        self.inputname = filename
+        self.basename = os.path.splitext(filename)[0]
+        self.rawfile = self.basename + ".rtex"
+        self.texfile = self.basename + ".tex"
+        self.binfile = self.basename + "." + binfmt
+
+    def __cmp__(self, other):
+        """
+        Comparaison method mainly to check if the document is in a list
+        """
+        if cmp(self.rawfile, other) == 0:
+            return 0
+        if cmp(self.texfile, other) == 0:
+            return 0
+        if cmp(self.binfile, other) == 0:
+            return 0
+        return -1
 
 
 class DbTex:
@@ -62,6 +86,8 @@ class DbTex:
         self.backend = ""
 
         # Temporary files
+        self.documents = []
+        self.interms = []
         self.basefile = ""
         self.rawfile = ""
         self.texfile = ""
@@ -77,6 +103,7 @@ class DbTex:
         self.topdir = os.path.realpath(topdir)
         self.xslmain = os.path.join(self.topdir, "xsl", "docbook.xsl")
         self.xsllist = os.path.join(self.topdir, "xsl", "common", "mklistings.xsl")
+        self.xslset = os.path.join(self.topdir, "xsl", "common", "mkdoclist.xsl")
         self.texdir = os.path.join(self.topdir, "texstyle")
         self.texlocal = ""
         self.confdir = os.path.join(self.topdir, "confstyle")
@@ -137,6 +164,8 @@ class DbTex:
         for xsluser in self.xslusers:
             f.write('<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
 
+        # Reverse to set the latest parameter first (case of overriding)
+        self.xslparams.reverse()
         for param in self.xslparams:
             v = param.split("=", 1)
             f.write('<xsl:param name="%s">' % v[0])
@@ -168,16 +197,69 @@ class DbTex:
             f.write("<listings/>\n")
             f.close()
 
+    def build_doclist(self):
+        xslset = "doclist.xsl"
+        f = file(xslset, "w")
+        f.write("""<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                version="1.0">
+                \n""")
+        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
+        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
+        f.write('</xsl:stylesheet>\n')
+        f.close()
+
+        doclist = os.path.join(self.tmpdir, "doclist.txt")
+        self.xsltproc.use_catalogs = 0
+        self.xsltproc.run(xslset, self.input, doclist, opts=self.xslopts)
+
+        # There's no set, or only one book from the set is compiled
+        if not(os.path.isfile(doclist)):
+            if not(self.output):
+                output = suffix_replace(self.input, "."+self.input_format,
+                                        ".%s" % self.format)
+                self.output = output
+            self.documents.append(Document(self.basefile + \
+                                           "." + self.input_format,
+                                           binfmt=self.format))
+            return
+
+        # There are multiple files to output. Check the output dir is OK
+        if self.output:
+            if not(os.path.isdir(self.output)):
+                failed_exit("Error: '%s' is not a directory" % self.output)
+        else:
+            self.output = "." # FIXME
+
+        f = open(doclist)
+        books = f.readlines()
+        f.close()
+
+        for b in books:
+            d = Document(b.strip() + ".tex", binfmt=self.format)
+            self.documents.append(d)
+
     def make_rawtex(self):
-        self.rawfile = self.basefile + ".rtex"
+        if len(self.documents) == 1:
+            self.rawfile = self.documents[0].rawfile
+        else:
+            self.rawfile = "output.rtex"
+
         param = {"listings.xml": self.listings,
                  "current.dir": self.inputdir}
         self.xsltproc.use_catalogs = 1
         self.xsltproc.run(self.xslbuild, self.input,
                           self.rawfile, opts=self.xslopts, params=param)
 
+        # Now, find the intermediate raw files
+        rawfiles = glob.glob("*.rtex")
+        for rawfile in rawfiles:
+            if not(rawfile in self.documents):
+                d = Document(rawfile, binfmt=self.format)
+                self.interms.append(d)
+
     def make_tex(self):
-        self.texfile = self.basefile + ".tex"
         self.rawtex.set_format(self.format, self.backend)
         if self.fig_format:
             self.rawtex.fig_format(self.fig_format)
@@ -185,13 +267,10 @@ class DbTex:
         # By default figures are relative to the source file directory
         self.rawtex.set_fig_paths([self.inputdir] + self.fig_paths)
 
-        self.rawfiles = glob.glob("*.rtex")
-        for rawfile in self.rawfiles:
-            texfile = os.path.splitext(rawfile)[0] + ".tex"
-            self.rawtex.parse(rawfile, texfile)
+        for d in self.documents + self.interms:
+            self.rawtex.parse(d.rawfile, d.texfile)
 
     def make_bin(self):
-        self.binfile = self.basefile + "." + self.format
         if self.backend:
             self.runtex.set_backend(self.backend)
         self.runtex.texpost = self.texpost
@@ -199,21 +278,12 @@ class DbTex:
         self.runtex.set_bib_paths([self.inputdir] + self.bib_paths,
                                   [self.inputdir] + self.bst_paths)
 
-        # Build the dependent files
-        self.rawfiles.remove(self.rawfile)
-        for rawfile in self.rawfiles:
-            texfile = os.path.splitext(rawfile)[0] + ".tex"
-            binfile = os.path.splitext(rawfile)[0] + "." + self.format
-            self.log.info("Build %s" % binfile)
-            self.runtex.compile(texfile, binfile, self.format,
+        # Build the intermediate files and (after) the main documents
+        for d in self.interms + self.documents:
+            self.log.info("Build %s" % d.binfile)
+            self.runtex.compile(d.texfile, d.binfile, self.format,
                                 batch=self.texbatch)
             self.runtex.clean()
-
-        # Build the main document file 
-        self.log.info("Build %s" % self.binfile)
-        self.runtex.compile(self.texfile, self.binfile, self.format,
-                            batch=self.texbatch)
-        self.runtex.clean()
 
     def compile(self):
         self.set_xslt()
@@ -225,11 +295,17 @@ class DbTex:
             self._stdin_write()
         os.chdir(self.tmpdir)
         try:
-            donefile = self._compile()
-            shutil.move(donefile, self.output)
-            print "'%s' successfully built" % os.path.basename(self.output)
-        except:
-            signal_error(self)
+            donefiles = self._compile()
+            for d in donefiles:
+                shutil.move(d, self.output)
+            if len(donefiles) == 1:
+                print "'%s' successfully built" % os.path.basename(self.output)
+            else:
+                donefiles.sort()
+                print "Files successfully built in '%s':\n%s" % \
+                      (self.output, ",\n".join(donefiles))
+        except Exception, e:
+            signal_error(self, e)
         finally:
             os.chdir(self.cwdir)
             if not(self.debug):
@@ -262,6 +338,9 @@ class DbTex:
         # Build the user XSL stylesheet if needed
         self.build_stylesheet()
 
+        # List the documents to build
+        self.build_doclist()
+
         # Refresh the TEXINPUTS
         self.update_texinputs()
 
@@ -272,26 +351,18 @@ class DbTex:
                     os.environ["TEXINPUTS"])
             f.close()
 
-        # Build the tex file, and compile it
+        # Build the tex file(s), and compile it(them)
         self.make_listings()
         self.make_rawtex()
         if self.format == "rtex":
-            return self.rawfile
+            return [ d.rawfile for d in self.documents ]
 
         self.make_tex()
         if self.format == "tex":
-            return self.texfile
+            return [ d.texfile for d in self.documents ]
 
         self.make_bin()
-        return self.binfile
-
-
-dump_stack = False
-def failed_exit(msg, rc=1):
-    global dump_stack
-    print >>sys.stderr, (msg)
-    if dump_stack: raise
-    sys.exit(rc)
+        return [ d.binfile for d in self.documents ]
 
 
 #
@@ -475,8 +546,7 @@ class DbTexCommand:
             run.tmpdir_user = os.path.abspath(options.tmpdir)
 
         if options.dump:
-            global dump_stack
-            dump_stack = True
+            dump_stack()
 
     def get_config_paths(self):
         # Allows user directories where to look for configuration files
@@ -552,8 +622,9 @@ class DbTexCommand:
         # The output name can be deduced from the input one:
         # /path/to/input.xml -> /path/to/input.{tex|pdf|dvi|ps}
         if not(options.output):
-            output = suffix_replace(input, "."+run.input_format,
-                                    ".%s" % run.format)
+            #output = suffix_replace(input, "."+run.input_format,
+            #                        ".%s" % run.format)
+            output = None
         else:
             output = os.path.realpath(options.output)
 

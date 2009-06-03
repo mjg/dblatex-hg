@@ -46,14 +46,8 @@ class LatexBuilder:
         self.tex.batch = self.batch
         self.tex.encoding = self.encoding
         self.tex.set_source(source)
-        self.tex.prepare()
 
-        # Set the index style
-        if self.index_style and self.tex.modules.has_key("makeidx"):
-            idx = self.tex.modules["makeidx"]
-            idx.style = self.index_style
-
-        # Adapt the modules to load, depending on the output format
+        # Load the modules needed to produce the expected output format
         if (self.format == "pdf"):
             if (self.backend == "pdftex"):
                 self.tex.modules.register("pdftex")
@@ -64,6 +58,14 @@ class LatexBuilder:
                 self.tex.modules.register("ps2pdf")
         elif (self.format == "ps"):
             self.tex.modules.register("dvips")
+
+        # Now load other the modules required to compile this file
+        self.tex.prepare()
+
+        # Set the index style
+        if self.index_style and self.tex.modules.has_key("makeidx"):
+            idx = self.tex.modules["makeidx"]
+            idx.style = self.index_style
 
         # Let's go...
         rc = self.maker.make()

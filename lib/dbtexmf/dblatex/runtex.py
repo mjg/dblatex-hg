@@ -78,10 +78,8 @@ class RunLatex:
 
     def compile(self, texfile, binfile, format, batch=1):
         root = os.path.splitext(texfile)[0]
-        tmpbase = root + "_tmp"
-        tmptex = tmpbase + ".tex"
-        tmplog = tmpbase + ".log"
-        tmpout = tmpbase + "." + format
+        tmptex = root + "_tmp" + ".tex"
+        texout = root + "." + format
 
         # The temporary file contains the extra paths
         f = file(tmptex, "w")
@@ -91,7 +89,7 @@ class RunLatex:
             f.write("\\def\\input@path{%s}\n" % paths)
             f.write("\\makeatother\n")
 
-        # Copy the original file
+        # Copy the original file and collect parameters embedded in the tex file
         self._clear_params()
         input = file(texfile)
         for line in input:
@@ -99,6 +97,9 @@ class RunLatex:
             f.write(line)
         f.close()
         input.close()
+
+        # Replace the original file with the new one
+        shutil.move(tmptex, texfile)
 
         # Build the output file
         try:
@@ -109,13 +110,14 @@ class RunLatex:
             self.texer.set_backend(self.backend)
             if self.index_style:
                 self.texer.set_index_style(self.index_style)
-            self.texer.compile(tmptex)
+            self.texer.compile(texfile)
         except:
             # On error, dump the log errors and raise again
             self.texer.print_errors()
             raise
 
-        shutil.move(tmpout, binfile)
+        if texout != binfile:
+            shutil.move(texout, binfile)
 
     def clean(self):
         self.texer.clean()
