@@ -1,9 +1,12 @@
 #!/bin/sh
 
-use_ssh=0
-use_remote=`cat CVS/Root | grep -c "@"`
-cvspackage=`cat CVS/Repository`
-cvsroot=`cat CVS/Root`
+use_hg=`hg root | wc -l`
+if [ $use_hg -eq 0 ]; then
+  use_ssh=0
+  use_remote=`cat CVS/Root | grep -c "@"`
+  cvspackage=`cat CVS/Repository`
+  cvsroot=`cat CVS/Root`
+fi
 
 # we can force some behaviour
 while true
@@ -16,7 +19,9 @@ do
   shift
 done
 
-if [ $use_ssh -eq 1 ]; then
+if [ $use_hg -eq 1 ]; then
+  echo "use mercurial"
+elif [ $use_ssh -eq 1 ]; then
   echo "use ssh mode"
   CVSROOT=:ext:marsgui@cvs.sourceforge.net:/cvsroot/dblatex
   export CVSROOT
@@ -55,12 +60,26 @@ fi
 
 tmpbuild=$tmpdir/$release
 
+if [ $use_hg -eq 1 ]; then
+
+hg archive -r $tag $tmpbuild; rc=$?
+if [ $rc -ne 0 ]; then
+  echo "hg archive failed"
+  exit 1
+fi
+
+rm -f $tmpbuild/.hg*
+
+else
+
 cd $tmpdir; cvs -z3 -q export -r $tag -d $release $cvspackage; rc=$?
 cd -
 
 if [ $rc -ne 0 ]; then
   echo "CVS failed"
   exit 1
+fi
+
 fi
 
 # Remove the devel only files
