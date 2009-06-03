@@ -299,10 +299,32 @@
 </xsl:template>
 
 <!-- No reference must be made, but the label should be printed, if any -->
-<xsl:template match="xref|link" mode="toc.skip">
+<xsl:template match="link" mode="toc.skip">
   <xsl:apply-templates select="." mode="xref.text"/>
 </xsl:template>
 
+<!-- Try to have the label from text mode, else get the reference counter -->
+<xsl:template match="xref" mode="toc.skip">
+  <xsl:variable name="xref.text">
+    <xsl:apply-templates select="." mode="xref.text"/>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$xref.text != ''">
+      <xsl:value-of select="$xref.text"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Get the normal markup but replace hot links by counters -->
+      <xsl:call-template name="string-replace">
+        <xsl:with-param name="string">
+          <xsl:apply-templates select="."/>
+        </xsl:with-param>
+        <xsl:with-param name="from" select="'\ref{'"/>
+        <xsl:with-param name="to" select="'\ref*{'"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 <xsl:template match="ulink" mode="toc.skip">
   <xsl:choose>
