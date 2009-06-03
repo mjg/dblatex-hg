@@ -4,7 +4,7 @@ import sys
 from subprocess import Popen, PIPE
 from xml.dom.minidom import parseString
 
-from cvsext import cvscommit, CVSSession
+from cvsext import CVSSession
 
 def get_cvsset(from_node, style, to_node="tip"):
     cmd = "hg log -r %s:%s --debug --style %s" % (from_node, to_node, style)
@@ -15,13 +15,12 @@ def get_cvsset(from_node, style, to_node="tip"):
     cvsset = []
 
     dom3 = parseString("<changegroup>" + data + "</changegroup>")
-    dom3.writexml(open("foo.xml", "w"))
+    #dom3.writexml(open("foo.xml", "w"))
 
     csets = dom3.getElementsByTagName("changeset")
-    rc = False
     for cset in csets:
         cvs = CVSSession()
-        cvscommit(cvs, cset)
+        cvs.from_cset(cset)
         if cvs.cset == from_node:
             continue
         cvsset.append(cvs)
@@ -93,6 +92,12 @@ def recover_from(batchfile):
     cvs.run(dry_run=True)
 
 
+def get_current_revision():
+    p = Popen("hg parents --template '{rev}:{node}'", shell=True, stdout=PIPE)
+    rev, node = p.communicate()[0].split(":")
+    return rev, node
+
+
 def main():
     from optparse import OptionParser
     parser = OptionParser()
@@ -118,8 +123,7 @@ def main():
     os.system("hg pull")
 
     # Where do we come from?
-    p = Popen("hg parents --template '{node}'", shell=True, stdout=PIPE)
-    starting_node = p.communicate()[0]
+    starting_rev, starting_node = get_current_revision()
 
     # Recover to a clean state if necessary
     if options.recover:
@@ -139,12 +143,14 @@ def main():
     # Now run each set in the order
     for cvs in cvsset:
         try:
-            print "Sync CVS to changeset %s" % cvs.cset
+            print "Sync CVS to changeset %s:%s" % (cvs.rev, cvs.cset)
             update_to(cvs.cset)
             cvs.run(batch=cvsqueue)
             os.unlink(cvsqueue)
         except:
-            print "foo"
+            rev, node = get_current_revision()
+            print "Changeset '%s' commit to CVS failed" % cvs.rev
+            print "The current Hg changeset is '%s'" % rev
             break
 
 if __name__ == "__main__":
