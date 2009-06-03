@@ -52,6 +52,9 @@
   <xsl:apply-templates select="title" mode="foottext"/>
 </xsl:template>
 
+<!-- Make a section heading from a title string. It gives something like:
+     \section{title string}\label{label.id}
+     -->
 <xsl:template name="maketitle">
   <xsl:param name="num" select="'1'"/>
   <xsl:param name="allnum" select="'0'"/>
@@ -115,6 +118,10 @@
   </xsl:if>
 </xsl:template>
 
+<!-- Make the title part of a section heading from a title node.
+     It gives something like:
+     [{string in TOC}]{heading string}
+     -->
 <xsl:template match="title" mode="format.title">
   <xsl:param name="allnum" select="'0'"/>
   <xsl:apply-templates select="." mode="toc">
