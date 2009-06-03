@@ -7,7 +7,7 @@
 
 <!-- Upper table and informaltable templates. They make the wrapper environment
      depending of the kind of table (floating, landscape, role) and call the
-     actual newtbl engine. The $newtbl.use parameter is now obsolete. -->
+     actual newtbl engine. The $newtbl.use parameter is now removed. -->
 
 <xsl:param name="newtbl.format.thead">\bfseries%&#10;</xsl:param>
 <xsl:param name="newtbl.format.tbody"/>
@@ -16,7 +16,6 @@
 <xsl:param name="newtbl.default.colsep" select="'1'"/>
 <xsl:param name="newtbl.default.rowsep" select="'1'"/>
 <xsl:param name="newtbl.use.hhline" select="'0'"/>
-<xsl:param name="newtbl.use" select="'1'"/> <!-- no more used -->
 <xsl:param name="newtbl.autowidth"/>
 <xsl:param name="table.title.top" select="'0'"/>
 <xsl:param name="table.in.float" select="'1'"/>
