@@ -53,6 +53,10 @@
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text>}&#10;</xsl:text>
+
+  <xsl:variable name="external.docs">
+    <xsl:call-template name="make.external.docs"/>
+  </xsl:variable>
   
   <xsl:call-template name="encode.before.style">
     <xsl:with-param name="lang" select="$lang"/>
@@ -61,9 +65,14 @@
   <xsl:text>\usepackage{makeidx}&#10;</xsl:text>
 
   <xsl:call-template name="user.params.set"/>
-
   <!-- Load babel before the style (bug #babel/3875) -->
   <xsl:call-template name="babel.setup"/>
+
+  <!-- Load xr before hyperref -->
+  <xsl:if test="$external.docs != ''">
+    <xsl:text>\usepackage{xr-hyper}&#10;</xsl:text>
+  </xsl:if>
+
   <xsl:text>\usepackage[hyperlink]{</xsl:text>
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>
@@ -132,6 +141,14 @@
   <xsl:value-of select="$authors"/>
   <xsl:text>}%&#10;</xsl:text>
   <xsl:text>}&#10;</xsl:text>
+
+  <!-- The external documents -->
+  <xsl:if test="$external.docs != ''">
+    <xsl:text>% </xsl:text>
+    <xsl:call-template name="give.basename"/>
+    <xsl:text>&#10;</xsl:text>
+    <xsl:value-of select="$external.docs"/>
+  </xsl:if>
 
   <!-- Set the collaborator table -->
   <xsl:call-template name="collab.setup">
@@ -495,8 +512,73 @@
     <xsl:value-of select="$set.book.num"/>
     <xsl:text>]</xsl:text>
   </xsl:message>
-  <xsl:apply-templates select="//book[position()=$set.book.num]"/>
+  <xsl:choose>
+  <xsl:when test="$set.book.num = 'all'">
+    <!-- Write a latex file per book -->
+    <xsl:apply-templates select="//book" mode="build.texfile"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:apply-templates select="//book[position()=$set.book.num]"/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
+
+<xsl:template match="book" mode="build.texfile">
+  <xsl:call-template name="write.text.chunk">
+    <xsl:with-param name="filename">
+      <xsl:call-template name="give.basename"/>
+      <xsl:text>.rtex</xsl:text>
+    </xsl:with-param>
+    <xsl:with-param name="method" select="'text'"/>
+    <xsl:with-param name="content">
+      <xsl:apply-templates select="."/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="book" mode="give.basename" name="give.basename">
+  <xsl:param name="template" select="'%b'"/>
+  <xsl:param name="exclude-gid"/>
+
+  <xsl:variable name="local-gid">
+    <xsl:value-of select="generate-id()"/>
+  </xsl:variable>
+
+  <xsl:variable name="basename">
+    <xsl:choose>
+    <xsl:when test="not(@id) or $use.id.as.filename = 0">
+      <xsl:value-of select="concat('book', position())"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@id"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:if test="$local-gid != $exclude-gid">
+    <xsl:call-template name="string-replace">
+      <xsl:with-param name="string" select="$template"/>
+      <xsl:with-param name="from" select="'%b'"/>
+      <xsl:with-param name="to" select="$basename"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="make.external.docs">
+  <xsl:variable name="local-gid">
+    <xsl:value-of select="generate-id()"/>
+  </xsl:variable>
+  <xsl:if test="$set.book.num = 'all'">
+    <xsl:apply-templates
+         select="//book[parent::set]"
+         mode="give.basename">
+      <xsl:with-param name="template"
+                      select="'\externaldocument{%b}[%b]&#10;'"/>
+      <xsl:with-param name="exclude-gid" select="$local-gid"/>
+    </xsl:apply-templates>
+  </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="set/setinfo"></xsl:template>
 <xsl:template match="set/title"></xsl:template>

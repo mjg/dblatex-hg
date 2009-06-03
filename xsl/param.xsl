@@ -55,6 +55,7 @@
 <xsl:param name="xref.with.number.and.title" select="0"/>
 <xsl:param name="insert.xref.page.number">no</xsl:param>
 <xsl:param name="punct.honorific" select="'.'"/>
+<xsl:param name="use.id.as.filename" select="0"/>
 
 <xsl:param name="target.database.document" select="''"/>
 <xsl:param name="targets.filename" select="'target.db'"/>
