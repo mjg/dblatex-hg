@@ -64,7 +64,7 @@
     <cmdsynopsis>
       <command>dblatex</command>
       <arg choice="opt"><option>options</option></arg>
-      <arg choice="plain"><replaceable>file</replaceable></arg>
+      <arg choice="plain">{<replaceable>file</replaceable> | -}</arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -235,8 +235,22 @@
         <term><option>--output=<replaceable>output</replaceable></option></term>
         <listitem>
           <simpara>
-            Output filename.  When not used, the input filename is used, with
-            the suffix of the output format.
+            Output filename. When not specified, the input filename is used, with
+            the suffix of the output format. The option is ignored if several
+            books are chunked from a set. In this case the <option>-O</option>
+            option is applied instead.
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-O <replaceable>output_dir</replaceable></option></term>
+        <term><option>--output-dir=<replaceable>output_dir</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Output directory of the books built from a set. When not specified,
+            the current working directory is used instead. The option is ignored
+            if a single document is outputed, and the <option>-o</option> is
+            taken into account.
           </simpara>
         </listitem>
       </varlistentry>
@@ -446,6 +460,10 @@ xsltproc --param profile.attribute "'output'" \
          --param profile.value "'pdf'" /path/to/profiling/profile.xsl \
          myfile.xml | dblatex -o myfile.pdf -
 </screen>
+    </para>
+    <para>
+      To build a set of books:
+      <screen>dblatex -O /path/to/chunk/dir -Pset.book.num=all myfile.xml</screen>
     </para>
   </refsection>
 

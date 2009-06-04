@@ -38,6 +38,7 @@
 <xsl:include href="lists.xsl"/>
 <xsl:include href="xref.xsl"/>
 <xsl:include href="lang.xsl"/>
+<xsl:include href="set.xsl"/>
 <xsl:include href="preamble.xsl"/>
 <xsl:include href="main.xsl"/>
 <xsl:include href="version.xsl"/>

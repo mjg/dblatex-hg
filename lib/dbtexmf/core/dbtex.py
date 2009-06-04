@@ -58,6 +58,13 @@ class Document:
 class DbTex:
     USE_MKLISTINGS = 1
 
+    xsl_header = \
+"""<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                version="1.0">
+                \n"""
+
     def __init__(self, base=""):
         self.name = None
         self.debug = 0
@@ -72,6 +79,7 @@ class DbTex:
         self.inputdir = ""
         self.input = ""
         self.input_format = "xml"
+        self.outputdir = ""
         self.output = ""
         self.format = "pdf"
         self.tmpdir = ""
@@ -90,8 +98,6 @@ class DbTex:
         self.interms = []
         self.basefile = ""
         self.rawfile = ""
-        self.texfile = ""
-        self.binfile = ""
 
         # Engines to use
         self.runtex = None
@@ -155,11 +161,7 @@ class DbTex:
             return
 
         f = file(wrapper, "w")
-        f.write("""<?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:m="http://www.w3.org/1998/Math/MathML"
-                version="1.0">
-                \n""")
+        f.write(self.xsl_header)
         f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
         for xsluser in self.xslusers:
             f.write('<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
@@ -197,14 +199,40 @@ class DbTex:
             f.write("<listings/>\n")
             f.close()
 
+    def _single_setup(self):
+        # If not specified the output name can be deduced from the input one:
+        # /path/to/input.{xml|sgml} -> /path/to/input.{tex|pdf|dvi|ps}
+        if not(self.output):
+            output = suffix_replace(self.input, "."+self.input_format,
+                                    ".%s" % self.format)
+            self.output = output
+
+        self.documents.append(Document(self.basefile + \
+                                       "." + self.input_format,
+                                       binfmt=self.format))
+
+    def _multiple_setup(self, doclist):
+        # If not specified, output the chunked books in the working dir
+        if not(self.outputdir):
+            self.log.info("No specified output dir (-O). Use the working directory")
+            self.outputdir = self.cwdir
+
+        f = open(doclist)
+        books = f.readlines()
+        f.close()
+
+        for b in books:
+            d = Document(b.strip() + ".tex", binfmt=self.format)
+            self.documents.append(d)
+
     def build_doclist(self):
+        # The stylesheet must include the building stylesheets to have the
+        # actual parameter values (e.g. set.book.num) needed to give the book
+        # set list
+        self.log.info("Build the book set list...")
         xslset = "doclist.xsl"
         f = file(xslset, "w")
-        f.write("""<?xml version="1.0"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:m="http://www.w3.org/1998/Math/MathML"
-                version="1.0">
-                \n""")
+        f.write(self.xsl_header)
         f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
         f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
         f.write('</xsl:stylesheet>\n')
@@ -214,31 +242,12 @@ class DbTex:
         self.xsltproc.use_catalogs = 0
         self.xsltproc.run(xslset, self.input, doclist, opts=self.xslopts)
 
-        # There's no set, or only one book from the set is compiled
+        # If <doclist> is missing, there's no set, or only one book from
+        # the set is compiled
         if not(os.path.isfile(doclist)):
-            if not(self.output):
-                output = suffix_replace(self.input, "."+self.input_format,
-                                        ".%s" % self.format)
-                self.output = output
-            self.documents.append(Document(self.basefile + \
-                                           "." + self.input_format,
-                                           binfmt=self.format))
-            return
-
-        # There are multiple files to output. Check the output dir is OK
-        if self.output:
-            if not(os.path.isdir(self.output)):
-                failed_exit("Error: '%s' is not a directory" % self.output)
+            self._single_setup()
         else:
-            self.output = "." # FIXME
-
-        f = open(doclist)
-        books = f.readlines()
-        f.close()
-
-        for b in books:
-            d = Document(b.strip() + ".tex", binfmt=self.format)
-            self.documents.append(d)
+            self._multiple_setup(doclist)
 
     def make_rawtex(self):
         if len(self.documents) == 1:
@@ -296,14 +305,15 @@ class DbTex:
         os.chdir(self.tmpdir)
         try:
             donefiles = self._compile()
-            for d in donefiles:
-                shutil.move(d, self.output)
             if len(donefiles) == 1:
+                shutil.move(donefiles[0], self.output)
                 print "'%s' successfully built" % os.path.basename(self.output)
             else:
+                for d in donefiles:
+                    shutil.move(d, self.outputdir)
                 donefiles.sort()
                 print "Files successfully built in '%s':\n%s" % \
-                      (self.output, ",\n".join(donefiles))
+                      (self.outputdir, "\n".join(donefiles))
         except Exception, e:
             signal_error(self, e)
         finally:
@@ -409,6 +419,11 @@ class DbTexCommand:
                           help="Output filename. "
                                "When not used, the input filename "
                                "is used, with the suffix of the output format")
+        parser.add_option("-O", "--output-dir",
+                          help="Output directory for the built books."
+                               " When not defined, the current working "
+                               "directory is used. Option used only for "
+                               "a document having a <set>")
         parser.add_option("-p", "--xsl-user", action="append",
                           help="XSL user configuration file to use")
         parser.add_option("-P", "--param", dest="xslparams",
@@ -619,17 +634,25 @@ class DbTexCommand:
         else:
             input = os.path.realpath(args[0])
 
-        # The output name can be deduced from the input one:
-        # /path/to/input.xml -> /path/to/input.{tex|pdf|dvi|ps}
+        # Output file in case of single document (main case)
         if not(options.output):
-            #output = suffix_replace(input, "."+run.input_format,
-            #                        ".%s" % run.format)
             output = None
         else:
             output = os.path.realpath(options.output)
 
+        # Output directory in case of chunked books (from a set)
+        if not(options.output_dir):
+            outputdir = None
+        else:
+            # Check the output dir is OK
+            outputdir = os.path.realpath(options.output_dir)
+            if not(os.path.isdir(outputdir)):
+                failed_exit("Error: '%s' is not a directory" %\
+                            options.output_dir)
+
         run.input = input
         run.output = output
+        run.outputdir = outputdir
 
         # Try to buid the file
         try:
