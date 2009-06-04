@@ -5,6 +5,7 @@
 # - A general API.
 #
 import sys
+import traceback
 
 class ErrorHandler:
     """
@@ -16,7 +17,7 @@ class ErrorHandler:
         pass
 
     def signal(self, object, *args, **kwargs):
-        failed_exit("Unexpected error occured")
+        failure_track("Unexpected error occured")
 
 
 _current_handler = None
@@ -46,10 +47,14 @@ def set_errhandler(handler):
 def signal_error(*args, **kwargs):
     get_errhandler().signal(*args, **kwargs)
 
-def failed_exit(msg, rc=1):
+def failure_track(msg):
     global _dump_stack
     print >>sys.stderr, (msg)
-    if _dump_stack: raise
+    if _dump_stack:
+        traceback.print_exc()
+
+def failed_exit(msg, rc=1):
+    failure_track(msg)
     sys.exit(rc)
 
 def dump_stack():

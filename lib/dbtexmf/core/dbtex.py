@@ -214,7 +214,8 @@ class DbTex:
     def _multiple_setup(self, doclist):
         # If not specified, output the chunked books in the working dir
         if not(self.outputdir):
-            self.log.info("No specified output dir (-O). Use the working directory")
+            self.log.info("No specified output dir (-O). "\
+                          "Use the working directory")
             self.outputdir = self.cwdir
 
         f = open(doclist)
@@ -316,12 +317,12 @@ class DbTex:
                       (self.outputdir, "\n".join(donefiles))
         except Exception, e:
             signal_error(self, e)
-        finally:
-            os.chdir(self.cwdir)
-            if not(self.debug):
-                shutil.rmtree(self.tmpdir)
-            else:
-                print "%s not removed" % self.tmpdir
+
+        os.chdir(self.cwdir)
+        if not(self.debug):
+            shutil.rmtree(self.tmpdir)
+        else:
+            print "%s not removed" % self.tmpdir
 
     def _stdin_write(self):
         # Find out the stdin working directory
