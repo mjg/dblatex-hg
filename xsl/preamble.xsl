@@ -144,9 +144,6 @@
 
   <!-- The external documents -->
   <xsl:if test="$external.docs != ''">
-    <xsl:text>% </xsl:text>
-    <xsl:call-template name="give.basename"/>
-    <xsl:text>&#10;</xsl:text>
     <xsl:value-of select="$external.docs"/>
   </xsl:if>
 

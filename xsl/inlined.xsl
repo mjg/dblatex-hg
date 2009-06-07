@@ -488,13 +488,16 @@
 </xsl:template>
 
 <xsl:template match="firstterm|glossterm">
+  <xsl:variable name="termtext">
+    <xsl:call-template name="inline.italicseq"/>
+  </xsl:variable>
+
   <xsl:choose>
   <xsl:when test="@linkend">
-    <xsl:text>\hyperlink{</xsl:text>
-    <xsl:value-of select="@linkend"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:call-template name="inline.italicseq"/>
-    <xsl:text>}</xsl:text>
+    <xsl:call-template name="hyperlink.markup">
+      <xsl:with-param name="linkend" select="@linkend"/>
+      <xsl:with-param name="text" select="$termtext"/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:when test="$glossterm.auto.link != 0">
     <xsl:variable name="term">
@@ -512,11 +515,10 @@
                              normalize-space(glossterm/@baseform)=$term][@id])[1]"/>
     <xsl:choose>
     <xsl:when test="$glossentry">
-      <xsl:text>\hyperlink{</xsl:text>
-      <xsl:value-of select="$glossentry/@id"/>
-      <xsl:text>}{</xsl:text>
-      <xsl:call-template name="inline.italicseq"/>
-      <xsl:text>}</xsl:text>
+      <xsl:call-template name="hyperlink.markup">
+        <xsl:with-param name="linkend" select="$glossentry/@id"/>
+        <xsl:with-param name="text" select="$termtext"/>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
       <xsl:message>
@@ -524,12 +526,12 @@
         <xsl:value-of select="."/>
         <xsl:text>.</xsl:text>
       </xsl:message>
-      <xsl:call-template name="inline.italicseq"/>
+      <xsl:value-of select="$termtext"/>
     </xsl:otherwise>
     </xsl:choose>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:call-template name="inline.italicseq"/>
+    <xsl:value-of select="$termtext"/>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

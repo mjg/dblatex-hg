@@ -35,7 +35,7 @@
 <xsl:template match="book" mode="build.texfile">
   <xsl:call-template name="write.text.chunk">
     <xsl:with-param name="filename">
-      <xsl:call-template name="give.basename"/>
+      <xsl:call-template name="bookname"/>
       <xsl:text>.rtex</xsl:text>
     </xsl:with-param>
     <xsl:with-param name="method" select="'text'"/>
@@ -47,26 +47,26 @@
 
 
 <!-- Print out the book filename formatted according to <template> -->
-<xsl:template match="book" mode="give.basename" name="give.basename">
+<xsl:template match="book" mode="bookname" name="bookname">
   <xsl:param name="template" select="'%b'"/>
   <xsl:param name="exclude-gid"/>
 
   <xsl:variable name="local-gid">
-    <xsl:value-of select="generate-id()"/>
-  </xsl:variable>
-
-  <xsl:variable name="basename">
-    <xsl:choose>
-    <xsl:when test="not(@id) or $use.id.as.filename = 0">
-      <xsl:value-of select="concat('book', position())"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="@id"/>
-    </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="booknumber"/>
   </xsl:variable>
 
   <xsl:if test="$local-gid != $exclude-gid">
+    <xsl:variable name="basename">
+      <xsl:choose>
+      <xsl:when test="not(@id) or $use.id.as.filename = 0">
+        <xsl:value-of select="concat('book', $local-gid)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@id"/>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:call-template name="string-replace">
       <xsl:with-param name="string" select="$template"/>
       <xsl:with-param name="from" select="'%b'"/>
@@ -75,20 +75,19 @@
   </xsl:if>
 </xsl:template>
 
+
 <!-- Give the list of the external documents that xr-hyper must know.
      This template must be called in the latex book preamble.
      -->
 <xsl:template name="make.external.docs">
   <!-- The list must contain only external books, not the current one -->
   <xsl:variable name="local-gid">
-    <xsl:value-of select="generate-id()"/>
+    <xsl:apply-templates select="." mode="booknumber"/>
   </xsl:variable>
 
   <!-- The list is meaningful only if several books are printed out -->
   <xsl:if test="$set.book.num = 'all'">
-    <xsl:apply-templates
-         select="//book[parent::set]"
-         mode="give.basename">
+    <xsl:apply-templates select="//book[parent::set]" mode="bookname">
       <xsl:with-param name="template"
                       select="'\externaldocument{%b}[%b]&#10;'"/>
       <xsl:with-param name="exclude-gid" select="$local-gid"/>
@@ -100,5 +99,13 @@
 <xsl:template match="set/setinfo"></xsl:template>
 <xsl:template match="set/title"></xsl:template>
 <xsl:template match="set/subtitle"></xsl:template>
+
+
+<!-- Book numbering -->
+<xsl:template match="book" mode="booknumber">
+  <xsl:number from="/"
+              level="any"
+              format="1"/>
+</xsl:template>
 
 </xsl:stylesheet>

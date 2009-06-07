@@ -14,6 +14,45 @@
 
 <!-- ==================================================================== -->
 
+<xsl:template name="hyperlink.markup">
+  <xsl:param name="referrer" select="." />
+  <xsl:param name="linkend"/>
+  <xsl:param name="text"/>
+
+  <xsl:variable name="targetbook"
+                select="key('id',$linkend)/ancestor-or-self::book"/>
+
+  <xsl:variable name="referbook"
+                select="$referrer/ancestor-or-self::book"/>
+
+  <xsl:variable name="referrer_i">
+    <xsl:apply-templates select="$referbook" mode="booknumber"/>
+  </xsl:variable>
+
+  <xsl:variable name="target_i">
+    <xsl:apply-templates select="$targetbook" mode="booknumber"/>
+  </xsl:variable>
+
+  <!-- The URL is local only if the target is in the referrer book -->
+  <xsl:choose>
+  <xsl:when test="$referrer_i != $target_i">
+    <xsl:text>\href{</xsl:text>
+    <xsl:apply-templates select="$targetbook" mode="bookname"/>
+    <xsl:value-of select="concat('\#',$linkend)" />
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\hyperlink{</xsl:text>
+    <xsl:value-of select="$linkend"/>
+  </xsl:otherwise>
+  </xsl:choose>
+  <!-- The hot text -->
+  <xsl:text>}{</xsl:text>
+  <xsl:value-of select="$text"/>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
 <xsl:template match="xref" mode="xref.text">
   <xsl:variable name="target" select="key('id',@linkend)[1]"/>
   <xsl:choose>
@@ -79,11 +118,10 @@
     <!-- how to print it -->
     <xsl:choose>
     <xsl:when test="$text!=''">
-      <xsl:text>\hyperlink{</xsl:text>
-      <xsl:value-of select="@linkend"/>
-      <xsl:text>}{</xsl:text>
-      <xsl:value-of select="$text"/>
-      <xsl:text>}</xsl:text>
+      <xsl:call-template name="hyperlink.markup">
+        <xsl:with-param name="linkend" select="@linkend"/>
+        <xsl:with-param name="text" select="$text"/>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="$target" mode="xref-to">
@@ -277,11 +315,12 @@
 </xsl:template>
 
 <xsl:template match="link">
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@linkend"/> 
-  <xsl:text>}{</xsl:text>
-  <xsl:apply-templates select="." mode="xref.text"/>
-  <xsl:text>}</xsl:text>
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="linkend" select="@linkend"/>
+    <xsl:with-param name="text">
+      <xsl:apply-templates select="." mode="xref.text"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <!-- Text of endterm xref must be managed with the text() function to support
@@ -480,36 +519,49 @@
 </xsl:template>
 
 <xsl:template match="refentry" mode="xref-to">
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@id"/>
-  <xsl:text>}{</xsl:text>
-  <xsl:apply-templates select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"
-                       mode="xref.text"/>
-  <xsl:apply-templates select="refmeta/manvolnum"/>
-  <xsl:text>}</xsl:text>
+  <xsl:param name="referrer"/>
+
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="referrer" select="$referrer"/>
+    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="text">
+      <xsl:apply-templates
+                select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"
+                mode="xref.text"/>
+      <xsl:apply-templates select="refmeta/manvolnum"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="refnamediv" mode="xref-to">
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@id"/>
-  <xsl:text>}{</xsl:text>
-  <xsl:apply-templates select="refname[1]" mode="xref.text"/>
-  <xsl:text>}</xsl:text>
+  <xsl:param name="referrer"/>
+
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="referrer" select="$referrer"/>
+    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="text">
+      <xsl:apply-templates select="refname[1]" mode="xref.text"/>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="varlistentry|term" mode="xref-to">
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@id"/>
-  <xsl:text>}{</xsl:text>
-  <xsl:choose>
-  <xsl:when test="local-name(.)='term'">
-    <xsl:apply-templates select="." mode="xref.text"/>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:apply-templates select="term" mode="xref.text"/>
-  </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>}</xsl:text>
+  <xsl:param name="referrer"/>
+
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="referrer" select="$referrer"/>
+    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="text">
+      <xsl:choose>
+      <xsl:when test="local-name(.)='term'">
+        <xsl:apply-templates select="." mode="xref.text"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="term" mode="xref.text"/>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="biblioentry|bibliomixed" mode="xref-to">
@@ -519,15 +571,19 @@
 </xsl:template>
 
 <xsl:template match="glossentry" mode="xref-to">
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@id"/>
-  <xsl:text>}{</xsl:text>
-  <xsl:call-template name="inline.italicseq">
-    <xsl:with-param name="content">
-      <xsl:apply-templates select="glossterm" mode="xref.text"/>
+  <xsl:param name="referrer"/>
+
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="referrer" select="$referrer"/>
+    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="text">
+      <xsl:call-template name="inline.italicseq">
+        <xsl:with-param name="content">
+          <xsl:apply-templates select="glossterm" mode="xref.text"/>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:with-param>
   </xsl:call-template>
-  <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="cmdsynopsis" mode="xref-to">
@@ -707,11 +763,10 @@
       <xsl:choose>
         <xsl:when test="$linkend != ''">
           <!-- internal link -->
-          <xsl:text>\hyperlink{</xsl:text>
-          <xsl:value-of select="$linkend"/>
-          <xsl:text>}{</xsl:text>
-          <xsl:value-of select="$hottext"/>
-          <xsl:text>}</xsl:text>
+          <xsl:call-template name="hyperlink.markup">
+            <xsl:with-param name="linkend" select="$linkend"/>
+            <xsl:with-param name="text" select="$hottext"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:when test="$href != ''">
           <!-- link to an external document -->
@@ -870,12 +925,13 @@
   <xsl:param name="purpose"/>
   <xsl:param name="xrefstyle"/>
   <xsl:param name="title"/>
+  <xsl:param name="referrer"/>
 
-  <xsl:text>\hyperlink{</xsl:text>
-  <xsl:value-of select="@id"/>
-  <xsl:text>}{</xsl:text>
-  <xsl:copy-of select="$title"/>
-  <xsl:text>}</xsl:text>
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="referrer" select="$referrer"/>
+    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="text" select="$title"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="*" mode="insert.subtitle.markup">

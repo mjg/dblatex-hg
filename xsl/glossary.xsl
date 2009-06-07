@@ -192,18 +192,19 @@
   <xsl:text>"</xsl:text>
   <xsl:choose>
     <xsl:when test="@otherterm">
-      <xsl:text>\hyperlink{</xsl:text>
-      <xsl:value-of select="@otherterm"/>
-      <xsl:text>}{</xsl:text>
-      <xsl:choose>
-      <xsl:when test="$text!=''">
-        <xsl:value-of select="$text"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="$target" mode="xref"/>
-      </xsl:otherwise>
-      </xsl:choose>
-      <xsl:text>}</xsl:text>
+      <xsl:call-template name="hyperlink.markup">
+        <xsl:with-param name="linkend" select="@otherterm"/>
+        <xsl:with-param name="text">
+          <xsl:choose>
+          <xsl:when test="$text!=''">
+            <xsl:value-of select="$text"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="$target" mode="xref"/>
+          </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
+      </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$text"/>

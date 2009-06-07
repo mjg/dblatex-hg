@@ -463,6 +463,7 @@
       <xsl:choose>
         <xsl:when test="$candidate = 't'">
           <xsl:apply-templates select="." mode="insert.title.markup">
+            <xsl:with-param name="referrer" select="$referrer"/>
             <xsl:with-param name="purpose" select="$purpose"/>
             <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
             <xsl:with-param name="title">
