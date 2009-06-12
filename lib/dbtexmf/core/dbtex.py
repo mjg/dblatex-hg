@@ -115,17 +115,39 @@ class DbTex:
         self.confdir = os.path.join(self.topdir, "confstyle")
 
     def update_texinputs(self):
-        # Systematically put the package style in TEXINPUTS
         sep = os.pathsep
-        texpaths = sep.join(self.texinputs + [self.texdir + "//"])
+        # Get a uniform list of paths (not a list of lists)
+        ti = []
+        for t in self.texinputs:
+            ti += t.split(sep)
+
+        # Systematically put the package style in TEXINPUTS
+        ti_opts = ti + [self.texdir + "//"]
+
+        # The original environment variable 
         texinputs = os.getenv("TEXINPUTS") or ""
-        if not(texinputs) or texinputs[0] == sep:
-            texinputs = sep + "%s%s" % (texpaths, texinputs)
-        else:
-            texinputs = sep + "%s%s%s" % (texpaths, sep, texinputs)
+        ti_env = texinputs.split(sep)
+
+        # Find where system default is in the paths
+        try:
+            syspos = ti_env.index('')
+        except:
+            # By default system has precedence (i.e. is the first one)
+            ti_env = [''] + ti_env
+            syspos = 0
+
+        ti_before = ti_env[:syspos]
+        ti_after = ti_env[syspos+1:]
+
+        # Paths passed by options have no precedence over the system 
+        ti_after = ti_opts + ti_after
+
         # Texlocal has precedence over the standard (and added) paths
         if self.texlocal:
-            texinputs = self.texlocal + "//" + sep + texinputs
+            ti_before = [ self.texlocal + "//" ] + ti_before
+        
+        # Export the whole paths
+        texinputs = sep.join(ti_before + [''] + ti_after)
         os.environ["TEXINPUTS"] = texinputs
 
     def set_xslt(self, xsltmod=None):
@@ -293,7 +315,9 @@ class DbTex:
             self.log.info("Build %s" % d.binfile)
             self.runtex.compile(d.texfile, d.binfile, self.format,
                                 batch=self.texbatch)
-            self.runtex.clean()
+            # Only reinit, to not lose the produced working files
+            # used to track the dependencies on other documents
+            self.runtex.reinit()
 
     def compile(self):
         self.set_xslt()

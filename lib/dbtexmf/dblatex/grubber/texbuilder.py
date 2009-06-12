@@ -89,6 +89,9 @@ class LatexBuilder:
 
     def clean(self):
         self.tex.clean()
+        self.reinit()
+
+    def reinit(self):
         self.tex.reinit()
         self.maker.reinit()
         self.maker.dep_append(self.tex)

@@ -121,4 +121,7 @@ class RunLatex:
 
     def clean(self):
         self.texer.clean()
+
+    def reinit(self):
+        self.texer.reinit()
  

@@ -43,6 +43,7 @@ class Module(TexModule):
         # Ask to compile the related .tex file to have the .aux 
         texdep = Latex(self.env)
         texdep.set_source(texfile)
+        texdep.batch = self.doc.batch
         for m in self.texmodules:
             texdep.modules.register(m)
 
