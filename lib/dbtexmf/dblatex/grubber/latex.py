@@ -39,8 +39,10 @@ class Latex(Depend):
         self.modules = Modules(self)
         self.parser = TexParser(self)
         self.date = None
+        # Is the final output expected?
+        self.draft_only = False
         self.batch = 1
-        self.opts = ""
+        self.opts = []
 
     def reinit(self):
         # Restart with a clean module set, parser and logger
@@ -66,13 +68,14 @@ class Latex(Depend):
         if self.must_compile:
             return 1
         msg.log(_("checking if compiling is necessary..."))
-        if not os.path.exists(self.outfile):
+        if not self.draft_only and not os.path.exists(self.outfile):
             msg.debug(_("the output file doesn't exist"))
             return 1
         if not os.path.exists(self.logfile):
             msg.debug(_("the log file does not exist"))
             return 1
-        if os.path.getmtime(self.outfile) < os.path.getmtime(self.srcfile):
+        if (not self.draft_only and 
+            (os.path.getmtime(self.outfile) < os.path.getmtime(self.srcfile))):
             msg.debug(_("the source is younger than the output file"))
             return 1
         if self.log.read(self.logfile):
@@ -134,9 +137,7 @@ class Latex(Depend):
         self.failed_module = None
 
         if self.batch:
-            self.opts = "-interaction=batchmode"
-        else:
-            self.opts = ""
+            self.opts.append("-interaction=batchmode")
 
         need_compile = force or self.compile_needed()
         while need_compile:
@@ -146,6 +147,9 @@ class Latex(Depend):
 
         # Finally there was no error.
         self.failed_dep = None
+
+        if self.last_compile():
+            return 1
 
         if self.something_done:
             self.date = int(time.time())
@@ -182,11 +186,22 @@ class Latex(Depend):
                 return 1
         return 0
 
+    def last_compile(self):
+        """
+        Run the module-specific operations that are to be performed after
+        the last compilation of the main source. Returns true on failure.
+        """
+        msg.log(_("running last-compilation scripts..."))
+
+        for mod in self.modules.objects.values():
+            if mod.last_compile():
+                self.failed_module = mod
+                return 1
+        return 0
+
     def compile(self):
         self.must_compile = 0
-        cmd = [self.program, self.opts, os.path.basename(self.srcfile)]
-        if not(self.opts):
-            cmd.pop(1)
+        cmd = [self.program] + self.opts + [os.path.basename(self.srcfile)]
         msg.log(" ".join(cmd))
         rc = subprocess.call(cmd)
         if rc != 0:

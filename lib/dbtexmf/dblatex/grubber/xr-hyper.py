@@ -44,6 +44,7 @@ class Module(TexModule):
         texdep = Latex(self.env)
         texdep.set_source(texfile)
         texdep.batch = self.doc.batch
+        texdep.draft_only = True # Final output not required here
         for m in self.texmodules:
             texdep.modules.register(m)
 

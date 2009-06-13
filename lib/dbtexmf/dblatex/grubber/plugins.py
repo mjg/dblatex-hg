@@ -40,6 +40,14 @@ class TexModule (object):
         """
         return 0
 
+    def last_compile (self):
+        """
+        This method is called after the last LaTeX compilation.
+        It is supposed to terminate the compilation for its specific needs.
+        The method must return true on failure.
+        """
+        return 0
+
     def clean (self):
         """
         This method is called when cleaning the compiled files. It is supposed
