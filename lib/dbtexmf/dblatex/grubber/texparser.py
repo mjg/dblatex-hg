@@ -15,6 +15,7 @@ class TexParser:
     def __init__(self, doc):
         self.doc = doc
         self.comment_mark = "%"
+        self.exclude_mods = []
         self.hooks = {
             "usepackage"   : self.h_usepackage,
             "begin{btSect}": self.h_bibtopic,
@@ -44,7 +45,7 @@ class TexParser:
         self.hooks[name] = fun
         self.update_rehooks()
 
-    def parse(self, fd):
+    def parse(self, fd, exclude_mods=None):
         """
         Process a LaTeX source. The file must be open, it is read to the end
         calling the handlers for the macro calls. This recursively processes
@@ -53,6 +54,7 @@ class TexParser:
         If the optional argument 'dump' is not None, then it is considered as
         a stream on which all text not matched as a macro is written.
         """
+        self.exclude_mods = exclude_mods or []
         self.lineno = 0
         for line in fd:
             self.parse_line(line)
@@ -107,6 +109,8 @@ class TexParser:
 #            if file and not exists(name + ".py"):
 #                self.process(file)
 #            else:
+            if (name in self.exclude_mods):
+                continue
             self.doc.modules.register(name, dict)
 
     def h_bibtopic(self, dict):
@@ -115,5 +119,7 @@ class TexParser:
         usepackage of bibtopic. Note that once loaded the btSect hook will be
         preempted by the bibtopic module hook.
         """
+        if ("bibtopic" in self.exclude_mods):
+            return
         self.doc.modules.register("bibtopic", dict)
 

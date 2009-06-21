@@ -44,9 +44,12 @@ class Module(TexModule):
         texdep = Latex(self.env)
         texdep.set_source(texfile)
         texdep.batch = self.doc.batch
+        texdep.encoding = self.doc.encoding
         texdep.draft_only = True # Final output not required here
         for m in self.texmodules:
             texdep.modules.register(m)
+        # Load other modules from source, except xr to avoid loops
+        texdep.prepare(exclude_mods=["xr-hyper"])
 
         # Add the .aux as an expected input for compiling the doc
         self.doc.sources[auxfile] = texdep

@@ -41,6 +41,7 @@ class Latex(Depend):
         self.date = None
         # Is the final output expected?
         self.draft_only = False
+        self.draft_support = False
         self.batch = 1
         self.opts = []
 
@@ -68,13 +69,13 @@ class Latex(Depend):
         if self.must_compile:
             return 1
         msg.log(_("checking if compiling is necessary..."))
-        if not self.draft_only and not os.path.exists(self.outfile):
+        if not self.draft_support and not os.path.exists(self.outfile):
             msg.debug(_("the output file doesn't exist"))
             return 1
         if not os.path.exists(self.logfile):
             msg.debug(_("the log file does not exist"))
             return 1
-        if (not self.draft_only and 
+        if (not self.draft_support and 
             (os.path.getmtime(self.outfile) < os.path.getmtime(self.srcfile))):
             msg.debug(_("the source is younger than the output file"))
             return 1
@@ -109,13 +110,13 @@ class Latex(Depend):
         msg.debug(_("no new compilation is needed"))
         return 0
 
-    def prepare(self):
+    def prepare(self, exclude_mods=None):
         """
         Prepare the compilation by parsing the source file. The parsing
         loads all the necessary modules required by the packages used, etc.
         """
         f = open(self.srcfile)
-        self.parser.parse(f)
+        self.parser.parse(f, exclude_mods=exclude_mods)
         f.close()
 
     def force_run(self):
