@@ -195,7 +195,7 @@
 \langsetupdbk{ko}{
 %  \usepackage{hfont}
   \ifxetex
-  \newenvironment{CJK}{}{}
+  \newenvironment{CJK}[3][]{}{}
   \else
   \hypersetup{unicode}
   \usepackage{CJKutf8}
@@ -203,17 +203,16 @@
 }
 \langsetupdbk{zh}{
   \ifxetex
-  \newenvironment{CJK}{}{}
+  \newenvironment{CJK}[3][]{}{}
   \else
   \hypersetup{unicode}
   \usepackage{CJKutf8}
   \usepackage{pinyin}
   \fi
-  %\newenvironment{CJK}{}{}
 }
 \langsetupdbk{ja}{
   \ifxetex
-  \newenvironment{CJK}{}{}
+  \newenvironment{CJK}[3][]{}{}
   \else
   \hypersetup{unicode}
   \usepackage{CJKutf8}
