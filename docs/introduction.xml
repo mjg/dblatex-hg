@@ -45,8 +45,12 @@ the images if needed, and do the whole compilation.</para>
 
 <listitem>
 <para>compile the temporary LaTeX file with <command>latex</command>,
-<command>pdflatex</command>, or <command>xelatex</command>
-to produce DVI, PostScript and PDF files,</para>
+<command>pdflatex</command>, or <command>xelatex</command> to produce DVI,
+PostScript and PDF files,</para>
+</listitem>
+
+<listitem>
+<para>publish a set of books,</para>
 </listitem>
 
 <listitem>
@@ -113,7 +117,10 @@ xmlns:xi="http://www.w3.org/2001/XInclude" />.</para>
 <section id="sec-changelog">
 <title>Change History</title>
 
-<para>See the <olink output="pdf" targetdoc="releasenotes" targetptr="intro">Release Notes</olink><ulink output="html" url="../release-notes/index.html">Release Notes</ulink> to have the dblatex change history.</para>
+<para>See the <olink output="pdf" targetdoc="releasenotes"
+targetptr="intro">Release Notes</olink><ulink output="html"
+url="../release-notes/index.html">Release Notes</ulink> to have the dblatex
+change history.</para>
 </section>
 
 <section>

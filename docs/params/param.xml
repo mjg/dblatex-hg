@@ -37,6 +37,7 @@ the DocBook Project documentation.</para>
 <xi:include href="colophon.tocdepth.xml"/>
 <xi:include href="dedication.tocdepth.xml"/>
 <xi:include href="preface.tocdepth.xml"/>
+<xi:include href="glossary.tocdepth.xml"/>
 <xi:include href="refentry.tocdepth.xml"/>
 
 </section>
@@ -51,6 +52,7 @@ the DocBook Project documentation.</para>
 -->
 <section><title>Automatic labelling</title>
 
+<xi:include href="glossary.numbered.xml"/>
 <xi:include href="refentry.numbered.xml"/>
 
 </section>
@@ -149,7 +151,6 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="monoseq.small.xml"/>
 <xi:include href="pdf.annot.options.xml"/>
 <xi:include href="seg.item.separator.xml"/>
-<xi:include href="set.book.num.xml"/>
 <xi:include href="show.comments.xml"/>
 <xi:include href="ulink.footnotes.xml"/>
 <xi:include href="ulink.show.xml"/>
@@ -160,6 +161,12 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="imagedata.boxed.xml"/>
 <xi:include href="imagedata.default.scale.xml"/>
 <xi:include href="imagedata.file.check.xml"/>
+
+</section>
+<section><title>Chuncking</title>
+
+<xi:include href="set.book.num.xml"/>
+<xi:include href="use.id.as.filename.xml"/>
 
 </section>
 <section><title>Pagination and General Styles</title>

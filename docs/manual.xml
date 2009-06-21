@@ -107,11 +107,15 @@ reference entries.</para>
 
 <xi:include href="custom/style.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
+<xi:include href="publish.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
 <xi:include href="figure.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="tables/table.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="math/math.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="verbatim.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="index.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 

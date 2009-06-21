@@ -6,7 +6,7 @@
   </refmeta>
   <refnamediv>
     <refname>set.book.num</refname>
-    <refpurpose>Select the book or article to compile from a
+    <refpurpose>Select a single book or all the books to compile from a
     <sgmltag>set</sgmltag></refpurpose>
   </refnamediv>
   <refsynopsisdiv>
@@ -16,7 +16,9 @@
   <refsection>
     <title>Description</title>
     <para>When the document root element is a <sgmltag>set</sgmltag> this
-parameter can be used to select the book to print, because
-<command moreinfo="none">dblatex</command> can output only one book from the set.</para>
+parameter can be used to select the book to print, or to publish all the
+books contained in the set when the value is "all".
+<command moreinfo="none">dblatex</command> can only chunk the set in several books, and is not able to publish several books in a single file.</para>
+<para>See <xref linkend="sec-book-set"/> for more details.</para>
   </refsection>
 </refentry>
