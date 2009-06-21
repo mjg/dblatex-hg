@@ -89,7 +89,10 @@ rm -f $tmpbuild/xsl/common/Makefile
 rm -f $tmpbuild/xsl/mathml2/Makefile
 rm -r $tmpbuild/tests/mathml/build
 rm -f $tmpbuild/tests/mathml/excluded*
-rm -f $tmpbuild/tools/cvstools
+rm -rf $tmpbuild/tools/cvstools
+
+# Remove some python test files
+find $tmpbuild -name "test*.py" | xargs rm
 
 # Temporary manual cleanup
 rm -rf $tmpbuild/xsl/latex-0.5.1
