@@ -37,7 +37,7 @@ xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
 <revision>
 <revnumber>01</revnumber>
 
-<date>05/05/2009</date>
+<date>2009/05/05</date>
 
 <authorinitials>B. Guillon</authorinitials>
 
@@ -45,6 +45,19 @@ xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
 <para>The manual does not include the change history anymore. The change
 history is now in the release note. The XSL Parameters are now described as
 reference entries.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>02</revnumber>
+
+<date>2009/06/21</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Add a section about the new <sgmltag>set</sgmltag> support, and a section
+about how to extend the verbatim rendering.</para>
 </revdescription>
 </revision>
 

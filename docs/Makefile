@@ -51,6 +51,7 @@ manual.html: manual.xml
 	convert -trim -rotate 90 processus.fig $(HTMLDIRUM)/processus.png
 	$(CP) tables/*.png $(HTMLDIRUM)/.
 	$(CP) -r math/figures $(HTMLDIRUM)/.
+	$(CP) -r $(XSLDBK)/images $(HTMLDIRUM)/.
 	$(CP) manual.css $(HTMLDIRUM)/.
 
 release-notes.html: release-notes.xml
