@@ -33,8 +33,16 @@
 
 <xsl:template match="/" mode="doc-wrap-with">
   <xsl:param name="root"/>
+  <xsl:variable name="rootnode" select="./*[1]"/>
   <xsl:message>
-    <xsl:text>Warning: element wrapped with </xsl:text>
+    <xsl:text>Warning: </xsl:text>
+    <xsl:value-of select="local-name($rootnode)"/>
+    <xsl:if test="$rootnode/@id">
+      <xsl:text>(</xsl:text>
+      <xsl:value-of select="$rootnode/@id"/>
+      <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:text> wrapped with </xsl:text>
     <xsl:value-of select="$root"/>
   </xsl:message>
 
