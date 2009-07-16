@@ -2,7 +2,7 @@
 import sys
 import os
 
-package_base = os.path.join(os.path.dirname(sys.argv[0]), "../../..")
+package_base = r"/usr/share/dblatex"
 sys.path.append(os.path.realpath(os.path.join(package_base, "lib")))
 
 # Register the Debian error analyser
