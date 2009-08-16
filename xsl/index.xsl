@@ -62,7 +62,7 @@
   </xsl:when>
   <xsl:when test="@class='startofrange'">
     <!-- sanity check: only open range if related close is found -->
-    <xsl:variable name="id" select="@id"/>
+    <xsl:variable name="id" select="(@id|@xml:id)[1]"/>
     <xsl:choose>
     <xsl:when test="//indexterm[@class='endofrange' and @startref=$id]">
       <xsl:text>|(</xsl:text>
@@ -90,7 +90,8 @@
 
 <xsl:template match="indexterm[@class='endofrange']">
   <xsl:variable name="id" select="@startref"/>
-  <xsl:apply-templates select="//indexterm[@class='startofrange' and @id=$id]">
+  <xsl:apply-templates select="//indexterm[@class='startofrange' and 
+                                           (@id=$id or @xml:id=$id)]">
     <xsl:with-param name="close" select="'|)'"/>
   </xsl:apply-templates>
 </xsl:template>

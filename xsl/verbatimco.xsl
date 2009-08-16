@@ -119,7 +119,8 @@
 
     <!-- <co> to insert for this line -->
     <co>
-      <xsl:for-each select="$area/@id|$area/@linkends"><xsl:copy/></xsl:for-each>
+      <xsl:for-each select="$area/@id|$area/@xml:id|$area/@linkends">
+        <xsl:copy/></xsl:for-each>
     </co>
     <!-- continue, for the next <area> if any -->
     <xsl:call-template name="insert.co">

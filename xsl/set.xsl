@@ -58,11 +58,11 @@
   <xsl:if test="$local-gid != $exclude-gid">
     <xsl:variable name="basename">
       <xsl:choose>
-      <xsl:when test="not(@id) or $use.id.as.filename = 0">
+      <xsl:when test="(not(@id) and not(@xml:id)) or $use.id.as.filename = 0">
         <xsl:value-of select="concat('book', $local-gid)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="@id"/>
+        <xsl:value-of select="(@id|@xml:id)[1]"/>
       </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>

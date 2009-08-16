@@ -144,9 +144,9 @@
 
 <xsl:template match="glossentry/glossterm">
   <xsl:text>\item[</xsl:text>
-  <xsl:if test="../@id">
+  <xsl:if test="../@id or ../@xml:id">
     <xsl:text>\hypertarget{</xsl:text>
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="(../@id|../@xml:id)[1]"/>
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:text>{</xsl:text>
@@ -175,8 +175,8 @@
 </xsl:template>
 
 <xsl:template match="glossseealso|glosssee">
-  <xsl:variable name="otherterm" select="@otherterm"/>
-  <xsl:variable name="targets" select="//node()[@id=$otherterm]"/>
+  <xsl:variable name="oterm" select="@otherterm"/>
+  <xsl:variable name="targets" select="//node()[@id=$oterm or @xml:id=$oterm]"/>
   <xsl:variable name="target" select="$targets[1]"/>
   <xsl:variable name="text">
     <xsl:apply-templates/>

@@ -37,9 +37,9 @@
   <xsl:message>
     <xsl:text>Warning: </xsl:text>
     <xsl:value-of select="local-name($rootnode)"/>
-    <xsl:if test="$rootnode/@id">
+    <xsl:if test="$rootnode/@id or $rootnode/@xml:id">
       <xsl:text>(</xsl:text>
-      <xsl:value-of select="$rootnode/@id"/>
+      <xsl:value-of select="($rootnode/@id|$rootnode/@xml:id)[1]"/>
       <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:text> wrapped with </xsl:text>

@@ -523,7 +523,7 @@
 
   <xsl:call-template name="hyperlink.markup">
     <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="text">
       <xsl:apply-templates
                 select="(refmeta/refentrytitle|refnamediv/refname[1])[1]"
@@ -538,7 +538,7 @@
 
   <xsl:call-template name="hyperlink.markup">
     <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="text">
       <xsl:apply-templates select="refname[1]" mode="xref.text"/>
     </xsl:with-param>
@@ -550,7 +550,7 @@
 
   <xsl:call-template name="hyperlink.markup">
     <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="text">
       <xsl:choose>
       <xsl:when test="local-name(.)='term'">
@@ -575,7 +575,7 @@
 
   <xsl:call-template name="hyperlink.markup">
     <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="text">
       <xsl:call-template name="inline.italicseq">
         <xsl:with-param name="content">
@@ -658,7 +658,7 @@
 
 <xsl:template match="co" mode="xref-to">
   <xsl:call-template name="coref.link.create">
-    <xsl:with-param name="ref" select="@id"/>
+    <xsl:with-param name="ref" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="circled" select="1"/>
   </xsl:call-template>
 </xsl:template>
@@ -897,25 +897,25 @@
 <xsl:template match="part|chapter|appendix|
                      sect1|sect2|sect3|sect4|sect5|section" mode="label.markup">
   <xsl:text>\ref{</xsl:text>
-  <xsl:value-of select="@id"/>
+  <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="figure|example|table|equation" mode="label.markup">
   <xsl:text>\ref{</xsl:text>
-  <xsl:value-of select="@id"/>
+  <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="step" mode="label.markup">
   <xsl:text>\ref{</xsl:text>
-  <xsl:value-of select="@id"/>
+  <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="pagenumber.markup">
   <xsl:text>\pageref{</xsl:text>
-  <xsl:value-of select="@id"/>
+  <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -929,7 +929,7 @@
 
   <xsl:call-template name="hyperlink.markup">
     <xsl:with-param name="referrer" select="$referrer"/>
-    <xsl:with-param name="linkend" select="@id"/>
+    <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="text" select="$title"/>
   </xsl:call-template>
 </xsl:template>
