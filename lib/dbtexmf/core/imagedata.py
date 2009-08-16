@@ -61,6 +61,11 @@ class FigConverter(ImageConverter):
         cmd += post
         self.system(cmd)
 
+class SvgConverter(ImageConverter):
+    def convert(self, input, output, format, doexec=1):
+        cmd = "inkscape -z -D \"--export-%s=%s\" %s" % (format, input, output)
+        return self.system(cmd, doexec)
+
 
 #
 # The Imagedata class handles all the image transformation
@@ -103,6 +108,8 @@ class Imagedata:
 
         if (ext == "fig" and self.output_format in ("eps", "pdf", "png")):
             conv = FigConverter()
+        elif (ext == "svg" and self.output_format in ("eps", "pdf", "png")):
+            conv = SvgConverter()
         elif (ext == "eps"):
             conv = EpsConverter()
         elif (ext in ("gif", "bmp")):
@@ -142,9 +149,9 @@ class Imagedata:
         
         # Lookup for the best suited available figure
         if (self.output_format == "pdf"):
-            formats = ("png", "pdf", "jpg", "eps", "gif", "fig")
+            formats = ("png", "pdf", "jpg", "eps", "gif", "fig", "svg")
         else:
-            formats = ("eps", "fig", "pdf", "png")
+            formats = ("eps", "fig", "pdf", "png", "svg")
 
         for format in formats:
             realfig = self.find("%s.%s" % (fig, format))
