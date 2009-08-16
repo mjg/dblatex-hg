@@ -225,7 +225,10 @@
 </xsl:template>
 
 <xsl:template match="member">
+  <!-- Put in a group to protect each member from side effects (esp. \\) -->
+  <xsl:text>{</xsl:text>
   <xsl:apply-templates/>
+  <xsl:text>}</xsl:text>
 </xsl:template>
 
 
