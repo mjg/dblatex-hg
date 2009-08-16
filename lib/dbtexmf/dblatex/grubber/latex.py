@@ -107,6 +107,13 @@ class Latex(Depend):
                 msg.debug(_("but the aux files are unchanged"))
                 return 0
             return 1
+        if changed:
+            msg.debug(_("the %s file has changed but no re-run required?") \
+                      % changed[0])
+            if self.program == "xelatex":
+                msg.debug(_("force recompilation (XeTeX engine)"))
+                return 1
+
         msg.debug(_("no new compilation is needed"))
         return 0
 
