@@ -37,6 +37,7 @@
       <xsl:when test='$level=5'>\subparagraph</xsl:when>
       <!-- rare case -->
       <xsl:when test='$level=0'>\chapter</xsl:when>
+      <xsl:when test='$level=-1'>\part</xsl:when>
     </xsl:choose>
   </xsl:when>
   <xsl:when test="$name!=''">

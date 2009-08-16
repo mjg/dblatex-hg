@@ -40,7 +40,16 @@
   <xsl:text>&#10;</xsl:text>
   <xsl:text>% Reference &#10;</xsl:text>
   <xsl:text>% ---------&#10;</xsl:text>
-  <xsl:call-template name="mapheading"/>
+  <xsl:call-template name="makeheading">
+    <!-- raise to the highest existing book section level (part or chapter) -->
+    <xsl:with-param name="level">
+      <xsl:choose>
+      <xsl:when test="preceding-sibling::part or
+                      following-sibling::part">-1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
   <xsl:apply-templates select="partintro"/>
   <xsl:apply-templates select="*[local-name(.) != 'partintro']"/>
 </xsl:template>
