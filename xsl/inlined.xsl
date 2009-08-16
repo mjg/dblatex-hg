@@ -629,18 +629,31 @@
 <!-- ==================================================================== -->
 <!-- inline elements in program listings -->
 
+<xsl:template name="verbatim.boldseq">
+  <xsl:param name="co-tagin" select="'&lt;'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+  <xsl:param name="style" select="'b'"/>
+  <xsl:param name="content"/>
+
+  <xsl:call-template name="verbatim.format">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
+    <xsl:with-param name="probe" select="$probe"/>
+    <xsl:with-param name="style" select="'b'"/>
+    <xsl:with-param name="content" select="$content"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="userinput" mode="latex.programlisting">
   <xsl:param name="co-tagin" select="'&lt;:'"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
 
-  <xsl:call-template name="verbatim.embed">
-    <xsl:with-param name="co-taging" select="$co-tagin"/>
+  <xsl:call-template name="verbatim.boldseq">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
     <xsl:with-param name="rnode" select="$rnode"/>
     <xsl:with-param name="probe" select="$probe"/>
-    <xsl:with-param name="content">
-      <xsl:call-template name="inline.boldseq"/>
-    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -649,11 +662,50 @@
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
 
-  <xsl:call-template name="verbatim.embed">
-    <xsl:with-param name="co-taging" select="$co-tagin"/>
+  <xsl:variable name="style">
+    <xsl:choose>
+    <xsl:when test="@role='bold' or @role='strong'">
+      <xsl:value-of select="'b'"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="'i'"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:call-template name="verbatim.format">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
     <xsl:with-param name="rnode" select="$rnode"/>
     <xsl:with-param name="probe" select="$probe"/>
+    <xsl:with-param name="style" select="$style"/>
   </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="replaceable" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+
+  <xsl:call-template name="verbatim.format">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
+    <xsl:with-param name="probe" select="$probe"/>
+    <xsl:with-param name="style" select="'i'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="optional" mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+
+  <xsl:value-of select="$arg.choice.opt.open.str"/>
+  <xsl:apply-templates mode="latex.programlisting">
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
+    <xsl:with-param name="rnode" select="$rnode"/>
+    <xsl:with-param name="probe" select="$probe"/>
+  </xsl:apply-templates>
+  <xsl:value-of select="$arg.choice.opt.close.str"/>
 </xsl:template>
 
 </xsl:stylesheet>

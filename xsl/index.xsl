@@ -103,7 +103,7 @@
 
 <!-- in a programlisting -->
 <xsl:template match="indexterm" mode="latex.programlisting">
-  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagin" select="'&lt;'"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
 

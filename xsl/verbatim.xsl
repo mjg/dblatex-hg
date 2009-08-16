@@ -84,12 +84,12 @@
      -->
 
 <xsl:template name="verbatim.embed">
-  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagin" select="'&lt;'"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
   <xsl:param name="content"/>
 
-  <xsl:value-of select="$co-tagin"/>
+  <xsl:value-of select="concat($co-tagin, 't&gt;')"/>
   <xsl:if test="$probe = 0">
     <xsl:choose>
       <xsl:when test="$content != ''">
@@ -100,15 +100,48 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:if>
-  <xsl:value-of select="$co.tagout"/>
+  <xsl:value-of select="'&lt;/t&gt;'"/>
 </xsl:template>
+
+<!-- Template to format (bold, italic) the calling element. The format is
+     specified by the <style> that drives the corresponding delimiter
+     sequence. Styles can be nested, so apply the same template mode to
+     children.
+     -->
+
+ <xsl:template name="verbatim.format">
+  <xsl:param name="co-tagin" select="'&lt;'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+  <xsl:param name="style" select="'b'"/>
+  <xsl:param name="content"/>
+
+  <xsl:value-of select="concat($co-tagin, $style, '&gt;')"/>
+  <xsl:if test="$probe = 0">
+    <xsl:choose>
+      <xsl:when test="$content != ''">
+        <xsl:value-of select="$content"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="latex.programlisting">
+          <xsl:with-param name="co-tagin" select="$co-tagin"/>
+          <xsl:with-param name="rnode" select="$rnode"/>
+          <xsl:with-param name="probe" select="$probe"/>
+        </xsl:apply-templates>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
+  <xsl:value-of select="concat('&lt;/', $style, '&gt;')"/>
+</xsl:template>
+
+<!-- ==================================================================== -->
 
 <!-- By default an element in a programlisting environment just prints out its
      text() adapted to this environment, and apply to its children the same
      template. -->
 
 <xsl:template match="*" mode="latex.programlisting">
-  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagin" select="'&lt;'"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
 
@@ -118,7 +151,7 @@
   </xsl:message>
 
   <xsl:apply-templates mode="latex.programlisting">
-    <xsl:with-param name="co-taging" select="$co-tagin"/>
+    <xsl:with-param name="co-tagin" select="$co-tagin"/>
     <xsl:with-param name="rnode" select="$rnode"/>
     <xsl:with-param name="probe" select="$probe"/>
   </xsl:apply-templates>
@@ -226,13 +259,11 @@
       <xsl:text>,</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
-    <!-- TeX delimiters if some tex stuff is embedded (like <co>s) -->
+    <!-- TeX/verb delimiters if tex or formatting is embedded (like <co>s) -->
     <xsl:if test="$co-tagin!=''">
-      <xsl:text>escapeinside={</xsl:text>
-      <xsl:value-of select="$co-tagin"/>
-      <xsl:text>}{</xsl:text>
-      <xsl:value-of select="$co.tagout"/>
-      <xsl:text>},</xsl:text>
+      <xsl:call-template name="listing-delim">
+        <xsl:with-param name="tagin" select="$co-tagin"/>
+      </xsl:call-template>
     </xsl:if>
   </xsl:variable>
 
@@ -270,6 +301,27 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
+<!-- Defines the style delimiters to use, and the tex sequence delimiters -->
+
+<xsl:template name="listing-delim">
+  <xsl:param name="tagin" select="'&lt;'"/>
+  <xsl:variable name="tex" select="concat($tagin, 't&gt;')"/>
+  <xsl:variable name="bf" select="concat($tagin, 'b&gt;')"/>
+  <xsl:variable name="it" select="concat($tagin, 'i&gt;')"/>
+
+  <xsl:text>escapeinside={</xsl:text>
+  <xsl:value-of select="$tex"/>
+  <xsl:text>}{&lt;/t&gt;}</xsl:text>
+  <xsl:text>,</xsl:text>
+  <xsl:text>moredelim={**[is][\bfseries]{</xsl:text>
+  <xsl:value-of select="$bf"/>
+  <xsl:text>}{&lt;/b&gt;}},</xsl:text>
+  <xsl:text>moredelim={**[is][\itshape]{</xsl:text>
+  <xsl:value-of select="$it"/>
+  <xsl:text>}{&lt;/i&gt;}},</xsl:text>
+</xsl:template>
 
 <!-- ==================================================================== -->
 

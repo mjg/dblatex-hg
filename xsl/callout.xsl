@@ -6,7 +6,7 @@
     ############################################################################ -->
 
 <!-- Callout parameters -->
-<xsl:param name="co.tagout" select="':&gt;'"/>
+<xsl:param name="co.tagout" select="'&lt;/t&gt;'"/>
 <xsl:param name="co.linkends.show" select="'1'"/>
 <xsl:param name="callout.markup.circled" select="'1'"/>
 <xsl:param name="callout.linkends.hot" select="'1'"/>
@@ -21,7 +21,7 @@
 
 
 <!-- Generate the enter TeX escape sequence for <co>. The principle is to
-     find the first sequence of the form "<[try]:" that is not contained in
+     find the first sequence of the form "<[try]" that is not contained in
      the listing, to ensure that no conflict will occur with lstlisting -->
 
 <xsl:template name="co-tagin-gen">
@@ -32,12 +32,11 @@
     <xsl:if test="$try &gt; 0">
       <xsl:value-of select="$try"/>
     </xsl:if>
-    <xsl:text>:</xsl:text>
   </xsl:variable>
 
   <xsl:choose>
   <xsl:when test="contains($text, $tag)">
-    <xsl:message>Try another escape sequence for &lt;co&gt;</xsl:message> 
+    <xsl:message>Try another escape sequence in verbatim</xsl:message> 
     <xsl:call-template name="co-tagin-gen">
       <xsl:with-param name="text" select="$text"/>
       <xsl:with-param name="try" select="$try+1"/>
@@ -60,7 +59,9 @@
   <!-- Cannot use directly id() because it must work on several RTF -->
   <!-- The element is also searched in the root tree for things stripped
        in the RTF, like <areaset>s -->
-  <xsl:variable name="coitem" select="($rnode//*[@id=$ref]|//*[@id=$ref])[1]"/>
+  <xsl:variable name="coitem"
+                select="($rnode//*[@id=$ref or @xml:id=$ref]|
+                        //*[@id=$ref or @xml:id=$ref])[1]"/>
   <xsl:apply-templates select="$coitem" mode="coref.link">
     <xsl:with-param name="circled" select="$circled"/>
     <xsl:with-param name="from" select="local-name(.)"/>
@@ -102,7 +103,7 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>\hyperref[</xsl:text>
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="(@id|@xml:id)[1]"/>
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$markup"/>
     <xsl:text>}</xsl:text>
@@ -167,27 +168,30 @@
 
 <xsl:template match="co|area" mode="latex.programlisting">
   <xsl:param name="rnode" select="/"/>
-  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagin" select="'&lt;'"/>
   <xsl:param name="co-tagout" select="$co.tagout"/>
   <xsl:param name="co-hide" select="0"/>
   <xsl:variable name="conum">
     <xsl:apply-templates select="." mode="conumber"/>
   </xsl:variable>
+  <xsl:variable name="id" select="(@id|@xml:id)[1]"/>
 
-  <xsl:value-of select="$co-tagin"/>
+  <xsl:if test="$co-tagin != ''">
+    <xsl:value-of select="concat($co-tagin, 't>')"/>
+  </xsl:if>
   <xsl:choose>
   <xsl:when test="$co-hide != 0">
-    <xsl:if test="@id">
+    <xsl:if test="$id">
       <xsl:text>\colabel{</xsl:text>
-      <xsl:value-of select="@id"/>
+      <xsl:value-of select="$id"/>
       <xsl:text>}</xsl:text>
     </xsl:if>
   </xsl:when>
-  <xsl:when test="@id">
+  <xsl:when test="$id">
     <xsl:text>\coref{</xsl:text>
     <xsl:value-of select="$conum"/>
     <xsl:text>}{</xsl:text>
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="$id"/>
     <xsl:text>}</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -206,9 +210,10 @@
 <!-- Print the markup of the co referenced by coref -->
 <xsl:template match="coref" mode="latex.programlisting">
   <xsl:param name="rnode" select="/"/>
-  <xsl:param name="co-tagin" select="'&lt;:'"/>
+  <xsl:param name="co-tagin" select="'&lt;'"/>
   <xsl:param name="co-tagout" select="$co.tagout"/>
-  <xsl:variable name="co" select="$rnode//*[@id=current()/@linkend]"/>
+  <xsl:variable name="linkend" select="@linkend"/>
+  <xsl:variable name="co" select="$rnode//*[@id=$linkend or @xml:id=$linkend]"/>
 
   <xsl:choose>
   <xsl:when test="$co">
@@ -216,7 +221,7 @@
       <xsl:apply-templates select="$co" mode="conumber"/>
     </xsl:variable>
     <!-- Entry tex sequence -->
-    <xsl:value-of select="$co-tagin"/>
+    <xsl:value-of select="concat($co-tagin, 't>')"/>
     <!-- The same number mark than the pointed <co> -->
     <xsl:text>\conum{</xsl:text>
     <xsl:value-of select="$conum"/>
@@ -265,9 +270,9 @@
     <xsl:with-param name="rnode" select="$rnode"/>
   </xsl:call-template>
   <xsl:text>}]</xsl:text>
-  <xsl:if test="@id and $co.linkends.show='1'">
+  <xsl:if test="(@id|@xml:id) and $co.linkends.show='1'">
     <xsl:text>\collabel{</xsl:text>
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="(@id|@xml:id)[1]"/>
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:apply-templates/>
