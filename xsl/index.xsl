@@ -115,6 +115,10 @@
 </xsl:template>
 
 
+<!-- ignore index entries in TOC -->
+<xsl:template match="indexterm" mode="toc.skip"/>
+
+ 
 <!-- todo -->
 <xsl:template match="index|setindex">
 <!--
