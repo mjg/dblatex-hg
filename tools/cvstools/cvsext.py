@@ -125,8 +125,9 @@ class CVSSession:
                 arg = "'%s'" % desc
             cmds.append("cvs commit %s %s %s" % \
                         (opt, arg, " ".join(commits)))
-            if self.tag and self.tag != "tip":
-                cmds.append("cvs tag %s" % (self.tag))
+
+        if self.tag and self.tag != "tip":
+            cmds.append("cvs tag %s" % (self.tag))
         return cmds
 
     def run(self, dry_run=False, batch="/tmp/cvsbatch"):

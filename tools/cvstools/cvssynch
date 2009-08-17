@@ -6,7 +6,7 @@ from xml.dom.minidom import parseString
 
 from cvsext import CVSSession
 
-def get_cvsset(from_node, style, to_node="tip"):
+def get_cvsset(from_node, style, to_node="tip", xmlsetfile=""):
     cmd = "hg log -r %s:%s --debug --style %s" % (from_node, to_node, style)
     print (cmd)
     p = Popen(cmd, shell=True, stdout=PIPE)
@@ -15,7 +15,8 @@ def get_cvsset(from_node, style, to_node="tip"):
     cvsset = []
 
     dom3 = parseString("<changegroup>" + data + "</changegroup>")
-    #dom3.writexml(open("foo.xml", "w"))
+    if xmlsetfile:
+        dom3.writexml(open(xmlsetfile, "w"))
 
     csets = dom3.getElementsByTagName("changeset")
     for cset in csets:
@@ -104,6 +105,9 @@ def main():
     parser.add_option("-r", "--recover", action="store_true",
                       help="Try to recover from failure state")
     parser.add_option("-c", "--cset", help="Changeset to sync to")
+    parser.add_option("-x", "--xml-cset", help="Log into an XML Changeset file")
+    parser.add_option("-n", "--dry-run", action="store_true",
+                      help="Actually does nothing")
 
     (options, args) = parser.parse_args()
 
@@ -115,7 +119,7 @@ def main():
     p = Popen("hg root", shell=True, stdout=PIPE)
     root = p.communicate()[0].strip("\n")
     cvsdir = os.path.join(root, "CVS")
-    if not(os.path.isdir(cvsdir)):
+    if not(os.path.isdir(cvsdir)) and not(options.dry_run):
         print "%s: Not a CVS working directory" % cvsdir
         sys.exit(0)
 
@@ -136,16 +140,16 @@ def main():
         cset_end = tpl[0]
         if len(tpl) > 1:
             cset_end = tpl[1]
-        cvsset = get_cvsset(cset_begin, style, cset_end)
+        cvsset = get_cvsset(cset_begin, style, cset_end, options.xml_cset)
     else:
-        cvsset = get_cvsset(starting_node, style)
+        cvsset = get_cvsset(starting_node, style, options.xml_cset)
 
     # Now run each set in the order
     for cvs in cvsset:
         try:
             print "Sync CVS to changeset %s:%s" % (cvs.rev, cvs.cset)
-            update_to(cvs.cset)
-            cvs.run(batch=cvsqueue)
+            if not(options.dry_run): update_to(cvs.cset)
+            cvs.run(batch=cvsqueue, dry_run=options.dry_run)
             os.unlink(cvsqueue)
         except:
             rev, node = get_current_revision()
