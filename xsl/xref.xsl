@@ -53,7 +53,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:template match="xref" mode="xref.text">
+<xsl:template match="xref|biblioref" mode="xref.text">
   <xsl:variable name="target" select="key('id',@linkend)[1]"/>
   <xsl:choose>
   <!-- If there is an endterm -->
@@ -83,7 +83,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="xref">
+<xsl:template match="xref" name="xref">
   <xsl:variable name="target" select="key('id',@linkend)[1]"/>
 
   <xsl:call-template name="check.id.unique">
@@ -134,7 +134,15 @@
   </xsl:choose>
 
   <!-- Add standard page reference? -->
-  <xsl:if test="not(starts-with(normalize-space($xrefstyle), 'select:') 
+  <xsl:choose>
+  <xsl:when test="self::biblioref">
+    <!-- no page number for a biblio reference -->
+  </xsl:when>
+  <xsl:when test="starts-with(normalize-space($xrefstyle), 'select:') 
+                  and contains($xrefstyle, 'nopage')">
+    <!-- negative xrefstyle in instance turns it off -->
+  </xsl:when>
+  <xsl:when test="not(starts-with(normalize-space($xrefstyle), 'select:') 
                 and (contains($xrefstyle, 'page')
                      or contains($xrefstyle, 'Page')))
                 and ( $insert.xref.page.number = 'yes' 
@@ -143,7 +151,15 @@
     <xsl:apply-templates select="$target" mode="page.citation">
       <xsl:with-param name="id" select="@linkend"/>
     </xsl:apply-templates>
-  </xsl:if>
+  </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<!-- Currently no begin, end, units supports, so handle like xref -->
+<xsl:template match="biblioref">
+  <xsl:call-template name="xref"/>
 </xsl:template>
 
 <!-- ==================================================================== -->
