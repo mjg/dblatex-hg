@@ -208,6 +208,14 @@
   <xsl:apply-templates mode="latex.programlisting" select="$lst.ext"/>
 </xsl:template>
 
+<!-- The intermediate elements in external file handling just apply
+     the templates in the same mode. -->
+<xsl:template match="textobject|listing"
+              mode="latex.programlisting">
+  <xsl:apply-templates mode="latex.programlisting"/>
+</xsl:template>
+
+
 <xsl:template match="textdata|
                      imagedata[@format='linespecific']|
                      inlinegraphic[@format='linespecific']" mode="lstid">
