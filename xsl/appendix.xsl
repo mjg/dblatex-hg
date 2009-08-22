@@ -6,29 +6,29 @@
     ############################################################################ -->
 
 <xsl:template match="appendix">
-  <xsl:variable name="normalized.title">
-    <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="title"/>
-    </xsl:call-template>
-  </xsl:variable>
   <xsl:if test="not (preceding-sibling::appendix)">
     <xsl:text>% ---------------------&#10;</xsl:text>
     <xsl:text>% Appendixes start here&#10;</xsl:text>
     <xsl:text>% ---------------------&#10;</xsl:text>
-    <xsl:text>\appendix&#10;</xsl:text>
+    <xsl:text>\begin{appendices}&#10;</xsl:text>
   </xsl:if>
-  <xsl:choose>
-    <xsl:when test="local-name(..)='book' or local-name(..)='part'">
-      <xsl:text>\chapter{</xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>\section{</xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:copy-of select="$normalized.title"/>
-  <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
+  <xsl:call-template name="makeheading">
+    <!-- raise to the highest existing book section level (part or chapter) -->
+    <xsl:with-param name="level">
+      <xsl:choose>
+      <xsl:when test="preceding-sibling::part or
+                      following-sibling::part">-1</xsl:when>
+      <xsl:when test="parent::book or parent::part">0</xsl:when>
+      <xsl:otherwise>1</xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
+
   <xsl:apply-templates/>
+
+  <xsl:if test="not (following-sibling::appendix)">
+    <xsl:text>&#10;\end{appendices}&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="appendix/title"></xsl:template>

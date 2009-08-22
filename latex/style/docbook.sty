@@ -118,6 +118,8 @@
 \usepackage{tabularx}
 % Before hyperlink to have consistent links to footnotes
 \usepackage{footmisc}
+% To be able to have sections afters appendices
+\usepackage{appendix}
 
 \usepackage{dbk_fonts}
 \usepackage{dbk_hyper}
@@ -209,8 +211,9 @@
 % ### Index redefinition
 % ##############################################################################
 
-% Index is redefined to have the section numbered, and to have a correct page
-% count
+%
+% Index is redefined to have the section numbered.
+% 
 \renewenvironment{theindex}
 { 
   \if@twocolumn
@@ -245,7 +248,11 @@
   \@ifundefined{chapter}{}{
     % To not have the number, replace by:
     % \addcontentsline{toc}{chapter}{\numberline{}\indexname}
-    \addcontentsline{toc}{chapter}{\numberline{\thechapter}\indexname}
+    \ifnum \c@secnumdepth >\z@
+      \addcontentsline{toc}{chapter}{\numberline{\thechapter}\indexname}
+    \else
+      \addcontentsline{toc}{chapter}{\indexname}
+    \fi
   }
 }{
   \end{stdindex}
