@@ -16,7 +16,7 @@ class XsltProc:
         return ["xsltproc"]
 
     def run(self, xslfile, xmlfile, outfile, opts=None, params=None):
-        cmd = ["xsltproc", "--xinclude", "-o", outfile]
+        cmd = ["xsltproc", "--xinclude", "--xincludestyle", "-o", outfile]
         if self.use_catalogs and self.catalogs:
             cmd.append("--catalogs")
         if params:
