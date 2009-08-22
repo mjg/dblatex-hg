@@ -4,6 +4,8 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<xsl:param name="bibliography.tocdepth">5</xsl:param>
+<xsl:param name="bibliography.numbered">1</xsl:param>
 
 <!-- ################
      # biblio setup #
@@ -22,20 +24,57 @@
      # biblio section #
      ################## -->
 
-<xsl:template name="biblio.title">
+<xsl:template name="biblio.insert.title">
+  <xsl:param name="level" select="0"/>
+
+  <xsl:variable name="title.node" select="(title|bibliographyinfo/title)[1]"/>
+  <xsl:variable name="title.text">
+    <xsl:choose>
+    <xsl:when test="ancestor::article">
+      <xsl:text>\refname</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>\bibname</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:choose>
-  <xsl:when test="title|bibliographyinfo/title">
-    <xsl:call-template name="normalize-scape">
-      <xsl:with-param name="string" select="(title|bibliographyinfo/title)[1]"/>
+  <xsl:when test="self::bibliography and number($bibliography.numbered) = 0">
+    <!-- The unumbered section is only for the top level bibliography heading -->
+    <xsl:call-template name="section.unnumbered.begin">
+      <xsl:with-param name="tocdepth" select="number($bibliography.tocdepth)"/>
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="title" select="$title.text"/>
+      <xsl:with-param name="titlenode" select="$title.node"/>
     </xsl:call-template>
   </xsl:when>
-  <xsl:when test="ancestor::article">
-    <xsl:text>\refname</xsl:text>
+  <xsl:when test="$title.node">
+    <!-- Numbered section from a <title> node -->
+    <xsl:call-template name="makeheading">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="allnum" select="'1'"/>
+      <xsl:with-param name="title" select="$title.node"/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:text>\bibname</xsl:text>
+    <!-- Numbered section from a generated title -->
+    <xsl:call-template name="maketitle">
+      <xsl:with-param name="level" select="$level"/>
+      <xsl:with-param name="allnum" select="'1'"/>
+      <xsl:with-param name="title" select="$title.text"/>
+    </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="biblio.section.end">
+  <xsl:if test="self::bibliography and number($bibliography.numbered) = 0">
+    <!-- Only the unumbered section requires to restore section counters -->
+    <xsl:call-template name="section.unnumbered.end">
+      <xsl:with-param name="tocdepth" select="number($bibliography.tocdepth)"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <!-- we can have a list of entries to process, or a bibtex file -->
@@ -63,13 +102,9 @@
 
   <!-- display the heading -->
   <xsl:if test="$level &gt;= 0">
-    <xsl:call-template name="map.sect.level">
+    <xsl:call-template name="biblio.insert.title">
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
-    <xsl:text>{</xsl:text>
-    <xsl:call-template name="biblio.title"/>
-    <xsl:text>}&#10;</xsl:text>
-    <xsl:call-template name="label.id"/>
   </xsl:if>
 
   <xsl:text>\begin{bibgroup}&#10;</xsl:text>
@@ -99,6 +134,9 @@
   </xsl:if>
   <xsl:text>&#10;\end{thebibliography}&#10;</xsl:text>
   <xsl:text>\end{bibgroup}&#10;</xsl:text>
+  <xsl:if test="$level &gt;= 0">
+    <xsl:call-template name="biblio.section.end"/>
+  </xsl:if>
   <xsl:text>\end{btSect}&#10;</xsl:text>
 </xsl:template>
 
@@ -155,13 +193,9 @@
 
   <!-- display the heading -->
   <xsl:if test="$level &gt;= 0">
-    <xsl:call-template name="map.sect.level">
+    <xsl:call-template name="biblio.insert.title">
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
-    <xsl:text>{</xsl:text>
-    <xsl:call-template name="biblio.title"/>
-    <xsl:text>}&#10;</xsl:text>
-    <xsl:call-template name="label.id"/>
   </xsl:if>
 
   <!-- things before the entries -->
@@ -188,6 +222,10 @@
     <xsl:text>\btPrintAll&#10;</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
+
+  <xsl:if test="$level &gt;= 0">
+    <xsl:call-template name="biblio.section.end"/>
+  </xsl:if>
 
   <xsl:text>\end{btSect}&#10;</xsl:text>
 </xsl:template>
@@ -220,16 +258,17 @@
   </xsl:when>
   <xsl:otherwise>
     <!-- no entries here, only a section block -->
-    <xsl:call-template name="map.sect.level">
+    <xsl:call-template name="biblio.insert.title">
       <xsl:with-param name="level" select="$level"/>
     </xsl:call-template>
-    <xsl:text>{</xsl:text>
-    <xsl:call-template name="biblio.title"/>
-    <xsl:text>}&#10;</xsl:text>
-    <xsl:call-template name="label.id"/>
   </xsl:otherwise>
   </xsl:choose>
   <xsl:apply-templates select="bibliodiv"/> 
+
+  <!-- close the opened section block -->
+  <xsl:if test="not(biblioentry|bibliomixed)">
+    <xsl:call-template name="biblio.section.end"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="bibliography/title"/>
