@@ -4,6 +4,7 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<xsl:param name="xref.hypermarkup" select="0"/>
 
 
 <xsl:template match="anchor">
@@ -49,6 +50,45 @@
   <xsl:text>}{</xsl:text>
   <xsl:value-of select="$text"/>
   <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<xsl:template match="*" mode="object.xref.markup2">
+  <xsl:param name="purpose" select="'xref'"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="referrer"/>
+  <xsl:param name="verbose" select="1"/>
+
+  <xsl:variable name="markup">
+    <xsl:apply-templates select="." mode="object.xref.markup">
+      <xsl:with-param name="purpose" select="$purpose"/>
+      <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
+      <xsl:with-param name="referrer" select="$referrer"/>
+      <xsl:with-param name="verbose" select="$verbose"/>
+    </xsl:apply-templates>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$xref.hypermarkup = 1">
+      <!-- Get the normal markup but replace hot links by counters -->
+      <xsl:variable name="text">
+        <xsl:call-template name="string-replace">
+          <xsl:with-param name="string" select="$markup"/>
+          <xsl:with-param name="from" select="'ref{'"/>
+          <xsl:with-param name="to" select="'ref*{'"/>
+        </xsl:call-template>
+      </xsl:variable>
+      <!-- Wrap the markup with an hyperlink -->
+      <xsl:call-template name="hyperlink.markup">
+        <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
+        <xsl:with-param name="text" select="$text"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$markup"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -449,7 +489,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -462,7 +502,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -477,7 +517,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -490,7 +530,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -507,7 +547,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -617,7 +657,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -630,7 +670,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -643,7 +683,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -656,7 +696,7 @@
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
 
-  <xsl:apply-templates select="." mode="object.xref.markup">
+  <xsl:apply-templates select="." mode="object.xref.markup2">
     <xsl:with-param name="purpose" select="'xref'"/>
     <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
     <xsl:with-param name="referrer" select="$referrer"/>
@@ -856,6 +896,8 @@
   </xsl:if>
 
 </xsl:template>
+
+<!-- ==================================================================== -->
 
 <xsl:template name="hyperref.format">
   <xsl:param name="href"/>
