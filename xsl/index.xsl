@@ -4,6 +4,9 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<xsl:param name="index.tocdepth">5</xsl:param>
+<xsl:param name="index.numbered">1</xsl:param>
+
 
 <xsl:template name="index.print">
   <xsl:param name="node" select="."/>
@@ -126,6 +129,25 @@
   <xsl:text>\printindex&#10;</xsl:text>
   -->
 </xsl:template>
+
+
+<xsl:template name="printindex">
+  <xsl:if test="number($index.numbered) = 0">
+    <xsl:text>\setcounter{secnumdepth}{-1}&#10;</xsl:text>
+    <xsl:call-template name="set-tocdepth">
+      <xsl:with-param name="depth" select="number($index.tocdepth) - 1"/>
+    </xsl:call-template>
+  </xsl:if>
+
+  <xsl:text>\printindex&#10;</xsl:text>
+
+  <xsl:if test="number($index.numbered) = 0">
+    <xsl:call-template name="section.unnumbered.end">
+      <xsl:with-param name="tocdepth" select="number($index.tocdepth)"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 
 <xsl:template match="index/title"></xsl:template>
 <xsl:template match="index/subtitle"></xsl:template>

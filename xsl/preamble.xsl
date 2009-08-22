@@ -483,7 +483,7 @@
   <!-- Back matter -->
   <xsl:if test="contains($layout, 'index ')">
     <xsl:if test="*//indexterm|*//keyword">
-      <xsl:text>\printindex&#10;</xsl:text>
+      <xsl:call-template name="printindex"/>
     </xsl:if>
   </xsl:if>
   <xsl:apply-templates select="colophon"/>
