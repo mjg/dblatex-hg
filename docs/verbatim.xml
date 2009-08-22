@@ -40,9 +40,11 @@ replaceable not supported in programlisting or screen
 optional not supported in programlisting or screen
 replaceable not supported in programlisting or screen
 ...
-</screen>If you want those elements be rendered as they are in a normal
-environment you need to override the templates used in
-<literal>latex.programlisting</literal> mode, as follow:</para>
+</screen></para>
+
+<para>If you want those elements be formatted in bold, or italic you need to
+override the templates used in <literal>latex.programlisting</literal> mode,
+as follow:</para>
 
 <para><programlisting>&lt;xsl:template match="replaceable|optional" mode="latex.programlisting"&gt;
    &lt;xsl:param name="co-tagin" select="'&amp;lt;:'"/&gt; <co
@@ -50,19 +52,40 @@ id="co-verb-par1" />
    &lt;xsl:param name="rnode" select="/"/&gt;          <co id="co-verb-par2" />
    &lt;xsl:param name="probe" select="0"/&gt;          <co id="co-verb-par3" />
  
-   &lt;xsl:call-template name="verbatim.embed"&gt; <co id="co-verb-template" />
-     &lt;xsl:with-param name="co-taging" select="$co-tagin"/&gt;
+   &lt;xsl:call-template name="verbatim.boldseq"&gt; <co id="co-verb-template" />
+     &lt;xsl:with-param name="co-tagin" select="$co-tagin"/&gt;
      &lt;xsl:with-param name="rnode" select="$rnode"/&gt;
      &lt;xsl:with-param name="probe" select="$probe"/&gt;
    &lt;/xsl:call-template&gt;
-&lt;/xsl:template&gt;
- </programlisting><calloutlist>
+&lt;/xsl:template&gt;</programlisting><calloutlist>
 <callout arearefs="co-verb-par1 co-verb-par2 co-verb-par3">
 <para>These parameters are required in <literal>latex.programlisting</literal>
 mode.</para>
 </callout>
 
 <callout arearefs="co-verb-template">
+<para>The predefined template makes bold the verbatim text of the
+element.</para>
+</callout>
+</calloutlist></para>
+
+<para>If formatting setup is not enough, you can also render these elements
+as if they were in a normal environment. To do this, you need to override the
+templates used in <literal>latex.programlisting</literal> mode, as
+follow:</para>
+
+<para><programlisting>&lt;xsl:template match="replaceable|optional" mode="latex.programlisting"&gt;
+   &lt;xsl:param name="co-tagin" select="'&amp;lt;:'"/&gt;
+   &lt;xsl:param name="rnode" select="/"/&gt;
+   &lt;xsl:param name="probe" select="0"/&gt;
+ 
+   &lt;xsl:call-template name="verbatim.embed"&gt; <co id="co-verb-template2" />
+     &lt;xsl:with-param name="co-tagin" select="$co-tagin"/&gt;
+     &lt;xsl:with-param name="rnode" select="$rnode"/&gt;
+     &lt;xsl:with-param name="probe" select="$probe"/&gt;
+   &lt;/xsl:call-template&gt;
+&lt;/xsl:template&gt; </programlisting><calloutlist>
+<callout arearefs="co-verb-template2">
 <para>To enable the normal mode rendering within a verbatim environment, call
 the verbatim.embed template, and pass the mandatory parameters.</para>
 </callout>

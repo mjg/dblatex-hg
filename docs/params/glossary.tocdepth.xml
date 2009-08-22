@@ -23,5 +23,8 @@ to 0.</para>
     <title>See Also</title>
     <para><parameter>glossary.numbered</parameter>.</para>
     <para><parameter>refentry.numbered</parameter>, <parameter>refentry.tocdepth</parameter>.</para>
+    <para><parameter>bibliography.numbered</parameter>, <parameter>bibliography.tocdepth</parameter>.</para>
+    <para><parameter>index.numbered</parameter>, <parameter>index.tocdepth</parameter>.</para>
+
   </refsection>
 </refentry>

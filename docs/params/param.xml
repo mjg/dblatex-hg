@@ -34,10 +34,12 @@ the DocBook Project documentation.</para>
 <xi:include href="doc.toc.show.xml"/>
 <xi:include href="titleabbrev.in.toc.xml"/>
 <xi:include href="toc.section.depth.xml"/>
+<xi:include href="bibliography.tocdepth.xml"/>
 <xi:include href="colophon.tocdepth.xml"/>
 <xi:include href="dedication.tocdepth.xml"/>
 <xi:include href="preface.tocdepth.xml"/>
 <xi:include href="glossary.tocdepth.xml"/>
+<xi:include href="index.tocdepth.xml"/>
 <xi:include href="refentry.tocdepth.xml"/>
 
 </section>
@@ -52,7 +54,9 @@ the DocBook Project documentation.</para>
 -->
 <section><title>Automatic labelling</title>
 
+<xi:include href="bibliography.numbered.xml"/>
 <xi:include href="glossary.numbered.xml"/>
+<xi:include href="index.numbered.xml"/>
 <xi:include href="refentry.numbered.xml"/>
 
 </section>
@@ -101,11 +105,12 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="olink.params.xml"/>
 
 </section>
-<!--
 <section><title>Cross References</title>
- TODO
+
+<xi:include href="insert.xref.page.number.xml"/>
+<xi:include href="xref.hypermarkup.xml"/>
+
 </section>
--->
 <section><title>Lists</title>
 
 <xi:include href="term.breakline.xml"/>
@@ -154,6 +159,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="show.comments.xml"/>
 <xi:include href="ulink.footnotes.xml"/>
 <xi:include href="ulink.show.xml"/>
+<xi:include href="xref.with.number.and.title.xml"/>
 
 </section>
 <section><title>Graphics</title>

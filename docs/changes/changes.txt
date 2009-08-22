@@ -1,3 +1,27 @@
+Release 0.2.12:
+---------------
+
+- Add support for feature #2836168 with the xref.hypermarkup parameter that
+  wraps the whole xref markup with an hyperlink.
+- The <index> section can be unnumbered when the new parameter index.numbered
+  is set to 0.
+- <bibliography> sections can be unnumbered when the new parameter
+  bibliography.numbered is set to 0. The parameter
+  bibliography.tocdepth is also given.
+- Basic <biblioref> support added. The specific attributes are not handled.
+- Allow the appendices to be followed by other sections.
+- Fix indexterm bug in titles.
+- Apply patch #2821475: add a converter to transform SVG graphics with
+  Inkscape (thanks to David Necas)
+- Fix bug #2821901: <reference> headings to the right level
+- Fix bug #2818215: square brackets must be protected in <member>s
+- Fix bug #2819592: references working with xml:id (DocBook 5 compatibility)
+- Fix Debian bug #533332: wrong page numeration in PDF viewers with XeTeX
+  backend
+- Fix Debian bug #528964: linebreaks preserved in formatted verbatim
+  environment
+
+
 Release 0.2.11:
 ---------------
 
