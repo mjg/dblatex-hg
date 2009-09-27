@@ -569,7 +569,7 @@
         <xsl:otherwise>+</xsl:otherwise>
       </xsl:choose>
     </xsl:if>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="."/>
   </xsl:for-each>
   <!-- now, the shortcut if any -->
   <xsl:if test="$shortcut">
