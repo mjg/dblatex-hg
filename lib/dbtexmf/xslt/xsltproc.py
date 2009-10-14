@@ -4,19 +4,25 @@
 #
 import os
 import logging
-from subprocess import call
+import re
+from subprocess import call, Popen, PIPE
 
 class XsltProc:
     def __init__(self):
         self.catalogs = os.getenv("SGML_CATALOG_FILES")
         self.use_catalogs = 1
         self.log = logging.getLogger("dblatex")
+        self.run_opts = ["--xinclude"]
+        # If --xincludestyle is supported we *must* use it to support external
+        # listings (see mklistings.xsl and pals)
+        if self._has_xincludestyle():
+            self.run_opts.append("--xincludestyle")
 
     def get_deplist(self):
         return ["xsltproc"]
 
     def run(self, xslfile, xmlfile, outfile, opts=None, params=None):
-        cmd = ["xsltproc", "--xinclude", "--xincludestyle", "-o", outfile]
+        cmd = ["xsltproc", "-o", outfile] + self.run_opts
         if self.use_catalogs and self.catalogs:
             cmd.append("--catalogs")
         if params:
@@ -32,6 +38,17 @@ class XsltProc:
         rc = call(cmd)
         if rc != 0:
             raise ValueError("xsltproc failed")
+
+    def _has_xincludestyle(self):
+        # check that with help output the option is there
+        p = Popen(["xsltproc"], stdout=PIPE)
+        data = p.communicate()[0]
+        m = re.search("--xincludestyle", data, re.M)
+        if not(m):
+            return False
+        else:
+            return True
+
 
 class Xslt(XsltProc):
     "Plugin Class to load"
