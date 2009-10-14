@@ -147,7 +147,7 @@
 
   <xsl:message>
     <xsl:value-of select="local-name(.)"/>
-    <xsl:text> not supported in programlisting or screen</xsl:text>
+    <xsl:text>: default template used in programlisting or screen</xsl:text>
   </xsl:message>
 
   <xsl:apply-templates mode="latex.programlisting">
