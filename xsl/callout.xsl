@@ -36,7 +36,7 @@
 
   <xsl:choose>
   <xsl:when test="contains($text, $tag)">
-    <xsl:message>Try another escape sequence in verbatim</xsl:message> 
+    <!-- <xsl:message>Try another escape sequence in verbatim</xsl:message> -->
     <xsl:call-template name="co-tagin-gen">
       <xsl:with-param name="text" select="$text"/>
       <xsl:with-param name="try" select="$try+1"/>
