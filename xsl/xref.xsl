@@ -471,16 +471,26 @@
 </xsl:template>
 
 <xsl:template match="book" mode="xref-to">
-  <xsl:text>\emph{</xsl:text>
-  <xsl:choose>
-  <xsl:when test="title">
-    <xsl:apply-templates select="title" mode="xref"/>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:apply-templates select="bookinfo/title" mode="xref"/>
-  </xsl:otherwise>
-  </xsl:choose>
-  <xsl:text>}</xsl:text>
+  <xsl:param name="referrer"/>
+
+  <xsl:variable name="text">
+    <xsl:text>\emph{</xsl:text>
+    <xsl:choose>
+    <xsl:when test="title">
+      <xsl:apply-templates select="title" mode="xref"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="bookinfo/title" mode="xref"/>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}</xsl:text>
+  </xsl:variable>
+
+  <xsl:call-template name="hyperlink.markup">
+    <xsl:with-param name="referrer" select="$referrer"/>
+    <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
+    <xsl:with-param name="text" select="$text"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="variablelist|orderedlist|orderedlist|itemizedlist"
