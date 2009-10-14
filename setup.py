@@ -348,7 +348,8 @@ def get_version():
 
 if __name__ == "__main__":
     pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
-    
+    htmldoc = [os.path.join("docs", "html")]
+
     setup(name="dblatex",
         version=get_version(),
         description='DocBook to LaTeX/ConTeXt Publishing',
@@ -365,7 +366,7 @@ if __name__ == "__main__":
         package_data={'dbtexmf.core':['sgmlent.txt']},
         data_files=[('share/dblatex', ['xsl', 'latex']),
                     ('share/doc/dblatex', pdfdocs),
-                    ('share/doc/dblatex', ['docs/html']),
+                    ('share/doc/dblatex', htmldoc),
                     ('share/man/man1', ['docs/manpage/dblatex.1.gz'])],
         scripts=['scripts/dblatex'],
         cmdclass={'build_scripts': BuildScripts,
