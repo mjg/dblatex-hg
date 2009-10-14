@@ -447,6 +447,7 @@
   <xsl:call-template name="lang.document.begin">
     <xsl:with-param name="lang" select="$lang"/>
   </xsl:call-template>
+  <xsl:call-template name="label.id"/>
 
   <!-- Apply the legalnotices here, when language is active -->
   <xsl:call-template name="print.legalnotice">
@@ -465,7 +466,6 @@
   <xsl:if test="contains($layout, 'toc ')">
     <xsl:apply-templates select="." mode="toc_lots"/>
   </xsl:if>
-  <xsl:call-template name="label.id"/>
 
   <!-- Print the abstract and front matter content -->
   <xsl:apply-templates select="(abstract|$info/abstract)[1]"/>
