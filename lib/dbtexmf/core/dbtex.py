@@ -199,7 +199,7 @@ class DbTex:
 
         f.write('</xsl:stylesheet>\n')
         f.close()
-        self.xslbuild = wrapper
+        self.xslbuild = os.path.realpath(wrapper)
 
     def make_xml(self):
         self.log.info("Build the XML file...")
