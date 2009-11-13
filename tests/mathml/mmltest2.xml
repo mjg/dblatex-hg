@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook MathML Module V1.0//EN"
-         "dbmathml.dtd">
+         "http://www.oasis-open.org/docbook/xml/mathml/1.0/dbmathml.dtd"
+         >
 <book xmlns:mml="http://www.w3.org/1998/Math/MathML">
 <title>W3C MathML Test Suite Extracts</title>
 <chapter>
