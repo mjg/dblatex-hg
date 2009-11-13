@@ -22,23 +22,41 @@
 </xsl:template>
 
 
-<xsl:template match="m:mtd">
+<xsl:template match="*" mode="mtd">
 	<xsl:if test="@columnalign='right' or @columnalign='center'">
 		<xsl:text>\hfill </xsl:text>
 	</xsl:if>
-	<xsl:apply-templates/>
+  <!-- checks in case of omitted <mtd> -->
+	<xsl:choose>
+		<xsl:when test="self::m:mtd">
+			<xsl:apply-templates/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:apply-templates select="."/>
+		</xsl:otherwise>
+	</xsl:choose>
 	<xsl:if test="@columnalign='left' or @columnalign='center'">
 		<xsl:text>\hfill </xsl:text>
 	</xsl:if>
-	<xsl:if test="count(following-sibling::*)>0">
+	<xsl:if test="count(following-sibling::*)>0 and parent::m:mtr">
 <!--    this test valid for Sablotron, another form - test="not(position()=last())".
 	Also for m:mtd[@columnspan] and m:mtr  -->
 		<xsl:text>&amp; </xsl:text>
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="m:mtr">
-	<xsl:apply-templates/>
+<xsl:template match="text()" mode="mtr"/>
+<xsl:template match="text()" mode="mtd"/>
+
+<xsl:template match="m:mtr" mode="mtr">
+	<xsl:apply-templates mode="mtd"/>
+	<xsl:if test="count(following-sibling::*)>0">
+		<xsl:text>\\ </xsl:text>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="*" mode="mtr">
+	<xsl:apply-templates select="." mode="mtd"/>
 	<xsl:if test="count(following-sibling::*)>0">
 		<xsl:text>\\ </xsl:text>
 	</xsl:if>
@@ -49,7 +67,9 @@
 	<xsl:if test="@frame='solid'">
 		<xsl:text>|</xsl:text>
 	</xsl:if>
-	<xsl:variable name="numbercols" select="count(./m:mtr[1]/m:mtd[not(@columnspan)])+sum(./m:mtr[1]/m:mtd/@columnspan)"/>
+	<xsl:variable name="mtr" select="./m:mtr[count(*)!=0][1]"/>
+	<xsl:variable name="numbercols" select="count($mtr/*[not(@columnspan)])+
+                                          sum($mtr/m:mtd/@columnspan)"/>
 	<xsl:choose>
 		<xsl:when test="@columnalign">
 			<xsl:variable name="colalign">
@@ -87,7 +107,7 @@
 	<xsl:if test="@frame='solid'">
 		<xsl:text>\hline </xsl:text>
 	</xsl:if>
-	<xsl:apply-templates/>
+	<xsl:apply-templates mode="mtr"/>
 	<xsl:if test="@frame='solid'">
 		<xsl:text>\\ \hline</xsl:text>
 	</xsl:if>
