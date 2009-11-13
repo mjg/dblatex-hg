@@ -142,7 +142,7 @@ def main():
             cset_end = tpl[1]
         cvsset = get_cvsset(cset_begin, style, cset_end, options.xml_cset)
     else:
-        cvsset = get_cvsset(starting_node, style, options.xml_cset)
+        cvsset = get_cvsset(starting_node, style, xmlsetfile=options.xml_cset)
 
     # Now run each set in the order
     for cvs in cvsset:
