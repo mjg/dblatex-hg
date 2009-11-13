@@ -162,18 +162,6 @@
   <xsl:apply-templates mode="java"/>
 </xsl:template>
 
-<xsl:template name="copy-string">
-  <xsl:param name="string"/>
-  <xsl:param name="count" select="'1'"/>
-  <xsl:value-of select="$string"/>
-  <xsl:if test="$count &gt; 1">
-    <xsl:call-template name="copy-string">
-      <xsl:with-param name="string" select="$string"/>
-      <xsl:with-param name="count" select="$count - 1"/>
-    </xsl:call-template>
-  </xsl:if>
-</xsl:template>
-
 <xsl:template match="methodparam" mode="java">
   <!-- PARAM: indent := 0 -->
   <xsl:param name="indent">0</xsl:param>

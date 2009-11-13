@@ -10,6 +10,7 @@
 <xsl:param name="imagedata.default.scale">pagebound</xsl:param>
 <xsl:param name="imagedata.file.check">1</xsl:param>
 <xsl:param name="imagedata.boxed">0</xsl:param>
+<xsl:param name="keep.relative.image.uris" select="0"/>
 
 
 <!-- Simple mediaobject selection using @role -->
@@ -241,6 +242,8 @@
   </xsl:if>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
 <!-- Image filename to use -->
 <xsl:template match="imagedata|graphic|inlinegraphic" mode="filename.get">
   <xsl:choose>
@@ -248,10 +251,32 @@
     <xsl:value-of select="unparsed-entity-uri(@entityref)"/>
   </xsl:when>
   <xsl:when test="@fileref">
-    <xsl:value-of select="@fileref"/>
+    <xsl:apply-templates select="@fileref"/>
   </xsl:when>
   </xsl:choose>
 </xsl:template>
+
+<!-- Resolve xml:base attributes (taken from the DocBook Project) -->
+<xsl:template match="@fileref">
+  <!-- need a check for absolute urls -->
+  <xsl:choose>
+    <xsl:when test="contains(., ':') or starts-with(.,'/')">
+      <!-- it has a uri scheme or starts with '/', so it is an absolute uri -->
+      <xsl:value-of select="."/>
+    </xsl:when>
+    <xsl:when test="$keep.relative.image.uris != 0">
+      <!-- leave it alone -->
+      <xsl:value-of select="."/>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- its a relative uri -->
+      <xsl:call-template name="relative-uri">
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- ==================================================================== -->
 
 <!-- Process an imagedata -->
 
