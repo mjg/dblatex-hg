@@ -6,6 +6,7 @@
     ############################################################################ -->
 <xsl:param name="bibliography.tocdepth">5</xsl:param>
 <xsl:param name="bibliography.numbered">1</xsl:param>
+<xsl:param name="biblioentry.numbered" select="0"/>
 
 <!-- ################
      # biblio setup #
@@ -380,7 +381,7 @@
   </xsl:variable>
   <xsl:text>&#10;</xsl:text>
   <xsl:text>\bibitem</xsl:text>
-  <xsl:if test="$tag != ''">
+  <xsl:if test="$tag != '' and $biblioentry.numbered = 0">
     <xsl:text>[</xsl:text>
     <xsl:call-template name="normalize-scape">
       <xsl:with-param name="string" select="$tag"/>
@@ -557,8 +558,10 @@
   </xsl:call-template>
   <xsl:call-template name="gentext.space"/>
   <xsl:apply-templates select="year" mode="bibliography.mode"/>
-  <xsl:call-template name="gentext.space"/>
-  <xsl:apply-templates select="holder" mode="bibliography.mode"/>
+  <xsl:if test="holder">
+    <xsl:call-template name="gentext.space"/>
+    <xsl:apply-templates select="holder" mode="bibliography.mode"/>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="year" mode="bibliography.mode">
