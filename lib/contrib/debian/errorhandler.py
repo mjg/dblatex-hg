@@ -47,17 +47,17 @@ class DebianHandler(ErrorHandler):
         aptcache = apt.Cache()
         warn_msgs = []
         if ((cmd.startswith('convert') or cmd.find('&& convert') > -1)
-            and not aptcache['graphicsmagick-imagemagick-compat'].isInstalled
-            and not aptcache['imagemagick'].isInstalled):
+            and not aptcache['graphicsmagick-imagemagick-compat'].is_installed
+            and not aptcache['imagemagick'].is_installed):
             warn_msgs.append('For image conversion one of Debian packages'
                              + ' graphicsmagick-imagemagick-compat')
             warn_msgs.append('or imagemagick is needed')
         if ((cmd.startswith('epstopdf') or cmd.find('&& epstopdf') > -1)
-            and not aptcache['ghostscript'].isInstalled):
+            and not aptcache['ghostscript'].is_installed):
             warn_msgs.append('For image conversion Debian package ghostscript'
                              + ' is needed')
         if ((cmd.startswith('fig2dev') or cmd.find('&& fig2dev') > -1)
-            and not aptcache['transfig'].isInstalled):
+            and not aptcache['transfig'].is_installed):
             warn_msgs.append('For image conversion Debian package transfig is'
                              + ' needed')
         if warn_msgs:
@@ -112,17 +112,17 @@ class DebianHandler(ErrorHandler):
         warn_msgs = []
         if obj.backend == 'xetex':
             for debian_pkg in 'texlive-xetex', 'lmodern':
-                if not aptcache[debian_pkg].isInstalled:
+                if not aptcache[debian_pkg].is_installed:
                     warn_msgs.append('For xetex backend Debian package '
                                      + debian_pkg + ' is needed')
         if obj.input_format == 'sgml':
             for debian_pkg in 'docbook', 'opensp':
-                if not aptcache[debian_pkg].isInstalled:
+                if not aptcache[debian_pkg].is_installed:
                     warn_msgs.append('For SGML documents Debian package '
                                      + debian_pkg + ' is needed')
         if obj.runtex.texer.encoding == 'utf8':
             debian_pkg = 'texlive-lang-cyrillic'
-            if not aptcache[debian_pkg].isInstalled:
+            if not aptcache[debian_pkg].is_installed:
                 warn_msgs.append('For utf8 encoding Debian package '
                                  + debian_pkg + ' is needed')
         if warn_msgs:
