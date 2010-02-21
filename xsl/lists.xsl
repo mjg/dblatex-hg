@@ -324,7 +324,9 @@
 <!-- Segmentedlist stuff -->
 
 <xsl:template match="segmentedlist">
-  <xsl:apply-templates select="node()[not(self::segtitle)]"/>
+  <xsl:text>\noindent </xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>&#10;</xsl:text>
 </xsl:template>
 
 <xsl:template match="segmentedlist/title">
@@ -334,12 +336,15 @@
 </xsl:template>
 
 <xsl:template match="segtitle">
+</xsl:template>
+
+<xsl:template match="segtitle" mode="segtitle-in-seg">
   <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="seglistitem">
   <xsl:apply-templates/>
-  <xsl:if test="position()!=last()">
+  <xsl:if test="following-sibling::seglistitem">
     <xsl:text> \\</xsl:text>
   </xsl:if>
   <xsl:text>&#10;</xsl:text>
@@ -348,12 +353,22 @@
 <!-- We trust in the right count of segtitle declarations -->
 
 <xsl:template match="seg">
-  <xsl:variable name="p" select="position()"/>
+  <xsl:variable name="segnum" select="count(preceding-sibling::seg)+1"/>
+  <xsl:variable name="seglist" select="ancestor::segmentedlist"/>
+  <xsl:variable name="segtitles" select="$seglist/segtitle"/>
+
+  <!--
+     Note: segtitle is only going to be the right thing in a well formed
+     SegmentedList.  If there are too many Segs or too few SegTitles,
+     you'll get something odd...maybe an error
+  -->
+
   <xsl:text>\emph{</xsl:text>
-  <xsl:apply-templates select="../../segtitle[position()=$p]"/>
+  <xsl:apply-templates select="$segtitles[$segnum=position()]"
+                       mode="segtitle-in-seg"/>
   <xsl:text>:} </xsl:text>
   <xsl:apply-templates/>
-  <xsl:if test="$p!=last()">
+  <xsl:if test="following-sibling::seg">
     <xsl:value-of select="$seg.item.separator"/>
   </xsl:if>
 </xsl:template>
