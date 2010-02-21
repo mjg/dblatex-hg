@@ -265,12 +265,12 @@ class DbTex:
         self.xsltproc.use_catalogs = 0
         self.xsltproc.run(xslset, self.input, doclist, opts=self.xslopts)
 
-        # If <doclist> is missing, there's no set, or only one book from
-        # the set is compiled
-        if not(os.path.isfile(doclist)):
-            self._single_setup()
-        else:
+        # If <doclist> is missing or is empty, there's no set, or only one
+        # book from the set is compiled
+        if os.path.isfile(doclist) and os.path.getsize(doclist) > 0:
             self._multiple_setup(doclist)
+        else:
+            self._single_setup()
 
     def make_rawtex(self):
         if len(self.documents) == 1:

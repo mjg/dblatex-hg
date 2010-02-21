@@ -13,7 +13,6 @@
 <xsl:param name="doc.collab.show">1</xsl:param>
 <xsl:param name="doc.alignment"/>
 <xsl:param name="doc.layout">coverpage toc frontmatter mainmatter index </xsl:param>
-<xsl:param name="set.book.num">1</xsl:param>
 <xsl:param name="draft.mode">maybe</xsl:param>
 <xsl:param name="draft.watermark">1</xsl:param>
 
