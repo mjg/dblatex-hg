@@ -29,6 +29,7 @@
   <xsl:param name="rowsep"/>
   <xsl:param name="colsep"/>
   <xsl:param name="cols"/>
+  <xsl:param name="autowidth"/>
   
   <xsl:if test="$colnum &lt;= $cols">
     <xsl:choose>
@@ -39,8 +40,8 @@
         <colspec colnum='{$colnum}' align='{$align}' star='1'
                  rowsep='{$rowsep}' colsep='{$colsep}' 
                  colwidth='\newtblstarfactor'>
-          <xsl:if test="contains($newtbl.autowidth,'default') or
-                        contains($newtbl.autowidth,'all')">
+          <xsl:if test="contains($autowidth,'default') or
+                        contains($autowidth,'all')">
             <xsl:attribute name="autowidth">1</xsl:attribute>
           </xsl:if>
         </colspec>
@@ -151,6 +152,7 @@
   <xsl:param name="align"/>
   <xsl:param name="colsep"/>
   <xsl:param name="rowsep"/>
+  <xsl:param name="autowidth"/>
   
   <xsl:copy>
     <xsl:for-each select="@*"><xsl:copy/></xsl:for-each>
@@ -182,7 +184,7 @@
           <xsl:with-param name="width" select="substring-before(@colwidth, '*')"/>
         </xsl:call-template>
       </xsl:attribute>
-      <xsl:if test="contains($newtbl.autowidth,'all')">
+      <xsl:if test="contains($autowidth,'all')">
         <xsl:attribute name="autowidth">1</xsl:attribute>
       </xsl:if>
     </xsl:if>
@@ -190,8 +192,8 @@
     <xsl:if test="not(string(@colwidth))">
       <xsl:attribute name="colwidth">\newtblstarfactor</xsl:attribute>
       <xsl:attribute name="star">1</xsl:attribute>
-      <xsl:if test="contains($newtbl.autowidth,'default') or
-                    contains($newtbl.autowidth,'all')">
+      <xsl:if test="contains($autowidth,'default') or
+                    contains($autowidth,'all')">
         <xsl:attribute name="autowidth">1</xsl:attribute>
       </xsl:if>
     </xsl:if>
@@ -236,6 +238,7 @@
     <xsl:with-param name="align" select="$align"/>
     <xsl:with-param name="colsep" select="$colsep"/>
     <xsl:with-param name="rowsep" select="$rowsep"/>
+    <xsl:with-param name="autowidth" select="$autowidth"/>
   </xsl:apply-templates>
 </xsl:template>
 
@@ -243,6 +246,7 @@
 
 <!-- Generate a complete set of colspecs for each column in the table -->
 <xsl:template name="tbl.colspec">
+  <xsl:param name="autowidth"/>
   <xsl:param name="align"/>
   <xsl:param name="rowsep"/>
   <xsl:param name="colsep"/>
@@ -254,6 +258,7 @@
       <xsl:with-param name="align" select="$align"/>
       <xsl:with-param name="rowsep" select="$rowsep"/>
       <xsl:with-param name="colsep" select="$colsep"/>
+      <xsl:with-param name="autowidth" select="$autowidth"/>
     </xsl:apply-templates>
   </xsl:variable>
   
@@ -264,6 +269,7 @@
     <xsl:with-param name="align" select="$align"/>
     <xsl:with-param name="rowsep" select="$rowsep"/>
     <xsl:with-param name="colsep" select="$colsep"/>
+    <xsl:with-param name="autowidth" select="$autowidth"/>
   </xsl:call-template>
 </xsl:template>
 
@@ -1164,6 +1170,52 @@
 </xsl:template>
 
 
+<xsl:template name="table.width">
+  <xsl:param name="fullwidth"/>
+  <xsl:param name="exclude"/>
+
+  <xsl:variable name="piwidth">
+    <xsl:call-template name="pi-attribute">
+      <xsl:with-param name="pis" select="../processing-instruction('dblatex')"/>
+      <xsl:with-param name="attribute" select="'table-width'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!-- precedence between table-widths specifications -->
+  <xsl:variable name="width">
+    <xsl:choose>
+      <xsl:when test="$piwidth != '' and
+                      ($exclude='' or not(contains($piwidth,$exclude)))">
+        <xsl:value-of select="$piwidth"/>
+      </xsl:when>
+      <xsl:when test="../@width and
+                      ($exclude='' or not(contains(../@width,$exclude)))">
+        <xsl:value-of select="../@width"/>
+      </xsl:when>
+      <xsl:when test="$default.table.width != '' and
+                      ($exclude='' or
+                      not(contains($default.table.width,$exclude)))">
+        <xsl:value-of select="$default.table.width"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$fullwidth"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- convert percentage to real width -->
+  <xsl:choose>
+    <xsl:when test="contains($width, '%')">
+      <xsl:value-of select="number(substring-before($width, '%')) div 100"/>
+      <xsl:value-of select="$fullwidth"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$width"/>
+    </xsl:otherwise>
+  </xsl:choose>
+
+</xsl:template>
+
 
 <!-- The main starting point of the table handling -->
 <xsl:template match="tgroup" mode="newtbl" name="tgroup">
@@ -1189,7 +1241,8 @@
         <xsl:value-of select="@cols"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="count(tbody/row[1]/*[self::entry or self::entrytbl])"/>
+        <xsl:value-of select="count(tbody/row[1]/*[self::entry or
+                              self::entrytbl])"/>
         <xsl:message>Warning: table's tgroup lacks cols attribute. 
         Assuming <xsl:value-of select="count(tbody/row[1]/*)"/>.
         </xsl:message>
@@ -1204,13 +1257,36 @@
     <xsl:message>Warning: 0 rows</xsl:message>
   </xsl:if>
 
+  <!-- Get the specified table width -->
+  <xsl:variable name="table.width">
+    <xsl:call-template name="table.width">
+      <xsl:with-param name="fullwidth" select="$tablewidth"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <!-- Find the table width -->
   <xsl:variable name="width">
     <xsl:choose>
-      <xsl:when test="../@width">
-        <xsl:value-of select="../@width"/>
+      <xsl:when test="not(contains($table.width,'auto'))">
+        <xsl:value-of select="$table.width"/>
       </xsl:when>
-      <xsl:otherwise><xsl:value-of select="$tablewidth"/></xsl:otherwise>
+      <xsl:otherwise>
+        <xsl:call-template name="table.width">
+          <xsl:with-param name="fullwidth" select="$tablewidth"/>
+          <xsl:with-param name="exclude" select="'auto'"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <!-- Get the autowidth option -->
+  <xsl:variable name="autowidth">
+    <xsl:choose>
+      <xsl:when test="contains($table.width,'auto')">
+        <!-- Expect something like 'autowidth.all' or 'autowidth.default' -->
+        <xsl:value-of select="$table.width"/>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="$newtbl.autowidth"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
   
@@ -1239,6 +1315,7 @@
   <!-- Build up a complete colspec for each column -->
   <xsl:variable name="colspec">
     <xsl:call-template name="tbl.colspec">
+      <xsl:with-param name="autowidth" select="$autowidth"/>
       <xsl:with-param name="cols" select="$cols"/>
       <xsl:with-param name="rowsep">
         <xsl:choose>

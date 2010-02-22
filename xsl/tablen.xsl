@@ -20,6 +20,7 @@
 <xsl:param name="table.title.top" select="'0'"/>
 <xsl:param name="table.in.float" select="'1'"/>
 <xsl:param name="table.default.position" select="'[htbp]'"/>
+<xsl:param name="default.table.width"/>
 
 
 <xsl:template match="table">
