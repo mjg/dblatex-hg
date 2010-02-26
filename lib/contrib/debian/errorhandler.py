@@ -11,29 +11,51 @@ from dbtexmf.core.error import ErrorHandler
 from dbtexmf.core.imagedata import ImageConverter
 from dbtexmf.core.dbtex import DbTex
 
+class AptSilentProgress(apt.progress.text.OpProgress):
+    """
+    Avoid the annoying progress messages when building the apt cache:
+    Reading package lists... Done
+    Building dependency tree
+    Reading state information... Done
+    Building data structures... Done
+    """
+    def __init__(self):
+        pass
+    def done(self):
+        pass
+    def update(self, percent):
+        pass
 
 class DebianHandler(ErrorHandler):
     def __init__(self):
         ErrorHandler.__init__(self)
         self.object = None
+        self.aptcache = None
 
     def signal(self, failed_object, *args, **kwargs):
         self.object = failed_object
+        if not self.aptcache:
+            self.aptcache = apt.Cache(progress=AptSilentProgress())
         if (isinstance(self.object, DbTex)):
-            self._check_dbtexrun()
+            error_handled = self._check_dbtexrun()
         elif (isinstance(self.object, ImageConverter)):
-            self._check_imagerun(*args)
+            error_handled = self._check_imagerun(*args)
+        else:
+            error_handled = False
+        if not error_handled:
+            super(DebianHandler, self).signal(failed_object, *args, **kwargs)
 
     def _check_dbtexrun(self):
         # First, check the XML input sanity
         if (self._check_input()):
-            return
+            return True
         # Check that all the required utilities are there
         if (self._check_dependencies()):
-            return
+            return True
         # Check some alternative reasons
         if (self._check_cyrillic()):
-            return
+            return True
+        return False
 
     def _check_imagerun(self, cmd):
         """
@@ -44,7 +66,7 @@ class DebianHandler(ErrorHandler):
         Thus the converters may be not installed.  Therefore check for each one:
         If it is used but missing, dump an appropriate hint.
         """
-        aptcache = apt.Cache()
+        aptcache = self.aptcache
         warn_msgs = []
         if ((cmd.startswith('convert') or cmd.find('&& convert') > -1)
             and not aptcache['graphicsmagick-imagemagick-compat'].is_installed
@@ -62,7 +84,9 @@ class DebianHandler(ErrorHandler):
                              + ' needed')
         if warn_msgs:
             print >> sys.stderr, "\n" + "\n".join(warn_msgs) + "\n"
- 
+            return True
+        else:
+            return False
 
     def _check_input(self):
         """
@@ -108,7 +132,7 @@ class DebianHandler(ErrorHandler):
         hint.
         """
         obj = self.object
-        aptcache = apt.Cache()
+        aptcache = self.aptcache
         warn_msgs = []
         if obj.backend == 'xetex':
             for debian_pkg in 'texlive-xetex', 'lmodern':

@@ -7,7 +7,7 @@
 import sys
 import traceback
 
-class ErrorHandler:
+class ErrorHandler(object):
     """
     Object in charge to handle any error occured during the dblatex
     transformation process. The first mandatory argument is the <object>
