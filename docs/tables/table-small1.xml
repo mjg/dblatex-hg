@@ -1,6 +1,5 @@
-<!-- Table example with smaller size -->
-
 <informaltable role="small">
+<!-- Table example with smaller size -->
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
 <colspec colname="c1"/>
 <colspec align="left"/>

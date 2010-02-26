@@ -1,6 +1,5 @@
-<!-- Exemple de table avec plusieurs colonnes sans largeur definie -->
-
 <informaltable>
+<!-- Table with no specifed column widths -->
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
 <colspec colname="c1"/>
 <colspec align="left"/>

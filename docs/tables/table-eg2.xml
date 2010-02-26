@@ -1,6 +1,5 @@
-<!-- Example mixing fixed and relative ('*') column widths -->
-
 <informaltable>
+<!-- Example mixing fixed and relative ('*') column widths -->
 <tgroup cols="5" colsep="1" rowsep="1" align="left">
 <colspec colname="c1" colwidth="*"/>
 <colspec align="left" colwidth="2*"/>

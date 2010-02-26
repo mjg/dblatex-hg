@@ -1,6 +1,5 @@
-<!-- Example with fixed column widths -->
-
 <informaltable>
+<!-- Example with morerows -->
 <tgroup cols="4" colsep="1" rowsep="1" align="left">
 <colspec colname="c1" colwidth="*"/>
 <colspec align="left" colwidth="2.5cm"/>

@@ -1,5 +1,5 @@
-<!-- Exemple de table avec une colonne -->
 <informaltable>
+<!-- Exemple de table avec une colonne -->
 <tgroup cols="1" colsep="1" rowsep="1" align="left">
 <colspec colname="c1"/>
 <thead>
