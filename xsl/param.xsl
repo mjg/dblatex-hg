@@ -16,6 +16,7 @@
 <xsl:param name="latex.class.article">article</xsl:param>
 <xsl:param name="latex.class.book">report</xsl:param>
 <xsl:param name="latex.unicode.use">0</xsl:param>
+<xsl:param name="texlive.version">2007-10</xsl:param>
 
 <!-- Default behaviour setting -->
 

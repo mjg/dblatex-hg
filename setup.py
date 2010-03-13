@@ -161,7 +161,12 @@ def find_programs(utils):
             missed.append(util)
     sys.path.remove("lib")
     return (util_paths, missed)
-        
+
+def kpsewhich(tex_file):
+    ios = os.popen2("kpsewhich %s" % tex_file)
+    out = "".join(ios[1].readlines()).strip()
+    return out
+
 
 class Install(install):
 
@@ -277,8 +282,8 @@ class Install(install):
                 found_stys.append(sty)
                 print status
                 continue
-            ios = os.popen2("kpsewhich %s.sty" % sty)
-            if ios[1].readlines():
+            stypath = kpsewhich("%s.sty" % sty)
+            if stypath:
                 status += "yes"
                 found_stys.append(sty)
             else:
@@ -335,7 +340,40 @@ class InstallData(install_data):
 
         # Replace synthetic data_files by the full one, and do the actual job
         self.data_files = full_data_files
-        return install_data.run(self)
+        rc = install_data.run(self)
+
+        self.adapt_installed_data()
+        return rc
+
+    def adapt_installed_data(self):
+        installed = self.get_outputs()
+        for data_file in installed:
+            if os.path.basename(data_file) == "param.xsl":
+                self._set_texlive_version(data_file)
+                break
+
+    def _set_texlive_version(self, param_file):
+        """Detect the installed Texlive version from hyperref.sty version, and
+        override the texlive.version param accordingly."""
+        hyper_sty = kpsewhich("hyperref.sty")
+        if not(hyper_sty):
+            # Cannot do anything, give up
+            return
+
+        # Grab the value from package version
+        d = open(hyper_sty).read()
+        m = re.search("\\ProvidesPackage{hyperref}\s+\[(\d+)", d, re.M)
+        if not(m):
+            return
+        year = m.group(1)
+
+        # Patch the parameter with the found value
+        p = open(param_file).read()
+        p2 = re.sub('name="texlive.version">.*<',
+                    'name="texlive.version">%s<' % year, p)
+        f = open(param_file, "w")
+        f.write(p2)
+        f.close()
 
 
 def get_version():

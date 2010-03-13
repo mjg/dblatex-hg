@@ -65,16 +65,32 @@
      -->
 <xsl:template name="nolinkurl-output">
   <xsl:param name="url" select="@url"/>
+  <xsl:variable name="url2">
+    <xsl:choose>
+      <!-- Behaviour depending on the texlive version -->
+      <xsl:when test="contains($texlive.version, '2009')">
+        <xsl:call-template name="string-replace">
+          <xsl:with-param name="string" select="$url"/>
+          <xsl:with-param name="from" select="'\'"/>
+          <xsl:with-param name="to" select="'\\'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$url"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:choose>
   <xsl:when test="ancestor::entry or ancestor::revision">
     <xsl:call-template name="nolinkurl-escape">
-      <xsl:with-param name="url" select="$url"/>
+      <xsl:with-param name="url" select="$url2"/>
     </xsl:call-template>
     <!-- FIXME: do something with '&' and revision if needed -->
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="nolinkurl-escape">
-      <xsl:with-param name="url" select="$url"/>
+      <xsl:with-param name="url" select="$url2"/>
       <xsl:with-param name="chars" select="' '"/>
     </xsl:call-template>
   </xsl:otherwise>
@@ -182,6 +198,8 @@
        <nolinkurl>ab%cde%#%fg</nolinkurl>
        <nolinkurl>#ab%cde%#%fg###</nolinkurl>
        <nolinkurl>nothing special</nolinkurl>
+       <nolinkurl>nothing\special\</nolinkurl>
+       <nolinkurl>nothing\special\\</nolinkurl>
        <entry>
          <nolinkurl>ab%cde%#%fg</nolinkurl>
          <nolinkurl>#%#ab%cde%#%fg###</nolinkurl>
@@ -191,6 +209,22 @@
          <nolinkurl>#%#%%#%##</nolinkurl>
        </entry>
      </u>
+
+     Expected:
+     \nolinkurl{ab%cde%#%fg}
+     \nolinkurl{#ab%cde%#%fg###}
+     \nolinkurl{nothing}\texttt{\ }\nolinkurl{special}
+     \nolinkurl{nothing\special\ }
+     \nolinkurl{nothing\special\\}
+     <entry>
+       \nolinkurl{ab}\texttt{\%}\nolinkurl{cde}\texttt{\%\#\%}\nolinkurl{fg}
+       \texttt{\#\%\#}\nolinkurl{ab}\texttt{\%}\nolinkurl{cde}\texttt{\%\#\%}\nolinkurl{fg}\texttt{\#\#\#}
+       \nolinkurl{nothing}\texttt{\ }\nolinkurl{special}
+       \texttt{\#\#\#\#\#\#\#\#\#}
+       \texttt{\%\%\%\%\%\%\%\%\%}
+       \texttt{\#\%\#\%\%\#\%\#\#}
+     </entry>
+
 -->
 <xsl:template match="nolinkurl">
   <xsl:call-template name="nolinkurl-output">
