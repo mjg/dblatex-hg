@@ -1,3 +1,35 @@
+Release 0.3:
+------------
+
+- Fix bug #2957897 to render the chapter/info/title node.
+- Fix Debian Bug #563659: adapt the url template behaviour to the installed
+  Texlive version (2007 or 2009).
+- Apply the two Andreas's debian errorhandler patches (replace an obsoleted
+  method).
+- Apply the Debian bug #570582 patch from Andreas.
+- Change the segmented list implentation to workaround a bug in processing DB5
+  documents (use the Docbook Project implementation).
+- Add the default.table.width parameter (equivalent to the Docbook Project
+  parameter).
+- Allow an autowidth setup local to a table through a Processing Instruction.
+- Convert latex logos to PDF-1.4 format supported by XeTeX.
+- Add parameter biblioentry.numbered to have bibliographic references numbered.
+- Apply bug #2891018 patch to improve biblio.xsl
+- Fix a bug to compute correctly the relative paths of <imagedata> filerefs.
+  Apply the same templates than the DocBook Project (use of @xml:base)
+- Make xsltproc.py compatible with versions providing --xincludestyle
+  or not (bug introduced with 0.2.12).
+- Fix bug #2955605 in setup.py that makes install crash under windows
+  (bug introduced in 0.2.10).
+- Fix bug to handle correctly a relative XSL customization file path
+  (use of the -p option).
+- Fix a bug that merged the example and equation floats in the same TOC
+- Add hyperlink to <xref> to books.
+- Move the book ID anchor so that an hyperlink to this anchor points to the 
+  beginning of the book and not after the Table of Content.
+- Change some output messages so that they don't appear as error messages.
+
+
 Release 0.2.12:
 ---------------
 
