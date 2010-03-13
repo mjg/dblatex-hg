@@ -26,7 +26,7 @@
   <xsl:param name="name"/>
   <xsl:param name="command"/>
   <!-- Title must be a node -->
-  <xsl:param name="title" select="title"/>
+  <xsl:param name="title" select="(title|info/title)[1]"/>
 
   <xsl:variable name="rcommand">
     <xsl:choose>
@@ -91,7 +91,7 @@
   <xsl:param name="object" select="."/>
   <xsl:param name="string" select="''"/>
   <xsl:param name="inline" select="0"/>
-  <!-- object.id cannot be used since it always provide an id -->
+  <!-- object.id cannot be used since it always provides an id -->
   <xsl:variable name="id">
     <xsl:choose>
       <xsl:when test="$object/@id">
