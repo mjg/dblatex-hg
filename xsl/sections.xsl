@@ -108,7 +108,13 @@
     </xsl:variable>
     <xsl:value-of select="$l+1"/>
   </xsl:when>
-  <xsl:when test="$n/parent::book">0</xsl:when>
+  <xsl:when test="$n/parent::book">
+    <xsl:choose>
+    <xsl:when test="preceding-sibling::part or
+                    following-sibling::part">-1</xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
   <xsl:when test="$n/parent::part">0</xsl:when>
   <xsl:when test="$n/parent::appendix">
     <xsl:choose>
