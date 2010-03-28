@@ -1,6 +1,13 @@
 Release 0.3:
 ------------
 
+- Make the latex style more robust to latex classes that don't define abstract
+  environment.
+- Partially Fix bug #2953261 to render elements under <methodsynopsis>
+- Fix bug #2969329 to allow a <screen> in an <entrytbl> (Pulchart's patch
+  partially applied).
+- Fix bug #2820728 to correctly render caption elements.
+- Fix bug #2967024 to make cmdsynopsis working for DocBook 5.
 - Fix bug #2957897 to render the chapter/info/title node.
 - Fix Debian Bug #563659: adapt the url template behaviour to the installed
   Texlive version (2007 or 2009).
