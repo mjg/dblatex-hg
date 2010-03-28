@@ -5,7 +5,11 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 
-<xsl:template match="classsynopsis">
+<xsl:template match="classsynopsis
+                     |fieldsynopsis
+                     |methodsynopsis
+                     |constructorsynopsis
+                     |destructorsynopsis">
   <xsl:call-template name="output.verbatim">
     <xsl:with-param name="content">
       <xsl:apply-templates select="." mode="content"/>
@@ -13,7 +17,11 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="classsynopsis" mode="save.verbatim">
+<xsl:template match="classsynopsis
+                     |fieldsynopsis
+                     |methodsynopsis
+                     |constructorsynopsis
+                     |destructorsynopsis" mode="save.verbatim">
   <xsl:call-template name="save.verbatim">
     <xsl:with-param name="content">
       <xsl:apply-templates select="." mode="content"/>
@@ -22,7 +30,11 @@
 </xsl:template>
 
 
-<xsl:template match="classsynopsis" mode="content">
+<xsl:template match="classsynopsis
+                     |fieldsynopsis
+                     |methodsynopsis
+                     |constructorsynopsis
+                     |destructorsynopsis" mode="content">
   <xsl:param name="language">
     <xsl:choose>
     <xsl:when test="@language">
@@ -81,7 +93,7 @@
     <xsl:text>throws</xsl:text>
     <xsl:apply-templates select="ooexception" mode="java"/>
   </xsl:if>
-  <xsl:text> {&#10;&#10;</xsl:text>
+  <xsl:text> {&#10;</xsl:text>
   <xsl:apply-templates select="constructorsynopsis
                                |destructorsynopsis
                                |fieldsynopsis
@@ -163,15 +175,14 @@
 </xsl:template>
 
 <xsl:template match="methodparam" mode="java">
-  <!-- PARAM: indent := 0 -->
   <xsl:param name="indent">0</xsl:param>
-  <xsl:if test="position() &gt; 1">
+  <xsl:if test="preceding-sibling::methodparam">
     <xsl:text>,&#10;</xsl:text>
     <xsl:if test="$indent &gt; 0">
-    <xsl:call-template name="copy-string">
-      <xsl:with-param name="string" select="' '"/>
-      <xsl:with-param name="count" select="$indent + 1"/>
-    </xsl:call-template>
+      <xsl:call-template name="copy-string">
+        <xsl:with-param name="string" select="' '"/>
+        <xsl:with-param name="count" select="$indent + 1"/>
+      </xsl:call-template>
     </xsl:if>
   </xsl:if>
   <xsl:apply-templates mode="java"/>
