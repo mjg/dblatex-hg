@@ -101,9 +101,8 @@
   <xsl:text>{</xsl:text>
   <xsl:value-of select="$mediaobject.caption.style"/>
   <xsl:text> </xsl:text>
-  <xsl:call-template name="normalize-scape">
-    <xsl:with-param name="string" select="."/>
-  </xsl:call-template>
+  <!-- Apply templates to render captions elements -->
+  <xsl:apply-templates/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
