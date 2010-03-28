@@ -643,7 +643,7 @@
       
       <xsl:apply-templates mode="newtbl.buildentries" 
                select="following-sibling::*[self::entry or self::entrytbl][1]">
-      <xsl:with-param name="colnum" select="$colend + 1"/>
+        <xsl:with-param name="colnum" select="$colend + 1"/>
         <xsl:with-param name="rownum" select="$rownum"/>
         <xsl:with-param name="colspec" select="$colspec"/>
         <xsl:with-param name="spanspec" select="$spanspec"/>
@@ -1223,8 +1223,10 @@
   <xsl:param name="tablewidth">\linewidth-2\tabcolsep</xsl:param>
   <xsl:param name="tableframe">all</xsl:param>
 
-  <!-- First, save the table verbatim data -->
-  <xsl:apply-templates mode="save.verbatim"/>
+  <!-- First, save the table verbatim data, but only at tgroup level -->
+  <xsl:if test="not(self::entrytbl)">
+    <xsl:apply-templates mode="save.verbatim"/>
+  </xsl:if>
   <xsl:text>\begingroup%&#10;</xsl:text>
 
   <!-- Set cellpadding -->
