@@ -60,7 +60,9 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:if test="position()>1"><xsl:value-of select="$sepchar"/></xsl:if>
+  <xsl:if test="preceding-sibling::*">
+    <xsl:value-of select="$sepchar"/>
+  </xsl:if>
   <xsl:choose>
     <xsl:when test="$choice='plain'">
       <xsl:value-of select="$arg.choice.plain.open.str"/>
@@ -104,7 +106,7 @@
 </xsl:template>
 
 <xsl:template match="group/arg">
-  <xsl:if test="position()>1">
+  <xsl:if test="preceding-sibling::*">
     <xsl:value-of select="$arg.or.sep"/>
   </xsl:if>
   <xsl:apply-templates/>
