@@ -183,6 +183,14 @@
 \@ifundefined{backmatter}{
   \def\backmatter{\if@openright\cleardoublepage\else\clearpage\fi}
 }{}
+
+\@ifundefined{abstract}{
+\newenvironment{abstract}{
+  \setlength\parskip{\medskipamount}%
+  \setlength\parindent{0pt}%
+}{}
+}{}
+
 \makeatother
 
 % ---------------------- 
