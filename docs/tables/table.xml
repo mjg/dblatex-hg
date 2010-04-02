@@ -247,7 +247,7 @@ all the tables in the document.</para>
 instead of using <parameter>newtbl.autowidth</parameter>.</para>
 </section>
 
-<section id="sec-newtbl-autowidth">
+<section id="sec-newtbl-autowidth2">
 <title>Local Setting</title>
 
 <para>If you want to apply an automatic width only to some specific tables you

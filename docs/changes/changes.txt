@@ -1,7 +1,7 @@
 Release 0.3:
 ------------
 
-- Make the latex style more robust to latex classes that don't define abstract
+- Make the latex style more robust to latex classes without abstract
   environment.
 - Partially Fix bug #2953261 to render elements under <methodsynopsis>
 - Fix bug #2969329 to allow a <screen> in an <entrytbl> (Pulchart's patch
