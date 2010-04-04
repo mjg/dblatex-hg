@@ -105,11 +105,11 @@ def main():
 
     torem_from_syn = ss - sp
     print "==========="
-    print "In param list, missing in synopsis:\n", sp - ss
+    print "In param list, missing in %s:\n" % (synopdir), sp - ss
     print "\nIn param list, missing in refentries:\n", sp - sr
     print "\nIn synopsis, not in param list:\n", torem_from_syn
     print "\nIn synopsis, missing in refentries:\n", ss - sr - torem_from_syn
-    print "\nIn refentries, missing in synopsis:\n", sr - ss
+    print "\nIn refentries, missing in %s:\n" % (synopdir), sr - ss
 
 
 if __name__ == "__main__":

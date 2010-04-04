@@ -74,7 +74,7 @@ several paragraphs. Moreover they are lost is a float like a table.</para>
 </itemizedlist></para>
 </section>
 
-<section>
+<section sec="sec-table-width">
 <title>Table Width</title>
 
 <para>A table width is explicit when all the columns have a fixed size. In
@@ -99,7 +99,7 @@ width.</para>
 
 <listitem>
 <para>A keyword telling to apply an automatic column width (e.g.
-autowidth.all). See xxx for more details.</para>
+autowidth.all). See <xref linkend="sec-autowidth"/> for more details.</para>
 </listitem>
 </itemizedlist>
 </section>

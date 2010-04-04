@@ -97,6 +97,8 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="table.default.position.xml"/>
 <xi:include href="table.in.float.xml"/>
 <xi:include href="table.title.top.xml"/>
+<xi:include href="table.title.top.xml"/>
+<xi:include href="default.table.width.xml"/>
 
 </section>
 <section><title>Linking</title>
@@ -125,6 +127,7 @@ refentry.pagebreak — Start each refentry on a new page
 <section><title>Bibliography</title>
 
 <xi:include href="biblioentry.item.separator.xml"/>
+<xi:include href="biblioentry.numbered.xml"/>
 <xi:include href="citation.default.style.xml"/>
 <xi:include href="citation.natbib.options.xml"/>
 <xi:include href="citation.natbib.use.xml"/>
@@ -157,6 +160,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="pdf.annot.options.xml"/>
 <xi:include href="seg.item.separator.xml"/>
 <xi:include href="show.comments.xml"/>
+<xi:include href="texlive.version.xml"/>
 <xi:include href="ulink.footnotes.xml"/>
 <xi:include href="ulink.show.xml"/>
 <xi:include href="xref.with.number.and.title.xml"/>
@@ -167,6 +171,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="imagedata.boxed.xml"/>
 <xi:include href="imagedata.default.scale.xml"/>
 <xi:include href="imagedata.file.check.xml"/>
+<xi:include href="keep.relative.image.uris.xml"/>
 
 </section>
 <section><title>Chuncking</title>
