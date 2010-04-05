@@ -106,6 +106,19 @@
   <xsl:text>}</xsl:text>
 </xsl:template>
 
+<xsl:template match="mediaobject/caption" mode="subfigure">
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$mediaobject.caption.style"/>
+  <xsl:text> </xsl:text>
+  <!-- In subfigures, cannot have several paragraphs, so just take
+       the text and normalize it (no \par in it)
+       -->
+  <xsl:call-template name="normalize-scape">
+    <xsl:with-param name="string" select="."/>
+  </xsl:call-template>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template match="mediaobject|inlinemediaobject">
   <xsl:variable name="figcount"
                 select="count(ancestor::figure/mediaobject[imageobject])"/>
@@ -164,6 +177,8 @@
     <!-- space before subfigure to prevent from strange behaviour with other
          subfigures -->
     <xsl:text> \subfigure[</xsl:text>
+    <xsl:apply-templates select="../caption" mode="subfigure"/>
+    <xsl:text>][</xsl:text>
     <xsl:apply-templates select="../caption"/>
     <xsl:text>]{</xsl:text>
   </xsl:if>

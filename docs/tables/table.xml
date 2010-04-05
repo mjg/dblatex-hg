@@ -74,7 +74,7 @@ several paragraphs. Moreover they are lost is a float like a table.</para>
 </itemizedlist></para>
 </section>
 
-<section sec="sec-table-width">
+<section id="sec-table-width">
 <title>Table Width</title>
 
 <para>A table width is explicit when all the columns have a fixed size. In
