@@ -81,6 +81,7 @@
       </xsl:variable>
       <!-- Wrap the markup with an hyperlink -->
       <xsl:call-template name="hyperlink.markup">
+        <xsl:with-param name="referrer" select="$referrer"/>
         <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
         <xsl:with-param name="text" select="$text"/>
       </xsl:call-template>
