@@ -40,7 +40,7 @@
 <xsl:template name="section.unnumbered">
   <xsl:param name="tocdepth" select="0"/>
   <xsl:param name="level" select="'0'"/>
-  <xsl:param name="titlenode" select="title"/>
+  <xsl:param name="titlenode" select="(title|info/title)[1]"/>
   <xsl:param name="title"/>
 
   <xsl:call-template name="section.unnumbered.begin">
