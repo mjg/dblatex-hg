@@ -70,7 +70,10 @@
   </xsl:variable>
 
   <xsl:choose>
-    <xsl:when test="$xref.hypermarkup = 1">
+    <!-- Wrap with an hyperlink if asked and if it is not already a link -->
+    <xsl:when test="$xref.hypermarkup=1 and 
+                    not(contains($markup, '\hyperlink{') or
+                        contains($markup, '\href{'))">
       <!-- Get the normal markup but replace hot links by counters -->
       <xsl:variable name="text">
         <xsl:call-template name="string-replace">
@@ -399,6 +402,32 @@
   <xsl:apply-templates select="." mode="xref.text"/>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
+<xsl:template name="xref.nolink">
+
+  <!-- Get the normal markup but replace hot links by counters -->
+  <xsl:variable name="xref.text">
+    <xsl:call-template name="string-replace">
+      <xsl:with-param name="string">
+        <xsl:apply-templates select="."/>
+      </xsl:with-param>
+      <xsl:with-param name="from" select="'\ref{'"/>
+      <xsl:with-param name="to" select="'\ref*{'"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <!-- Remove an internal hyperlink wrapper (external links seem ok) -->
+  <xsl:choose>
+    <xsl:when test="starts-with($xref.text, '\hyperlink{')">
+      <xsl:value-of select="substring-after($xref.text, '}')"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$xref.text"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- Try to have the label from text mode, else get the reference counter -->
 <xsl:template match="xref" mode="toc.skip">
   <xsl:variable name="xref.text">
@@ -410,14 +439,7 @@
       <xsl:value-of select="$xref.text"/>
     </xsl:when>
     <xsl:otherwise>
-      <!-- Get the normal markup but replace hot links by counters -->
-      <xsl:call-template name="string-replace">
-        <xsl:with-param name="string">
-          <xsl:apply-templates select="."/>
-        </xsl:with-param>
-        <xsl:with-param name="from" select="'\ref{'"/>
-        <xsl:with-param name="to" select="'\ref*{'"/>
-      </xsl:call-template>
+      <xsl:call-template name="xref.nolink"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
