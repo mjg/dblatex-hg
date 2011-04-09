@@ -5,7 +5,11 @@ This module contains utility functions and classes used by the main system and
 by the modules for various tasks.
 """
 
-import md5
+try:
+    import hashlib
+except ImportError:
+    # Fallback for python 2.4:
+    import md5 as hashlib
 import os
 from msg import _, msg
 
@@ -14,7 +18,7 @@ def md5_file(fname):
     """
     Compute the MD5 sum of a given file.
     """
-    m = md5.new()
+    m = hashlib.md5()
     file = open(fname)
     for line in file.readlines():
         m.update(line)
