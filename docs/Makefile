@@ -6,11 +6,11 @@ XSLTPROC = xsltproc
 XSLDBK = /usr/local/share/xsl/docbook
 XSLPROF = $(XSLDBK)/profiling/profile.xsl
 XSLMAN = $(XSLDBK)/manpages/docbook.xsl
-XSLHTML = $(XSLDBK)/html/chunk.xsl
-XSLPROFH = $(XSLDBK)/html/profile-chunk.xsl
-XSLOLINK = $(XSLDBK)/html/docbook.xsl
-HTMLDIRUM = html/manual/
-HTMLDIRRN = html/release-notes/
+XSLHTML = $(XSLDBK)/xhtml/chunk.xsl
+XSLPROFH = $(XSLDBK)/xhtml/profile-chunk.xsl
+XSLOLINK = $(XSLDBK)/xhtml/docbook.xsl
+HTMLDIRUM = xhtml/manual/
+HTMLDIRRN = xhtml/release-notes/
 CP = cp
 HERE = $(shell pwd)
 
