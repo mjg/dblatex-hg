@@ -461,6 +461,11 @@
 <!-- abbrev not displayed  -->
 <xsl:template match="abbrev" mode="bibliography.mode"/>
 
+<!-- want latex label anchors -->
+<xsl:template match="anchor" mode="bibliography.mode">
+  <xsl:apply-templates select="."/>
+</xsl:template>
+
 
 <xsl:template match="biblioset" mode="bibliography.mode">
   <xsl:if test="author|authorgroup">
