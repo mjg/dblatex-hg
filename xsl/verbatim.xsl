@@ -9,6 +9,9 @@
 <xsl:param name="literal.width.ignore">0</xsl:param>
 <xsl:param name="literal.layout.options"/>
 <xsl:param name="literal.lines.showall">1</xsl:param>
+<xsl:param name="linenumbering.scope"/>
+<xsl:param name="linenumbering.default"/>
+<xsl:param name="linenumbering.everyNth"/>
 
 
 <xsl:template name="verbatim.setup">
@@ -194,6 +197,19 @@
   <xsl:value-of select="$env"/>
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
+
+<!-- ==================================================================== -->
+
+<xsl:template name="linenumbering">
+  <xsl:choose>
+    <xsl:when test="@linenumbering='numbered'">1</xsl:when>
+    <xsl:when test="@linenumbering and @linenumbering!='numbered'">0</xsl:when>
+    <xsl:when test="$linenumbering.default='numbered' and 
+                   (contains(concat(' ',$linenumbering.scope,' '),
+                             concat(' ',local-name(.),' ')))">1</xsl:when>
+    <xsl:otherwise>0</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
  
 <xsl:template match="programlisting|screen">
   <xsl:param name="rnode" select="/"/>
@@ -222,6 +238,10 @@
     </xsl:if>
   </xsl:variable>
 
+  <xsl:variable name="linenumbered">
+    <xsl:call-template name="linenumbering"/>
+  </xsl:variable>
+
   <xsl:variable name="opt">
     <!-- skip empty endlines -->
     <xsl:if test="$literal.lines.showall='0'">
@@ -238,8 +258,13 @@
       <xsl:text>linewidth=\lstwidth,</xsl:text>
     </xsl:if>
     <!-- print line numbers -->
-    <xsl:if test="@linenumbering='numbered'">
+    <xsl:if test="$linenumbered=1">
       <xsl:text>numbers=left,</xsl:text>
+      <xsl:if test="number($linenumbering.everyNth) &gt; 1">
+        <xsl:text>stepnumber=</xsl:text>
+        <xsl:value-of select="number($linenumbering.everyNth)"/>
+        <xsl:text>,</xsl:text>
+      </xsl:if>
     </xsl:if>
     <!-- find the fist line number to print -->
     <xsl:choose>
@@ -392,10 +417,19 @@
     </xsl:if>
   </xsl:variable>
 
+  <xsl:variable name="linenumbered">
+    <xsl:call-template name="linenumbering"/>
+  </xsl:variable>
+
   <xsl:variable name="fvopt">
     <!-- print line numbers -->
-    <xsl:if test="@linenumbering='numbered'">
+    <xsl:if test="$linenumbered=1">
       <xsl:text>numbers=left,</xsl:text>
+      <xsl:if test="number($linenumbering.everyNth) &gt; 1">
+        <xsl:text>stepnumber=</xsl:text>
+        <xsl:value-of select="number($linenumbering.everyNth)"/>
+        <xsl:text>,</xsl:text>
+      </xsl:if>
       <!-- find the fist line number to print -->
       <xsl:choose>
       <xsl:when test="@startinglinenumber">
