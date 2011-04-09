@@ -220,6 +220,11 @@
 }
 
 %% Define the babel setups in docbook
+\babelsetup{cs}{%
+  % Shorthand breaks longtable stops
+  \AtBeginDocument{\shorthandoff{-}}
+}
+
 \babelsetup{fr}{%
   \NoAutoSpaceBeforeFDP
   % Avoid mess between enumitem and french redefinition
@@ -245,6 +250,11 @@
   % XeTeX works with russian babel only if xecyr is provided
   \ifxetex\usepackage{xecyr}\fi
   \AtBeginDocument{\shorthandoff{"}}
+}
+
+\babelsetup{sk}{%
+  % Shorthand breaks longtable stops
+  \AtBeginDocument{\shorthandoff{-}}
 }
 
 \babelsetup{uk}{%
