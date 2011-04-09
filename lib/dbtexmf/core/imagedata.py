@@ -63,7 +63,7 @@ class FigConverter(ImageConverter):
 
 class SvgConverter(ImageConverter):
     def convert(self, input, output, format, doexec=1):
-        cmd = "inkscape -z -D \"--export-%s=%s\" %s" % (format, input, output)
+        cmd = "inkscape -z -D --export-%s=%s \"%s\"" % (format, output, input)
         return self.system(cmd, doexec)
 
 
