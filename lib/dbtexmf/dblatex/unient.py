@@ -463,6 +463,7 @@ unicode_map = {
 0x021B0: r"\ensuremath{\Lsh}", # UPWARDS ARROW WITH TIP LEFTWARDS
 0x021B1: r"\ensuremath{\Rsh}", # UPWARDS ARROW WITH TIP RIGHTWARDS
 0x021B3: r"\ensuremath{\ElsevierGlyph{21B3}}", # DOWNWARDS ARROW WITH TIP RIGHTWARDS
+0x021B5: r"\ensuremath{\hookleftarrow}", # DOWNWARDS ARROW WITH CORNER LEFTWARDS
 0x021B6: r"\ensuremath{\curvearrowleft}", # ANTICLOCKWISE TOP SEMICIRCLE ARROW
 0x021B7: r"\ensuremath{\curvearrowright}", # CLOCKWISE TOP SEMICIRCLE ARROW
 0x021BA: r"\ensuremath{\circlearrowleft}", # ANTICLOCKWISE OPEN CIRCLE ARROW
