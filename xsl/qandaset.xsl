@@ -48,18 +48,20 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:call-template name="makeheading">
-    <xsl:with-param name="level">
-      <xsl:choose>
-      <xsl:when test="ancestor::qandaset[title|blockinfo/title|info/title]">
-        <xsl:value-of select="$l+$lset+1"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$l+$lset"/>
-      </xsl:otherwise>
-      </xsl:choose>
-    </xsl:with-param>
-  </xsl:call-template>
+  <xsl:if test="blockinfo/title|info/title|title">
+    <xsl:call-template name="makeheading">
+      <xsl:with-param name="level">
+        <xsl:choose>
+        <xsl:when test="ancestor::qandaset[title|blockinfo/title|info/title]">
+          <xsl:value-of select="$l+$lset+1"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$l+$lset"/>
+        </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:if>
 
   <xsl:apply-templates/>
 </xsl:template>
