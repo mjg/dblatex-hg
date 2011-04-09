@@ -440,9 +440,26 @@
 </xsl:template>
 
 <xsl:template match="quote">
-  <xsl:call-template name="gentext.nestedstartquote"/>
-  <xsl:call-template name="inline.charseq"/>
-  <xsl:call-template name="gentext.nestedendquote"/>
+  <xsl:variable name="depth">
+    <xsl:call-template name="dot.count">
+      <xsl:with-param name="string">
+        <xsl:number level="multiple"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:choose>
+    <xsl:when test="$depth mod 2 = 0">
+      <xsl:call-template name="gentext.startquote"/>
+      <xsl:call-template name="inline.charseq"/>
+      <xsl:call-template name="gentext.endquote"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="gentext.nestedstartquote"/>
+      <xsl:call-template name="inline.charseq"/>
+      <xsl:call-template name="gentext.nestedendquote"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="varname">
