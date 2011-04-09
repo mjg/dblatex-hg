@@ -14,6 +14,23 @@
 
 <!-- Only an excerpt of the original file -->
 
+<xsl:template name="dot.count">
+  <!-- Returns the number of "." characters in a string -->
+  <xsl:param name="string"/>
+  <xsl:param name="count" select="0"/>
+  <xsl:choose>
+    <xsl:when test="contains($string, '.')">
+      <xsl:call-template name="dot.count">
+        <xsl:with-param name="string" select="substring-after($string, '.')"/>
+        <xsl:with-param name="count" select="$count+1"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$count"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="pi-attribute">
   <xsl:param name="pis" select="processing-instruction('BOGUS_PI')"/>
   <xsl:param name="attribute">filename</xsl:param>
