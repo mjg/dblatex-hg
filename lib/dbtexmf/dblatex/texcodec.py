@@ -38,6 +38,7 @@ class TexCodec:
               "\xa5": r"$\yen$",
               # "\xa6": r"\textbrokenbar{}",
               "\xac": r"\ensuremath{\lnot}",
+              # "\xad": r"", # FIXME: bug around soft hyphen...
               "\xb0": r"\textdegree{}",
               "\xb1": r"\ensuremath{\pm}",
               "\xb2": r"$^2$",
@@ -128,8 +129,12 @@ def main():
     import sys
     c = LatexCodec()
     f = open(sys.argv[1])
+    text = ""
     for line in f:
-        c.encode(c.decode(line))
-        
+        text += c.encode(c.decode(line))
+        if text:
+            sys.stdout.write(text)
+
+
 if __name__ == "__main__":
     main()
