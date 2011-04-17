@@ -2,6 +2,7 @@ import sys
 import os
 import re
 import shutil
+import logging
 from dbtexmf.core.error import signal_error
 
 #
@@ -11,13 +12,14 @@ from dbtexmf.core.error import signal_error
 class ImageConverter:
     def __init__(self):
         self.debug = 1
+        self.log = None
         self.fake = 0
 
     def system(self, cmd, doexec=1):
         if not(cmd):
             return ""
-        if self.debug:
-            print cmd
+        if self.log:
+            self.log.info(cmd)
         if doexec:
             if not(self.fake):
                 if (os.system(cmd)):
@@ -49,7 +51,7 @@ class FigConverter(ImageConverter):
         if (format != "eps"):
             conv = EpsConverter()
             conv.fake = self.fake
-            conv.debug = self.debug
+            conv.log = self.log
             epsfile = "tmp_fig.eps"
             post = " && "
             post += conv.convert(epsfile, output, format, doexec=0)
@@ -78,6 +80,7 @@ class Imagedata:
         self.input_format = "png"
         self.output_format = "pdf"
         self.converted = {}
+        self.log = logging.getLogger("dblatex")
 
     def convert(self, fig):
         # First, scan the available formats
@@ -85,13 +88,13 @@ class Imagedata:
 
         # No real file found, give up
         if not(realfig):
-            print "Image '%s' not found" % fig
+            self.log.warning("Image '%s' not found" % fig)
             return fig
 
         # Check if this image has been already converted
         if self.converted.has_key(realfig):
-            print "Image '%s' already converted as %s" % \
-                  (fig, self.converted[realfig])
+            self.log.info("Image '%s' already converted as %s" % \
+                  (fig, self.converted[realfig]))
             return self.converted[realfig]
 
         # No format found, take the default one
@@ -119,6 +122,7 @@ class Imagedata:
             return self._safe_file(fig, realfig, ext)
 
         # Convert the image and put it in the cache
+        conv.log = self.log
         conv.convert(realfig, newfig, self.output_format)
         self.converted[realfig] = newfig
         return newfig
@@ -156,7 +160,7 @@ class Imagedata:
         for format in formats:
             realfig = self.find("%s.%s" % (fig, format))
             if realfig:
-                print "Found %s for '%s'" % (format, fig)
+                self.log.info("Found %s for '%s'" % (format, fig))
                 break
 
         # Maybe a figure with no extension
@@ -183,7 +187,7 @@ class Imagedata:
         return None
        
     def system(self, cmd):
-        print cmd
+        self.log.info(cmd)
         rc = os.system(cmd)
         # TODO: raise error when system call failed
 

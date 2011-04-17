@@ -1,3 +1,30 @@
+Release 0.3.1:
+------------
+
+- Fix bug in referencing to external books when xref.hypermarkup=1.
+- Fix bug #2969329 to have sub-tables working
+- Fix bug #3006458 to support the &#x21B5; Unicode character
+- Fix bug #3038067 md5 python module deprecation warning
+- Fix bug #3039592 to pass correct parameters to inkscape when converting SVG
+- Fix bug #3072636 to process preface/info/title
+- Fix bug #3137026 to remove a babel setup side effect on tables
+- Fix Debian bug #609374 to have nested quotes working
+- Fix Debian bug #617842 to write HTML documentation in UTF-8 format
+- Fix some documentation errors
+- Fix <anchor> used in bibliography mode
+- Fix <qandadiv> title support to be robust to a missing title element
+- Fix Debian bug #622357 to make <filename> more robust in <footnote>
+- Add the parameters:
+  * linenumbering.scope: which templates where linenumbering parameters apply
+  * linenumbering.default: default linenumbering attribute value
+  * linenumbering.everyNth: indicates which lines to number in verbatim blocks
+- Improve tables to support the tabularx environment (see documentation).
+  Add the parameter:
+  * table.default.tabstyle: default tabstyle to apply when no tabstyle attribute
+    is defined.
+- Add a not fully implemented --quiet option
+
+
 Release 0.3:
 ------------
 

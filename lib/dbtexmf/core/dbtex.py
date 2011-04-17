@@ -13,7 +13,7 @@ from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse, texstyle_parse
 from dbtexmf.xslt import xslt
-from dbtexmf.core.logger import logger
+import dbtexmf.core.logger as logger
 from dbtexmf.core.error import signal_error, failed_exit, dump_stack
 
 
@@ -454,6 +454,8 @@ class DbTexCommand:
         parser.add_option("-P", "--param", dest="xslparams",
                           action="append", metavar="PARAM=VALUE",
                           help="Set an XSL parameter value from command line")
+        parser.add_option("-q", "--quiet", action="store_true",
+                          help="Less verbose, showing only error messages")
         parser.add_option("-r", "--texpost", metavar="SCRIPT",
                           help="Script called at the very end of the tex "
                                "compilation. Its role is to modify the tex file "
@@ -576,7 +578,10 @@ class DbTexCommand:
 
         if options.verbose:
             run.verbose = options.verbose
-    
+
+        if options.quiet:
+            run.verbose = logger.QUIET
+
         if options.tmpdir:
             if not(os.path.exists(options.tmpdir)):
                 try:
@@ -647,7 +652,7 @@ class DbTexCommand:
         self.run_setup(options)
 
         # Verbose mode
-        run.log = logger(self.prog, run.verbose)
+        run.log = logger.logger(self.prog, run.verbose)
 
         # Data from standard input?
         if args[0] == "-":

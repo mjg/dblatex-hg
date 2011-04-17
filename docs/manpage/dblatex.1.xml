@@ -281,6 +281,15 @@
         </listitem>
       </varlistentry>
       <varlistentry>
+        <term><option>-q</option></term>
+        <term><option>--quiet</option></term>
+        <listitem>
+          <simpara>
+            Less verbose, showing only TeX output messages and error messages.
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
         <term><option>-r <replaceable>script</replaceable></option></term>
         <term>
           <option>--texpost=<replaceable>script</replaceable></option>

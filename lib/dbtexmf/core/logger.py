@@ -1,10 +1,15 @@
 import logging
 
+VERBOSE = 1
+NORMAL = 0
+LESS_VERBOSE = -1
+QUIET = -2
+
 def logger(logname, level):
-    loglevels = { -2: logging.ERROR-1,
-                  -1: logging.WARNING-1,
-                   0: logging.INFO-1,
-                   1: logging.DEBUG-1 }
+    loglevels = { QUIET:        logging.ERROR-1,
+                  LESS_VERBOSE: logging.WARNING-1,
+                  NORMAL:       logging.INFO-1,
+                  VERBOSE:      logging.DEBUG-1 }
 
     log = logging.getLogger(logname)
     log.setLevel(loglevels[level])
