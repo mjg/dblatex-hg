@@ -82,7 +82,7 @@
   </xsl:variable>
 
   <xsl:choose>
-  <xsl:when test="ancestor::entry or ancestor::revision">
+  <xsl:when test="ancestor::entry or ancestor::revision or ancestor::footnote">
     <xsl:call-template name="nolinkurl-escape">
       <xsl:with-param name="url" select="$url2"/>
     </xsl:call-template>
