@@ -20,6 +20,7 @@
 <xsl:param name="table.title.top" select="'0'"/>
 <xsl:param name="table.in.float" select="'1'"/>
 <xsl:param name="table.default.position" select="'[htbp]'"/>
+<xsl:param name="table.default.tabstyle"/>
 <xsl:param name="default.table.width"/>
 
 
@@ -174,6 +175,81 @@
   <xsl:text>}\tabularnewline&#10;</xsl:text>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
+<xsl:template name="align.environment">
+  <xsl:param name="align"/>
+  <xsl:param name="align-default" select="'center'"/>
+
+  <xsl:choose>
+    <xsl:when test="$align = 'left'">
+      <xsl:text>flushright</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'right'">
+      <xsl:text>flushleft</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'center'">
+      <xsl:text>center</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$align-default"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="tbl.align.begin">
+  <xsl:param name="tabletype"/>
+
+  <!-- provision for user-specified alignment -->
+  <xsl:variable name="align" select="'center'"/>
+
+  <xsl:choose>
+  <xsl:when test="$tabletype = 'longtable'">
+    <xsl:choose>
+    <xsl:when test="$align = 'left'">
+      <xsl:text>\raggedright</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'right'">
+      <xsl:text>\raggedleft</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'center'">
+      <xsl:text>\centering</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'justify'"></xsl:when>
+    <xsl:otherwise>
+      <xsl:message>Word-wrapped alignment <xsl:value-of 
+          select="$align"/> not supported</xsl:message>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:variable name="alignenv">
+      <xsl:call-template name="align.environment">
+        <xsl:with-param name="align" select="$align"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="concat('\begin{',$alignenv,'}')"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template name="tbl.align.end">
+  <xsl:param name="tabletype"/>
+
+  <!-- provision for user-specified alignment -->
+  <xsl:variable name="align" select="'center'"/>
+
+  <xsl:if test="$tabletype != 'longtable'">
+    <xsl:variable name="alignenv">
+      <xsl:call-template name="align.environment">
+        <xsl:with-param name="align" select="$align"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="concat('\end{',$alignenv,'}')"/>
+  </xsl:if>
+</xsl:template>
+
+<!-- ==================================================================== -->
 
 <xsl:template match="informaltable">
   <!-- do we need to change text size? -->
@@ -196,6 +272,13 @@
   <xsl:variable name="tabletype">
     <xsl:choose>
     <xsl:when test="$nested">tabular</xsl:when>
+    <xsl:when test="@tabstyle='tabular' or @tabstyle='tabularx'">
+      <xsl:value-of select="@tabstyle"/>
+    </xsl:when>
+    <xsl:when test="$table.default.tabstyle='tabular' or
+                    $table.default.tabstyle='tabularx'">
+      <xsl:value-of select="$table.default.tabstyle"/>
+    </xsl:when>
     <xsl:otherwise>longtable</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -210,7 +293,11 @@
   </xsl:if>
   <xsl:choose>
   <xsl:when test="not($nested)">
-    <xsl:text>&#10;{\centering </xsl:text>
+    <xsl:text>&#10;&#10;{</xsl:text>
+    <!-- table alignment -->
+    <xsl:call-template name="tbl.align.begin">
+      <xsl:with-param name="tabletype" select="$tabletype"/>
+    </xsl:call-template>
     <!-- do the actual work -->
     <xsl:if test="$tabletype='longtable'">
       <xsl:text>\savetablecounter </xsl:text>
@@ -221,6 +308,9 @@
     <xsl:if test="$tabletype='longtable'">
       <xsl:text>\restoretablecounter%&#10;</xsl:text>
     </xsl:if>
+    <xsl:call-template name="tbl.align.end">
+      <xsl:with-param name="tabletype" select="$tabletype"/>
+    </xsl:call-template>
     <xsl:text>}&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>

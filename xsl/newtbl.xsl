@@ -37,11 +37,17 @@
         <xsl:copy-of select="$colspec/colspec[@colnum = $colnum]"/>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:variable name="natwidth">
+          <xsl:call-template name="natural-width">
+            <xsl:with-param name="autowidth" select="$autowidth"/>
+            <xsl:with-param name="colnum" select="$colnum"/>
+          </xsl:call-template>
+        </xsl:variable>
+ 
         <colspec colnum='{$colnum}' align='{$align}' star='1'
                  rowsep='{$rowsep}' colsep='{$colsep}' 
                  colwidth='\newtblstarfactor'>
-          <xsl:if test="contains($autowidth,'default') or
-                        contains($autowidth,'all')">
+          <xsl:if test="$natwidth = 1">
             <xsl:attribute name="autowidth">1</xsl:attribute>
           </xsl:if>
         </colspec>
@@ -53,6 +59,7 @@
       <xsl:with-param name="rowsep" select="$rowsep"/>
       <xsl:with-param name="colsep" select="$colsep"/>
       <xsl:with-param name="cols" select="$cols"/>
+      <xsl:with-param name="autowidth" select="$autowidth"/>
       <xsl:with-param name="colspec" select="$colspec"/>
     </xsl:call-template>
   </xsl:if>
@@ -144,6 +151,24 @@
 </xsl:template>
 
 
+<!-- Evaluate from the autowidth statement if the current column width
+     is its natural size determined by the column cells contents -->
+<xsl:template name="natural-width">
+  <xsl:param name="autowidth"/>
+  <xsl:param name="colnum" select="1"/>
+
+  <xsl:choose>
+  <xsl:when test="not(string(@colwidth)) and 
+                  (contains($autowidth,'default') or
+                   contains($autowidth,'all'))">1</xsl:when>
+  <xsl:when test="contains(@colwidth,'*') and
+                  contains($autowidth,'all')">1</xsl:when>
+  <xsl:when test="contains(concat($autowidth,' '),concat(' ',$colnum,' ')) and
+                  contains($autowidth,'column')">1</xsl:when>
+  <xsl:otherwise>0</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <!-- Ensure each column has a colspec and each colspec has a valid column -->
 <!-- number, width, alignment, colsep, rowsep -->
@@ -153,9 +178,26 @@
   <xsl:param name="colsep"/>
   <xsl:param name="rowsep"/>
   <xsl:param name="autowidth"/>
-  
+
+  <xsl:variable name="natwidth">
+    <xsl:call-template name="natural-width">
+      <xsl:with-param name="autowidth" select="$autowidth"/>
+      <xsl:with-param name="colnum">
+         <xsl:choose><xsl:when test="@colnum">
+           <xsl:value-of select="@colnum"/>
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:value-of select="$colnum"/>
+         </xsl:otherwise></xsl:choose>
+      </xsl:with-param>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:copy>
     <xsl:for-each select="@*"><xsl:copy/></xsl:for-each>
+    <xsl:if test="$natwidth = 1">
+      <xsl:attribute name="autowidth">1</xsl:attribute>
+    </xsl:if>
     <xsl:if test="not(@colnum)">
       <xsl:attribute name="colnum"><xsl:value-of select="$colnum"/>
       </xsl:attribute>
@@ -184,18 +226,11 @@
           <xsl:with-param name="width" select="substring-before(@colwidth, '*')"/>
         </xsl:call-template>
       </xsl:attribute>
-      <xsl:if test="contains($autowidth,'all')">
-        <xsl:attribute name="autowidth">1</xsl:attribute>
-      </xsl:if>
     </xsl:if>
     <!-- No colwidth specified? Assume '*' -->
     <xsl:if test="not(string(@colwidth))">
       <xsl:attribute name="colwidth">\newtblstarfactor</xsl:attribute>
       <xsl:attribute name="star">1</xsl:attribute>
-      <xsl:if test="contains($autowidth,'default') or
-                    contains($autowidth,'all')">
-        <xsl:attribute name="autowidth">1</xsl:attribute>
-      </xsl:if>
     </xsl:if>
     <xsl:if test="not(@align)">
       <xsl:attribute name="align"><xsl:value-of select="$align"/>
@@ -384,11 +419,12 @@
   <xsl:param name="frame"/>
   <xsl:param name="rowcolor"/>
   <xsl:param name="entries"/>
-  
+  <xsl:param name="tabletype"/>
+
   <xsl:variable name="cols" select="count($colspec/*)"/>
-  
+ 
   <xsl:if test="$colnum &lt;= $cols">
-    
+
     <xsl:variable name="entry"
                   select="$entries/*[self::entry or self::entrytbl]
                                     [@colstart=$colnum and @rowend &gt;= $rownum]"/>
@@ -408,6 +444,7 @@
         <xsl:with-param name="frame" select="$frame"/>
         <xsl:with-param name="rowcolor" select="$rowcolor"/>
         <xsl:with-param name="entries" select="$entries"/>
+        <xsl:with-param name="tabletype" select="$tabletype"/>
       </xsl:apply-templates>
       </xsl:when><xsl:otherwise>
       <!-- Get any span for this entry -->
@@ -549,6 +586,10 @@
           <xsl:when test="../@valign">
             <xsl:value-of select="../@valign"/>
           </xsl:when>
+          <!-- Then parent tbody|thead -->
+          <xsl:when test="../../@valign">
+            <xsl:value-of select="../../@valign"/>
+          </xsl:when>
         </xsl:choose>
       </xsl:variable>
 
@@ -620,6 +661,9 @@
             <xsl:value-of select="$bgcolor"/>
           </xsl:attribute>
         </xsl:if>
+        <xsl:attribute name="tabletype">
+          <xsl:value-of select="$tabletype"/>
+        </xsl:attribute>
         <!-- Process the output here, to stay in the document context. -->
         <!-- In RTF entries the document links/refs are lost -->
         <xsl:element name="output">
@@ -638,6 +682,7 @@
           <xsl:with-param name="rownum" select="$rownum"/>
           <xsl:with-param name="rowcolor" select="$rowcolor"/>
           <xsl:with-param name="entries" select="$entries"/>
+          <xsl:with-param name="tabletype" select="$tabletype"/>
         </xsl:call-template>
       </xsl:if>
       
@@ -650,6 +695,7 @@
         <xsl:with-param name="frame" select="$frame"/>
         <xsl:with-param name="rowcolor" select="$rowcolor"/>
         <xsl:with-param name="entries" select="$entries"/>
+        <xsl:with-param name="tabletype" select="$tabletype"/>
       </xsl:apply-templates>
     </xsl:otherwise></xsl:choose>
   </xsl:if>  <!-- $colnum <= $cols -->
@@ -964,6 +1010,7 @@
           <xsl:with-param name="frame" select="$frame"/>
           <xsl:with-param name="rowcolor" select="$rowcolor"/>
           <xsl:with-param name="entries" select="exsl:node-set($oldentries)"/>
+          <xsl:with-param name="tabletype" select="$tabletype"/>
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
@@ -1081,6 +1128,119 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template name="tbl.colwidth2">
+  <xsl:param name="col"/>
+  <xsl:param name="colend"/>
+  <xsl:param name="colspec"/>
+  
+  <xsl:value-of select="$colspec/colspec[@colnum=$col]/@fixedwidth"/>
+  
+  <xsl:if test="$col &lt; $colend">
+    <xsl:text>+</xsl:text>
+    <xsl:call-template name="tbl.colwidth2">
+      <xsl:with-param name="col" select="$col + 1"/>
+      <xsl:with-param name="colend" select="$colend"/>
+      <xsl:with-param name="colspec" select="$colspec"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
+
+<xsl:template match="entry|entrytbl" mode="width.colfmt">
+  <xsl:param name="colspec"/>
+  <xsl:param name="color"/>
+  <xsl:param name="rsep"/>
+
+  <!-- Color in pre-command -->
+  <xsl:if test="$color != ''">
+    <xsl:value-of select="concat('>{',$color,'}')"/>
+  </xsl:if>
+
+  <!-- Get the column width -->
+  <xsl:variable name="width">
+    <xsl:call-template name="tbl.colwidth">
+      <xsl:with-param name="col" select="@colstart"/>
+      <xsl:with-param name="colend" select="@colend"/>
+      <xsl:with-param name="colspec" select="$colspec"/>
+    </xsl:call-template>
+    <xsl:if test="$rsep = ''">
+      <xsl:text>+\arrayrulewidth</xsl:text>
+    </xsl:if>
+    <xsl:if test="@coloff = 0">
+      <xsl:text>+2\tabcolsep</xsl:text>
+    </xsl:if>
+  </xsl:variable>
+  
+  <xsl:choose>
+    <xsl:when test="@valign = 'top'">
+      <xsl:text>p</xsl:text>
+    </xsl:when>
+    <xsl:when test="@valign = 'bottom'">
+      <xsl:text>b</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>m</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
+  
+  <xsl:text>{</xsl:text>
+  <xsl:value-of select="$width"/>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="entry|entrytbl" mode="widthx.colfmt">
+  <xsl:param name="colspec"/>
+  <xsl:param name="color"/>
+
+  <xsl:variable name="stars" 
+                select="sum(exsl:node-set($colspec)/colspec
+                            [@colnum &gt;= current()/@colstart and 
+                             @colnum &lt;= current()/@colend]/@star)"/>
+
+  <!-- Get the column fixed width part -->
+  <xsl:variable name="width">
+    <xsl:call-template name="tbl.colwidth2">
+      <xsl:with-param name="col" select="@colstart"/>
+      <xsl:with-param name="colend" select="@colend"/>
+      <xsl:with-param name="colspec" select="$colspec"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:choose>
+  <xsl:when test="$stars = 0">
+    <xsl:if test="$color != ''">
+      <xsl:value-of select="concat('>{',$color,'}')"/>
+    </xsl:if>
+    <!-- Only a fixed width -->
+    <xsl:choose>
+      <xsl:when test="@valign = 'top'">
+        <xsl:text>p</xsl:text>
+      </xsl:when>
+      <xsl:when test="@valign = 'bottom'">
+        <xsl:text>b</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>m</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$width"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>>{</xsl:text>
+    <xsl:value-of select="$color"/>
+    <xsl:text>\setlength\hsize{</xsl:text>
+    <xsl:if test="$width != ''">
+      <xsl:value-of select="$width"/>
+      <xsl:text>+</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$stars"/>
+    <xsl:text>\hsize}}X</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 
 
 <!-- Generate a latex column specifier, possibly surrounded by '|' -->
@@ -1111,48 +1271,37 @@
   </xsl:if>
 
   <!-- Column color? -->
-  <xsl:if test="@bgcolor != ''">
-    <xsl:text>>{\columncolor</xsl:text>
-    <xsl:call-template name="get-color">
-      <xsl:with-param name="color" select="@bgcolor"/>
-    </xsl:call-template>
-    <xsl:text>}</xsl:text>
-  </xsl:if>
+  <xsl:variable name="color">
+    <xsl:if test="@bgcolor != ''">
+      <xsl:text>\columncolor</xsl:text>
+      <xsl:call-template name="get-color">
+        <xsl:with-param name="color" select="@bgcolor"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:variable>
   
   <xsl:choose>
-  <xsl:when test="not($autowidth)">  
-    <!-- Get the column width -->
-    <xsl:variable name="width">
-      <xsl:call-template name="tbl.colwidth">
-        <xsl:with-param name="col" select="@colstart"/>
-        <xsl:with-param name="colend" select="@colend"/>
-        <xsl:with-param name="colspec" select="$colspec"/>
-      </xsl:call-template>
-      <xsl:if test="$rsep = ''">
-        <xsl:text>+\arrayrulewidth</xsl:text>
-      </xsl:if>
-      <xsl:if test="@coloff = 0">
-        <xsl:text>+2\tabcolsep</xsl:text>
-      </xsl:if>
-    </xsl:variable>
-    
+  <xsl:when test="not($autowidth)">
     <xsl:choose>
-      <xsl:when test="@valign = 'top'">
-        <xsl:text>p</xsl:text>
-      </xsl:when>
-      <xsl:when test="@valign = 'bottom'">
-        <xsl:text>b</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>m</xsl:text>
-      </xsl:otherwise>
+    <xsl:when test="@tabletype = 'tabularx'">
+      <xsl:apply-templates select="." mode="widthx.colfmt">
+        <xsl:with-param name="colspec" select="$colspec"/>
+        <xsl:with-param name="color" select="$color"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="width.colfmt">
+        <xsl:with-param name="colspec" select="$colspec"/>
+        <xsl:with-param name="color" select="$color"/>
+        <xsl:with-param name="rsep" select="$rsep"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
     </xsl:choose>
-    
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$width"/>
-    <xsl:text>}</xsl:text>
   </xsl:when>
   <xsl:otherwise>
+    <xsl:if test="$color != ''">
+      <xsl:value-of select="concat('>{',$color,'}')"/>
+    </xsl:if>
     <xsl:choose>
       <xsl:when test="@align = 'left'">l</xsl:when>
       <xsl:when test="@align = 'right'">r</xsl:when>
@@ -1214,6 +1363,56 @@
     </xsl:otherwise>
   </xsl:choose>
 
+</xsl:template>
+
+
+<xsl:template name="tbl.sizes">
+  <xsl:param name="colspec"/>
+  <xsl:param name="width"/>
+
+  <!-- Now get latex to calculate the 'spare' width of the table -->
+  <!-- (Table width - widths of all specified columns - gaps between columns) -->
+  <xsl:text>\setlength{\newtblsparewidth}{</xsl:text>
+  <xsl:value-of select="$width"/>
+  <xsl:for-each select="exsl:node-set($colspec)/*">
+    <xsl:if test="@fixedwidth">
+      <xsl:text>-</xsl:text>
+      <xsl:value-of select="translate(@fixedwidth,'+','-')"/>
+    </xsl:if>
+    <xsl:text>-2\tabcolsep</xsl:text>
+  </xsl:for-each>
+  <xsl:text>}%&#10;</xsl:text>
+  
+  <!-- Now get latex to calculate widths of cols with starred colwidths -->
+  
+  <xsl:variable name="numunknown" 
+                select="sum(exsl:node-set($colspec)/colspec/@star)"/>
+  <!-- If we have at least one such col, then work out how wide it should -->
+  <!-- be -->
+  <xsl:if test="$numunknown &gt; 0">
+    <xsl:text>\setlength{\newtblstarfactor}{\newtblsparewidth / \real{</xsl:text>
+    <xsl:value-of select="$numunknown"/>
+    <xsl:text>}}%&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+
+<!-- tabularx vertical alignment setup, global to the whole table -->
+<xsl:template name="tbl.valign.x">
+  <xsl:param name="valign"/>
+
+  <xsl:variable name="valign.param">
+    <xsl:choose>
+    <xsl:when test="$valign = 'top'"><xsl:text>p</xsl:text></xsl:when>
+    <xsl:when test="$valign = 'bottom'"><xsl:text>b</xsl:text></xsl:when>
+    <!-- default vertical alignment -->
+    <xsl:otherwise><xsl:text>m</xsl:text></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:text>\def\tabularxcolumn#1{</xsl:text>
+  <xsl:value-of select="$valign.param"/>
+  <xsl:text>{#1}}</xsl:text>
 </xsl:template>
 
 
@@ -1351,32 +1550,20 @@
   
   <!-- Get all the spanspecs as an RTF -->
   <xsl:variable name="spanspec" select="spanspec"/>
-  
-  <!-- Now get latex to calculate the 'spare' width of the table -->
-  <!-- (Table width - widths of all specified columns - gaps between columns) -->
-  <xsl:text>\setlength{\newtblsparewidth}{</xsl:text>
-  <xsl:value-of select="$width"/>
-  <xsl:for-each select="exsl:node-set($colspec)/*">
-    <xsl:if test="@fixedwidth">
-      <xsl:text>-</xsl:text>
-      <xsl:value-of select="translate(@fixedwidth,'+','-')"/>
-    </xsl:if>
-    <xsl:text>-2\tabcolsep</xsl:text>
-  </xsl:for-each>
-  <xsl:text>}%&#10;</xsl:text>
-  
-  <!-- Now get latex to calculate widths of cols with starred colwidths -->
-  
-  <xsl:variable name="numunknown" 
-                select="sum(exsl:node-set($colspec)/colspec/@star)"/>
-  <!-- If we have at least one such col, then work out how wide it should -->
-  <!-- be -->
-  <xsl:if test="$numunknown &gt; 0">
-    <xsl:text>\setlength{\newtblstarfactor}{\newtblsparewidth / \real{</xsl:text>
-    <xsl:value-of select="$numunknown"/>
-    <xsl:text>}}%&#10;</xsl:text>
+
+  <xsl:if test="$tabletype != 'tabularx'">
+    <xsl:call-template name="tbl.sizes">
+      <xsl:with-param name="colspec" select="$colspec"/>
+      <xsl:with-param name="width" select="$width"/>
+    </xsl:call-template>
   </xsl:if>
 
+  <xsl:if test="$tabletype = 'tabularx'">
+    <xsl:call-template name="tbl.valign.x">
+      <xsl:with-param name="valign" select="tbody/@valign"/>
+    </xsl:call-template>
+  </xsl:if>
+  
   <!-- Start the next table on a new line -->
   <xsl:if test="preceding::tgroup">
     <xsl:text>&#10;</xsl:text>
@@ -1385,13 +1572,40 @@
   <!-- Start the table declaration -->
   <xsl:text>\begin{</xsl:text>
   <xsl:value-of select="$tabletype"/>
-  <xsl:text>}{</xsl:text>
-  
-  <!-- The initial column definition -->
-  <xsl:for-each select="exsl:node-set($colspec)/*">
-    <xsl:text>l</xsl:text>
-  </xsl:for-each>
   <xsl:text>}</xsl:text>
+
+  <xsl:choose>
+  <xsl:when test="$tabletype = 'tabularx'">
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$width"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:for-each select="exsl:node-set($colspec)/*">
+      <xsl:choose>
+      <xsl:when test="@star">
+        <xsl:text>&gt;{\hsize=</xsl:text>
+        <xsl:if test="@fixedwidth">
+          <xsl:value-of select="@fixedwidth"/>
+          <xsl:text>+</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="@star"/>
+        <xsl:text>\hsize}X</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>l</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>{</xsl:text>
+    <!-- The initial column definition -->
+    <xsl:for-each select="exsl:node-set($colspec)/*">
+      <xsl:text>l</xsl:text>
+    </xsl:for-each>
+    <xsl:text>}</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
 
   <xsl:if test="not(thead)">
     <xsl:apply-templates select="(ancestor::table
