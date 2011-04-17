@@ -5,7 +5,7 @@
     <refentrytitle>literal.layout.options</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>literal.layout.options</refname>
+    <refname><parameter>literal.layout.options</parameter></refname>
     <refpurpose>Override the options passed to the <filename>listing</filename>
     package</refpurpose>
   </refnamediv>

@@ -5,7 +5,7 @@
     <refentrytitle>literal.width.ignore</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>literal.width.ignore</refname>
+    <refname><parameter>literal.width.ignore</parameter></refname>
     <refpurpose>Ignore the literal environment width attribute</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

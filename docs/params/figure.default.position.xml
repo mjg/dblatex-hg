@@ -5,7 +5,7 @@
     <refentrytitle>figure.default.position</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>figure.default.position</refname>
+    <refname><parameter>figure.default.position</parameter></refname>
     <refpurpose>Figure float placement policy</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

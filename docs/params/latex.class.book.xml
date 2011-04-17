@@ -5,7 +5,7 @@
     <refentrytitle>latex.class.book</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.class.book</refname>
+    <refname><parameter>latex.class.book</parameter></refname>
     <refpurpose>LaTeX document class to use for
 <sgmltag>book</sgmltag> documents</refpurpose>
   </refnamediv>

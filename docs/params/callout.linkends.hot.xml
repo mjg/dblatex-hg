@@ -5,7 +5,7 @@
     <refentrytitle>callout.linkends.hot</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>callout.linkends.hot</refname>
+    <refname><parameter>callout.linkends.hot</parameter></refname>
     <refpurpose>Hot links callout items</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

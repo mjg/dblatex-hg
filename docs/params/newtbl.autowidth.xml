@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.autowidth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.autowidth</refname>
+    <refname><parameter>newtbl.autowidth</parameter></refname>
     <refpurpose>Table column widths sized by latex</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>show.comments</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>show.comments</refname>
+    <refname><parameter>show.comments</parameter></refname>
     <refpurpose>Display <sgmltag>remark</sgmltag> elements?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

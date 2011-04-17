@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.format.thead</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.format.thead</refname>
+    <refname><parameter>newtbl.format.thead</parameter></refname>
     <refpurpose>LaTeX formatting for head table cells</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

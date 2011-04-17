@@ -5,7 +5,7 @@
     <refentrytitle>qanda.defaultlabel</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>qanda.defaultlabel</refname>
+    <refname><parameter>qanda.defaultlabel</parameter></refname>
     <refpurpose>Sets the default for defaultlabel on QandASet.</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

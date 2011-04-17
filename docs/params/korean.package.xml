@@ -5,7 +5,7 @@
     <refentrytitle>korean.package</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>korean.package</refname>
+    <refname><parameter>korean.package</parameter></refname>
     <refpurpose>Package included when Korean language is used</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

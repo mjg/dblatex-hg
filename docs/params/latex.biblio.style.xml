@@ -5,7 +5,7 @@
     <refentrytitle>latex.biblio.style</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.biblio.style</refname>
+    <refname><parameter>latex.biblio.style</parameter></refname>
     <refpurpose>Default BibTeX style to apply</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>make.year.ranges</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>make.year.ranges</refname>
+    <refname><parameter>make.year.ranges</parameter></refname>
     <refpurpose>Collate copyright years into ranges?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

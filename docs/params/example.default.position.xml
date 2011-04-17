@@ -5,7 +5,7 @@
     <refentrytitle>example.default.position</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>example.default.position</refname>
+    <refname><parameter>example.default.position</parameter></refname>
     <refpurpose>Default example float placement to apply</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

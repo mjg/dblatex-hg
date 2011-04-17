@@ -5,7 +5,7 @@
     <refentrytitle>refentry.xref.manvolnum</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>refentry.xref.manvolnum</refname>
+    <refname><parameter>refentry.xref.manvolnum</parameter></refname>
     <refpurpose>Output <sgmltag>manvolnum</sgmltag> as part of 
 <sgmltag>refentry</sgmltag> cross-reference?</refpurpose>
   </refnamediv>

@@ -5,7 +5,7 @@
     <refentrytitle>keep.relative.image.uris</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>keep.relative.image.uris</refname>
+    <refname><parameter>keep.relative.image.uris</parameter></refname>
     <refpurpose>Should image URIs be resolved against xml:base?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

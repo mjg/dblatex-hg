@@ -5,7 +5,7 @@
     <refentrytitle>dedication.tocdepth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>dedication.tocdepth</refname>
+    <refname><parameter>dedication.tocdepth</parameter></refname>
     <refpurpose>How dedication section and subsections appear in TOC</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

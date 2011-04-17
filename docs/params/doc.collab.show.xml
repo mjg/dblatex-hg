@@ -5,7 +5,7 @@
     <refentrytitle>doc.collab.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>doc.collab.show</refname>
+    <refname><parameter>doc.collab.show</parameter></refname>
     <refpurpose>Print the document collaborators (authors, etc.) in a table</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

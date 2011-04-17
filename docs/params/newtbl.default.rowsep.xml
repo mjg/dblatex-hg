@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.default.rowsep</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.default.rowsep</refname>
+    <refname><parameter>newtbl.default.rowsep</parameter></refname>
     <refpurpose>By default draw a horizontal line between rows</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

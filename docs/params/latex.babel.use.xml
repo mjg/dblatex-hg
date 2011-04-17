@@ -5,7 +5,7 @@
     <refentrytitle>latex.babel.use</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.babel.use</refname>
+    <refname><parameter>latex.babel.use</parameter></refname>
     <refpurpose>Disable the use of babel, whatever the document language is</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

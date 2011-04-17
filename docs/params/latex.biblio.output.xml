@@ -5,7 +5,7 @@
     <refentrytitle>latex.biblio.output</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.biblio.output</refname>
+    <refname><parameter>latex.biblio.output</parameter></refname>
     <refpurpose>Defines how the BibTeX bibliographic entries are printed out</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

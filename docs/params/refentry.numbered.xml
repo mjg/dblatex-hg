@@ -5,7 +5,7 @@
     <refentrytitle>refentry.numbered</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>refentry.numbered</refname>
+    <refname><parameter>refentry.numbered</parameter></refname>
     <refpurpose>Should <sgmltag>refentry</sgmltag> headings be numbered?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

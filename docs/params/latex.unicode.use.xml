@@ -5,7 +5,7 @@
     <refentrytitle>latex.unicode.use</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.unicode.use</refname>
+    <refname><parameter>latex.unicode.use</parameter></refname>
     <refpurpose>Use passivetex unicode support?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>xetex.font</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>xetex.font</refname>
+    <refname><parameter>xetex.font</parameter></refname>
     <refpurpose>Specifies the fonts that XeTeX must use</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>xref.with.number.and.title</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>xref.with.number.and.title</refname>
+    <refname><parameter>xref.with.number.and.title</parameter></refname>
     <refpurpose>Use number and title in cross references</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

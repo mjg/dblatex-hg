@@ -5,7 +5,7 @@
     <refentrytitle>biblioentry.numbered</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>biblioentry.numbered</refname>
+    <refname><parameter>biblioentry.numbered</parameter></refname>
     <refpurpose>Should <sgmltag>biblioentry</sgmltag> item labels be numbered?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

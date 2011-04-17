@@ -5,7 +5,7 @@
     <refentrytitle>draft.mode</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>draft.mode</refname>
+    <refname><parameter>draft.mode</parameter></refname>
     <refpurpose>Select draft mode</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

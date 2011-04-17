@@ -5,7 +5,7 @@
     <refentrytitle>table.default.position</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>table.default.position</refname>
+    <refname><parameter>table.default.position</parameter></refname>
     <refpurpose>Default table float placement policy</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

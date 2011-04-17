@@ -5,7 +5,7 @@
     <refentrytitle>glossterm.auto.link</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>glossterm.auto.link</refname>
+    <refname><parameter>glossterm.auto.link</parameter></refname>
     <refpurpose>Generate links from glossterm to glossentry automatically?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

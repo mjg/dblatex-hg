@@ -5,7 +5,7 @@
     <refentrytitle>literal.lines.showall</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>literal.lines.showall</refname>
+    <refname><parameter>literal.lines.showall</parameter></refname>
     <refpurpose>Show the last empty lines in the literal environments?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

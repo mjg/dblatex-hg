@@ -5,7 +5,7 @@
     <refentrytitle>refentry.generate.name</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>refentry.generate.name</refname>
+    <refname><parameter>refentry.generate.name</parameter></refname>
     <refpurpose>Output NAME header before <sgmltag>refname</sgmltag>s?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

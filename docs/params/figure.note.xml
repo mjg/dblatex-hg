@@ -5,7 +5,7 @@
     <refentrytitle>figure.note</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>figure.note</refname>
+    <refname><parameter>figure.note</parameter></refname>
     <refpurpose>Figure to use to render a <sgmltag>note</sgmltag> block</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

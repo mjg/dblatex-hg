@@ -5,7 +5,7 @@
     <refentrytitle>preface.tocdepth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>preface.tocdepth</refname>
+    <refname><parameter>preface.tocdepth</parameter></refname>
     <refpurpose>How preface section and subsections appear in TOC</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>mediaobject.caption.style</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>mediaobject.caption.style</refname>
+    <refname><parameter>mediaobject.caption.style</parameter></refname>
     <refpurpose>Font style of the mediaobject caption text</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

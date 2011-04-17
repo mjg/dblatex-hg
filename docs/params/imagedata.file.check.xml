@@ -5,7 +5,7 @@
     <refentrytitle>imagedata.file.check</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>imagedata.file.check</refname>
+    <refname><parameter>imagedata.file.check</parameter></refname>
     <refpurpose>Make the latex compilation robust to missing images</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

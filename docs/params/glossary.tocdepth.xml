@@ -5,7 +5,7 @@
     <refentrytitle>glossary.tocdepth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>glossary.tocdepth</refname>
+    <refname><parameter>glossary.tocdepth</parameter></refname>
     <refpurpose>How glossary section and subsections appear in TOC</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

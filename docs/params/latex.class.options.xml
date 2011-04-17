@@ -5,7 +5,7 @@
     <refentrytitle>latex.class.options</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.class.options</refname>
+    <refname><parameter>latex.class.options</parameter></refname>
     <refpurpose>Options passed to the \documentclass command</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

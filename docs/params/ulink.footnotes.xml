@@ -5,7 +5,7 @@
     <refentrytitle>ulink.footnotes</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>ulink.footnotes</refname>
+    <refname><parameter>ulink.footnotes</parameter></refname>
     <refpurpose>Generate footnotes for <sgmltag>ulink</sgmltag>s?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

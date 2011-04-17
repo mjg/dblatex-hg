@@ -5,7 +5,7 @@
     <refentrytitle>funcsynopsis.style</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>funcsynopsis.style</refname>
+    <refname><parameter>funcsynopsis.style</parameter></refname>
     <refpurpose>What style of <sgmltag>funcsynopsis</sgmltag> should be generated?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

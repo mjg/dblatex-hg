@@ -5,7 +5,7 @@
     <refentrytitle>ulink.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>ulink.show</refname>
+    <refname><parameter>ulink.show</parameter></refname>
     <refpurpose>Display URLs after <sgmltag>ulink</sgmltag>s?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

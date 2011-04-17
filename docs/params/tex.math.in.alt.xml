@@ -5,7 +5,7 @@
     <refentrytitle>tex.math.in.alt</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>tex.math.in.alt</refname>
+    <refname><parameter>tex.math.in.alt</parameter></refname>
     <refpurpose>TeX notation used for equations</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

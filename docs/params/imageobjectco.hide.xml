@@ -5,7 +5,7 @@
     <refentrytitle>imageobjectco.hide</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>imageobjectco.hide</refname>
+    <refname><parameter>imageobjectco.hide</parameter></refname>
     <refpurpose>Hide the callout markups on the image</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>figure.warning</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>figure.warning</refname>
+    <refname><parameter>figure.warning</parameter></refname>
     <refpurpose>Figure to use to render a <sgmltag>warning</sgmltag>
     block</refpurpose>
   </refnamediv>

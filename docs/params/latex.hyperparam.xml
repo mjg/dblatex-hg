@@ -5,7 +5,7 @@
     <refentrytitle>latex.hyperparam</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.hyperparam</refname>
+    <refname><parameter>latex.hyperparam</parameter></refname>
     <refpurpose>Options/parameters passed to <filename>hyperref</filename></refpurpose>
   </refnamediv>
   <refsynopsisdiv>

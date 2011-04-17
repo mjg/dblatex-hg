@@ -5,7 +5,7 @@
     <refentrytitle>co.linkends.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>co.linkends.show</refname>
+    <refname><parameter>co.linkends.show</parameter></refname>
     <refpurpose>Show the references to calloutlist items next to the markup</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

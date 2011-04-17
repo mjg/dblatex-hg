@@ -5,7 +5,7 @@
     <refentrytitle>filename.as.url</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>filename.as.url</refname>
+    <refname><parameter>filename.as.url</parameter></refname>
     <refpurpose>Hyphenate a <sgmltag>filename</sgmltag> like if is was an URL</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>monoseq.hyphenation</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>monoseq.hyphenation</refname>
+    <refname><parameter>monoseq.hyphenation</parameter></refname>
     <refpurpose>Specifies one of the supported monseq hyphenation policy</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

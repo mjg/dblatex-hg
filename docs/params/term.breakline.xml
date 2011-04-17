@@ -5,7 +5,7 @@
     <refentrytitle>term.breakline</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>term.breakline</refname>
+    <refname><parameter>term.breakline</parameter></refname>
     <refpurpose>Put the term description on the next line?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

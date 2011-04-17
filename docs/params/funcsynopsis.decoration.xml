@@ -5,7 +5,7 @@
     <refentrytitle>funcsynopsis.decoration</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>funcsynopsis.decoration</refname>
+    <refname><parameter>funcsynopsis.decoration</parameter></refname>
     <refpurpose>Decorate elements of a <sgmltag>funcsynopsis</sgmltag>?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>variablelist.term.separator</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>variablelist.term.separator</refname>
+    <refname><parameter>variablelist.term.separator</parameter></refname>
     <refpurpose>Text to separate <sgmltag>term</sgmltag>s within a multi-term
 <sgmltag>varlistentry</sgmltag></refpurpose>
   </refnamediv>

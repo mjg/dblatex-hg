@@ -95,6 +95,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="newtbl.format.thead.xml"/>
 <xi:include href="newtbl.use.hhline.xml"/>
 <xi:include href="table.default.position.xml"/>
+<xi:include href="table.default.tabstyle.xml"/>
 <xi:include href="table.in.float.xml"/>
 <xi:include href="table.title.top.xml"/>
 <xi:include href="table.title.top.xml"/>
@@ -154,6 +155,9 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="literal.layout.options.xml"/>
 <xi:include href="literal.lines.showall.xml"/>
 <xi:include href="literal.width.ignore.xml"/>
+<xi:include href="linenumbering.scope.xml"/>
+<xi:include href="linenumbering.default.xml"/>
+<xi:include href="linenumbering.everyNth.xml"/>
 <xi:include href="mediaobject.caption.style.xml"/>
 <xi:include href="monoseq.hyphenation.xml"/>
 <xi:include href="monoseq.small.xml"/>

@@ -5,7 +5,7 @@
     <refentrytitle>use.id.as.filename</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>use.id.as.filename</refname>
+    <refname><parameter>use.id.as.filename</parameter></refname>
     <refpurpose>Use ID value of chunk elements as the filename?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

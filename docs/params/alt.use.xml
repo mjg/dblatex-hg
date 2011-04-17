@@ -5,7 +5,7 @@
     <refentrytitle>alt.use</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>alt.use</refname>
+    <refname><parameter>alt.use</parameter></refname>
     <refpurpose>Always use <sgmltag>alt</sgmltag> to display equations</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

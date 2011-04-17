@@ -5,7 +5,7 @@
     <refentrytitle>latex.output.revhistory</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.output.revhistory</refname>
+    <refname><parameter>latex.output.revhistory</parameter></refname>
     <refpurpose>Print the <sgmltag>revhistory</sgmltag> table?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

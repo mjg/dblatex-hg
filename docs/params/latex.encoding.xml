@@ -5,7 +5,7 @@
     <refentrytitle>latex.encoding</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.encoding</refname>
+    <refname><parameter>latex.encoding</parameter></refname>
     <refpurpose>Encoding of the latex document to produce</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

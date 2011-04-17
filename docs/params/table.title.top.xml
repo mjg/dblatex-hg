@@ -5,7 +5,7 @@
     <refentrytitle>table.title.top</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>table.title.top</refname>
+    <refname><parameter>table.title.top</parameter></refname>
     <refpurpose>Title on top of the <sgmltag>table</sgmltag> float</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

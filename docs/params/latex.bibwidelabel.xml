@@ -5,7 +5,7 @@
     <refentrytitle>latex.bibwidelabel</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.bibwidelabel</refname>
+    <refname><parameter>latex.bibwidelabel</parameter></refname>
     <refpurpose>Template of the widest bibliography label</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

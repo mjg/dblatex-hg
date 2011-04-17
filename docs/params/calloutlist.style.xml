@@ -5,7 +5,7 @@
     <refentrytitle>calloutlist.style</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>calloutlist.style</refname>
+    <refname><parameter>calloutlist.style</parameter></refname>
     <refpurpose>Callout list style to apply</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

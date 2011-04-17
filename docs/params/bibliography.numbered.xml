@@ -5,7 +5,7 @@
     <refentrytitle>bibliography.numbered</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>bibliography.numbered</refname>
+    <refname><parameter>bibliography.numbered</parameter></refname>
     <refpurpose>Should <sgmltag>bibliography</sgmltag> headings be numbered?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>latex.babel.language</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.babel.language</refname>
+    <refname><parameter>latex.babel.language</parameter></refname>
     <refpurpose>Force the loaded babel language</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.bgcolor.thead</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.bgcolor.thead</refname>
+    <refname><parameter>newtbl.bgcolor.thead</parameter></refname>
     <refpurpose>Background color of the <sgmltag>thead</sgmltag> rows</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

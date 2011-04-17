@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.use.hhline</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.use.hhline</refname>
+    <refname><parameter>newtbl.use.hhline</parameter></refname>
     <refpurpose>Draw the horizontal lines with the <filename>hhline</filename> package</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

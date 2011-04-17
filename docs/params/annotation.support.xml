@@ -5,7 +5,7 @@
     <refentrytitle>annotation.support</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>annotation.support</refname>
+    <refname><parameter>annotation.support</parameter></refname>
     <refpurpose>Enable the <sgmltag>annotation</sgmltag> support</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

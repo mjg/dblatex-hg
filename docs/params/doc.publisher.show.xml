@@ -5,7 +5,7 @@
     <refentrytitle>doc.publisher.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>doc.publisher.show</refname>
+    <refname><parameter>doc.publisher.show</parameter></refname>
     <refpurpose>Print the dblatex logo on the cover page?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

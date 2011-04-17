@@ -5,7 +5,7 @@
     <refentrytitle>function.parens</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>function.parens</refname>
+    <refname><parameter>function.parens</parameter></refname>
     <refpurpose>Generate parens after a function?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>set.book.num</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>set.book.num</refname>
+    <refname><parameter>set.book.num</parameter></refname>
     <refpurpose>Select a single book or all the books to compile from a
     <sgmltag>set</sgmltag></refpurpose>
   </refnamediv>

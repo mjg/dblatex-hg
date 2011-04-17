@@ -5,7 +5,7 @@
     <refentrytitle>cjk.font</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>cjk.font</refname>
+    <refname><parameter>cjk.font</parameter></refname>
     <refpurpose>Fonts to use in CJK environments</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

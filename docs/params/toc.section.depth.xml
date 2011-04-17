@@ -5,7 +5,7 @@
     <refentrytitle>toc.section.depth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>toc.section.depth</refname>
+    <refname><parameter>toc.section.depth</parameter></refname>
     <refpurpose>How deep should recursive sections appear in the TOC?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

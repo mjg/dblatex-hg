@@ -5,7 +5,7 @@
     <refentrytitle>citation.natbib.use</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>citation.natbib.use</refname>
+    <refname><parameter>citation.natbib.use</parameter></refname>
     <refpurpose>Use natbib to display citations</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

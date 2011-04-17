@@ -5,7 +5,7 @@
     <refentrytitle>equation.default.position</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>equation.default.position</refname>
+    <refname><parameter>equation.default.position</parameter></refname>
     <refpurpose>Default equation float placement to apply</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

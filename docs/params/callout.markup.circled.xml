@@ -5,7 +5,7 @@
     <refentrytitle>callout.markup.circled</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>callout.markup.circled</refname>
+    <refname><parameter>callout.markup.circled</parameter></refname>
     <refpurpose>Use black circles for numbering the callout items?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

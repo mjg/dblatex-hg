@@ -5,7 +5,7 @@
     <refentrytitle>latex.bibfiles</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.bibfiles</refname>
+    <refname><parameter>latex.bibfiles</parameter></refname>
     <refpurpose>Defines the default BibTeX database to use</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

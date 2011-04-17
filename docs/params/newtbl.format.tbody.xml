@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.format.tbody</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.format.tbody</refname>
+    <refname><parameter>newtbl.format.tbody</parameter></refname>
     <refpurpose>LaTeX formatting for body table cells</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

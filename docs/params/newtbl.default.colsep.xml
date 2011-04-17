@@ -5,7 +5,7 @@
     <refentrytitle>newtbl.default.colsep</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>newtbl.default.colsep</refname>
+    <refname><parameter>newtbl.default.colsep</parameter></refname>
     <refpurpose>By default draw a vertical line between columns</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

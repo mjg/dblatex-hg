@@ -5,7 +5,7 @@
     <refentrytitle>index.tocdepth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>index.tocdepth</refname>
+    <refname><parameter>index.tocdepth</parameter></refname>
     <refpurpose>How index section and subsections appear in TOC</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

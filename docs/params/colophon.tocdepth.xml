@@ -5,7 +5,7 @@
     <refentrytitle>colophon.tocdepth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>colophon.tocdepth</refname>
+    <refname><parameter>colophon.tocdepth</parameter></refname>
     <refpurpose>How colophon section and subsections appear in TOC</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

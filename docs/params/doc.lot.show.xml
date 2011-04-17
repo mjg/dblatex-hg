@@ -5,7 +5,7 @@
     <refentrytitle>doc.lot.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>doc.lot.show</refname>
+    <refname><parameter>doc.lot.show</parameter></refname>
     <refpurpose>Specifies the Lists of Titles to display</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

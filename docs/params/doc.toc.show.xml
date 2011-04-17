@@ -5,7 +5,7 @@
     <refentrytitle>doc.toc.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>doc.toc.show</refname>
+    <refname><parameter>doc.toc.show</parameter></refname>
     <refpurpose>Print the Table Of Contents</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

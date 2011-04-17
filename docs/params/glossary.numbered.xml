@@ -5,7 +5,7 @@
     <refentrytitle>glossary.numbered</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>glossary.numbered</refname>
+    <refname><parameter>glossary.numbered</parameter></refname>
     <refpurpose>Should <sgmltag>glossary</sgmltag> headings be numbered?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

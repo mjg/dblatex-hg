@@ -5,7 +5,7 @@
     <refentrytitle>pdf.annot.options</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>pdf.annot.options</refname>
+    <refname><parameter>pdf.annot.options</parameter></refname>
     <refpurpose>PDF text annotations rendering options</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

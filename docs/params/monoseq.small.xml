@@ -5,7 +5,7 @@
     <refentrytitle>monoseq.small</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>monoseq.small</refname>
+    <refname><parameter>monoseq.small</parameter></refname>
     <refpurpose>Use a smaller font to render monoseq portions of text</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

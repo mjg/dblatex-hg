@@ -5,7 +5,7 @@
     <refentrytitle>biblioentry.item.separator</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>biblioentry.item.separator</refname>
+    <refname><parameter>biblioentry.item.separator</parameter></refname>
     <refpurpose>Text to separate bibliography entries</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

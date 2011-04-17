@@ -5,7 +5,7 @@
     <refentrytitle>xref.hypermarkup</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>xref.hypermarkup</refname>
+    <refname><parameter>xref.hypermarkup</parameter></refname>
     <refpurpose>Wrap the entire the <sgmltag>xref</sgmltag> markups with an hyperlink?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>figure.important</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>figure.important</refname>
+    <refname><parameter>figure.important</parameter></refname>
     <refpurpose>Figure to use to render a <sgmltag>important</sgmltag> block</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

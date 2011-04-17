@@ -5,7 +5,7 @@
     <refentrytitle>texlive.version</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>texlive.version</refname>
+    <refname><parameter>texlive.version</parameter></refname>
     <refpurpose>Version of the installed Tex Live Distribution</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

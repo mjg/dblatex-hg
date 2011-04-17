@@ -5,7 +5,7 @@
     <refentrytitle>imagedata.boxed</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>imagedata.boxed</refname>
+    <refname><parameter>imagedata.boxed</parameter></refname>
     <refpurpose>Put the images into a framed box</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

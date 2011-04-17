@@ -5,7 +5,7 @@
     <refentrytitle>seg.item.separator</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>seg.item.separator</refname>
+    <refname><parameter>seg.item.separator</parameter></refname>
     <refpurpose>Separator to use between several
 <sgmltag>segitem</sgmltag>s</refpurpose>
   </refnamediv>

@@ -5,7 +5,7 @@
     <refentrytitle>doc.pdfcreator.show</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>doc.pdfcreator.show</refname>
+    <refname><parameter>doc.pdfcreator.show</parameter></refname>
     <refpurpose>Set the PDF metadata Creator field</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

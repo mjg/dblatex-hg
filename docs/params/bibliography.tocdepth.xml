@@ -5,7 +5,7 @@
     <refentrytitle>bibliography.tocdepth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>bibliography.tocdepth</refname>
+    <refname><parameter>bibliography.tocdepth</parameter></refname>
     <refpurpose>How bibliography section and subsections appear in TOC</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

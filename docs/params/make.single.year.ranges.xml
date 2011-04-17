@@ -5,7 +5,7 @@
     <refentrytitle>make.single.year.ranges</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>make.single.year.ranges</refname>
+    <refname><parameter>make.single.year.ranges</parameter></refname>
     <refpurpose>Print single-year ranges (e.g., 1998-1999)</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>draft.watermark</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>draft.watermark</refname>
+    <refname><parameter>draft.watermark</parameter></refname>
     <refpurpose>Print a Watermak on each page in draft mode?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

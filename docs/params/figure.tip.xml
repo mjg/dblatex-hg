@@ -5,7 +5,7 @@
     <refentrytitle>figure.tip</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>figure.tip</refname>
+    <refname><parameter>figure.tip</parameter></refname>
     <refpurpose>Figure to use to render a <sgmltag>tip</sgmltag> block</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

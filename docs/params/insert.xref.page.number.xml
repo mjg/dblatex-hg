@@ -5,7 +5,7 @@
     <refentrytitle>insert.xref.page.number</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>insert.xref.page.number</refname>
+    <refname><parameter>insert.xref.page.number</parameter></refname>
     <refpurpose>Turns page numbers in xrefs on and off</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

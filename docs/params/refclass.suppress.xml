@@ -5,7 +5,7 @@
     <refentrytitle>refclass.suppress</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>refclass.suppress</refname>
+    <refname><parameter>refclass.suppress</parameter></refname>
     <refpurpose>Suppress display of refclass contents?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

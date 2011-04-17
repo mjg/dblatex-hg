@@ -5,7 +5,7 @@
     <refentrytitle>table.in.float</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>table.in.float</refname>
+    <refname><parameter>table.in.float</parameter></refname>
     <refpurpose>Use or emulate a float to display a formal table?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

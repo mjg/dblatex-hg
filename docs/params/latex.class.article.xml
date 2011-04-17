@@ -5,7 +5,7 @@
     <refentrytitle>latex.class.article</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>latex.class.article</refname>
+    <refname><parameter>latex.class.article</parameter></refname>
     <refpurpose>LaTeX document class to use for
 <sgmltag>article</sgmltag> documents</refpurpose>
   </refnamediv>

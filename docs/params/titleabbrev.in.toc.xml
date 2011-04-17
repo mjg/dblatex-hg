@@ -5,7 +5,7 @@
     <refentrytitle>titleabbrev.in.toc</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>titleabbrev.in.toc</refname>
+    <refname><parameter>titleabbrev.in.toc</parameter></refname>
     <refpurpose>Should <sgmltag>titleabbrev</sgmltag> be put in the TOC 
     instead of <sgmltag>title</sgmltag>?</refpurpose>
   </refnamediv>

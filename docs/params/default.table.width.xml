@@ -5,7 +5,7 @@
     <refentrytitle>default.table.width</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>default.table.width</refname>
+    <refname><parameter>default.table.width</parameter></refname>
     <refpurpose>The default width of tables</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

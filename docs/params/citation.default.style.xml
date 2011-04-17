@@ -5,7 +5,7 @@
     <refentrytitle>citation.default.style</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>citation.default.style</refname>
+    <refname><parameter>citation.default.style</parameter></refname>
     <refpurpose>Default natbib citation style to apply</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

@@ -5,7 +5,7 @@
     <refentrytitle>doc.section.depth</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>doc.section.depth</refname>
+    <refname><parameter>doc.section.depth</parameter></refname>
     <refpurpose>Depth of the section numbering</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

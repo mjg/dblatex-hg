@@ -19,17 +19,17 @@
     </refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>current.docid</refname>
-    <refname>insert.olink.page.number</refname>
-    <refname>insert.olink.pdf.frag</refname>
-    <refname>olink.base.uri</refname>
-    <refname>olink.debug</refname>
-    <refname>olink.doctitle</refname>
-    <refname>olink.lang.fallback.sequence</refname>
-    <refname>prefer.internal.olink</refname>
-    <refname>target.database.document</refname>
-    <refname>targets.filename</refname>
-    <refname>use.local.olink.style</refname>
+    <refname><parameter>current.docid</parameter></refname>
+    <refname><parameter>insert.olink.page.number</parameter></refname>
+    <refname><parameter>insert.olink.pdf.frag</parameter></refname>
+    <refname><parameter>olink.base.uri</parameter></refname>
+    <refname><parameter>olink.debug</parameter></refname>
+    <refname><parameter>olink.doctitle</parameter></refname>
+    <refname><parameter>olink.lang.fallback.sequence</parameter></refname>
+    <refname><parameter>prefer.internal.olink</parameter></refname>
+    <refname><parameter>target.database.document</parameter></refname>
+    <refname><parameter>targets.filename</parameter></refname>
+    <refname><parameter>use.local.olink.style</parameter></refname>
     <refpurpose>Parameters to configure Olinks</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

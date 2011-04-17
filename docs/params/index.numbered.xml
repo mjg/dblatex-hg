@@ -5,7 +5,7 @@
     <refentrytitle>index.numbered</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>index.numbered</refname>
+    <refname><parameter>index.numbered</parameter></refname>
     <refpurpose>Should <sgmltag>index</sgmltag> headings be numbered?</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

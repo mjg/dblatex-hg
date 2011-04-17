@@ -5,7 +5,7 @@
     <refentrytitle>template</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname>template</refname>
+    <refname><parameter>template</parameter></refname>
     <refpurpose>???</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
