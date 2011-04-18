@@ -7,7 +7,7 @@
 environment and improving the automatic column width feature. See 
 <olink output="pdf" targetdoc="usermanual"
 targetptr="sec-autowidth"/><ulink output="html"
-url="../manual/index.html">Automatic Width</ulink> and
+url="../manual/sec-table.html#sec-autowidth">Automatic Width</ulink> and
 <olink output="pdf" targetdoc="usermanual"
 targetptr="sec-tabstyle"/><ulink output="html"
 url="../manual/sec-table.html#sec-tabstyle">Table LaTeX Styles</ulink>
