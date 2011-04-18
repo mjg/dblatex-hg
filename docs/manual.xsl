@@ -25,4 +25,28 @@
 <!-- Manpage titles not numbered -->
 <xsl:param name="refentry.numbered">0</xsl:param>
 
+<xsl:template match="parameter">
+  <xsl:variable name="name" select="."/>
+  <xsl:variable name="target" select="key('id',$name)[1]"/>
+
+  <xsl:choose>
+  <xsl:when test="count($target) &gt; 0">
+    <!-- Hot link to the parameter refentry -->
+    <xsl:call-template name="hyperlink.markup">
+      <xsl:with-param name="linkend" select="$name"/>
+      <xsl:with-param name="text">
+        <xsl:apply-imports/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- Index entry for this parameter -->
+    <xsl:text>\index{Parameters!</xsl:text>
+    <xsl:value-of select="$name"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:apply-imports/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>

@@ -4,7 +4,8 @@
 <appendix id="sec-params" xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Dblatex XSL Parameter Reference</title>
 
-<para>This is reference documentation for all user-configurable parameters
+<para>This is reference documentation for all user-configurable
+parameters<indexterm><primary>Parameters</primary></indexterm>
 in the dblatex XSL stylesheets.</para>
 <para>The organization of the reference entries mimics the
 <ulink url="http://docbook.sf.net/release/xsl/current/doc/fo/index.html">FO Parameter Reference</ulink> for people familiar with
