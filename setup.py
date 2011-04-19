@@ -12,6 +12,7 @@ from distutils.core import setup
 from distutils.command.build_scripts import build_scripts
 from distutils.command.install_data import install_data
 from distutils.command.install import install
+from subprocess import Popen, PIPE
 
 
 #
@@ -163,8 +164,9 @@ def find_programs(utils):
     return (util_paths, missed)
 
 def kpsewhich(tex_file):
-    ios = os.popen2("kpsewhich %s" % tex_file)
-    out = "".join(ios[1].readlines()).strip()
+    p = Popen("kpsewhich %s" % tex_file, shell=True,
+              stdin=PIPE, stdout=PIPE, close_fds=True)
+    out = "".join(p.stdout.readlines()).strip()
     return out
 
 
