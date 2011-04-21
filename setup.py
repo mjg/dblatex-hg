@@ -388,7 +388,7 @@ def get_version():
 
 if __name__ == "__main__":
     pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
-    htmldoc = [os.path.join("docs", "html")]
+    htmldoc = [os.path.join("docs", "xhtml")]
 
     setup(name="dblatex",
         version=get_version(),
