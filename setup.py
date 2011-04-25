@@ -17,6 +17,7 @@ except ImportError:
 
 from distutils.command.build_scripts import build_scripts
 from distutils.command.install_data import install_data
+from distutils.command.sdist import sdist
 from subprocess import Popen, PIPE
 
 
@@ -182,6 +183,12 @@ def kpsewhich(tex_file):
               stdin=PIPE, stdout=PIPE, close_fds=True)
     out = "".join(p.stdout.readlines()).strip()
     return out
+
+
+class Sdist(sdist):
+    def prune_file_list(self):
+        sdist.prune_file_list(self)
+        self.filelist.exclude_pattern(r'.*.pyc', is_regex=1)
 
 
 class Install(install):
@@ -419,7 +426,7 @@ if __name__ == "__main__":
     setup(name="dblatex",
         version=get_version(),
         description='DocBook to LaTeX/ConTeXt Publishing',
-        author='Benoît Guillon',
+        author='Benoit Guillon',
         author_email='marsgui@users.sourceforge.net',
         url='http://dblatex.sf.net',
         license='GPL Version 2 or later',
@@ -440,6 +447,7 @@ if __name__ == "__main__":
         scripts=['scripts/dblatex'],
         cmdclass={'build_scripts': BuildScripts,
                   'install': Install,
-                  'install_data': InstallData}
+                  'install_data': InstallData,
+                  'sdist': Sdist}
         )
 

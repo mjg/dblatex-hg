@@ -1,6 +1,7 @@
 include setup.py
 include setup.cfg
 include MANIFEST.in
+include COPYRIGHT
 recursive-include docs *
 recursive-include latex *
 recursive-include lib *
