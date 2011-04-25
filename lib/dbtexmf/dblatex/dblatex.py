@@ -27,7 +27,8 @@ class DbLatex(DbTex):
     def set_base(self, topdir):
         DbTex.set_base(self, topdir)
         self.xslmain = os.path.join(self.topdir, "xsl", "latex_book_fast.xsl")
-        self.xsllist = os.path.join(self.topdir, "xsl", "common", "mklistings.xsl")
+        self.xsllist = os.path.join(self.topdir,
+                                    "xsl", "common", "mklistings.xsl")
         self.texdir = os.path.join(self.topdir, "latex")
         self.texlocal = os.path.join(self.topdir, "latex", "style")
         self.confdir = os.path.join(self.topdir, "latex", "specs")
