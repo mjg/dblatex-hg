@@ -8,7 +8,16 @@
   <xsl:text>\end{enumerate}&#10;</xsl:text>
 </xsl:template>
 
-<xsl:template match="procedure/title"/>
+<xsl:template match="procedure/title">
+  <xsl:text>{\sc </xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>}&#10;</xsl:text>
+  <xsl:call-template name="label.id">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
+  <!-- Ask to latex to let the title with its list -->
+  <xsl:text>\nopagebreak&#10;</xsl:text>
+</xsl:template>
 
 <xsl:template match="step/title">
   <xsl:text>{\sc </xsl:text>
