@@ -8,10 +8,15 @@ import sys
 import re
 import glob
 
-from distutils.core import setup
+try:
+    from setuptools import setup
+    from setuptools.command.install import install
+except ImportError:
+    from distutils.core import setup
+    from distutils.command.install import install
+
 from distutils.command.build_scripts import build_scripts
 from distutils.command.install_data import install_data
-from distutils.command.install import install
 from subprocess import Popen, PIPE
 
 
@@ -24,7 +29,7 @@ class BuildScripts(build_scripts):
 import sys
 import os
 
-package_base = r"%(package_base)s"
+package_base = %(package_base)s
 
 %(lib_path)s
 %(catalogs)s
@@ -91,6 +96,7 @@ os.environ["SGML_CATALOG_FILES"] = cat
         return newpaths
 
     def build_script(self):
+        global use_setuptools
         script_name = self.scripts[0]
 
         # prepare args for the bang path at the top of the script
@@ -120,6 +126,14 @@ os.environ["SGML_CATALOG_FILES"] = cat
             lib_path = ""
         else:
             lib_path = "sys.path.append(r\"%s\")" % lib_path
+
+        # Things to adapt when building an egg
+        if "/egg" in lib_path:
+            lib_path = ""
+            package_base = 'os.path.abspath(os.path.join(os.path.dirname('\
+                           '__file__), "..", "..", "share", "dblatex"))'
+        else:
+            package_base = 'r"%s"' % (package_base)
 
         if self._catalogs:
             catalogs = self.CATALOGS % (self._catalogs, self._catalogs)
@@ -389,6 +403,18 @@ def get_version():
 if __name__ == "__main__":
     pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
     htmldoc = [os.path.join("docs", "xhtml")]
+    classifiers = [
+       "Operating System :: OS Independent",
+       "Topic :: Text Processing :: Markup :: XML",
+       "License :: OSI Approved :: GNU General Public License (GPL)"
+    ]
+
+    description = """
+       dblatex is a program that transforms your SGML/XML DocBook documents to
+       DVI, PostScript or PDF by translating them into pure LaTeX as a first
+       process.  MathML 2.0 markups are supported, too. It started as a clone
+       of DB2LaTeX.
+       """
 
     setup(name="dblatex",
         version=get_version(),
@@ -396,6 +422,9 @@ if __name__ == "__main__":
         author='Benoît Guillon',
         author_email='marsgui@users.sourceforge.net',
         url='http://dblatex.sf.net',
+        license='GPL Version 2 or later',
+        long_description=description,
+        classifiers=classifiers,
         packages=['dbtexmf',
                   'dbtexmf.core',
                   'dbtexmf.xslt',
