@@ -1,5 +1,16 @@
+Release 0.3.1.1:
+----------------
+
+- Fix bug #2941472: print out the procedure title
+- Fix a python deprecation warning in setup.py
+- Fix a bug in setup.py to install correctly the XHTML documentation
+- Fix a bug in sgmtag.xsl to have the right font type for <sgmltag>
+- Add feature request #2999505 to be able to pass a user index style file
+- Improve setup.py to be able to build and distribute a dblatex egg package 
+
+
 Release 0.3.1:
-------------
+--------------
 
 - Fix bug in referencing to external books when xref.hypermarkup=1.
 - Fix bug #2969329 to have sub-tables working
