@@ -422,6 +422,8 @@ class DbTexCommand:
                                "which %s actually works" % prog)
         parser.add_option("-D", "--dump", action="store_true",
                           help="Dump error stack (debug purpose)")
+        parser.add_option("-e", "--indexstyle",
+                          help="Index Style file to pass to makeindex")
         parser.add_option("-f", "--fig-format",
                           help="Input figure format, used when not deduced "
                                "from figure extension")
@@ -543,6 +545,9 @@ class DbTexCommand:
                 failed_exit("Error: %s" % e)
             run.xslparams.append(xslparam)
             if texpath: run.texinputs.append(texpath)
+
+        if options.indexstyle:
+            run.runtex.index_style = os.path.abspath(options.indexstyle)
 
         if options.texinputs:
             for texinputs in options.texinputs:
