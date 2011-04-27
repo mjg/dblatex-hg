@@ -1,4 +1,5 @@
 import os
+import fnmatch
 from subprocess import Popen, PIPE
 from xml.dom.minidom import parseString
 
@@ -140,7 +141,14 @@ class CVSSession:
             if rc != 0:
                 raise OSError("exec failed")
 
-    def from_cset(self, cset):
+    def _file_match(self, filename, pattern_list):
+        if not(pattern_list):
+            return None
+
+        matchers = [ p for p in pattern_list if fnmatch.fnmatch(filename, p)]
+        return matchers
+
+    def from_cset(self, cset, exclude_files=None):
         # Get the changeset tag
         tag = ""
         tags = cset.getElementsByTagName("tag")
@@ -162,6 +170,10 @@ class CVSSession:
 
             # Ignore Tag machinery changesets
             if path == ".hgtags":
+                continue
+
+            if self._file_match(path, exclude_files):
+                print "Skip '%s'" % (path)
                 continue
 
             if mode == "add":
