@@ -57,11 +57,18 @@ class Index(TexModule):
         LaTeX), the target file (the output of makeindex) and the transcript
         (e.g. .ilg) file.  Transcript is used by glosstex.py.
         """
+        self.paranoid = True
         self.doc = doc
         self.pbase = doc.src_base
         self.source = doc.src_base + "." + source
         self.target = doc.src_base + "." + target
         self.transcript = doc.src_base + "." + transcript
+
+        # In paranoid mode, can output only in current working dir
+        if self.paranoid and (os.path.dirname(self.target) == os.getcwd()):
+            self.target = os.path.basename(self.target)
+            self.transcript = os.path.basename(self.transcript)
+
         if os.path.exists(self.source):
             self.md5 = md5_file(self.source)
         else:
@@ -150,7 +157,8 @@ class Index(TexModule):
             env = {}
 
         msg.debug(" ".join(cmd))
-        rc = subprocess.call(cmd)
+        # Makeindex outputs everything to stderr, even progress messages
+        rc = subprocess.call(cmd, stderr=msg.stdout)
         if (rc != 0):
             msg.error(_("could not make index %s") % self.target)
             return 1
