@@ -195,15 +195,17 @@
   <xsl:variable name="lst.ext"
       select="$lst.doc/listings/listing[@type=$name][@lstid=$lst.id]"/>
 
-  <xsl:message><xsl:text>Load external file </xsl:text>
-    <xsl:value-of select="$name"/>
-    <xsl:text>[</xsl:text>
-    <xsl:value-of select="$lst.id"/>
-    <xsl:text>]</xsl:text>
-    <xsl:if test="not($lst.ext)">
-      <xsl:text>(failed)</xsl:text> 
-    </xsl:if>
-  </xsl:message>
+  <xsl:if test="$output.quietly = 0">
+    <xsl:message><xsl:text>Load external file </xsl:text>
+      <xsl:value-of select="$name"/>
+      <xsl:text>[</xsl:text>
+      <xsl:value-of select="$lst.id"/>
+      <xsl:text>]</xsl:text>
+      <xsl:if test="not($lst.ext)">
+        <xsl:text>(failed)</xsl:text> 
+      </xsl:if>
+    </xsl:message>
+  </xsl:if>
 
   <xsl:apply-templates mode="latex.programlisting" select="$lst.ext"/>
 </xsl:template>

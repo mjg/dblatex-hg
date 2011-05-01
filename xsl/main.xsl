@@ -95,7 +95,7 @@
 
 <xsl:template match="/">
   <xsl:param name="rfs" select="0"/>
-  <xsl:if test="$rfs=0">
+  <xsl:if test="$rfs = 0 and $output.quietly = 0">
     <xsl:message>
     <xsl:text>XSLT stylesheets DocBook - LaTeX 2e </xsl:text>
     <xsl:text>(</xsl:text>
@@ -109,11 +109,15 @@
   </xsl:when>
   <xsl:when test="function-available('exsl:node-set')
                   and (*/self::ng:* or */self::db:*)">
-    <xsl:message>Stripping NS from DocBook 5/NG document.</xsl:message>
+    <xsl:if test="$output.quietly = 0">
+      <xsl:message>Stripping NS from DocBook 5/NG document.</xsl:message>
+    </xsl:if>
     <xsl:variable name="nons">
       <xsl:apply-templates mode="stripNS"/>
     </xsl:variable>
-    <xsl:message>Processing stripped document.</xsl:message>
+    <xsl:if test="$output.quietly = 0">
+      <xsl:message>Processing stripped document.</xsl:message>
+    </xsl:if>
     <xsl:apply-templates select="exsl:node-set($nons)">
       <xsl:with-param name="rfs" select="1"/>
     </xsl:apply-templates>

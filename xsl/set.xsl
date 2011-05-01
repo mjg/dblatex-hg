@@ -16,7 +16,9 @@
 <xsl:template match="set">
   <xsl:choose>
   <xsl:when test="$set.book.num = 'all'">
-    <xsl:message>Output all the books from the set</xsl:message>
+    <xsl:if test="$output.quietly = 0">
+      <xsl:message>Output all the books from the set</xsl:message>
+    </xsl:if>
     <!-- Write a latex file per book -->
     <xsl:apply-templates select="//book" mode="build.texfile"/>
   </xsl:when>

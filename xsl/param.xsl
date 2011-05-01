@@ -29,6 +29,7 @@
 <xsl:param name="show.comments" select="1"/>
 <xsl:param name="glossterm.auto.link" select="0"/>
 <xsl:param name="pdf.annot.options"/>
+<xsl:param name="output.quietly" select="0"/>
 
 <!-- "Common" parameters -->
 

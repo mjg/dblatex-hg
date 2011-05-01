@@ -8,7 +8,6 @@
 
 <xsl:template match="revhistory">
   <xsl:if test="$latex.output.revhistory=1">
-    <xsl:message>Processing Revision History </xsl:message>
     <xsl:text>
 %% ----------------------
 %% Revision History Table

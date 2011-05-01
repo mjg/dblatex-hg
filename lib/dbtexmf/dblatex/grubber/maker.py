@@ -209,7 +209,7 @@ class DependShell (Depend): #{{{2
 
     def run (self):
         msg.progress(_("running %s") % self.cmd[0])
-        rc = subprocess.call(self.cmd)
+        rc = subprocess.call(self.cmd, stdout=msg.stdout)
         if rc != 0:
             msg.error(_("execution of %s failed") % self.cmd[0])
             return 1

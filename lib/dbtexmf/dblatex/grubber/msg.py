@@ -30,6 +30,11 @@ class Message (object):
         self.cwd = "./"
         self.pos = []
         self._log = logging.getLogger("dblatex")
+        level = self._log.getEffectiveLevel()
+        if level >= logging.WARNING:
+            self.stdout = open(os.devnull, "w")
+        else:
+            self.stdout = None
 
     def write_stdout(self, text, level=0):
         print text

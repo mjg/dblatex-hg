@@ -38,7 +38,7 @@ class Dep (Depend):
             cmd.extend(["-t", opt])
         cmd.extend(self.options + ["-o", self.target, self.source])
         msg.debug(" ".join(cmd))
-        rc = subprocess.call(cmd)
+        rc = subprocess.call(cmd, stdout=msg.stdout)
         if rc != 0:
             msg.error(_("%s failed on %s") % (cmd[0], self.source))
             return 1

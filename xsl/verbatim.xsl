@@ -148,10 +148,12 @@
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
 
-  <xsl:message>
-    <xsl:value-of select="local-name(.)"/>
-    <xsl:text>: default template used in programlisting or screen</xsl:text>
-  </xsl:message>
+  <xsl:if test="$output.quietly = 0">
+    <xsl:message>
+      <xsl:value-of select="local-name(.)"/>
+      <xsl:text>: default template used in programlisting or screen</xsl:text>
+    </xsl:message>
+  </xsl:if>
 
   <xsl:apply-templates mode="latex.programlisting">
     <xsl:with-param name="co-tagin" select="$co-tagin"/>

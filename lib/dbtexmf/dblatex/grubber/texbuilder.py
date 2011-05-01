@@ -77,7 +77,7 @@ class LatexBuilder:
             return
 
         os.environ["LATEX"] = self.tex.program
-        rc = subprocess.call([self.texpost, source])
+        rc = subprocess.call([self.texpost, source], stdout=msg.stdout)
         if rc == 1:
             return
         if rc != 0:

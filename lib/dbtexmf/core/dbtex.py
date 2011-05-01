@@ -332,13 +332,14 @@ class DbTex:
             donefiles = self._compile()
             if len(donefiles) == 1:
                 shutil.move(donefiles[0], self.output)
-                print "'%s' successfully built" % os.path.basename(self.output)
+                self.log.info("'%s' successfully built" % \
+                              os.path.basename(self.output))
             else:
                 for d in donefiles:
                     shutil.move(d, self.outputdir)
                 donefiles.sort()
-                print "Files successfully built in '%s':\n%s" % \
-                      (self.outputdir, "\n".join(donefiles))
+                self.log.info("Files successfully built in '%s':\n%s" % \
+                              (self.outputdir, "\n".join(donefiles)))
         except Exception, e:
             signal_error(self, e)
 
@@ -346,7 +347,7 @@ class DbTex:
         if not(self.debug):
             shutil.rmtree(self.tmpdir)
         else:
-            print "%s not removed" % self.tmpdir
+            self.log.info("%s not removed" % self.tmpdir)
 
     def _stdin_write(self):
         # Find out the stdin working directory
@@ -586,6 +587,7 @@ class DbTexCommand:
 
         if options.quiet:
             run.verbose = logger.QUIET
+            run.xslparams.append("output.quietly=1")
 
         if options.tmpdir:
             if not(os.path.exists(options.tmpdir)):

@@ -237,10 +237,12 @@
      ################ -->
 
 <xsl:template match="bibliography">
+  <!--
   <xsl:message>Processing Bibliography</xsl:message>
   <xsl:message><xsl:text>Output Mode: </xsl:text>
     <xsl:value-of select="$latex.biblio.output"/>
   </xsl:message>
+  -->
   <xsl:text>% ------------------------------------------- &#10;</xsl:text>
   <xsl:text>% Bibliography&#10;</xsl:text>
   <xsl:text>% ------------------------------------------- &#10;</xsl:text>
@@ -281,7 +283,6 @@
      ############### -->
 
 <xsl:template match="bibliodiv">
-  <xsl:message>Processing Bibliography - Bibliodiv</xsl:message>
   <xsl:variable name="level">
     <xsl:call-template name="get.sect.level">
       <xsl:with-param name="n" select="parent::bibliography"/>

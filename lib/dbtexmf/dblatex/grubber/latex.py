@@ -211,7 +211,7 @@ class Latex(Depend):
         self.must_compile = 0
         cmd = [self.program] + self.opts + [os.path.basename(self.srcfile)]
         msg.log(" ".join(cmd))
-        rc = subprocess.call(cmd)
+        rc = subprocess.call(cmd, stdout=msg.stdout)
         if rc != 0:
             msg.error(_("%s failed") % self.program)
         # Whatever the result is, read the log file

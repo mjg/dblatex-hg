@@ -170,7 +170,8 @@ class BibTex(TexModule):
         dtime = getmtime(self.blgfile)
         for db in self.db.values():
             if getmtime(db) > dtime:
-                msg.log(_("bibliography database %s was modified") % db, pkg="bibtex")
+                msg.log(_("bibliography database %s was modified") % db,
+                        pkg="bibtex")
                 return 1
 
         blg = open(self.blgfile)
@@ -261,9 +262,9 @@ class BibTex(TexModule):
         if len(self.bst_path) != 1:
             os.environ["BSTINPUTS"] = string.join(self.bst_path +
                 [os.getenv("BSTINPUTS", "")], ":")
-        rc = subprocess.call(["bibtex", self.base])
+        rc = subprocess.call(["bibtex", self.base], stdout=msg.stdout)
         if rc != 0:
-            msg.info(_("There were errors making the bibliography."))
+            msg.error(_("There were errors making the bibliography."))
             return 1
         self.run_needed = 0
         self.doc.must_compile = 1
