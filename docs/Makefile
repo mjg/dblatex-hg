@@ -33,7 +33,7 @@ all: olink manpagegz allpdf allhtml
 
 allpdf: manual.pdf release-notes.pdf
 
-allhtml:manual.html release-notes.html
+allhtml: $(HTMLDIRUM)/index.html $(HTMLDIRRN)/index.html
 
 allstyle: all native db2latex simple
 
@@ -44,8 +44,8 @@ manpagegz:
 	@$(MAKE) -C manpage -f ../Makefile dblatex.1.gz
 
 # Build the HTML version of the documentation
-manual.html: manual.xml
-	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRUM)'" \
+$(HTMLDIRUM)/index.html: manual.xml
+	@$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRUM)'" \
 			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<
 	convert -trim -rotate 90 processus.fig $(HTMLDIRUM)/processus.png
@@ -54,8 +54,8 @@ manual.html: manual.xml
 	$(CP) -r $(XSLDBK)/images $(HTMLDIRUM)/.
 	$(CP) manual.css $(HTMLDIRUM)/.
 
-release-notes.html: release-notes.xml
-	$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRRN)'" \
+$(HTMLDIRRN)/index.html: release-notes.xml
+	@$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRRN)'" \
 			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<
 	$(CP) manual.css $(HTMLDIRRN)/.
@@ -64,6 +64,7 @@ clean:
 	$(RM) manual.pdf release-notes.pdf *.db
 	$(RM) $(FIGURES) manpage/dblatex.1.gz
 	$(RM) -r $(HTMLDIRUM)
+	$(RM) -r $(HTMLDIRRN)
 
 native db2latex simple: version.xml
 	$(XSLTPROC) --xinclude \
@@ -82,7 +83,7 @@ native db2latex simple: version.xml
 
 # Build the PDF
 %.pdf: %.xml version.xml $(TABLES) $(CHANGES)
-	$(XSLTPROC) --xinclude \
+	@$(XSLTPROC) --xinclude \
 	            --param profile.attribute "'output'" \
                     --param profile.value "'manual;pdf'" $(XSLPROF) $< | \
 	../scripts/dblatex -P target.database.document=$(HERE)/olinkdb.xml \

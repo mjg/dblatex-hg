@@ -7,6 +7,7 @@ import os
 import sys
 import re
 import glob
+import subprocess
 
 try:
     from setuptools import setup
@@ -15,9 +16,11 @@ except ImportError:
     from distutils.core import setup
     from distutils.command.install import install
 
+from distutils.command.build import build
 from distutils.command.build_scripts import build_scripts
 from distutils.command.install_data import install_data
 from distutils.command.sdist import sdist
+from distutils import log
 from subprocess import Popen, PIPE
 
 
@@ -97,7 +100,6 @@ os.environ["SGML_CATALOG_FILES"] = cat
         return newpaths
 
     def build_script(self):
-        global use_setuptools
         script_name = self.scripts[0]
 
         # prepare args for the bang path at the top of the script
@@ -164,6 +166,31 @@ os.environ["SGML_CATALOG_FILES"] = cat
         os.close(fd)
 
 
+class Build(build):
+    """
+    Build the documentation if missing or required to rebuild
+    """
+    def run(self):
+        # Do the default tasks
+        build.run(self)
+        # And build the doc
+        self.build_doc()
+
+    def build_doc(self):
+        log.info("running build_doc")
+        htmldir = os.path.join("docs", "xhtml")
+        pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
+        manpage = os.path.join("docs", "manpage", "dblatex.1.gz")
+
+        # Lazy check to avoid a rebuild for nothing
+        if (not(self.force) and os.path.exists(htmldir) and len(pdfdocs) >= 2
+            and os.path.exists(manpage)):
+            return
+
+        # Assumes that make is the GNU make
+        subprocess.call(["make", "-C", "docs", "VERSION=%s" % (get_version())])
+
+
 def find_programs(utils):
     sys.path.append("lib")
     from contrib.which import which
@@ -186,6 +213,9 @@ def kpsewhich(tex_file):
 
 
 class Sdist(sdist):
+    """
+    Make the source package, and remove the .pyc files
+    """
     def prune_file_list(self):
         sdist.prune_file_list(self)
         self.filelist.exclude_pattern(r'.*.pyc', is_regex=1)
@@ -337,6 +367,8 @@ class Install(install):
 class InstallData(install_data):
 
     def run(self):
+        ignore_pattern = os.path.sep + r"(CVS|RCS)" + os.path.sep
+
         # Walk through sub-dirs, specified in data_files and build the
         # full data files list accordingly
         full_data_files = []
@@ -346,6 +378,8 @@ class InstallData(install_data):
                 if os.path.isdir(path):
                     pref = os.path.dirname(path)
                     for root, dirs, files in os.walk(path):
+                        if re.search(ignore_pattern, root + os.sep):
+                            continue
                         # Only the last directory is copied, not the full path
                         if not(pref):
                             iroot = root
@@ -445,7 +479,8 @@ if __name__ == "__main__":
                     ('share/doc/dblatex', htmldoc),
                     ('share/man/man1', ['docs/manpage/dblatex.1.gz'])],
         scripts=['scripts/dblatex'],
-        cmdclass={'build_scripts': BuildScripts,
+        cmdclass={'build': Build,
+                  'build_scripts': BuildScripts,
                   'install': Install,
                   'install_data': InstallData,
                   'sdist': Sdist}
