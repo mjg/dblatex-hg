@@ -7,7 +7,9 @@
 
 <xsl:template name="nolinkurl">
   <xsl:param name="url" select="@url"/>
-  <xsl:text>\nolinkurl{</xsl:text>
+  <xsl:param name="command" select="'\nolinkurl'"/>
+  <xsl:value-of select="$command"/>
+  <xsl:text>{</xsl:text>
   <xsl:call-template name="scape-encode">
     <xsl:with-param name="string" select="$url"/>
   </xsl:call-template>
@@ -20,12 +22,14 @@
 -->
 <xsl:template name="nolinkurl2">
   <xsl:param name="url" select="@url"/>
+  <xsl:param name="command" select="'\nolinkurl'"/>
   <xsl:variable name="bscount">
     <xsl:call-template name="bslash-end-count">
       <xsl:with-param name="url" select="$url"/>
     </xsl:call-template>
   </xsl:variable>
-  <xsl:text>\nolinkurl{</xsl:text>
+  <xsl:value-of select="$command"/>
+  <xsl:text>{</xsl:text>
   <xsl:call-template name="scape-encode">
     <xsl:with-param name="string" select="$url"/>
   </xsl:call-template>
@@ -65,6 +69,7 @@
      -->
 <xsl:template name="nolinkurl-output">
   <xsl:param name="url" select="@url"/>
+  <xsl:param name="command" select="'\nolinkurl'"/>
   <xsl:variable name="url2">
     <xsl:choose>
       <!-- Behaviour depending on the texlive version -->
@@ -85,6 +90,7 @@
   <xsl:when test="ancestor::entry or ancestor::revision or ancestor::footnote">
     <xsl:call-template name="nolinkurl-escape">
       <xsl:with-param name="url" select="$url2"/>
+      <xsl:with-param name="command" select="$command"/>
     </xsl:call-template>
     <!-- FIXME: do something with '&' and revision if needed -->
   </xsl:when>
@@ -92,6 +98,7 @@
     <xsl:call-template name="nolinkurl-escape">
       <xsl:with-param name="url" select="$url2"/>
       <xsl:with-param name="chars" select="' '"/>
+      <xsl:with-param name="command" select="$command"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
@@ -142,6 +149,7 @@
   <xsl:param name="escchars"/>
   <xsl:param name="url"/>
   <xsl:param name="chars" select="'#% '"/>
+  <xsl:param name="command" select="'\nolinkurl'"/>
 
   <xsl:variable name="len" select="string-length($url)"/>
 
@@ -162,6 +170,7 @@
     <xsl:if test="$len != 0">
       <xsl:call-template name="nolinkurl2">
         <xsl:with-param name="url" select="$url"/>
+        <xsl:with-param name="command" select="$command"/>
       </xsl:call-template>
     </xsl:if>
   </xsl:when>
@@ -171,6 +180,7 @@
                       select="concat($escchars, '\', substring($url,1,1))"/>
       <xsl:with-param name="url" select="substring($url, 2)"/>
       <xsl:with-param name="chars" select="$chars"/>
+      <xsl:with-param name="command" select="$command"/>
     </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
@@ -181,12 +191,14 @@
     </xsl:if>
     <xsl:call-template name="nolinkurl2">
       <xsl:with-param name="url" select="substring($url, 1, $pos)"/>
+      <xsl:with-param name="command" select="$command"/>
     </xsl:call-template>
     <xsl:call-template name="nolinkurl-escape">
       <xsl:with-param name="escchars"
                       select="concat('\', substring($url,$pos+1,1))"/>
       <xsl:with-param name="url" select="substring($url, $pos+2)"/>
       <xsl:with-param name="chars" select="$chars"/>
+      <xsl:with-param name="command" select="$command"/>
     </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>

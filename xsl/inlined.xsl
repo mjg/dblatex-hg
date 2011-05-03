@@ -223,15 +223,54 @@
   <xsl:when test="$filename.as.url='1' and
                   not(ancestor::title or ancestor::refentrytitle)">
     <!-- Guess hyperref is always used now. -->
-    <xsl:call-template name="nolinkurl-output">
-      <xsl:with-param name="url" select="."/>
-    </xsl:call-template>
+    <xsl:apply-templates mode="nolinkurl"/>
   </xsl:when>
   <xsl:otherwise>
     <xsl:call-template name="inline.monoseq"/>
   </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+<!-- By default propagate the mode -->
+<xsl:template match="*" mode="nolinkurl">
+  <xsl:param name="command" select="'\nolinkurl'"/>
+  <xsl:apply-templates mode="nolinkurl">
+    <xsl:with-param name="command" select="$command"/>
+  </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="text()" mode="nolinkurl">
+  <xsl:param name="command" select="'\nolinkurl'"/>
+  <xsl:call-template name="nolinkurl-output">
+    <xsl:with-param name="url" select="."/>
+    <xsl:with-param name="command" select="$command"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- Come back to inline.monoseq for templates where nolinkurl cannot apply -->
+<xsl:template match="subscript|superscript" mode="nolinkurl">
+  <xsl:call-template name="inline.monoseq">
+    <xsl:with-param name="content">
+      <xsl:apply-templates select="."/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="replaceable" mode="nolinkurl">
+  <xsl:param name="command" select="'\nolinkurl'"/>
+  <xsl:call-template name="inline.italicmonoseq">
+    <xsl:with-param name="content">
+      <xsl:apply-templates mode="nolinkurl">
+        <xsl:with-param name="command" select="$command"/>
+      </xsl:apply-templates>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="indexterm" mode="nolinkurl">
+  <xsl:apply-templates select="."/>
+</xsl:template>
+
 
 <xsl:template match="function">
   <xsl:choose>
