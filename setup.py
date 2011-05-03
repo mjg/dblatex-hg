@@ -170,6 +170,14 @@ class Build(build):
     """
     Build the documentation if missing or required to rebuild
     """
+    user_options = build.user_options + \
+                 [('docbook-xsl=', None,
+                   'DocBook Project Stylesheet base directory (build_doc)')]
+
+    def initialize_options(self):
+        build.initialize_options(self)
+        self.docbook_xsl = None
+
     def run(self):
         # Do the default tasks
         build.run(self)
@@ -188,7 +196,11 @@ class Build(build):
             return
 
         # Assumes that make is the GNU make
-        subprocess.call(["make", "-C", "docs", "VERSION=%s" % (get_version())])
+        cmd = ["make", "-C", "docs", "VERSION=%s" % (get_version())]
+        if self.docbook_xsl:
+            cmd.append("XSLDBK=%s" % os.path.abspath(self.docbook_xsl))
+
+        subprocess.call(cmd)
 
 
 def find_programs(utils):
