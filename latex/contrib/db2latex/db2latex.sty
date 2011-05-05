@@ -411,7 +411,11 @@
     \addcontentsline{toc}{section}{\numberline{}\indexname}
   }{
     \refstepcounter{chapter}
-    \addcontentsline{toc}{chapter}{\numberline{}\indexname}
+    \ifnum \value{part} >\z@
+      \addcontentsline{toc}{part}{\protect\numberline{}\indexname}
+    \else
+      \addcontentsline{toc}{chapter}{\numberline{}\indexname}
+    \fi
   }
 }{
   \dbtolatex@@endtheindex%
