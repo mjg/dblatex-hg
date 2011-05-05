@@ -90,18 +90,11 @@
 
   <!-- Document title -->
   <xsl:variable name="title">
-    <xsl:call-template name="normalize-scape">
-      <xsl:with-param name="string">
-        <xsl:choose>
-        <xsl:when test="title">
-          <xsl:value-of select="title"/>
-        </xsl:when>
-        <xsl:when test="$info">
-          <xsl:value-of select="$info/title"/>
-        </xsl:when>
-        </xsl:choose>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:apply-templates select="(title
+                                 |info/title
+                                 |bookinfo/title
+                                 |articleinfo/title
+                                 |artheader/title)[1]" mode="coverpage"/>
   </xsl:variable>
 
   <!-- Get the Authors -->
@@ -158,6 +151,11 @@
   <xsl:apply-templates select="$info/revhistory"/>
 
   <xsl:call-template name="verbatim.setup"/>
+</xsl:template>
+
+<!-- FIXME: currently does nothing more than default rendering -->
+<xsl:template match="title" mode="coverpage">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <!-- ##################################
