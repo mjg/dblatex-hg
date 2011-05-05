@@ -15,6 +15,8 @@ def get_cvsset(from_node, style, to_node="tip", xmlsetfile="",
 
     cvsset = []
 
+    d = data.decode("utf8")
+    data = d.replace(u'\xa0','')
     dom3 = parseString("<changegroup>" + data + "</changegroup>")
     if xmlsetfile:
         dom3.writexml(open(xmlsetfile, "w"))
