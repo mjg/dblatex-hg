@@ -20,6 +20,7 @@
 <xsl:include href="bridgehead.xsl"/>
 <xsl:include href="color.xsl"/>
 <xsl:include href="newtbl.xsl"/>
+<xsl:include href="htmltbl.xsl"/>
 <xsl:include href="tablen.xsl"/>
 <xsl:include href="admon.xsl"/>
 <xsl:include href="revision.xsl"/>

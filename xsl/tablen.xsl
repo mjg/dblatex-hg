@@ -36,6 +36,28 @@
   <xsl:apply-templates select="." mode="foottext"/>
 </xsl:template>
 
+<!-- Switch to CALS or HTML templates -->
+<xsl:template name="make.table.content">
+  <xsl:param name="tabletype">tabular</xsl:param>
+  <xsl:param name="tablewidth">\linewidth-2\tabcolsep</xsl:param>
+
+  <xsl:choose>
+    <xsl:when test="tgroup">
+      <xsl:apply-templates select="tgroup" mode="newtbl">
+        <xsl:with-param name="tabletype" select="$tabletype"/>
+        <xsl:with-param name="tablewidth" select="$tablewidth"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="htmlTable">
+        <xsl:with-param name="tabletype" select="$tabletype"/>
+        <xsl:with-param name="tablewidth" select="$tablewidth"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- ==================================================================== -->
 
 <xsl:template match="table" mode="float">
   <!-- do we need to change text size? -->
@@ -73,7 +95,7 @@
   <xsl:text>&#10;</xsl:text>
   <!-- title caption before the table -->
   <xsl:if test="$table.title.top='1'">
-    <xsl:apply-templates select="title"/>
+    <xsl:apply-templates select="title|caption"/>
   </xsl:if>
   <xsl:if test="$size!='normal'">
     <xsl:text>\begin{</xsl:text>
@@ -81,10 +103,12 @@
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:text>\begin{center}&#10;</xsl:text>
+
   <!-- do the actual work -->
-  <xsl:apply-templates select="tgroup" mode="newtbl">
+  <xsl:call-template name="make.table.content">
     <xsl:with-param name="tabletype" select="'tabular'"/>
-  </xsl:apply-templates>
+  </xsl:call-template>
+
   <xsl:text>&#10;\end{center}&#10;</xsl:text>
   <xsl:if test="$size!='normal'">
     <xsl:text>\end{</xsl:text>
@@ -92,7 +116,7 @@
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:if test="$table.title.top='0'">
-    <xsl:apply-templates select="title"/>
+    <xsl:apply-templates select="title|caption"/>
   </xsl:if>
   <xsl:value-of select="concat('\end{', $table.env, '}&#10;')"/>
   <xsl:if test="@orient='land'">
@@ -100,7 +124,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="table/title">
+<xsl:template match="table/title|table/caption">
   <xsl:text>&#10;\caption</xsl:text>
   <xsl:apply-templates select="." mode="format.title"/>
   <xsl:call-template name="label.id">
@@ -133,10 +157,12 @@
     <xsl:text>}&#10;</xsl:text>
   </xsl:if>
   <xsl:text>\begin{center}&#10;</xsl:text>
+
   <!-- do the actual work -->
-  <xsl:apply-templates select="tgroup" mode="newtbl">
+  <xsl:call-template name="make.table.content">
     <xsl:with-param name="tabletype" select="'longtable'"/>
-  </xsl:apply-templates>
+  </xsl:call-template>
+
   <xsl:text>&#10;\end{center}&#10;</xsl:text>
   <xsl:if test="$size!='normal'">
     <xsl:text>\end{</xsl:text>
@@ -148,7 +174,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="table/title" mode="longtable">
+<xsl:template match="table/title|table/caption" mode="longtable">
   <xsl:variable name="toc">
     <xsl:apply-templates select="." mode="toc"/>
   </xsl:variable>
@@ -302,9 +328,11 @@
     <xsl:if test="$tabletype='longtable'">
       <xsl:text>\savetablecounter </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="tgroup" mode="newtbl">
+
+    <xsl:call-template name="make.table.content">
       <xsl:with-param name="tabletype" select="$tabletype"/>
-    </xsl:apply-templates>
+    </xsl:call-template>
+
     <xsl:if test="$tabletype='longtable'">
       <xsl:text>\restoretablecounter%&#10;</xsl:text>
     </xsl:if>
@@ -314,10 +342,10 @@
     <xsl:text>}&#10;</xsl:text>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:apply-templates select="tgroup" mode="newtbl">
+    <xsl:call-template name="make.table.content">
       <xsl:with-param name="tabletype" select="$tabletype"/>
       <xsl:with-param name="tablewidth" select="'\linewidth'"/>
-    </xsl:apply-templates>
+    </xsl:call-template>
   </xsl:otherwise>
   </xsl:choose>
   <xsl:if test="$size!='normal'">
@@ -352,7 +380,7 @@
     <!-- longtable endhead -->
     <xsl:choose>
     <xsl:when test="$table.in.float='0'">
-      <xsl:apply-templates select="title" mode="longtable"/>
+      <xsl:apply-templates select="title|caption" mode="longtable"/>
       <xsl:value-of select="$headrows"/>
       <xsl:text>\endfirsthead&#10;</xsl:text>
       <xsl:text>\caption[]</xsl:text>

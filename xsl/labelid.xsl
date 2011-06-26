@@ -122,7 +122,7 @@
      It gives something like:
      [{string in TOC}]{heading string}
      -->
-<xsl:template match="title" mode="format.title">
+<xsl:template match="title|table/caption" mode="format.title">
   <xsl:param name="allnum" select="'0'"/>
   <xsl:apply-templates select="." mode="toc">
     <xsl:with-param name="allnum" select="$allnum"/>
@@ -138,7 +138,7 @@
      or graphics, or if some titleabbrev is provided and should be used
      for the TOC.
  -->
-<xsl:template match="title" mode="toc">
+<xsl:template match="title|table/caption" mode="toc">
   <xsl:param name="allnum" select="0"/>
   <xsl:param name="pre" select="'[{'"/>
   <xsl:param name="post" select="'}]'"/>
@@ -205,7 +205,7 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="title" mode="content">
+<xsl:template match="title|table/caption" mode="content">
   <xsl:apply-templates/>
 </xsl:template>
 

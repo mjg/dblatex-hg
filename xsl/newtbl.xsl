@@ -797,10 +797,10 @@
           <xsl:text>\centering</xsl:text>
         </xsl:when>
         <xsl:when test="@align = 'justify'"></xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="@align != ''">
           <xsl:message>Word-wrapped alignment <xsl:value-of 
           select="@align"/> not supported</xsl:message>
-        </xsl:otherwise>
+        </xsl:when>
       </xsl:choose>
     </xsl:if>  
     
@@ -1243,6 +1243,25 @@
 </xsl:template>
 
 
+<!-- Convert a frame tag to a CALS frame equivalent -->
+<xsl:template name="cals.frame">
+  <xsl:param name="frame"/>
+
+  <xsl:choose>
+  <xsl:when test="$frame='void'">none</xsl:when>
+  <xsl:when test="$frame='above'">top</xsl:when>
+  <xsl:when test="$frame='below'">bottom</xsl:when>
+  <xsl:when test="$frame='hsides'">topbot</xsl:when>
+  <xsl:when test="$frame='vsides'">sides</xsl:when>
+  <xsl:when test="$frame='box'">all</xsl:when>
+  <xsl:when test="$frame='border'">all</xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="$frame"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
 <!-- Generate a latex column specifier, possibly surrounded by '|' -->
 <xsl:template match="entry|entrytbl" mode="tbl.colfmt">
   <xsl:param name="frame"/>
@@ -1337,9 +1356,9 @@
                       ($exclude='' or not(contains($piwidth,$exclude)))">
         <xsl:value-of select="$piwidth"/>
       </xsl:when>
-      <xsl:when test="../@width and
+      <xsl:when test="(@width or ../@width) and
                       ($exclude='' or not(contains(../@width,$exclude)))">
-        <xsl:value-of select="../@width"/>
+        <xsl:value-of select="(@width|../@width)[last()]"/>
       </xsl:when>
       <xsl:when test="$default.table.width != '' and
                       ($exclude='' or
@@ -1413,6 +1432,50 @@
   <xsl:text>\def\tabularxcolumn#1{</xsl:text>
   <xsl:value-of select="$valign.param"/>
   <xsl:text>{#1}}</xsl:text>
+</xsl:template>
+
+
+<xsl:template name="tbl.begin">
+  <xsl:param name="colspec"/>
+  <xsl:param name="tabletype"/>
+  <xsl:param name="width"/>
+
+  <xsl:text>\begin{</xsl:text>
+  <xsl:value-of select="$tabletype"/>
+  <xsl:text>}</xsl:text>
+
+  <xsl:choose>
+  <xsl:when test="$tabletype = 'tabularx'">
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$width"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:for-each select="$colspec/*">
+      <xsl:choose>
+      <xsl:when test="@star">
+        <xsl:text>&gt;{\hsize=</xsl:text>
+        <xsl:if test="@fixedwidth">
+          <xsl:value-of select="@fixedwidth"/>
+          <xsl:text>+</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="@star"/>
+        <xsl:text>\hsize}X</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>l</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>{</xsl:text>
+    <!-- The initial column definition -->
+    <xsl:for-each select="$colspec/*">
+      <xsl:text>l</xsl:text>
+    </xsl:for-each>
+    <xsl:text>}</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
