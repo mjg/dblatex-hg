@@ -79,6 +79,20 @@
       <xsl:text>*</xsl:text>
     </xsl:if>
   </xsl:variable>
+  <!-- in a float only tabular or tabularx allowed -->
+  <xsl:variable name="tabletype">
+    <xsl:choose>
+    <xsl:when test="@tabstyle='tabular' or @tabstyle='tabularx'">
+      <xsl:value-of select="@tabstyle"/>
+    </xsl:when>
+    <xsl:when test="$table.default.tabstyle='tabular' or
+                    $table.default.tabstyle='tabularx'">
+      <xsl:value-of select="$table.default.tabstyle"/>
+    </xsl:when>
+    <xsl:otherwise>tabular</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:if test="@orient='land'">
     <xsl:text>\begin{landscape}&#10;</xsl:text>
   </xsl:if>
@@ -106,7 +120,7 @@
 
   <!-- do the actual work -->
   <xsl:call-template name="make.table.content">
-    <xsl:with-param name="tabletype" select="'tabular'"/>
+    <xsl:with-param name="tabletype" select="$tabletype"/>
   </xsl:call-template>
 
   <xsl:text>&#10;\end{center}&#10;</xsl:text>

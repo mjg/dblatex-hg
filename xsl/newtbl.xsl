@@ -1393,7 +1393,7 @@
   <!-- (Table width - widths of all specified columns - gaps between columns) -->
   <xsl:text>\setlength{\newtblsparewidth}{</xsl:text>
   <xsl:value-of select="$width"/>
-  <xsl:for-each select="exsl:node-set($colspec)/*">
+  <xsl:for-each select="$colspec/*">
     <xsl:if test="@fixedwidth">
       <xsl:text>-</xsl:text>
       <xsl:value-of select="translate(@fixedwidth,'+','-')"/>
@@ -1405,7 +1405,7 @@
   <!-- Now get latex to calculate widths of cols with starred colwidths -->
   
   <xsl:variable name="numunknown" 
-                select="sum(exsl:node-set($colspec)/colspec/@star)"/>
+                select="sum($colspec/colspec/@star)"/>
   <!-- If we have at least one such col, then work out how wide it should -->
   <!-- be -->
   <xsl:if test="$numunknown &gt; 0">
@@ -1616,7 +1616,7 @@
 
   <xsl:if test="$tabletype != 'tabularx'">
     <xsl:call-template name="tbl.sizes">
-      <xsl:with-param name="colspec" select="$colspec"/>
+      <xsl:with-param name="colspec" select="exsl:node-set($colspec)"/>
       <xsl:with-param name="width" select="$width"/>
     </xsl:call-template>
   </xsl:if>
@@ -1633,42 +1633,11 @@
   </xsl:if>
   
   <!-- Start the table declaration -->
-  <xsl:text>\begin{</xsl:text>
-  <xsl:value-of select="$tabletype"/>
-  <xsl:text>}</xsl:text>
-
-  <xsl:choose>
-  <xsl:when test="$tabletype = 'tabularx'">
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="$width"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:for-each select="exsl:node-set($colspec)/*">
-      <xsl:choose>
-      <xsl:when test="@star">
-        <xsl:text>&gt;{\hsize=</xsl:text>
-        <xsl:if test="@fixedwidth">
-          <xsl:value-of select="@fixedwidth"/>
-          <xsl:text>+</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="@star"/>
-        <xsl:text>\hsize}X</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>l</xsl:text>
-      </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each>
-    <xsl:text>}</xsl:text>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:text>{</xsl:text>
-    <!-- The initial column definition -->
-    <xsl:for-each select="exsl:node-set($colspec)/*">
-      <xsl:text>l</xsl:text>
-    </xsl:for-each>
-    <xsl:text>}</xsl:text>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="tbl.begin">
+    <xsl:with-param name="colspec" select="exsl:node-set($colspec)"/>
+    <xsl:with-param name="tabletype" select="$tabletype"/>
+    <xsl:with-param name="width" select="$width"/>
+  </xsl:call-template>
 
   <xsl:if test="not(thead)">
     <xsl:apply-templates select="(ancestor::table

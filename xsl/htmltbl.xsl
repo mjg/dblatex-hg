@@ -105,7 +105,7 @@
     </xsl:apply-templates>
   </xsl:variable>
 
-  <!-- Complete the colspecs with widths from fully expended rows -->
+  <!-- Complete the colspecs @width from the fully expended <row>s -->
   <xsl:variable name="colspec2">
     <xsl:call-template name="build.colwidth">
       <xsl:with-param name="colspec" select="exsl:node-set($colspec)"/>
@@ -113,7 +113,7 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <!-- To check the intermediate elements, uncomment and call testtbl.xsl 
+  <!-- TIP: to check the built RTF elements, uncomment and call testtbl.xsl 
   <xsl:copy-of select="exsl:node-set($colspec2)"/>
   <xsl:copy-of select="exsl:node-set($rows)"/>
   -->
@@ -123,9 +123,9 @@
   <xsl:text>\begingroup%&#10;</xsl:text>
 
   <!-- Set cellpadding -->
-  <xsl:if test="../@cellpadding">
+  <xsl:if test="@cellpadding">
     <xsl:text>\setlength{\tabcolsep}{</xsl:text>
-    <xsl:value-of select="../@cellpadding"/>
+    <xsl:value-of select="@cellpadding"/>
     <xsl:text>}%&#10;</xsl:text>
   </xsl:if>
 
@@ -146,6 +146,7 @@
     </xsl:call-template>
   </xsl:if>
   
+  <!-- Translate the table to latex -->
 
   <!-- Start the table declaration -->
   <xsl:call-template name="tbl.begin">
@@ -160,7 +161,6 @@
   </xsl:if>
   <xsl:text>&#10;</xsl:text>
 
-  <!-- Table content in latex -->
   <!-- First, the head rows -->
   <xsl:variable name="headrows">
     <xsl:apply-templates select="$t.rows/*[@type='thead']"
@@ -197,6 +197,7 @@
 </xsl:template>
 
 
+<!-- Build the latex row from the <row> element -->
 <xsl:template match="row" mode="htmlTable">
   <xsl:param name="colspec"/>
   <xsl:param name="context"/>
@@ -229,7 +230,6 @@
     </xsl:otherwise>
     </xsl:choose>
   </xsl:if>
-
 </xsl:template>
 
 
@@ -246,12 +246,16 @@
   <xsl:param name="colspec"/>
   <xsl:apply-templates select="tr[1]" mode="htmlTable">
     <xsl:with-param name="colspec" select="$colspec"/>
-    <xsl:with-param name="rownum" select="count(preceding-sibling::*[self::tbody or
-                                                                     self::thead]/*)+1"/>
+    <xsl:with-param name="rownum"
+                    select="count(preceding-sibling::*[self::tbody or
+                                                       self::thead]/*)+1"/>
   </xsl:apply-templates>
 </xsl:template>
 
 
+<!-- Build an intermediate <row> element from a <tr> only if the row
+     has the required 'context'
+  -->
 <xsl:template match="tr" mode="htmlTable">
   <xsl:param name="rownum"/>
   <xsl:param name="colspec"/>
@@ -294,8 +298,9 @@
 
 </xsl:template>
 
+<!-- ==================================================================== -->
 
-<!-- This template writes rowsep or colsep equivalant for html tables -->
+<!-- This template writes rowsep equivalant for html tables -->
 <xsl:template name="html.table.row.rules">
   <xsl:variable name="border" 
                 select="(ancestor::table |
@@ -417,6 +422,7 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- ==================================================================== -->
 
 <xsl:template match="td|th" mode="htmlTable">
   <xsl:param name="rownum"/>
@@ -585,14 +591,28 @@
           <xsl:with-param name="rownum" select="$rownum"/>
           <xsl:with-param name="entries" select="$entries"/>
           <xsl:with-param name="rowcolor" select="$rowcolor"/>
-          <!--
-          <xsl:with-param name="tabletype" select="$tabletype"/>
-          -->
         </xsl:call-template>
 
       </xsl:when>
       </xsl:choose>
     </xsl:otherwise></xsl:choose>
+  </xsl:if>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<xsl:template match="tr" mode="span">
+  <xsl:param name="currow"/>
+  <xsl:variable name="tr.pos" select="position()"/>
+  <xsl:variable name="spantds" select="td[@rowspan][$tr.pos + @rowspan &gt; 
+                                                    $currow]"/>
+  <xsl:if test="$spantds">
+    <span rownum="{$currow}" p="{$tr.pos}">
+      <xsl:attribute name="value">
+        <xsl:value-of
+        select="sum($spantds/@colspan)+count($spantds[not(@colspan)])"/>
+      </xsl:attribute>
+    </span>
   </xsl:if>
 </xsl:template>
 
@@ -613,19 +633,24 @@
 
       <!-- retrieve the previous <td>s that contain a @rowspan
            that span over the current row -->
-      <xsl:variable name="spantds"
-                  select="$rows[position() &lt; $currow]/
-                               *[@rowspan][@rowspan - 1 +
-                                count(../preceding-sibling::*) &gt; $currow]"/>
+      <xsl:variable name="spantds">
+        <xsl:apply-templates
+             select="$rows[position() &lt; $currow]"
+             mode="span">
+          <xsl:with-param name="currow" select="$currow"/>
+        </xsl:apply-templates>
+      </xsl:variable>
 
       <!-- get the additional columns implied by the upward spanning <td> -->
       <xsl:variable name="addcols"
-                    select="count($spantds[not(@colspan)]) +
-                                  sum($spantds/@colspan)"/>
+                    select="sum(exsl:node-set($spantds)/*/@value)"/>
 
-      <!--
+      <!-- TIP: uncomment to debug the column count algorithm
+      <foo> <xsl:copy-of select="$spantds"/> </foo>
+
       <xsl:message>
-        <xsl:text>w=</xsl:text><xsl:value-of select="count($spantds)"/>
+        <xsl:text>p=</xsl:text><xsl:value-of select="$currow"/>
+        <xsl:text> c=</xsl:text><xsl:value-of select="$count"/>
         <xsl:text> s=</xsl:text><xsl:value-of select="$addcols"/>
       </xsl:message>
       -->
@@ -650,6 +675,7 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- ==================================================================== -->
 
 <xsl:template name="build.colwidth">
   <xsl:param name="colspec"/>
@@ -697,7 +723,8 @@
         <xsl:value-of select="number(substring-before(@width, '*'))"/>
       </xsl:when>
       <xsl:otherwise>
-        <!-- '0*' is allowed and meaningfull, so use a negative number -->
+        <!-- '0*' is allowed and meaningfull, so use a negative number to
+             signify a missing star -->
         <xsl:value-of select="-1"/>
       </xsl:otherwise>
       </xsl:choose>
@@ -722,6 +749,13 @@
       <!-- the special form "0*" means to use the column's content width -->
       <xsl:when test="$star = 0">
         <xsl:attribute name="autowidth">1</xsl:attribute>
+        <!-- set a star to reserve some default space for the column -->
+        <xsl:attribute name="colwidth">
+          <xsl:text>\newtblstarfactor</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="star">
+          <xsl:value-of select="1"/>
+        </xsl:attribute>
       </xsl:when>
       <xsl:when test="$star &gt; 0">
         <xsl:attribute name="colwidth">
@@ -770,8 +804,7 @@
 </xsl:template>
 
 
-<!--
--->
+<!-- Find the maximum width expressed in percentage in column entries -->
 <xsl:template name="max.percent">
   <xsl:param name="entries"/>
   <xsl:param name="maxpct" select="0"/>
@@ -809,6 +842,7 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- Find the maximum width expressed in numbers in column entries -->
 <xsl:template name="max.value">
   <xsl:param name="entries"/>
   <xsl:param name="maxval" select="0"/>
@@ -846,6 +880,12 @@
   </xsl:choose>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
+<!-- Build the equivalent <colspec>s elements from <colgroup>s and <col>s
+     and use default colspec for undefined <col>s in order to have a colspec
+     per actual column.
+-->
 
 <xsl:template match="colgroup" mode="make.colspec">
   <xsl:param name="done" select="0"/>
@@ -875,11 +915,26 @@
 
     <xsl:choose>
     <xsl:when test="$done &lt; $span">
+      <!-- bgcolor specified via a PI -->
+      <xsl:variable name="bgcolor">
+        <xsl:if test="processing-instruction('dblatex')">
+          <xsl:call-template name="pi-attribute">
+            <xsl:with-param name="pis"
+                            select="processing-instruction('dblatex')"/>
+            <xsl:with-param name="attribute" select="'bgcolor'"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:variable>
+
       <colspec>
         <xsl:for-each select="@*"><xsl:copy/></xsl:for-each>
         <xsl:attribute name="colnum">
           <xsl:value-of select="$colnum"/>
         </xsl:attribute>
+        <xsl:if test="$bgcolor != ''">
+          <xsl:attribute name="bgcolor"><xsl:value-of select="$bgcolor"/>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:call-template name="html.table.column.rules">
           <xsl:with-param name="colnum" select="$colnum"/>
           <xsl:with-param name="colmax" select="$colmax"/>
@@ -900,6 +955,7 @@
         <xsl:with-param name="colmax" select="$colmax"/>
       </xsl:apply-templates>
     </xsl:when>
+    <!-- build empty default <colspec>s for missing columns -->
     <xsl:when test="$colnum &lt;= $colmax">
       <colspec>
         <xsl:attribute name="colnum">
@@ -952,12 +1008,36 @@
   <xsl:choose>
   <!-- clone the same <colspec> span times -->
   <xsl:when test="$done &lt; $span">
+    <!-- bgcolor specified via a PI or a colgroup parent PI -->
+    <xsl:variable name="bgcolor">
+      <xsl:choose>
+      <xsl:when test="processing-instruction('dblatex')">
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis"
+                          select="processing-instruction('dblatex')"/>
+          <xsl:with-param name="attribute" select="'bgcolor'"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="../processing-instruction('dblatex')">
+        <xsl:call-template name="pi-attribute">
+          <xsl:with-param name="pis"
+                          select="../processing-instruction('dblatex')"/>
+          <xsl:with-param name="attribute" select="'bgcolor'"/>
+        </xsl:call-template>
+      </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+
     <colspec>
       <xsl:for-each select="parent::colgroup/@*"><xsl:copy/></xsl:for-each>
       <xsl:for-each select="@*"><xsl:copy/></xsl:for-each>
       <xsl:attribute name="colnum">
         <xsl:value-of select="$colnum"/>
       </xsl:attribute>
+      <xsl:if test="$bgcolor != ''">
+        <xsl:attribute name="bgcolor"><xsl:value-of select="$bgcolor"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:call-template name="html.table.column.rules">
         <xsl:with-param name="colnum" select="$colnum"/>
         <xsl:with-param name="colmax" select="$colmax"/>
@@ -972,8 +1052,9 @@
   </xsl:when>
   <!-- process the next following <col*> -->
   <xsl:when test="following-sibling::*[self::colgroup or self::col]">
-    <xsl:apply-templates select="following-sibling::*[self::col or self::colgroup][1]"
-                         mode="make.colspec">
+    <xsl:apply-templates
+        select="following-sibling::*[self::col or self::colgroup][1]"
+        mode="make.colspec">
       <xsl:with-param name="colnum" select="$colnum"/>
       <xsl:with-param name="colmax" select="$colmax"/>
     </xsl:apply-templates>
@@ -983,7 +1064,8 @@
   <xsl:when test="parent::colgroup[following-sibling::*[self::colgroup or
                                                         self::col]]">
     <xsl:apply-templates select="parent::colgroup/
-                                 following-sibling::*[self::col or self::colgroup][1]"
+                                 following-sibling::*[self::col or
+                                                      self::colgroup][1]"
                          mode="make.colspec">
       <xsl:with-param name="colnum" select="$colnum"/>
       <xsl:with-param name="colmax" select="$colmax"/>
@@ -1009,32 +1091,5 @@
   </xsl:when>
   </xsl:choose>
 </xsl:template>
-
-<!--
-<xsl:template name="make.table.content">
-  <xsl:param name="tabletype">tabular</xsl:param>
-  <xsl:param name="tablewidth">\linewidth-2\tabcolsep</xsl:param>
-
-  <xsl:choose>
-    <xsl:when test="tgroup|mediaobject|graphic">
-      <xsl:apply-templates select="tgroup" mode="newtbl">
-        <xsl:with-param name="tabletype" select="$tabletype"/>
-        <xsl:with-param name="tablewidth" select="$tablewidth"/>
-      </xsl:apply-templates>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates select="." mode="htmlTable">
-        <xsl:with-param name="tabletype" select="$tabletype"/>
-        <xsl:with-param name="tablewidth" select="$tablewidth"/>
-      </xsl:apply-templates>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-
-<xsl:template match="/">
-  <xsl:apply-templates select="table" mode="longtable"/>
-</xsl:template>
--->
 
 </xsl:stylesheet>
