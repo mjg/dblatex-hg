@@ -1,3 +1,15 @@
+Release 0.3.2:
+----------------
+
+- Add feature request #2052157 to have HTML table support
+- Full support of the --quiet option
+- Improve setup.py to make package building easier in a development environment
+- Fix bug #3094120 to work in paranoid mode (required for TexLive 2010)
+- Fix debian bug #623590 to format elements like <emphasis> contained
+  in <filename>.
+- Improve the document title formatting, to render <superscript> for example.
+
+
 Release 0.3.1.1:
 ----------------
 

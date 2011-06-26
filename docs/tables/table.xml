@@ -7,7 +7,7 @@
 <!ENTITY __table-style1 SYSTEM "table-style1.xml">
 <!ENTITY __table-style2 SYSTEM "table-style2.xml">
 ]>
-<section xmlns:xi="http://www.w3.org/2001/XInclude" id="sec-table">
+<section id="sec-table" xmlns:xi="http://www.w3.org/2001/XInclude">
 <title>Creating Tables</title>
 
 <para>DocBook tables can be quite complex, but <command>dblatex</command>
@@ -395,11 +395,11 @@ code:</para>
 </programlisting>
 
 <para>It is rendered as follow:</para>
+
 <para output="pdf">
 &__table-style1;
 
 &__table-style2;
-
 </para>
 </section>
 
@@ -528,8 +528,122 @@ output</phrase> example.</para>
 
 <para>This table is coded like this:</para>
 
-<programlisting><xi:include href="coloured.xml" parse="text"/></programlisting>
-<!--
+<!-- To comment before editing with XXE
 -->
+<programlisting><xi:include href="coloured.xml" parse="text"/></programlisting>
+</section>
+
+<section>
+<title>HTML Tables</title>
+
+<para>Since version 0.3.2 dblatex supports HTML tables. Some features are
+handled differently from CALS tables as illustrated by the following HTML
+table source example:</para>
+
+<programlisting language="HTML">&lt;table border="1" width="100%" rules="all"<co
+id="co-htmltbl-rules" />&gt;
+  &lt;caption&gt;An HTML Table&lt;/caption&gt;<co id="co-htmltbl-title" />
+  &lt;colgroup span="2" valign="top" align="right"/&gt;
+    &lt;?dblatex bgcolor="red"?&gt;<co id="co-htmltbl-bgcolor1" />
+  &lt;/colgroup&gt;
+  &lt;colgroup valign="bottom" align="left" width="5%"<co
+id="co-htmltbl-widthpct" />&gt;
+    &lt;col align="right" span="2"/&gt;
+    &lt;col valign="top"/&gt;
+  &lt;/colgroup&gt;
+  &lt;colgroup bgcolor="yellow" width="0*"<co id="co-htmltbl-autowidth" />&gt;&lt;?dblatex bgcolor="yellow"?&gt;&lt;/colgroup&gt;
+  &lt;colgroup valign="bottom" align="left" width="15%"/&gt;
+  &lt;colgroup valign="bottom" align="left" width="10%"/&gt;
+  &lt;thead&gt;
+    &lt;tr&gt; &lt;td width="10%"&gt;Head A1&lt;/td&gt;&lt;td&gt;Head B1&lt;/td&gt;&lt;td&gt;Head C1&lt;/td&gt; &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tfoot&gt;
+    &lt;tr&gt; &lt;td width="10%"&gt;Foot A1&lt;/td&gt;&lt;td&gt;Foot B1&lt;/td&gt;&lt;td&gt;Foot C1&lt;/td&gt; &lt;/tr&gt;
+  &lt;/tfoot&gt;
+
+  &lt;tr&gt;
+    &lt;td width="10%"&gt;A1&lt;/td&gt;&lt;td&gt;B1&lt;/td&gt;&lt;td&gt;C1&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A2&lt;/td&gt;&lt;td bgcolor="yellow"&gt;B2&lt;/td&gt;&lt;td colspan="3" rowspan="3"&gt;C-E2&lt;/td&gt;&lt;td&gt;F2&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A3&lt;/td&gt;&lt;td width="25.3"<co id="co-htmltbl-widthfix" />&gt;B3&lt;/td&gt;&lt;td&gt;F3&lt;/td&gt;&lt;td rowspan="2"&gt;G3&lt;/td&gt;&lt;td rowspan="3"&gt;H3&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A4&lt;/td&gt;&lt;td&gt;B4&lt;/td&gt;&lt;td&gt;F4&lt;/td&gt;&lt;td&gt;G4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;A5&lt;/td&gt;&lt;td&gt;B5&lt;/td&gt;&lt;td width="5%"&gt;C5&lt;/td&gt;&lt;td&gt;D5&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr bgcolor="blue"<co id="co-htmltbl-bgcolorp" />&gt;
+    &lt;td&gt;A6&lt;/td&gt;&lt;td&gt;B6&lt;/td&gt;&lt;td&gt;C6&lt;/td&gt;&lt;td&gt;D6&lt;/td&gt;&lt;td&gt;E6&lt;/td&gt;&lt;td bgcolor="green"<coref
+linkend="co-htmltbl-bgcolorp" />&gt;F6&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</programlisting>
+
+<calloutlist>
+<callout arearefs="co-htmltbl-rules">
+<para>The cell borders are specified through the table <sgmltag
+role="attribute">rules</sgmltag> attribute, and not by any
+<sgmltag>rowsep</sgmltag> and <sgmltag>colsep</sgmltag> attributes. Therefore
+it is not possible to set the borders of an individual cell. If no <sgmltag
+role="attribute">rules</sgmltag> attribute is provided the default setup
+defined by <parameter>default.table.rules</parameter> parameter is
+used.</para>
+</callout>
+
+<callout arearefs="co-htmltbl-title">
+<para>The title of a formal HTML table is set through the
+<sgmltag>caption</sgmltag> element, because the <sgmltag>title</sgmltag>
+element is not available.</para>
+</callout>
+
+<callout arearefs="co-htmltbl-bgcolor1">
+<para>The cell background colors can be set directly with the bgcolor
+attribute in <sgmltag>row</sgmltag> (for an entire row color setting),
+<sgmltag>th</sgmltag>, or <sgmltag>td</sgmltag>, but the dblatex bgcolor
+Processing Instruction is required in <sgmltag>colgroup</sgmltag> or
+<sgmltag>col</sgmltag> to set a column color.</para>
+</callout>
+
+<callout arearefs="co-htmltbl-widthpct">
+<para>The relative widths can be expressed as a percentage. The proportional
+syntax (e.g. "3*") is still available in <sgmltag>colgroup</sgmltag>s.</para>
+</callout>
+
+<callout arearefs="co-htmltbl-autowidth">
+<para>To specify that a column must be as wide as its content, there is no
+need to use the dblatex autowidth Processing Instruction. You just need to set
+the related colgroup width attribute to "0*".</para>
+</callout>
+
+<callout arearefs="co-htmltbl-widthfix">
+<para>The fixed widths must be expressed as numbers, and the implicit unit is
+the point ("pt"). You cannot set a width expressed in a unit like inchs
+("in"), centimeters ("cm") and so on.</para>
+</callout>
+
+<callout arearefs="co-htmltbl-bgcolorp">
+<para>The closest enclosing element attribute has precedence over ancestor
+attributes. This applies to background color too.</para>
+</callout>
+</calloutlist>
+
+<para>This source example is rendered as follow:</para>
+
+<para output="pdf">
+<xi:include href="table-html.xml" />
+</para>
+
+<!-- The image img-tbl-html.png was built with the command line:
+     ../tools/imagefrom manual.xml tbl-html 
+-->
+
+<mediaobject output="html">
+<imageobject>
+<imagedata align="center" fileref="img-tbl-html" />
+</imageobject>
+</mediaobject>
 </section>
 </section>

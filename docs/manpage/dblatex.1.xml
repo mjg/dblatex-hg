@@ -158,6 +158,16 @@
         </listitem>
       </varlistentry>
       <varlistentry>
+        <term><option>-e <replaceable>indexstyle</replaceable></option></term>
+        <term><option>--indexstyle <replaceable>indexstyle</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Index style file to pass to <command>makeindex</command> instead of
+            the dblatex default index style.
+          </simpara>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
         <term><option>-f <replaceable>figure_format</replaceable></option></term>
         <term>
           <option>--fig-format=<replaceable>figure_format</replaceable></option>
