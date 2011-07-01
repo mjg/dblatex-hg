@@ -8,6 +8,19 @@
 \usepackage{footmisc}
 \usepackage{appendix}
 
+% Workaround to avoid troubles with accents in \appendixname used as hyperref
+% label: force the label prefix to 'appendix' whatever the lang is
+\let\orgresetsapp=\@resets@pp
+\let\orgrestoreapp=\restoreapp
+\let\restoreapp\relax
+\def\@resets@pp{%
+  \orgresetsapp
+  \if@pphyper
+    \def\Hy@chapapp{appendix}%
+  \fi
+  \orgrestoreapp
+}
+
 %
 % These <bookinfo|articleinfo> parameters must be defined
 %
