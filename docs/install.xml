@@ -51,7 +51,7 @@ compile the LaTeX output.</para>
 </variablelist>
 </section>
 
-<section>
+<section id="sec-install-unix">
 <title>Installing on Unix like Systems</title>
 
 <section>

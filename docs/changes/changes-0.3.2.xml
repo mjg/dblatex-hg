@@ -24,7 +24,7 @@ HTML table support.</para>
 <para>Improve the <filename>setup.py</filename> script in order to be able to
 build and distribute a dblatex egg package. See <olink output="pdf"
 targetdoc="usermanual" targetptr="sec-install-pypi"></olink><ulink output="html"
-url="../manual/sec-install.html#sec-install-pypi">PyPI Install</ulink> for more
+url="../manual/sec-install-unix.html#sec-install-pypi">PyPI Install</ulink> for more
 details.</para>
 </listitem>
 
