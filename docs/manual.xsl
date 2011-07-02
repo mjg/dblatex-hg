@@ -44,6 +44,10 @@
     <xsl:text>}</xsl:text>
   </xsl:when>
   <xsl:otherwise>
+    <!--
+    <xsl:message>No reference for parameter: '<xsl:value-of
+    select="$name"/>'</xsl:message>
+    -->
     <xsl:apply-imports/>
   </xsl:otherwise>
   </xsl:choose>

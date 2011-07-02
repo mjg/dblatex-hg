@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter>
+<chapter id="sec-install">
 <title>Installing the Package</title>
 
 <section>
@@ -174,7 +174,7 @@ the <option>--catalogs</option> option.</para>
 </section>
 
 <section>
-<title>Installing the tool</title>
+<title>Installing from the source tarball</title>
 
 <para>The steps to follow are the following:</para>
 
@@ -182,11 +182,11 @@ the <option>--catalogs</option> option.</para>
 <listitem>
 <para>Untar the ball. For a bzipped release, do as follow:</para>
 
-<programlisting>% tar xvfj dblatex-x.x.x.tar.bz2</programlisting>
+<screen>% tar xvfj dblatex-x.x.x.tar.bz2</screen>
 
 <para>For a gzipped release, do as follow:</para>
 
-<programlisting>% tar xvfz dblatex-x.x.x.tar.gz</programlisting>
+<screen>% tar xvfz dblatex-x.x.x.tar.gz</screen>
 </listitem>
 
 <listitem>
@@ -202,6 +202,35 @@ installed under <filename>/usr/local/share/dblatex</filename>. Besides, the
 </programlisting>
 </listitem>
 </orderedlist>
+</section>
+<section id="sec-install-pypi">
+<title>Installing from the Python Egg</title>
+
+<para>Since version 0.3.2 dblatex is distributed as a Python Egg in the <ulink url="http://pypi.python.org/pypi">Python Package Index (PyPI)</ulink>. It requires to have <command>easy_install</command> installed.</para>
+
+<para>The procedure to follow is:</para>
+
+<orderedlist>
+<listitem>
+<para>Call simply easy_install:</para>
+<screen>
+% <userinput>easy_install dblatex</userinput>
+Searching for dblatex
+Reading http://pypi.python.org/simple/dblatex/
+Reading http://dblatex.sf.net
+Best match: dblatex 0.3.1.1
+Downloading http://pypi.python.org/packages/2.5/d/dblatex/dblatex-0.3.1.1-py2.5.egg#md5=8520d596e473ff544eb9dcdc5175d7ae
+Processing dblatex-0.3.1.1-py2.5.egg
+creating /path/to/dblatex-0.3.1.1-py2.5.egg
+Extracting dblatex-0.3.1.1-py2.5.egg to /path/to
+Adding dblatex 0.3.1.1 to easy-install.pth file
+Installing dblatex script to /path/to
+
+Installed /path/to/dblatex-0.3.1.1-py2.5.egg
+</screen>
+</listitem>
+</orderedlist>
+<para>That's it!</para>
 </section>
 </section>
 </section>

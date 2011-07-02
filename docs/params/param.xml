@@ -99,7 +99,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="table.default.tabstyle.xml"/>
 <xi:include href="table.in.float.xml"/>
 <xi:include href="table.title.top.xml"/>
-<xi:include href="table.title.top.xml"/>
+<xi:include href="default.table.rules.xml"/>
 <xi:include href="default.table.width.xml"/>
 
 </section>

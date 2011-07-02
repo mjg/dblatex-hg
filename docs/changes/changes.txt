@@ -1,24 +1,26 @@
 Release 0.3.2:
-----------------
+--------------
 
 - Add feature request #2052157 to have HTML table support
 - Full support of the --quiet option
 - Improve setup.py to make package building easier in a development environment
+- Improve the document title formatting, to render <superscript> for example.
+- Fix debian bug #629110 to work around an appendix package limitation with
+  xetex
 - Fix bug #3094120 to work in paranoid mode (required for TexLive 2010)
 - Fix debian bug #623590 to format elements like <emphasis> contained
   in <filename>.
-- Improve the document title formatting, to render <superscript> for example.
+- Fix a bug that prevented from putting and index at the highest level when
+  preceded by a <part>.
 
-
-Release 0.3.1.1:
-----------------
-
+  Release 0.3.1.1:
+  ~~~~~~~~~~~~~~~~
+- Add feature request #2999505 to be able to pass a user index style file
+- Improve setup.py to be able to build and distribute a dblatex egg package 
 - Fix bug #2941472: print out the procedure title
 - Fix a python deprecation warning in setup.py
 - Fix a bug in setup.py to install correctly the XHTML documentation
 - Fix a bug in sgmtag.xsl to have the right font type for <sgmltag>
-- Add feature request #2999505 to be able to pass a user index style file
-- Improve setup.py to be able to build and distribute a dblatex egg package 
 
 
 Release 0.3.1:

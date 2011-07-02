@@ -533,7 +533,7 @@ output</phrase> example.</para>
 <programlisting><xi:include href="coloured.xml" parse="text"/></programlisting>
 </section>
 
-<section>
+<section id="sec-html-table">
 <title>HTML Tables</title>
 
 <para>Since version 0.3.2 dblatex supports HTML tables. Some features are
