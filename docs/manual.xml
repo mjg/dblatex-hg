@@ -11,7 +11,7 @@
 <surname>Guillon</surname>
 </author>
 
-<date>4 April 2010</date>
+<date>3 July 2011</date>
 
 <subtitle>User Manual</subtitle>
 
@@ -19,7 +19,7 @@
 
 <address>Valence</address>
 
-<edition>02</edition>
+<edition>03</edition>
 
 <releaseinfo>v<xi:include href="version.xml"
 xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
@@ -58,6 +58,19 @@ reference entries.</para>
 <revdescription>
 <para>Add a section about the new <sgmltag>set</sgmltag> support, and a section
 about how to extend the verbatim rendering.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>03</revnumber>
+
+<date>2011/07/03</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Add a section about the new HTML table support, and a section
+about the PyPI distribution.</para>
 </revdescription>
 </revision>
 
