@@ -73,10 +73,6 @@ verbatim environments like litterallayout are allowed.</para>
 <para>Footnotes in table cells can fail, especially if the footnote contains
 several paragraphs. Moreover they are lost is a float like a table.</para>
 </listitem>
-
-<listitem>
-<para>The HTML tables are not supported.</para>
-</listitem>
 </itemizedlist></para>
 </section>
 
@@ -326,7 +322,7 @@ autowidth.default:</para>
 <title>Informal Table LaTeX Styles</title>
 
 <para>By default <command>dblatex</command> translates an informal table to
-the LaTeX envIronment specified by the
+the LaTeX environment specified by the
 <parameter>table.default.tabstyle</parameter> parameter (usually
 <literal>longtable</literal>), but you can specify which Latex tabular
 environment to use, globally through the parameter, or per table through the
