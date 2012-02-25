@@ -3,7 +3,7 @@
 # This script builds a Python Egg corresponding to the <package>, an official
 # source tarball, and upload them to http://pypi.python.org
 #
-# The pypi setup used to upload is under ~/pypirc
+# The pypi setup used to upload is under ~/.pypirc
 #
 
 if [ $# -lt 1 ]; then
