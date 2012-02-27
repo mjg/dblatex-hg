@@ -127,9 +127,12 @@
   to let the subfigures correctly displayed.
   -->
   <xsl:if test="self::mediaobject and not(parent::figure)">
-    <xsl:text>&#10;</xsl:text>
+    <xsl:text>&#10;\noindent</xsl:text>
     <xsl:text>\begin{minipage}[c]{\linewidth}&#10;</xsl:text>
     <xsl:text>\begin{center}&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="self::inlinemediaobject">
+    <xsl:text>\noindent</xsl:text>
   </xsl:if>
   <xsl:choose>
     <xsl:when test="imageobject|imageobjectco">
@@ -175,12 +178,19 @@
                 select="count(ancestor::figure/mediaobject[imageobject])"/>
   <xsl:if test="$figcount &gt; 1">
     <!-- space before subfigure to prevent from strange behaviour with other
-         subfigures -->
-    <xsl:text> \subfigure[</xsl:text>
-    <xsl:apply-templates select="../caption" mode="subfigure"/>
-    <xsl:text>][</xsl:text>
-    <xsl:apply-templates select="../caption"/>
-    <xsl:text>]{</xsl:text>
+         subfigures unless forced by @role -->
+    <xsl:if test="not(ancestor::figure/@role='flow.inline')">
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:text>\subfigure</xsl:text>
+    <xsl:if test="../caption">
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="../caption" mode="subfigure"/>
+      <xsl:text>][</xsl:text>
+      <xsl:apply-templates select="../caption"/>
+      <xsl:text>]</xsl:text>
+    </xsl:if>
+    <xsl:text>{</xsl:text>
   </xsl:if>
   <xsl:if test="$imagedata.boxed = '1'">
     <xsl:text>\fbox{</xsl:text>
