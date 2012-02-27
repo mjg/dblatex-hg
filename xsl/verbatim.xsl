@@ -9,6 +9,7 @@
 <xsl:param name="literal.width.ignore">0</xsl:param>
 <xsl:param name="literal.layout.options"/>
 <xsl:param name="literal.lines.showall">1</xsl:param>
+<xsl:param name="literal.role"/>
 <xsl:param name="linenumbering.scope"/>
 <xsl:param name="linenumbering.default"/>
 <xsl:param name="linenumbering.everyNth"/>
@@ -248,6 +249,11 @@
     <!-- skip empty endlines -->
     <xsl:if test="$literal.lines.showall='0'">
       <xsl:text>showlines=false,</xsl:text>
+    </xsl:if>
+    <!-- Remove wrap mode if required -->
+    <xsl:if test="@role='overflow' or 
+                  (not(@role) and $literal.role='overflow')">
+      <xsl:text>breaklines=false,</xsl:text>
     </xsl:if>
     <!-- language option is only for programlisting -->
     <xsl:if test="@language">
