@@ -274,7 +274,7 @@
         <listitem>
           <simpara>
             An <application>XSL</application> user stylesheet to use. Several
-            user stylesheets can be specified, but the option order is meaningful.
+            user stylesheets can be specified, but the option order is meaningful: a user stylesheet takes precedence over previously defined user stylesheets.
             <phrase output="manual">See <xref linkend="sec-param"/>.</phrase>
           </simpara>
         </listitem>
