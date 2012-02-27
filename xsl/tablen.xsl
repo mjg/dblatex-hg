@@ -306,7 +306,7 @@
   </xsl:variable>
 
   <!-- are we a nested table? -->
-  <xsl:variable name="nested" select="ancestor::entry"/>
+  <xsl:variable name="nested" select="ancestor::entry|ancestor::td"/>
 
   <!-- longtables cannot be nested -->
   <xsl:variable name="tabletype">
