@@ -340,14 +340,12 @@ class DbTex:
                 donefiles.sort()
                 self.log.info("Files successfully built in '%s':\n%s" % \
                               (self.outputdir, "\n".join(donefiles)))
-        except Exception, e:
-            signal_error(self, e)
-
-        os.chdir(self.cwdir)
-        if not(self.debug):
-            shutil.rmtree(self.tmpdir)
-        else:
-            self.log.info("%s not removed" % self.tmpdir)
+        finally:
+            os.chdir(self.cwdir)
+            if not(self.debug):
+                shutil.rmtree(self.tmpdir)
+            else:
+                self.log.info("%s not removed" % self.tmpdir)
 
     def _stdin_write(self):
         # Find out the stdin working directory
@@ -695,5 +693,6 @@ class DbTexCommand:
         try:
             run.compile()
         except Exception, e:
+            signal_error(self, e)
             failed_exit("Error: %s" % e)
 
