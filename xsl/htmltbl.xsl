@@ -599,6 +599,16 @@
   </xsl:if>
 </xsl:template>
 
+<!-- Process the entry content, and remove spurious empty lines -->
+<xsl:template match="td|th" mode="output">
+  <xsl:call-template name="normalize-border">
+    <xsl:with-param name="string">
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+
 <!-- ==================================================================== -->
 
 <xsl:template match="tr" mode="span">
