@@ -284,7 +284,7 @@
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="ulink">
+<xsl:template name="ulink.format">
   <xsl:variable name="url">
     <xsl:call-template name="ulink-encode"/>
   </xsl:variable>
@@ -343,6 +343,35 @@
   </xsl:choose>
 </xsl:template>
 
+
+<!-- Template that can be overwritten by user to customize the URL displayed as
+     a block. The default is the solution sponsored by Freexian -->
+<xsl:template name="ulink.block.markup">
+  <xsl:text>&#10;&#10;</xsl:text>
+  <!-- Put a small black triangle pointing to right (U25B8) --> 
+  <xsl:call-template name="scape">
+    <xsl:with-param name="string" select="'&#x25B8;'"/>
+  </xsl:call-template>
+  <xsl:text>\space</xsl:text>
+  <xsl:call-template name="ulink.format"/>
+  <xsl:text>&#10;&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template match="ulink">
+  <xsl:variable name="urlstring">
+  </xsl:variable>
+
+  <xsl:choose>
+  <xsl:when test="@type='block'">
+    <xsl:call-template name="ulink.block.markup"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:call-template name="ulink.format"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- ==================================================================== -->
 
 <!-- it now works thanks to "hyperlabel" -->
 
