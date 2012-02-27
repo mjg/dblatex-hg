@@ -218,8 +218,12 @@ def find_programs(utils):
     return (util_paths, missed)
 
 def kpsewhich(tex_file):
+    if os.name == "nt":
+        close_fds = False
+    else:
+        close_fds = True
     p = Popen("kpsewhich %s" % tex_file, shell=True,
-              stdin=PIPE, stdout=PIPE, close_fds=True)
+              stdin=PIPE, stdout=PIPE, close_fds=close_fds)
     out = "".join(p.stdout.readlines()).strip()
     return out
 
@@ -380,6 +384,8 @@ class InstallData(install_data):
 
     def run(self):
         ignore_pattern = os.path.sep + r"(CVS|RCS)" + os.path.sep
+        # literal backslash must be doubled in regular expressions
+        ignore_pattern = ignore_pattern.replace('\\', r'\\')
 
         # Walk through sub-dirs, specified in data_files and build the
         # full data files list accordingly
