@@ -19,11 +19,11 @@ class AptSilentProgress(apt.progress.text.OpProgress):
     Reading state information... Done
     Building data structures... Done
     """
-    def __init__(self):
+    def __init__(self, outfile=None):
         pass
     def done(self):
         pass
-    def update(self, percent):
+    def update(self, percent=None):
         pass
 
 class DebianHandler(ErrorHandler):
