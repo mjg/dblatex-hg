@@ -233,7 +233,7 @@
   </xsl:variable>
   <xsl:choose>
   <xsl:when test="$use-unicode='1' or $latex.encoding='utf8'">
-    <xsl:text>\lstset{inputencoding=utf8x, extendedchars=\true}&#10;</xsl:text>
+    <xsl:text>\lstset{inputencoding=utf8x, extendedchars=true}&#10;</xsl:text>
   </xsl:when>
   <xsl:when test="$latex.encoding='latin1' and $latex.unicode.use!='0'">
     <!-- Use the UTF-8 Passivetex support if required -->
