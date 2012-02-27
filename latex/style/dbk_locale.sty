@@ -226,6 +226,10 @@
 }
 
 \babelsetup{fr}{%
+  \ifxetex
+  % \NoAutoSpaceBeforeFDP does not seem to work when used with XeTeX
+  \AtBeginDocument{\shorthandoff{:;!?}}
+  \fi
   \NoAutoSpaceBeforeFDP
   % Avoid mess between enumitem and french redefinition
   \@ifundefined{ifFrenchItemizeSpacing}{}{\FrenchItemizeSpacingfalse}
