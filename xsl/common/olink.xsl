@@ -626,8 +626,8 @@
       <!-- Get the xref text for this record -->
       <xsl:variable name="xref.text" >
         <xsl:for-each select="$target.database" >
-          <xsl:call-template name="scape">
-            <xsl:with-param name="string" 
+          <xsl:call-template name="insert.targetdb.data">
+            <xsl:with-param name="data"
                   select="key('targetptr-key', $olink.key)/xreftext/node()" />
           </xsl:call-template>
         </xsl:for-each>
@@ -855,8 +855,8 @@
             <xsl:with-param name="template" select="$template"/>
             <xsl:with-param name="title">
               <xsl:for-each select="$target.database" >
-                <xsl:call-template name="scape">
-                  <xsl:with-param name="string"
+                <xsl:call-template name="insert.targetdb.data">
+                  <xsl:with-param name="data"
                                   select="key('targetptr-key', $olink.key)/ttl" />
                 </xsl:call-template>
               </xsl:for-each>
@@ -875,8 +875,8 @@
             </xsl:with-param>
             <xsl:with-param name="docname">
               <xsl:for-each select="$target.database" >
-                <xsl:call-template name="scape">
-                  <xsl:with-param name="string" 
+                <xsl:call-template name="insert.targetdb.data">
+                  <xsl:with-param name="data"
                        select="key('targetdoc-key', $targetdoc)/div[1]/ttl" />
                 </xsl:call-template>
               </xsl:for-each>
@@ -898,8 +898,8 @@
             <xsl:with-param name="template" select="$template"/>
             <xsl:with-param name="title">
               <xsl:for-each select="$target.database" >
-                <xsl:call-template name="scape">
-                  <xsl:with-param name="string"
+                <xsl:call-template name="insert.targetdb.data">
+                  <xsl:with-param name="data"
                                   select="key('targetptr-key', $olink.key)/ttl" />
                 </xsl:call-template>
               </xsl:for-each>
@@ -947,6 +947,23 @@
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template name="insert.targetdb.data">
+  <xsl:param name="data"/>
+  <!-- Apply the node template even if it's a text() node,
+       at least to perform the tex escaping -->
+  <xsl:apply-templates select="$data"/>
+</xsl:template>
+
+<!-- Translate HTML target.db formatting to dblatex equivalent -->
+<xsl:template match="xreftext//i">
+  <xsl:call-template name="inline.italicseq"/>
+</xsl:template>
+
+<!-- Called through insert.targetdb.data template -->
+<xsl:template match="ttl">
+  <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="*" mode="olink.docname.markup">
@@ -1100,8 +1117,8 @@
 
   <xsl:variable name="docname">
     <xsl:for-each select="$target.database" >
-      <xsl:call-template name="scape">
-        <xsl:with-param name="string" 
+      <xsl:call-template name="insert.targetdb.data">
+        <xsl:with-param name="data"
              select="key('targetdoc-key', $targetdoc)/div[1]/ttl" />
       </xsl:call-template>
     </xsl:for-each>
