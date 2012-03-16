@@ -72,6 +72,9 @@
     <xsl:text>\usepackage{xr-hyper}&#10;</xsl:text>
   </xsl:if>
 
+  <!-- Paper and Page setup -->
+  <xsl:call-template name="page.setup"/>
+
   <xsl:text>\usepackage[hyperlink]{</xsl:text>
   <xsl:value-of select="$latex.style"/>
   <xsl:text>}&#10;</xsl:text>

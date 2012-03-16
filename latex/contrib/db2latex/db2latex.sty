@@ -153,8 +153,11 @@
 % --------------------------------------------
 % Check for PDFLaTeX/LaTeX 
 % --------------------------------------------
+% Default page setup if not already done by geometry
+\@ifpackageloaded{geometry}{}{
 \usepackage{anysize}
 \marginsize{3cm}{2cm}{1.25cm}{1.25cm}
+}
 
 \makeatletter
 % redefine the listoffigures and listoftables so that the name of the chapter
