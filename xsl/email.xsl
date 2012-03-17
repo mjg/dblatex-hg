@@ -9,7 +9,11 @@
   <xsl:text>\href{mailto:</xsl:text>
   <xsl:value-of select="."/>
   <xsl:text>}{</xsl:text>
-  <xsl:apply-templates mode="slash.hyphen"/>
+  <xsl:call-template name="hyphen-encode">
+    <xsl:with-param name="string">
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
   <xsl:text>}</xsl:text>
 </xsl:template>
 

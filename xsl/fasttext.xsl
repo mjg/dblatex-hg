@@ -6,6 +6,8 @@
 <!ENTITY u2 "&#x371;u">
 <!ENTITY v1 "&#x370;u">
 <!ENTITY v2 "&#x371;u">
+<!ENTITY h1 "&#x370;h">
+<!ENTITY h2 "&#x371;h">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
@@ -73,6 +75,14 @@
   <xsl:text>&u1;</xsl:text>
   <xsl:value-of select="$string"/>
   <xsl:text>&u2;</xsl:text>
+</xsl:template>
+
+<!-- ask for hyphenating -->
+<xsl:template name="hyphen-encode" >
+  <xsl:param name="string"/>
+  <xsl:text>&h1;</xsl:text>
+  <xsl:value-of select="$string"/>
+  <xsl:text>&h2;</xsl:text>
 </xsl:template>
 
 <!-- specific behaviour for MML -->

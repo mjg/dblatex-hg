@@ -24,8 +24,8 @@ class RawLatexParser:
         self.codec = codec or LatexCodec(output_encoding=output_encoding)
         
         # hyphenation patterns
-        self.hypon = re.compile(r"<h>")
-        self.hypof = re.compile(r"</h>")
+        self.hypon = re.compile(utf8(u"\u0370h"))
+        self.hypof = re.compile(utf8(u"\u0371h"))
 
     def parse(self, line):
         lout = ""

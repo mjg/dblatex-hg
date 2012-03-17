@@ -92,9 +92,9 @@
   </xsl:if>
   <xsl:choose>
   <xsl:when test="$monoseq.hyphenation='1'">
-    <xsl:text>&lt;h&gt;</xsl:text>
-    <xsl:copy-of select="$content"/>
-    <xsl:text>&lt;/h&gt;</xsl:text>
+    <xsl:call-template name="hyphen-encode">
+      <xsl:with-param name="string" select="$content"/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
     <xsl:copy-of select="$content"/>
@@ -113,9 +113,9 @@
   <xsl:text>\texttt{\emph{\small{</xsl:text>
   <xsl:choose>
   <xsl:when test="$monoseq.hyphenation='1'">
-    <xsl:text>&lt;h&gt;</xsl:text>
-    <xsl:copy-of select="$content"/>
-    <xsl:text>&lt;/h&gt;</xsl:text>
+    <xsl:call-template name="hyphen-encode">
+      <xsl:with-param name="string" select="$content"/>
+    </xsl:call-template>
   </xsl:when>
   <xsl:otherwise>
     <xsl:copy-of select="$content"/>
