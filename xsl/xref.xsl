@@ -346,13 +346,22 @@
 
 <!-- Template that can be overwritten by user to customize the URL displayed as
      a block. The default is the solution sponsored by Freexian -->
+
 <xsl:template name="ulink.block.markup">
   <xsl:text>&#10;&#10;</xsl:text>
   <!-- Put a small black triangle pointing to right (U25B8) --> 
   <xsl:call-template name="scape">
     <xsl:with-param name="string" select="'&#x25B8;'"/>
   </xsl:call-template>
-  <xsl:text>\space</xsl:text>
+  <xsl:choose>
+  <!-- In sidebar force left-alignment with a fixed space -->
+  <xsl:when test="ancestor::sidebar">
+    <xsl:text>\enspace</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>\space</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
   <xsl:call-template name="ulink.format"/>
   <xsl:text>&#10;&#10;</xsl:text>
 </xsl:template>
