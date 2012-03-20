@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 import logging
+import urllib
 from dbtexmf.core.error import signal_error
 
 #
@@ -81,8 +82,15 @@ class Imagedata:
         self.output_format = "pdf"
         self.converted = {}
         self.log = logging.getLogger("dblatex")
+        self.output_encoding = ""
+
+    def set_encoding(self, output_encoding):
+        self.output_encoding = output_encoding
 
     def convert(self, fig):
+        # Translate the URL to an actual local path
+        fig = urllib.url2pathname(fig)
+
         # First, scan the available formats
         (realfig, ext) = self.scanformat(fig)
 
@@ -132,8 +140,11 @@ class Imagedata:
         Copy the file in the working directory if its path contains characters
         unsupported by latex, like spaces.
         """
-        if fig.find(" ") == -1:
-            return fig
+        # Encode to expected output format. If encoding is OK and 
+        # supported by tex, just return the encoded path
+        newfig = self._path_encode(fig)
+        if newfig and newfig.find(" ") == -1:
+            return newfig
 
         # Added to the converted list
         count = len(self.converted)
@@ -142,6 +153,17 @@ class Imagedata:
 
         # Do the copy
         shutil.copyfile(realfig, newfig)
+        return newfig
+
+    def _path_encode(self, fig):
+        # Actually, only ASCII characters are sure to match filesystem encoding
+        # so let's be conservative
+        if self.output_encoding == "utf8":
+            return fig
+        try:
+            newfig = fig.decode("utf8").encode("ascii")
+        except:
+            newfig = ""
         return newfig
 
     def scanformat(self, fig):

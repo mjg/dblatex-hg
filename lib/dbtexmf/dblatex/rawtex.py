@@ -52,6 +52,7 @@ class RawLatex:
                         RawLatexParser(codec=codec,
                                        output_encoding=output_encoding),
                         RawUtfParser(output_encoding=output_encoding)]
+        self.image.set_encoding(output_encoding or "latin-1")
 
     def set_format(self, format, backend=None):
         figformats = {"pdf":"pdf", "dvi":"eps", "ps":"eps"}
