@@ -233,6 +233,8 @@
   \NoAutoSpaceBeforeFDP
   % Avoid mess between enumitem and french redefinition
   \@ifundefined{ifFrenchItemizeSpacing}{}{\FrenchItemizeSpacingfalse}
+  % The same, for recent frenchb release (v2.3)
+  \@ifundefined{frenchbsetup}{}{\frenchbsetup{CompactItemize=false}}
 }
 
 \babelsetup{es}{%
