@@ -10,6 +10,7 @@
 <xsl:param name="literal.layout.options"/>
 <xsl:param name="literal.lines.showall">1</xsl:param>
 <xsl:param name="literal.role"/>
+<xsl:param name="literal.class">monospaced</xsl:param>
 <xsl:param name="linenumbering.scope"/>
 <xsl:param name="linenumbering.default"/>
 <xsl:param name="linenumbering.everyNth"/>
@@ -20,13 +21,13 @@
                        mode="save.verbatim.preamble"/>
 </xsl:template>
 
-<xsl:template match="address|literallayout|literallayout[@class='monospaced']">
+<xsl:template match="address">
   <xsl:call-template name="output.verbatim"/>
 </xsl:template>
 
 <xsl:template match="text()" mode="save.verbatim"/>
 
-<xsl:template match="address|literallayout|literallayout[@class='monospaced']"
+<xsl:template match="address"
               mode="save.verbatim">
   <xsl:call-template name="save.verbatim"/>
 </xsl:template>
@@ -171,12 +172,12 @@
 <!-- The listing content is internal to the element, and is not a reference
      to an external file -->
 
-<xsl:template match="programlisting|screen" mode="internal">
+<xsl:template match="programlisting|screen|literallayout" mode="internal">
   <xsl:param name="opt"/>
   <xsl:param name="co-tagin"/>
   <xsl:param name="rnode" select="/"/>
+  <xsl:param name="env" select="'lstlisting'"/>
 
-  <xsl:variable name="env" select="'lstlisting'"/>
 
   <xsl:text>&#10;\begin{</xsl:text>
   <xsl:value-of select="$env"/>
@@ -214,7 +215,7 @@
   </xsl:choose>
 </xsl:template>
  
-<xsl:template match="programlisting|screen">
+<xsl:template match="programlisting|screen|literallayout">
   <xsl:param name="rnode" select="/"/>
 
   <!-- formula to compute the listing width -->
@@ -292,6 +293,19 @@
       <xsl:text>,</xsl:text>
     </xsl:otherwise>
     </xsl:choose>
+    <!-- In literallayout no specific background, nor monospaced font -->
+    <xsl:if test="self::literallayout">
+      <xsl:text>backgroundcolor={},</xsl:text>
+      <xsl:choose>
+      <xsl:when test="@class='monospaced' or
+                      $literal.class='monospaced'">
+        <xsl:text>basicstyle=\ttfamily,</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>basicstyle=\normalfont,flexiblecolumns,</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
     <!-- TeX/verb delimiters if tex or formatting is embedded (like <co>s) -->
     <xsl:if test="$co-tagin!=''">
       <xsl:call-template name="listing-delim">
@@ -362,7 +376,7 @@
      in which context the footnotes are used. A check is done to not cover
      the other saving points in tables. -->
 
-<xsl:template match="programlisting|screen"
+<xsl:template match="programlisting|screen|literallayout"
               mode="save.verbatim.preamble">
   <xsl:if test="not(ancestor::table or ancestor::informaltable) and
                 ancestor::footnote">
@@ -377,7 +391,7 @@
      file. Using the save/use commands would work except for linenumbering
      stuff. -->
 
-<xsl:template match="programlisting|screen"
+<xsl:template match="programlisting|screen|literallayout"
               mode="save.verbatim">
   <xsl:if test="not(descendant::imagedata[@format='linespecific']|
                     descendant::inlinegraphic[@format='linespecific']|
@@ -409,12 +423,12 @@
 </xsl:template>
 
 
-<xsl:template match="programlisting[ancestor::entry or
-                                    ancestor::entrytbl or
-                                    ancestor::footnote]|
-                     screen[ancestor::entry or
-                            ancestor::entrytbl or
-                            ancestor::footnote]">
+<xsl:template match="*[self::programlisting or
+                       self::screen or
+                       self::literallayout]
+                      [ancestor::entry or
+                       ancestor::entrytbl or
+                       ancestor::footnote]">
 
   <xsl:variable name="lsopt">
     <!-- language option is only for programlisting -->
@@ -457,7 +471,18 @@
       </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
-    <!-- TODO: TeX delimiters if <co>s are embedded -->
+    <!-- In literallayout no specific background, nor monospaced font -->
+    <xsl:if test="self::literallayout">
+      <xsl:choose>
+      <xsl:when test="@class='monospaced' or
+                      $literal.class='monospaced'">
+        <xsl:text>fontfamily=tt,</xsl:text>
+      </xsl:when>
+      <!-- FIXME: don't know how to force to use normal text font -->
+      </xsl:choose>
+    </xsl:if>
+    
+    <!-- TODO: TeX delimiters if <co>s are embedded. Use commandchars -->
   </xsl:variable>
 
   <xsl:text>\begin{fvlisting}</xsl:text>
@@ -498,6 +523,7 @@
 
 </xsl:template>
 
+<!-- ==================================================================== -->
 
 <xsl:template match="*" mode="filename.abs.get">
   <xsl:choose>
