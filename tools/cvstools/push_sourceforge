@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# It is assumed that the dévelopment repositories are organized as follow:
+#
+#     dblatex     |      Hg    | dblatex.hg.sf |    CVS      | Remote
+#    Mainstrean   |<-- fetch --| Hg clone repo |-- commit -->| Sourceforge
+#  Mercurial repo |            | SF CVS repo   |             | CVS repo
+#                                                            |
+#                              |   sf.dblatex  |             |
+#                              | SF CVS repo   |<-- update --|
+#                              |               |             |
+#
+# The dblatex.hg.sf is a proxy to upgrade SF CVS repo from Mercurial repo
+# The sf.dblatex is local copy of the Sourceforge repo to check the updates
+#
+
+hgbase=`pwd`
+
+# Fetch from the pure Mercurial repository and commit to the CVS one
+cd ../dblatex.hg.sf
+./tools/cvstools/cvssynch -x cset.xml -s "*/manual.pdf"
+
+# Update from the Sourceforge repository
+cd ../sf.dblatex
+cvs update
+
+# Assume a bash like shell
+cd -
+
