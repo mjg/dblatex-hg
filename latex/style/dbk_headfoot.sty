@@ -16,10 +16,16 @@
 
 % Define front/main/back matter if not available
 \@ifundefined{frontmatter}{
-  \def\frontmatter{\cleardoublepage\pagenumbering{roman}\chead[]{\DBKcheadfront}}
+  \def\frontmatter{\cleardoublepage\pagenumbering{roman}
+                   \lhead[]{\DBKtitle}
+                   \chead[]{\releasebox}
+                   \rhead[]{\textsf{\thepage{}}}}
 }{}
 \@ifundefined{mainmatter}{
-  \def\mainmatter{\cleardoublepage\pagenumbering{arabic}\chead[]{\DBKcheadbody}}
+  \def\mainmatter{\cleardoublepage\pagenumbering{arabic}
+                  \lhead[]{\DBKtitle}
+                  \chead[]{\releasebox}
+                  \rhead[]{\textsf{\thepage{} / \getpagerefnumber{LastPage}}}}
 }{}
 \@ifundefined{backmatter}{
   \def\backmatter{\if@openright\cleardoublepage\else\clearpage\fi}
@@ -28,47 +34,11 @@
 
 % Fancy header/footer for the first page
 
-\chead[]{%
-  \begin{tabular}{
-    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
-    \multirow{3}{5.6cm}{\DBKtitle}
-    & & \tabularnewline%
-    & \releasebox
-    & \textsf{\thepage} \tabularnewline %
-    & & \tabularnewline%
-  \end{tabular}%
-} %
-
 \lfoot[]{\@ifundefined{DBKpublisher}{}{\DBKpublisher}}
 \rfoot[]{}
 \cfoot[]{}
 
 % Fancy header/footer for the front matter
 
-\def\DBKcheadfront{%
-  \begin{tabular}{
-    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
-    \multirow{3}{5.6cm}{\DBKtitle}
-    & & \textsf{\DBKreference{} \edhead} \tabularnewline%
-    & \releasebox & \tabularnewline %
-    & & \textsf{\thepage}
-  \tabularnewline%
-  \end{tabular}%
-}
-
 % Fancy header/footer for the doc body
-
-\def\DBKcheadbody{%
-  \begin{tabular}{
-    >{\raggedright}p{5.6cm} >{\centering}p{5.6cm} >{\raggedleft}p{5.6cm}} %
-    \multirow{3}{5.6cm}{\DBKtitle}
-    & & \textsf{\DBKreference{} \edhead} \tabularnewline%
-    & \releasebox & \tabularnewline %
-    & & \textsf{\thepage{} / \getpagerefnumber{LastPage}}
-  \tabularnewline%
-  \end{tabular}%
-}
-
-\lhead[]{}
-\rhead[]{}
 

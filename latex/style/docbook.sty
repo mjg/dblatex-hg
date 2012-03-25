@@ -93,8 +93,9 @@
 \fi
 
 % ##############################################################################
-% ### Page Parameters
+% ### Page Parameters if not done by geometry
 % ##############################################################################
+\@ifpackageloaded{geometry}{}{
 \setlength{\paperwidth}{21cm}
 \setlength{\paperheight}{29.7cm}
 \setlength{\hoffset}{-1in}
@@ -103,12 +104,13 @@
 \setlength{\marginparsep}{0cm}
 \setlength{\marginparwidth}{0cm}
 \setlength{\textwidth}{18cm}
-\setlength{\topmargin}{0.5cm}
-\setlength{\headsep}{2cm}
-
+%\setlength{\topmargin}{0.5cm}
+\setlength{\topmargin}{1.3cm}
+%\setlength{\headsep}{2cm}
+\setlength{\headsep}{1.1cm}
 \setlength{\textheight}{24cm}
 \setlength{\footskip}{1.5cm}
-
+}
 
 % ##############################################################################
 % ### Used Packages
@@ -181,7 +183,7 @@
 }
 
 % Sidebar is a boxed minipage that can contain verbatim
-\newenvironment{sidebar}[1][0.95\textwidth]{
+\newenvironment{sidebar}[1][0.95\linewidth]{
   \hspace{0mm}\newline%
   \noindent\begin{Sbox}\begin{minipage}{#1}%
   \setlength\parskip{\medskipamount}%
