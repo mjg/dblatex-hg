@@ -8,6 +8,7 @@ the rubber internals.
 """
 import subprocess
 import os
+import shlex
 from msg import _, msg
 from maker import Maker
 from latex import Latex
@@ -31,6 +32,7 @@ class LatexBuilder:
         self.batch = 1
         self.encoding = "latin-1"
         self.texpost = ""
+        self.options = ""
 
     def set_format(self, format):
         # Just record it
@@ -46,6 +48,8 @@ class LatexBuilder:
         self.tex.batch = self.batch
         self.tex.encoding = self.encoding
         self.tex.set_source(source)
+        if self.options:
+            self.tex.opts += shlex.split(self.options)
 
         # Load the modules needed to produce the expected output format
         if (self.format == "pdf"):

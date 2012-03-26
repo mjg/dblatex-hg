@@ -73,7 +73,8 @@ class RunLatex:
         if line.startswith("%%</params>"):
             self._param_ended = 1
             return
-        p = line.split()
+        # Expected format is: '%% <param_name> <param_string>\n'
+        p = line.split(" ", 2)
         self._params[p[1]] = p[2]
 
     def compile(self, texfile, binfile, format, batch=1):
@@ -106,6 +107,7 @@ class RunLatex:
             self.texer.batch = batch
             self.texer.texpost = self.texpost
             self.texer.encoding = self._params.get("latex.encoding", "latin-1")
+            self.texer.options = self._params.get("latex.engine.options")
             self.texer.set_format(format)
             self.texer.set_backend(self.backend)
             if self.index_style:

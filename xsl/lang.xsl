@@ -6,6 +6,7 @@
     ############################################################################ -->
 
 <xsl:param name="latex.encoding">latin1</xsl:param>
+<xsl:param name="latex.engine.options"/>
 <xsl:param name="korean.package">CJK</xsl:param>
 <xsl:param name="cjk.font">cyberbit</xsl:param>
 <xsl:param name="xetex.font">
@@ -180,6 +181,11 @@
   <xsl:text>%%&lt;params&gt;&#10;</xsl:text>
   <xsl:if test="$use-unicode='1' or $latex.encoding='utf8'">
     <xsl:text>%% latex.encoding utf8&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$latex.engine.options != ''">
+    <xsl:text>%% latex.engine.options </xsl:text>
+    <xsl:value-of select="$latex.engine.options"/>
+    <xsl:text>&#10;</xsl:text>
   </xsl:if>
   <xsl:text>%%&lt;/params&gt;&#10;</xsl:text>
 </xsl:template>
