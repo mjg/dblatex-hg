@@ -10,6 +10,7 @@ between the preceding and the current character.
 
 import re
 import xml.dom.minidom
+import logging
 
 from fcfallback import FcFallbackFontSpec, DefaultFontSpec
 from fontspec import FontSpec, _indent
@@ -31,6 +32,7 @@ class FontSpecConfig:
         """Create a font specification configuration from the specified file
         (file name or file-like object).
         """
+        self.log = logging.getLogger("dblatex")
         self.fontspecs = []
         self.fontnames = {}
 
@@ -38,7 +40,7 @@ class FontSpecConfig:
         for dom_fontspec in dom_document.getElementsByTagName('fontspec'):
             default = dom_fontspec.getAttribute('default')
             if default:
-                print "has default"
+                self.log.debug("has default")
                 fallback = dom_fontspec.getAttribute('fallback')
                 if fallback == "fontconfig":
                     self.default_fontspec = FcFallbackFontSpec()

@@ -81,8 +81,8 @@ class FcFallbackFontSpec(DefaultFontSpec):
         return fontspec
 
     def spawn_fontspec_from_fcfont(self, fcfont, char):
-        print "New fontspec '%s' matching U%X from fontconfig"\
-              % (fcfont.family, ord(char))
+        self.log.info("New fontspec '%s' matching U%X from fontconfig"\
+              % (fcfont.family, ord(char)))
         # Create a new font
         fontspec = FontSpec()
         fontspec.id = fcfont.family

@@ -10,6 +10,7 @@ between the preceding and the current character.
 
 import re
 import xml.dom.minidom
+import logging
 
 
 def _indent(string, width=2):
@@ -106,6 +107,7 @@ class FontSpec:
         self.fontspecs = [self]
         self.subfont_first = subfont_first
         self._ignored = []
+        self.log = logging.getLogger("dblatex")
 
         for type in self.transition_types:
             self.transitions[type] = {}
@@ -150,7 +152,7 @@ class FontSpec:
         """Parse the specified /fonts/fontspec@range attribute to a
         UnicodeInterval list.
         """
-        print range
+        #print range
         intervals = []
         chunks = range.split()
         for chunk in chunks:
@@ -199,12 +201,12 @@ class FontSpec:
         return s
 
     def enter(self):
-        print "enter in %s" % self.id
+        self.log.debug("enter in %s" % self.id)
         s = self._switch_to(self.transitions["enter"])
         return s
 
     def exit(self):
-        print "exit from %s" % self.id
+        self.log.debug("exit from %s" % self.id)
         s = self._switch_to(self.transitions["exit"])
         return s
 
@@ -217,12 +219,13 @@ class FontSpec:
         string = 'FontSpec:'
         string += '\n  Id: %s' % self.id
         string += '\n  Refmode: %s' % self.refmode
+        string += '\n  subFirst: %s' % self.subfont_first
         for interval in self._intervals:
             string += '\n' + _indent(str(interval))
         return string
 
     def add_subfont(self, fontspec):
-        print "%s -> %s" % (self.id, fontspec.id)
+        self.log.debug("%s -> %s" % (self.id, fontspec.id))
         if self.subfont_first:
             self.fontspecs.insert(-1, fontspec)
         else:
@@ -267,9 +270,9 @@ class FontSpec:
 
     def _loghas(self, id, char):
         try:
-            print "%s has '%s'" % (id, str(char))
+            self.log.debug("%s has '%s'" % (id, str(char)))
         except:
-            print "%s has '%s'" % (id, ord(char))
+            self.log.debug("%s has '%s'" % (id, ord(char)))
 
     def match(self, char, excluded=None):
         """Determine whether the font specification matches the specified

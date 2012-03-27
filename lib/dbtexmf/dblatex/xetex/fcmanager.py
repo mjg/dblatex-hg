@@ -5,6 +5,7 @@
 # An efficient solution should use some python bindings to directly call the
 # C fontconfig library.
 #
+import logging
 from subprocess import Popen, PIPE
 
 def execute(cmd):
@@ -21,6 +22,7 @@ class FcFont:
     Font Object with properties filled with the fc-match command output.
     """
     def __init__(self, fontnames, partial=False):
+        self.log = logging.getLogger("dblatex")
         self.name = fontnames[0]
         self.aliases = fontnames[1:]
         self._completed = False
@@ -71,7 +73,7 @@ class FcFont:
             attrname, attrdata = infos.split(":", 1)
         except:
             # Skip this row
-            print "Wrong data? '%s'" % infos
+            self.log.warning("Wrong data? '%s'" % infos)
             return
         
         #print infos
@@ -149,6 +151,7 @@ class FcManager:
     used).
     """
     def __init__(self):
+        self.log = logging.getLogger("dblatex")
         self.fonts = {}
 
     def get_font(self, fontname):
@@ -175,8 +178,10 @@ class FcManager:
         for f in fonts:
             fontnames = f.split(":")[0].split(",")
             mainname = fontnames[0]
+            if not(mainname):
+                continue
             if self.fonts.get(mainname):
-                print "'%s': duplicated" % mainname
+                self.log.debug("'%s': duplicated" % mainname)
                 continue
 
             #print fontnames
