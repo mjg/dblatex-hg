@@ -12,6 +12,7 @@
 import re
 
 from texcodec import TexCodec
+from texcodec import tex_handler_counter
 from rawparse import RawUtfParser
 
 
@@ -20,8 +21,28 @@ class VerbCodec(TexCodec):
                  input_encoding="utf8", output_encoding="latin-1"):
         self.pre = pre
         self.post = post
+        self.output_encoding = output_encoding
         TexCodec.__init__(self, input_encoding, output_encoding,
                           errors=errors, pre=pre, post=post)
+
+    def decode(self, text):
+        global tex_handler_counter
+        ntext = TexCodec.decode(self, text)
+        if self.output_encoding != "utf8":
+            return ntext
+
+        # Funnily listings cannot handle unicode characters greater than 255.
+        # The loop just escapes them by wrapping with <pre> and <post> and
+        # emulates the corresponding encoding exception
+        text = ""
+        n = tex_handler_counter[self._errors]
+        for c in ntext:
+            if ord(c) > 255:
+                c = self.pre + c + self.post
+                n += 1
+            text += c
+        tex_handler_counter[self._errors] = n
+        return text
 
 
 class VerbParser:
