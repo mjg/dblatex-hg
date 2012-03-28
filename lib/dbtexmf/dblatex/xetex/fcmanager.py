@@ -9,11 +9,11 @@ import logging
 from subprocess import Popen, PIPE
 
 def execute(cmd):
-    p = Popen(cmd, shell=True, stdout=PIPE)
+    p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
     rc = p.wait()
     if rc != 0:
-        raise OSError("'%s' failed (%d)" % (cmd, rc))
+        raise OSError("'%s' failed (%d)" % (" ".join(cmd), rc))
     return data
 
 
@@ -31,7 +31,7 @@ class FcFont:
 
     def complete(self):
         if not(self._completed):
-            d = execute("fc-match --verbose '%s'" % self.name)
+            d = execute(["fc-match", "--verbose", self.name])
             d = d.strip()
             self._build_attr_from(d)
             self._completed = True
@@ -173,7 +173,7 @@ class FcManager:
         return fonts
 
     def build_fonts(self, partial=False):
-        d = execute("fc-list")
+        d = execute(["fc-list"])
         fonts = d.strip().split("\n")
         for f in fonts:
             fontnames = f.split(":")[0].split(",")

@@ -54,7 +54,8 @@ class FcFallbackFontSpec(DefaultFontSpec):
         for fontspec in self.fontspecs:
 
             if fontspec in self.fcmissed:
-                print "missed!"
+                print "Specified font '%s' is missing in the system!" % \
+                      (fontspec.mainfont())
                 continue
 
             fcfont = self.fccache.get(fontspec.mainfont()) or \
