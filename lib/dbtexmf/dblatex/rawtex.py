@@ -90,18 +90,19 @@ class RawLatex:
         f.close()
 
     def figconvert(self, line):
-        # Is there an image included here
-        m = self.figre.search(line)
-        if not(m):
+        # Is there one or more images included here
+        mlist = self.figre.findall(line)
+        if not(mlist):
             return line
 
-        # Try to convert the image
-        fig = m.group(2)
-        newfig = self.image.convert(fig)
+        # Try to convert each found image
+        for m in mlist:
+            fig = m[1]
+            newfig = self.image.convert(fig)
 
-        # If something done, replace the figure in the tex file
-        if newfig != fig:
-            line = re.sub(r"{%s}" % fig, r"{%s}" % newfig, line)
+            # If something done, replace the figure in the tex file
+            if newfig != fig:
+                line = re.sub(r"{%s}" % fig, r"{%s}" % newfig, line)
 
         return line
             
