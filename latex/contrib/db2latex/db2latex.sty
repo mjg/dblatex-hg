@@ -316,9 +316,9 @@
   \par
 }
 
-\newenvironment{sidebar}[1][\linewidth-2\fboxsep-2\fboxrule-\shadowsize]{
+\newenvironment{sidebar}[1][]{
   \hspace{0mm}\newline%
-  \noindent\begin{Sbox}\begin{minipage}{#1}
+  \noindent\begin{Sbox}\begin{minipage}{\linewidth-2\fboxsep-2\fboxrule-\shadowsize}
 }{
   \end{minipage}\end{Sbox}\shadowbox{\TheSbox}%
 }

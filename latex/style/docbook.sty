@@ -183,9 +183,9 @@
 }
 
 % Sidebar is a boxed minipage that can contain verbatim
-\newenvironment{sidebar}[1][0.95\linewidth]{
+\newenvironment{sidebar}[1][]{
   \hspace{0mm}\newline%
-  \noindent\begin{Sbox}\begin{minipage}{#1}%
+  \noindent\begin{Sbox}\begin{minipage}{0.95\linewidth}%
   \setlength\parskip{\medskipamount}%
 }{
   \end{minipage}\end{Sbox}\shadowbox{\TheSbox}%

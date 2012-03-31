@@ -80,9 +80,9 @@
 %
 % <sidebar> environment
 %
-\newenvironment{sidebar}[1][\textwidth]{
+\newenvironment{sidebar}[1][]{
   \hspace{0mm}\newline%
-  \noindent\begin{Sbox}\begin{minipage}{#1}
+  \noindent\begin{Sbox}\begin{minipage}{\linewidth}
 }{
   \end{minipage}\end{Sbox}\shadowbox{\TheSbox}%
 }
