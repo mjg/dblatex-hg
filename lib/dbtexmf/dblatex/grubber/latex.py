@@ -253,4 +253,19 @@ class Latex(Depend):
         else:
             return self.failed_module.get_errors()
 
+    def print_misschars(self):
+        """
+        Sort the characters not handled by the selected font,
+        and print them as a warning.
+        """
+        missed_chars = []
+        for c in self.log.get_misschars():
+            missed_chars.append((c["uchar"], c["font"]))
+        # Strip redundant missed chars
+        missed_chars = list(set(missed_chars))
+        missed_chars.sort()
+        for m in missed_chars:
+            uchar = m[0].decode("utf8")
+            msg.warn("Character U+%X (%s) not in font '%s'" % \
+                     (ord(uchar), m[0], m[1]))
 

@@ -103,3 +103,7 @@ class LatexBuilder:
     def print_errors(self):
         msg.display_all(self.tex.get_errors(), writer=msg.write_stderr)
 
+    def print_misschars(self):
+        # Show the characters not handled by fonts
+        self.tex.print_misschars()
+

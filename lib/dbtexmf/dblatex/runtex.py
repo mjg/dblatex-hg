@@ -113,6 +113,7 @@ class RunLatex:
             if self.index_style:
                 self.texer.set_index_style(self.index_style)
             self.texer.compile(texfile)
+            self.texer.print_misschars()
         except:
             # On error, dump the log errors and raise again
             self.texer.print_errors()

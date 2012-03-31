@@ -36,6 +36,7 @@ class LogParser:
     "(LaTeX|Package)( (?P<pkg>.*))? Warning: (?P<text>.*)$")
     re_online = re.compile("(; reported)? on input line (?P<line>[0-9]*)")
     re_ignored = re.compile("; all text was ignored after line (?P<line>[0-9]*).$")
+    re_misschar = re.compile("Missing character: There is no (?P<uchar>[^ ]*) in font (?P<font>.*)!")
 
     #-- Initialization {{{2
 
@@ -111,7 +112,7 @@ class LogParser:
         """
         return len(line) == 79
 
-    def parse (self, errors=0, boxes=0, refs=0, warnings=0):
+    def parse (self, errors=0, boxes=0, refs=0, warnings=0, misschars=0):
         """
         Parse the log file for relevant information. The named arguments are
         booleans that indicate which information should be extracted:
@@ -310,6 +311,18 @@ class LogParser:
                 skipping = 1
                 continue
 
+            # Missing characters in a font
+            if misschars:
+                m = self.re_misschar.match(line)
+                if m:
+                    d = {
+                        "kind": "warning",
+                        "uchar": m.group("uchar"),
+                        "font": m.group("font"),
+                        }
+                    yield d
+                    continue
+
             # If there is no message, track source names and page numbers.
 
             last_file = self.update_file(line, pos, last_file)
@@ -323,6 +336,8 @@ class LogParser:
         return self.parse(refs=1)
     def get_warnings (self):
         return self.parse(warnings=1)
+    def get_misschars (self):
+        return self.parse(misschars=1)
 
     def update_file (self, line, stack, last):
         """
