@@ -89,6 +89,7 @@ class FcFallbackFontSpec(DefaultFontSpec):
         fontspec.id = fcfont.family
         fontspec.transitions["enter"]["main"] = fcfont.family
         fontspec.add_char(char)
+        fontspec.add_ignored(self._ignored)
         # Register the font and its related fontconfig object
         self.fccache[fcfont.name] = fcfont
         self.add_subfont(fontspec)
