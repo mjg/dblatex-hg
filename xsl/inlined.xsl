@@ -287,7 +287,7 @@
       <xsl:text>)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
-     <xsl:call-template name="inline.monoseq"/>
+      <xsl:call-template name="inline.monoseq"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
