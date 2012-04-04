@@ -47,8 +47,10 @@ class VerbCodec(TexCodec):
 
 class VerbParser:
     def __init__(self, output_encoding="latin-1"):
-        self.start_re = re.compile(r"\\begin{lstlisting}")
-        self.stop_re = re.compile(r"\\end{lstlisting}")
+        # The listing environment can be different from 'lstlisting'
+        # but the rule is that it must begin with 'lst'
+        self.start_re = re.compile(r"\\begin{lst[^}]*}")
+        self.stop_re = re.compile(r"\\end{lst[^}]*}")
         self.esc_re = re.compile(r"escapeinside={([^}]*)}{([^}]*)}")
         self.block = ""
         self.encoding = output_encoding

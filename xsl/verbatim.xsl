@@ -11,6 +11,8 @@
 <xsl:param name="literal.lines.showall">1</xsl:param>
 <xsl:param name="literal.role"/>
 <xsl:param name="literal.class">monospaced</xsl:param>
+<xsl:param name="literal.environment">lstlisting</xsl:param>
+<xsl:param name="literal.extensions">0</xsl:param>
 <xsl:param name="linenumbering.scope"/>
 <xsl:param name="linenumbering.default"/>
 <xsl:param name="linenumbering.everyNth"/>
@@ -114,7 +116,7 @@
      children.
      -->
 
- <xsl:template name="verbatim.format">
+<xsl:template name="verbatim.format">
   <xsl:param name="co-tagin" select="'&lt;'"/>
   <xsl:param name="rnode" select="/"/>
   <xsl:param name="probe" select="0"/>
@@ -256,6 +258,17 @@
                   (not(@role) and $literal.role='overflow')">
       <xsl:text>breaklines=false,</xsl:text>
     </xsl:if>
+    <!-- The scaling feature is not available with standard listings -->
+    <xsl:if test="$literal.extensions!=0">
+      <xsl:choose>
+      <xsl:when test="@role='scale'">
+        <xsl:text>scale=true,</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>scale=false,</xsl:text>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
     <!-- language option is only for programlisting -->
     <xsl:if test="@language">
       <xsl:text>language=</xsl:text>
@@ -343,6 +356,7 @@
       <xsl:with-param name="rnode" select="$rnode"/>
       <xsl:with-param name="co-tagin" select="$co-tagin"/>
       <xsl:with-param name="opt" select="$opt"/>
+      <xsl:with-param name="env" select="$literal.environment"/>
     </xsl:apply-templates>
   </xsl:otherwise>
   </xsl:choose>
