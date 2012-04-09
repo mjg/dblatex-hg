@@ -19,6 +19,14 @@
 
 
 <xsl:template name="verbatim.setup">
+  <!-- dblatex requires that a listing environment starts with 'lst' -->
+  <xsl:if test="substring($literal.environment,1,3) != 'lst'">
+    <xsl:message terminate="yes">
+      <xsl:text>Error: </xsl:text>
+      <xsl:value-of select="$literal.environment"/>
+      <xsl:text>: a listing environment must start with 'lst'</xsl:text>
+    </xsl:message>
+  </xsl:if>
   <xsl:apply-templates select="//screen|//programlisting"
                        mode="save.verbatim.preamble"/>
 </xsl:template>
