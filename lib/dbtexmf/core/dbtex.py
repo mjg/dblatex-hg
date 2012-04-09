@@ -5,6 +5,7 @@
 import sys
 import os
 import re
+import shlex
 import tempfile
 import shutil
 import urllib
@@ -520,7 +521,8 @@ class DbTexCommand:
             failed_exit("Error: %s" % e)
 
         if options.xslopts:
-            run.xslopts = options.xslopts
+            for o in options.xslopts:
+                run.xslopts += shlex.split(o)
 
         if options.xslparams:
             run.xslparams += options.xslparams
