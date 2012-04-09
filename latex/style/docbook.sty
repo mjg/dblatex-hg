@@ -78,7 +78,13 @@
 
 % Display ``DRAFT'' as a water mark:
 \usepackage{ifpdf}
-\ifpdf
+
+\newif\ifpdfengine
+\ifpdf\pdfenginetrue
+\else\ifxetex\pdfenginetrue
+\fi\fi
+
+\ifpdfengine
 \usepackage{pdfpages}
 \usepackage{color}
 \def\showwatermark#1{%
@@ -295,6 +301,7 @@
 \usepackage{refcount}
 \usepackage{lastpage}
 
+%\usepackage{dbk_url}
 \usepackage{dbk_locale}
 \usepackage{dbk_title}
 \usepackage{dbk_headfoot}

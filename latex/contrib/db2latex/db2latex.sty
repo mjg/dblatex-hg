@@ -37,6 +37,7 @@
 
 \usepackage{dbk_fonts}
 \usepackage{dbk_hyper}
+%\usepackage{dbk_url}
 \usepackage{dbk_biblio}
 \usepackage{dbk_table}
 \usepackage{dbk_changebar}
@@ -92,7 +93,13 @@
 
 % Display ``DRAFT'' as a water mark:
 \usepackage{ifpdf}
-\ifpdf
+
+\newif\ifpdfengine
+\ifpdf\pdfenginetrue
+\else\ifxetex\pdfenginetrue
+\fi\fi
+
+\ifpdfengine
 \usepackage{pdfpages}
 \usepackage{color}
 \def\showwatermark#1{%
