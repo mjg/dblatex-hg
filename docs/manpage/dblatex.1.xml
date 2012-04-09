@@ -476,6 +476,10 @@
 dblatex -s /path/to/mystyle.sty myfile.xml</screen>
     </para>
     <para>
+      To pass extra arguments to the XSLT engine:
+      <screen>dblatex -x "--path /path/to/load/entity" myfile.xml</screen>
+    </para>
+    <para>
       To use <command>dblatex</command> and profiling:
       <screen>
 xsltproc --param profile.attribute "'output'" \

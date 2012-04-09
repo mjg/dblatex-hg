@@ -156,6 +156,10 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="literal.layout.options.xml"/>
 <xi:include href="literal.lines.showall.xml"/>
 <xi:include href="literal.width.ignore.xml"/>
+<xi:include href="literal.class.xml"/>
+<xi:include href="literal.role.xml"/>
+<xi:include href="literal.environment.xml"/>
+<xi:include href="literal.extensions.xml"/>
 <xi:include href="linenumbering.scope.xml"/>
 <xi:include href="linenumbering.default.xml"/>
 <xi:include href="linenumbering.everyNth.xml"/>
@@ -187,12 +191,21 @@ refentry.pagebreak — Start each refentry on a new page
 </section>
 <section><title>Pagination and General Styles</title>
 
+<xi:include href="page.height.xml"/>
+<xi:include href="page.margin.bottom.xml"/>
+<xi:include href="page.margin.inner.xml"/>
+<xi:include href="page.margin.outer.xml"/>
+<xi:include href="page.margin.top.xml"/>
+<xi:include href="page.width.xml"/>
+<xi:include href="paper.type.xml"/>
+<xi:include href="geometry.options.xml"/>
 <xi:include href="doc.alignment.xml"/>
 <xi:include href="doc.collab.show.xml"/>
 <xi:include href="doc.layout.xml"/>
 <xi:include href="doc.publisher.show.xml"/>
 <xi:include href="draft.mode.xml"/>
 <xi:include href="draft.watermark.xml"/>
+<xi:include href="latex.engine.options.xml"/>
 <xi:include href="latex.class.article.xml"/>
 <xi:include href="latex.class.book.xml"/>
 <xi:include href="latex.class.options.xml"/>
@@ -217,10 +230,18 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="latex.babel.language.xml"/>
 <xi:include href="latex.babel.use.xml"/>
 
+</section>
 <!--
 <section><title>EBNF</title>
-<section><title>Prepress</title>
 -->
+<section><title>Prepress</title>
+
+<xi:include href="crop.marks.xml"/>
+<xi:include href="crop.paper.type.xml"/>
+<xi:include href="crop.page.width.xml"/>
+<xi:include href="crop.page.height.xml"/>
+<xi:include href="crop.mode.xml"/>
+<xi:include href="crop.options.xml"/>
+
 </section>
 </appendix>
-

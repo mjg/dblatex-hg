@@ -1,3 +1,56 @@
+Release 0.3.3:
+--------------
+
+- Fix incomplete image path conversion when subfigures are used.
+- Fix unicode listings limitation to handle characters greater than 255.
+- Fix <abstract> environment to prevent from page counter reset.
+- Fix the <literallayout> limitations by using the same implementation than
+  <screen>.
+- Fix a texlive 9 french babel and enumitem incompatibility.
+- Fix to be robust to URL encoded image paths, and to non-latin1 paths.
+- Fix missing cross-reference to <sidebar> and <qandaset>.
+- Fix the <sidebar> box width to the actual context witdh.
+- Fix a french babel bug (unexpected active chars) when used with XeTeX.
+- Fix Debian bug #627501 to tell the priority policy of --xsl-user option.
+- Fix Debian bug #632967 to return a non-null code when the compilation fails.
+- Fix Debian bug #629514 to have draft watermark with XeTeX backend.
+- Fix setup.py in order to work under Windows.
+- Fix the HTML table support to correctly render the cells elements.
+- Fix the HTML table support to correctly nested tables.
+- Fix the Olink support to allow database user-specific renderings like italics
+  for <i> tags. Reuse of the DocBook Project implementation.
+- Fix a setup failure that made the listings UTF-8 support failed 
+  (extendedchars to set to "true").
+- Fix --xslt-opts to be able to pass several arguments by using quotes
+- Set the TexLive version to 2009 by default.
+- Update to new Debian Error Handler API.
+ 
+Improvements sponsored by Freexian (http://www.freexian.com) :
+
+- Remove hard-coded paper size and add some parameters for page layout setup:
+  * Parameters to define page sizes and margins.
+  * Parameters to have crop marks for pre-press PDF output.
+- Add the parameters literal.environment and literal.extensions to allow the
+  user define its own listing environment.
+- Add the parameter latex.engine.options to be able to pass options to the
+  TeX engine backend.
+- Add warnings about the characters not handled by the selected fonts.
+- Image display improvements/fixes:
+  * Avoid unexpected paragraph indentation when displaying images.
+  * Strip spurious spaces between subfigures when @role='flow.inline'
+  * Prevents from empty tex subcaptions when no subfigure <caption> is defined.
+- Add the ability to format <ulink> as a block when @type='block'.
+- Pass @role to the latex sidebar environment.
+- Add the literal.class parameter used when <literallayout> class attribute is
+  not set. Default is 'monospaced'.
+- Add some @role to format literal elements, and literal.role parameter for
+  default role:
+  * Wrap: wrap lines when longer than text width (default)
+  * Overflow: do not wrap lines ; long lines overflow to the left
+  * Scale: automatically scale a listing to have its lines fit the page width
+           The special feature can be disabled with literal.extensions=0
+
+
 Release 0.3.2:
 --------------
 

@@ -4,6 +4,59 @@
 <section id="sec-verbatim">
 <title>Extending the Verbatim Rendering</title>
 
+<section id="sec-literal-options">
+<title>Dblatex Specific Options</title>
+
+<para>There are few attributes or options specific to
+<command>dblatex</command> to render verbatim blocks:</para>
+
+<itemizedlist>
+<listitem><para>The <sgmltag>role</sgmltag> attribute of
+<sgmltag>screen</sgmltag>, <sgmltag>programlisting</sgmltag>, and
+<sgmltag>literallayout</sgmltag> can take the following special values:
+
+<variablelist>
+<varlistentry>
+<term>wrap</term>
+<listitem>
+<para>The verbatim lines can break and wrap when they are longer than the
+available width. It is the default behaviour.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>overflow</term>
+<listitem>
+<para>The verbatim lines never break and go into the margin when they are too
+long.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>scale</term>
+<listitem>
+<para>The verbatim block is automatically scaled so that the longuest line
+fits in the available page width. This feature is activated only when role
+is set to this value and when the parameter <parameter>literal.extensions</parameter> is not set to 0.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</para></listitem>
+
+<listitem><para>The parameter <parameter>literal.role</parameter> can be used
+to set the default role to apply. By default the value is an empty string.
+</para>
+</listitem>
+
+<listitem><para>The parameter <parameter>literal.class</parameter> can be used
+to set the default <parameter>literallayout</parameter> class when
+no class attribute is given. By default the value is
+<literal>monospaced</literal>.</para></listitem>
+</itemizedlist>
+
+</section>
+<section>
+<title>Formatting embedded elements</title>
+
 <para>The programlisting and screen environments are supported by dblatex, but
 the implementation is rather conservative, that is, most of the elements
 embedded in such environments are not rendered like in normal environment
@@ -92,4 +145,47 @@ the verbatim.embed template, and pass the mandatory parameters.</para>
 </calloutlist></para>
 
 <para></para>
+</section>
+<section id="sec-literal-env">
+<title>Creating a new Verbatim Environment</title>
+
+<para><command>dblatex</command> heavily relies upon the listing latex package
+to display the <sgmltag>screen</sgmltag>, <sgmltag>programlisting</sgmltag>, and
+<sgmltag>literallayout</sgmltag> blocks.</para>
+
+<para>The global listing setup can be overwritten with
+<parameter>literal.layout.options</parameter> but the user can also provide its
+own listing environment to use instead of the default environment, by using the following procedure:</para>
+<procedure>
+<step><para>Create the new listing environment in a customized latex style, like
+the following example. It is required that the environment name starts with the
+string <literal>"lst"</literal>. If not, <command>dblatex</command> raises an
+error because it cannot recognize it as a special verbatim environment.
+<programlisting language="tex"><![CDATA[
+%%
+%% This style is derivated from the db2latex one
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mystyle}[2012/02/03 My DocBook Style]
+
+%% Just use the original package and pass the options
+\RequirePackageWithOptions{db2latex}
+
+%% New listing environment doing what I want
+\lstnewenvironment{lstblock}[1][]
+  {\lstset{numbers=left,numberstyle=\tiny,float,#1}}
+  {}
+]]></programlisting>
+</para></step>
+<step><para>Specify to <command>dblatex</command> the listing environment name
+through the <parameter>literal.environment</parameter> parameter, either on the
+command line or with a user XSL stylesheet.
+<screen><![CDATA[
+$ dblatex -s mystyle.sty -P literal.environment=lstblock file.xml
+]]></screen>
+
+</para></step>
+</procedure>
+
+</section>
 </section>
