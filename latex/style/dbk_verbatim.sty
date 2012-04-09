@@ -51,8 +51,13 @@
 \newlength{\lstcharwidth}
 \newlength{\lstframesep}
 \newlength{\lstwidth}
-\setlength{\lstcharwidth}{0.51em}
+%\setlength{\lstcharwidth}{0.51em}
+\let\lstcharwidth\lst@width
 \setlength{\lstframesep}{\lst@frametextsep}
+
+% Setup to compute a char width (provision)
+\def\lstsetup{\sbox{\z@}{\lstinline!x!}%
+  \settowidth{\lstcharwidth}{\usebox{\z@}}}
 
 % Environment to render fancyvrb like listings does
 \newenvironment{fvlisting}[1][]
