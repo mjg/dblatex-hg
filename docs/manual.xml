@@ -135,6 +135,8 @@ about the PyPI distribution.</para>
 
 <xi:include href="publish.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
+<xi:include href="pagesetup.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
 <xi:include href="figure.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="tables/table.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

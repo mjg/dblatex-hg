@@ -189,7 +189,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="use.id.as.filename.xml"/>
 
 </section>
-<section><title>Pagination and General Styles</title>
+<section id="sec-pagination-params"><title>Pagination and General Styles</title>
 
 <xi:include href="page.height.xml"/>
 <xi:include href="page.margin.bottom.xml"/>
@@ -234,7 +234,7 @@ refentry.pagebreak — Start each refentry on a new page
 <!--
 <section><title>EBNF</title>
 -->
-<section><title>Prepress</title>
+<section id="sec-prepress-params"><title>Prepress</title>
 
 <xi:include href="crop.marks.xml"/>
 <xi:include href="crop.paper.type.xml"/>
