@@ -149,10 +149,17 @@ class FcManager:
     Collect all the fonts available in the system. The building can be partial,
     i.e. the font objects can be partially created, and updated later (when
     used).
+
+    The class tries to build three ordered list of fonts, one per standard
+    generic font family:
+    - Serif      : main / body font
+    - Sans-serif : used to render sans-serif forms
+    - Monospace  : used to render verbatim / monospace characters
     """
     def __init__(self):
         self.log = logging.getLogger("dblatex")
         self.fonts = {}
+        self.fonts_family = {}
 
     def get_font(self, fontname):
         font = self.fonts.get(fontname)
@@ -160,10 +167,22 @@ class FcManager:
             font.complete()
         return font
 
-    def get_font_handling(self, char, all=False):
+    def get_font_handling(self, char, all=False, family_type=""):
+        if not(family_type):
+            font_family = self.fonts.values()
+        else:
+            font_family = self.fonts_family.get(family_type, None)
+        
+        if not(font_family):
+            return []
+
+        fonts = self.get_font_handling_from(font_family, char, all=all)
+        return fonts
+
+    def get_font_handling_from(self, fontlist, char, all=False):
         fonts = []
         # Brutal method to get something...
-        for f in self.fonts.values():
+        for f in fontlist:
             f.complete()
             if f.has_char(char):
                 if all:
@@ -173,6 +192,13 @@ class FcManager:
         return fonts
 
     def build_fonts(self, partial=False):
+        self.build_fonts_all(partial=partial)
+        self.build_fonts_family("serif")
+        self.build_fonts_family("sans-serif")
+        self.build_fonts_family("monospace")
+
+    def build_fonts_all(self, partial=False):
+        # Grab all the fonts installed on the system
         d = execute(["fc-list"])
         fonts = d.strip().split("\n")
         for f in fonts:
@@ -188,4 +214,17 @@ class FcManager:
             font = FcFont(fontnames, partial=partial)
             self.fonts[mainname] = font
 
+    def build_fonts_family(self, family_type):
+        # Create a sorted list matching a generic family
+        # Use --sort to have only fonts completing unicode range
+        font_family = []
+        self.fonts_family[family_type] = font_family
+        d = execute(["fc-match", "--sort", family_type, "family"])
+        fonts = d.strip().split("\n")
+        for f in fonts:
+            font = self.fonts.get(f)
+            if not(font in font_family):
+                font_family.append(font)
+        #print family_type
+        #print font_family
 

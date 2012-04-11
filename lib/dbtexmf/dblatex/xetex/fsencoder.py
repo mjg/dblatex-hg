@@ -7,7 +7,7 @@ Provide an encoder for a font specification configuration: the encoder is fed
 with Unicode characters one by one and determines the needed font switches
 between the preceding and the current character.
 """
-
+import sys
 import re
 import xml.dom.minidom
 
@@ -68,6 +68,7 @@ class FontSpecEncoder:
         """
         fontspec = self._cur_fontspec or self._conf.default_fontspec
 
+        print >>sys.stderr, "Current:", fontspec.id
         fontspec = fontspec.match(char)
         while not(fontspec):
             leaf = self._ref_stack.pop()

@@ -261,7 +261,7 @@ class FontSpec:
             return False
 
     def isignored(self, char):
-        #print "%s: %s" % (self.id, [ str(a) for a in self._ignored ])
+        self.log.debug("%s: %s" % (self.id, [ str(a) for a in self._ignored ]))
         for interval in self._ignored:
             if interval.contains(char):
                 return True
@@ -279,7 +279,7 @@ class FontSpec:
         object, thereby considering refmode.
         """
         fontspec = None
-        #print "Lookup in ", self.id
+        self.log.debug( "Lookup in %s" % self.id)
         if self.isignored(char):
             self._loghas(self.id, char)
             return self
