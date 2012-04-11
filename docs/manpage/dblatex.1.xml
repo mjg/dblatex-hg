@@ -13,11 +13,13 @@
     <author>
       <firstname>Benoit</firstname>
       <surname>Guillon</surname>
+      <contrib>Upstream maintainer</contrib>
     </author>
     <author>
       <firstname>Andreas</firstname>
       <surname>Hoenen</surname>
       <email>andreas.hoenen@arcor.de</email>
+      <contrib>Debian maintainer</contrib>
     </author>
     <copyright>
       <year>2005</year>
@@ -52,6 +54,9 @@
   <refmeta>
     <refentrytitle>dblatex</refentrytitle>
     <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">Dblatex Manual Page</refmiscinfo>
+    <refmiscinfo class="source">dblatex <xi:include href="../version.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude"/></refmiscinfo>
   </refmeta>
 
   <refnamediv>
@@ -483,7 +488,8 @@ dblatex -s /path/to/mystyle.sty myfile.xml</screen>
       To use <command>dblatex</command> and profiling:
       <screen>
 xsltproc --param profile.attribute "'output'" \
-         --param profile.value "'pdf'" /path/to/profiling/profile.xsl \
+         --param profile.value "'pdf'" \
+         /path/to/profiling/profile.xsl \
          myfile.xml | dblatex -o myfile.pdf -
 </screen>
     </para>

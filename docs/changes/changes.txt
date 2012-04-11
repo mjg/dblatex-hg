@@ -34,7 +34,7 @@ Improvements sponsored by Freexian (http://www.freexian.com) :
   user define its own listing environment.
 - Add the parameter latex.engine.options to be able to pass options to the
   TeX engine backend.
-- Add warnings about the characters not handled by the selected fonts.
+- Print out warnings about the characters not handled by the selected fonts.
 - Image display improvements/fixes:
   * Avoid unexpected paragraph indentation when displaying images.
   * Strip spurious spaces between subfigures when @role='flow.inline'

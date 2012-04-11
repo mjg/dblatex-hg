@@ -95,7 +95,8 @@ native db2latex simple: version.xml
 
 %.1: %.1.xml
 	$(XSLTPROC) --param profile.attribute "'output'" \
-                    --param profile.value "'manpage'" $(XSLPROF) $< | \
+                    --param profile.value "'manpage'" \
+                    --xinclude $(XSLPROF) $< | \
         $(XSLTPROC) $(XSLMAN) - 
 
 # Actual version of the release
