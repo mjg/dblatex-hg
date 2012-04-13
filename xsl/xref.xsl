@@ -5,6 +5,7 @@
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
 <xsl:param name="xref.hypermarkup" select="0"/>
+<xsl:param name="ulink.block.symbol">\textbullet</xsl:param>
 
 
 <xsl:template match="anchor">
@@ -349,10 +350,8 @@
 
 <xsl:template name="ulink.block.markup">
   <xsl:text>&#10;&#10;</xsl:text>
-  <!-- Put a small black triangle pointing to right (U25B8) --> 
-  <xsl:call-template name="scape">
-    <xsl:with-param name="string" select="'&#x25B8;'"/>
-  </xsl:call-template>
+  <!-- Put a symbol as a starter --> 
+  <xsl:value-of select="$ulink.block.symbol"/>
   <xsl:choose>
   <!-- In sidebar force left-alignment with a fixed space -->
   <xsl:when test="ancestor::sidebar">
