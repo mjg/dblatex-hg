@@ -48,6 +48,15 @@
 </xsl:template>
 -->
 
+<xsl:template name="inline.sansseq">
+  <xsl:param name="content">
+    <xsl:apply-templates/>
+  </xsl:param>
+  <xsl:text>\textsf{</xsl:text>
+  <xsl:copy-of select="$content"/>
+  <xsl:text>}</xsl:text>
+</xsl:template>
+
 <xsl:template name="inline.charseq">
   <xsl:param name="content">
     <xsl:apply-templates/>
