@@ -14,6 +14,7 @@ Release 0.3.3:
 - Fix Debian bug #627501 to tell the priority policy of --xsl-user option.
 - Fix Debian bug #632967 to return a non-null code when the compilation fails.
 - Fix Debian bug #629514 to have draft watermark with XeTeX backend.
+- Fix Debian bug #634563 to have safe pdftitle content (no images).
 - Fix setup.py in order to work under Windows.
 - Fix the HTML table support to correctly render the cells elements.
 - Fix the HTML table support to correctly nested tables.

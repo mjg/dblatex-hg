@@ -99,6 +99,13 @@
                                  |articleinfo/title
                                  |artheader/title)[1]" mode="coverpage"/>
   </xsl:variable>
+  <xsl:variable name="pdftitle">
+    <xsl:apply-templates select="(title
+                                 |info/title
+                                 |bookinfo/title
+                                 |articleinfo/title
+                                 |artheader/title)[1]" mode="pdftitle"/>
+  </xsl:variable>
 
   <!-- Get the Authors -->
   <xsl:variable name="authors">
@@ -130,7 +137,7 @@
     <xsl:text>},%&#10;</xsl:text>
   </xsl:if>
   <xsl:text>pdftitle={</xsl:text>
-  <xsl:value-of select="$title"/>
+  <xsl:value-of select="$pdftitle"/>
   <xsl:text>},%&#10;</xsl:text>
   <xsl:text>pdfauthor={</xsl:text>
   <xsl:value-of select="$authors"/>
@@ -159,6 +166,15 @@
 <!-- FIXME: currently does nothing more than default rendering -->
 <xsl:template match="title" mode="coverpage">
   <xsl:apply-templates/>
+</xsl:template>
+
+<!-- In PDF title, no formatting required, just text content -->
+<xsl:template match="title" mode="pdftitle">
+  <xsl:apply-templates mode="pdftitle"/>
+</xsl:template>
+
+<xsl:template match="text()" mode="pdftitle">
+  <xsl:apply-templates select="."/>
 </xsl:template>
 
 <!-- ##################################
