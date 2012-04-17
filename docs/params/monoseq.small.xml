@@ -16,5 +16,16 @@
     <title>Description</title>
     <para>When set to 1, choose a smaller font to the element rendered with
 monoseq fonts.</para>
+    <tip>
+    <para>If you use the XeTeX backend you do not need to use this parameter.
+    Instead, you can configure
+    the monospaced font used with a scale option as follow,
+    through the parameter <parameter>xetex.font</parameter> or via a user
+    latex style:
+<programlisting>
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+</programlisting>
+    </para>
+    </tip>
   </refsection>
 </refentry>
