@@ -40,7 +40,7 @@ allstyle: all native db2latex simple
 olink: manual.db release-notes.db
 
 # Build and zip the Manpage
-manpagegz:
+manpagegz: version.xml
 	@$(MAKE) -C manpage -f ../Makefile dblatex.1.gz
 
 # Build the HTML version of the documentation
