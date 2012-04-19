@@ -49,7 +49,8 @@ $(HTMLDIRUM)/index.html: manual.xml
 			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<
 	convert -trim -rotate 90 processus.fig $(HTMLDIRUM)/processus.png
-	$(CP) tables/*.png $(HTMLDIRUM)/.
+	convert -trim pagesetup2.fig $(HTMLDIRUM)/pagesetup2.png
+	$(CP) *.png tables/*.png $(HTMLDIRUM)/.
 	$(CP) -r math/figures $(HTMLDIRUM)/.
 	$(CP) -r $(XSLDBK)/images $(HTMLDIRUM)/.
 	$(CP) manual.css $(HTMLDIRUM)/.
