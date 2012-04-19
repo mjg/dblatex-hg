@@ -84,6 +84,7 @@ fi
 
 # Remove the devel only files
 rm -f $tmpbuild/build_package
+rm -f $tmpbuild/build_egg
 rm -f $tmpbuild/xsl/common/.cvsignore
 rm -f $tmpbuild/xsl/common/Makefile
 rm -f $tmpbuild/xsl/mathml2/Makefile
