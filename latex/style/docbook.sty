@@ -49,15 +49,20 @@
 }{
 }
 }{
+% Redefine abstract in avoid page count reset
+\def\nocount#1#2{}
+\let\stdsetcounter\setcounter
 \let\stdabstract=\abstract
 \let\endstdabstract=\endabstract
-\renewenvironment{abstract}{
+\renewenvironment{abstract}{%
+  \let\setcounter\nocount%
   \begin{stdabstract}%
   \noindent%
   \setlength\parskip{\medskipamount}%
   \setlength\parindent{0pt}%
 }{
   \end{stdabstract}
+  \let\setcounter\stdsetcounter
 }
 }
 
