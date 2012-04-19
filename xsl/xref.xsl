@@ -509,7 +509,9 @@
   <xsl:message>
     <xsl:text>Don't know what gentext to create for xref to: "</xsl:text>
     <xsl:value-of select="$refelem"/>
-    <xsl:text>"</xsl:text>
+    <xsl:text>" (linkend=</xsl:text>
+    <xsl:value-of select="(@id|@xml:id)[1]"/>
+    <xsl:text>)</xsl:text>
   </xsl:message>
   <xsl:text>[?</xsl:text><xsl:value-of select="$refelem"/><xsl:text>]</xsl:text>
 </xsl:template>

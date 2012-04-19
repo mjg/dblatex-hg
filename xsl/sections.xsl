@@ -50,7 +50,15 @@
     </xsl:choose>
   </xsl:when>
   <xsl:otherwise>
-    <xsl:message>Section level &gt; 6 not well supported</xsl:message> 
+    <xsl:message>
+      <xsl:text>Section level &gt; 6 not well supported for </xsl:text>
+      <xsl:value-of select="local-name(.)"/>
+      <xsl:if test="@id|@xml:id">
+        <xsl:text>(id=</xsl:text>
+        <xsl:value-of select="(@id|@xml:id)[1]"/>
+        <xsl:text>)</xsl:text>
+      </xsl:if>
+    </xsl:message> 
     <xsl:text>\subparagraph</xsl:text>
   </xsl:otherwise>
   </xsl:choose>
