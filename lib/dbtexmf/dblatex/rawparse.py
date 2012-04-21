@@ -1,6 +1,7 @@
 import re
 
 from texcodec import LatexCodec, TexCodec
+from texhyphen import BasicHyphenator, UrlHyphenator
 
 
 def utf8(u):
@@ -22,6 +23,8 @@ class RawLatexParser:
         self.depth = 0
         self.hyphenate = 0
         self.codec = codec or LatexCodec(output_encoding=output_encoding)
+        #self.hyphenator = BasicHyphenator(codec=self.codec)
+        self.hyphenator = UrlHyphenator(codec=self.codec)
         
         # hyphenation patterns
         self.hypon = re.compile(utf8(u"\u0370h"))
@@ -62,17 +65,12 @@ class RawLatexParser:
         return lout
 
     def translate(self, text):
-        text = self.codec.decode(text)
-        if self.hyphenate:
-            text = "\1".join(text)
-            text = text.replace("\1 ", " ")
-            text = text.replace(" \1", " ")
-
-        text = self.codec.encode(text)
-
         # Now hyphenate if needed
         if self.hyphenate:
-            text = text.replace("\1", r"\-")
+            text = self.hyphenator.hyphenate(text)
+        else:
+            text = self.codec.decode(text)
+            text = self.codec.encode(text)
         return text
 
 
