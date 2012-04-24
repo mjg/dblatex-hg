@@ -445,12 +445,13 @@
 </xsl:template>
 
 
-<xsl:template match="*[self::programlisting or
+<!-- Special case for literal blocks in tables or foonotes -->
+<xsl:template match="*[self::entry or
+                       self::entrytbl or
+                       self::footnote]//
+                     *[self::programlisting or
                        self::screen or
-                       self::literallayout]
-                      [ancestor::entry or
-                       ancestor::entrytbl or
-                       ancestor::footnote]">
+                       self::literallayout]">
 
   <xsl:variable name="lsopt">
     <!-- language option is only for programlisting -->
