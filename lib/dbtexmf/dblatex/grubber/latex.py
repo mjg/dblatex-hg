@@ -265,7 +265,15 @@ class Latex(Depend):
         missed_chars = list(set(missed_chars))
         missed_chars.sort()
         for m in missed_chars:
-            uchar = m[0].decode("utf8")
-            msg.warn("Character U+%X (%s) not in font '%s'" % \
-                     (ord(uchar), m[0], m[1]))
+            # The log file is encoded in UTF8 (xetex) or in latin1 (pdftex)
+            try:
+                uchar = m[0].decode("utf8")
+            except:
+                uchar = m[0].decode("latin1")
+            # Check we have a real char (e.g. not something like '^^a3')
+            if len(uchar) == 1:
+                msg.warn("Character U+%X (%s) not in font '%s'" % \
+                         (ord(uchar), m[0], m[1]))
+            else:
+                msg.warn("Character '%s' not in font '%s'" % (m[0], m[1]))
 
