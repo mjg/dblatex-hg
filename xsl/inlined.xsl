@@ -6,14 +6,33 @@
     ############################################################################ -->
 
 <xsl:param name="filename.as.url">1</xsl:param>
-<xsl:param name="monoseq.hyphenation">1</xsl:param>
+<xsl:param name="hyphenation.format">monoseq,sansseq</xsl:param>
 <xsl:param name="monoseq.small">0</xsl:param>
 
 
 <xsl:template name="inline.setup">
-  <xsl:if test="$monoseq.hyphenation='nohyphen'">
+  <xsl:if test="$hyphenation.format='nohyphen'">
     <xsl:text>\sloppy&#10;</xsl:text>
   </xsl:if>
+</xsl:template>
+
+<!-- Use the dblatex hyphenation only if enabled for this format.
+     If no format is specified, the check is done on the calling
+     element name
+-->
+<xsl:template name="inline.hyphenate">
+  <xsl:param name="string"/>
+  <xsl:param name="format" select="local-name()"/>
+  <xsl:choose>
+  <xsl:when test="contains($hyphenation.format, $format)">
+    <xsl:call-template name="hyphen-encode">
+      <xsl:with-param name="string" select="$string"/>
+    </xsl:call-template>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:copy-of select="$string"/>
+  </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="inline.boldseq">
@@ -53,7 +72,10 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\textsf{</xsl:text>
-  <xsl:copy-of select="$content"/>
+  <xsl:call-template name="inline.hyphenate">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="format" select="'sansseq'"/>
+  </xsl:call-template>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -69,7 +91,10 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>{\ttfamily\bfseries{</xsl:text>
-  <xsl:copy-of select="$content"/>
+  <xsl:call-template name="inline.hyphenate">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="format" select="'boldmonoseq'"/>
+  </xsl:call-template>
   <xsl:text>}}</xsl:text>
 </xsl:template>
 
@@ -99,16 +124,10 @@
   <xsl:if test="not($monoseq.small = '0')">
     <xsl:text>\small{</xsl:text>
   </xsl:if>
-  <xsl:choose>
-  <xsl:when test="$monoseq.hyphenation='1'">
-    <xsl:call-template name="hyphen-encode">
-      <xsl:with-param name="string" select="$content"/>
-    </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:copy-of select="$content"/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="inline.hyphenate">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="format" select="'monoseq'"/>
+  </xsl:call-template>
   <xsl:if test="not($monoseq.small = '0')">
     <xsl:text>}</xsl:text>
   </xsl:if>
@@ -120,16 +139,10 @@
     <xsl:apply-templates/>
   </xsl:param>
   <xsl:text>\texttt{\emph{\small{</xsl:text>
-  <xsl:choose>
-  <xsl:when test="$monoseq.hyphenation='1'">
-    <xsl:call-template name="hyphen-encode">
-      <xsl:with-param name="string" select="$content"/>
-    </xsl:call-template>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:copy-of select="$content"/>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="inline.hyphenate">
+    <xsl:with-param name="string" select="$content"/>
+    <xsl:with-param name="format" select="'monoseq'"/>
+  </xsl:call-template>
   <xsl:text>}}}</xsl:text>
 </xsl:template>
 
