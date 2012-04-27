@@ -207,6 +207,12 @@
     <xsl:with-param name="co-tagin" select="$co-tagin"/>
     <xsl:with-param name="rnode" select="$rnode"/>
   </xsl:apply-templates>
+  <!-- ensure to have the end on a separate line -->
+  <xsl:if test="substring(.,string-length(.))!='&#10;' and
+                substring(translate(.,' &#09;',''),
+                  string-length(translate(.,' &#09;','')))!='&#10;'">
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
   <xsl:text>\end{</xsl:text>
   <xsl:value-of select="$env"/>
   <xsl:text>}&#10;</xsl:text>
@@ -435,9 +441,8 @@
     <xsl:value-of select="$str"/>
     <!-- put a \n only if needed -->
     <xsl:if test="substring($str1,string-length($str1))!='&#10;' and
-                  string-length(substring-after(
-                    concat(substring-after(
-                      $str1,normalize-space($str1)),'&#10;'),'&#10;'))=0">
+                  substring(translate($str1,' &#09;',''),
+                    string-length(translate($str1,' &#09;','')))!='&#10;'">
       <xsl:text>&#10;</xsl:text>
     </xsl:if>
     <xsl:text>\end{VerbatimOut}&#10;</xsl:text>
