@@ -1,0 +1,34 @@
+%
+% dblatex - Contains miscellaneous latex macros
+%
+%
+
+%%
+%% Redefine the `float' behaviour so that it can split over pages.
+%% Actually there's nothing floating anymore, but the float style is preserved.
+%% The XSLT templates must be redefined to call this macro instead.
+%% - #1: float name
+%% - #2: caption material (including the \caption macro call)
+%%
+%% It assumes that floats are created with \newfloat and it
+%% uses some internal macros of float.sty to emulate the same environment.
+%% It is compatible with \caption redefined by caption.sty.
+%%
+\newenvironment{longfloat}[2]{
+  \@nameuse{fst@#1}%
+  \def\@captype{#1}\setbox\@floatcapt=\vbox{}%
+  \def\@capcontent{#2} % caption material
+  \vspace{2\parskip}\pagebreak[3]
+  \@parboxrestore%
+  \@fs@pre\@fs@iftopcapt%
+    \@capcontent%
+    \ifvoid\@floatcapt\else\unvbox\@floatcapt\par\@fs@mid\fi%
+  \else\fi%
+}{
+  \@fs@iftopcapt\else%
+    \@capcontent%
+    \ifvoid\@floatcapt\else\par\@fs@mid\unvbox\@floatcapt\fi
+  \fi\par\@fs@post\vskip\z@%
+  \vspace{2mm}
+}
+

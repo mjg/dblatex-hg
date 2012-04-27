@@ -6,9 +6,31 @@
     ############################################################################ -->
 
 <xsl:param name="example.default.position">[H]</xsl:param>
+<xsl:param name="example.float.type">none</xsl:param>
 
 
 <xsl:template match="example">
+  <xsl:choose>
+    <xsl:when test="@floatstyle='none' or
+                   (not(@floatstyle) and $example.float.type='none')">
+      <xsl:apply-templates select="." mode="block"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="." mode="float"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="example" mode="block">
+  <xsl:text>&#10;\begin{longfloat}{example}{</xsl:text>
+  <!-- caption -->
+  <xsl:apply-templates select="title"/>
+  <xsl:text>}&#10;</xsl:text>
+  <xsl:apply-templates select="*[not(self::title)]"/>
+  <xsl:text>&#10;\end{longfloat}&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template match="example" mode="float">
   <xsl:text>&#10;\begin{example}</xsl:text>
   <!-- float placement preference -->
   <xsl:choose>
