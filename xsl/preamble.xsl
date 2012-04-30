@@ -494,9 +494,15 @@
   <xsl:apply-templates select="*[not(self::abstract or
                                      self::preface or
                                      self::dedication or
-                                     self::colophon)]"/>
+                                     self::colophon or
+                                     self::appendix)]"/>
 
   <!-- Back matter -->
+  <xsl:if test="contains($layout, 'backmatter ')">
+    <xsl:value-of select="$backmatter"/>
+  </xsl:if>
+
+  <xsl:apply-templates select="appendix"/>
   <xsl:if test="contains($layout, 'index ')">
     <xsl:if test="*//indexterm|*//keyword">
       <xsl:call-template name="printindex"/>
