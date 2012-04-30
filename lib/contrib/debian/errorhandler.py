@@ -9,7 +9,7 @@ import apt
 
 from dbtexmf.core.error import ErrorHandler
 from dbtexmf.core.imagedata import ImageConverter
-from dbtexmf.core.dbtex import DbTex
+from dbtexmf.core.dbtex import DbTexCommand
 
 class AptSilentProgress(apt.progress.text.OpProgress):
     """
@@ -36,7 +36,7 @@ class DebianHandler(ErrorHandler):
         self.object = failed_object
         if not self.aptcache:
             self.aptcache = apt.Cache(progress=AptSilentProgress())
-        if (isinstance(self.object, DbTex)):
+        if (isinstance(self.object, DbTexCommand)):
             error_handled = self._check_dbtexrun()
         elif (isinstance(self.object, ImageConverter)):
             error_handled = self._check_imagerun(*args)
@@ -98,7 +98,7 @@ class DebianHandler(ErrorHandler):
         a best effort approach, that is it will silently skip any problems,
         e.g. the external validation program xmllint not installed.
         """
-        obj = self.object
+        obj = self.object.run
         nulldev = file('/dev/null')
         try:
             rc = subprocess.Popen(['xmllint', '--noout', '--postvalid',
@@ -131,7 +131,7 @@ class DebianHandler(ErrorHandler):
         If it is used but a needed dependency is missing, dump an appropriate
         hint.
         """
-        obj = self.object
+        obj = self.object.run
         aptcache = self.aptcache
         warn_msgs = []
         if obj.backend == 'xetex':
@@ -156,7 +156,7 @@ class DebianHandler(ErrorHandler):
             return False
 
     def _check_cyrillic(self):
-        obj = self.object
+        obj = self.object.run
         """
         In case of failed processing check on the "cyrillic scenario":
 
