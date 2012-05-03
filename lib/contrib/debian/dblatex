@@ -2,7 +2,7 @@
 
 # Register the Debian error analyser
 from dbtexmf.core import error
-from contrib.debian.errorhandler import DebianHandler
+from dbtexmf.contrib.debian.errorhandler import DebianHandler
 error.set_errhandler(DebianHandler())
 
 from dbtexmf.dblatex import dblatex
