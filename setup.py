@@ -22,7 +22,8 @@ from distutils.command.install_data import install_data
 from distutils.command.sdist import sdist
 from distutils import log
 from subprocess import Popen, PIPE
-
+sys.path.append("lib")
+from contrib.debian.installer import DebianInstaller
 
 #
 # Build the command line script
@@ -364,7 +365,12 @@ class Install(install):
             raise OSError("not found: %s" % ", ".join(mis_stys))
 
     def run(self):
-        if not(self.nodeps):
+        if self.install_layout == "deb":
+            db = DebianInstaller(self)
+        else:
+            db = None
+
+        if not(db) and not(self.nodeps):
             try:
                 self.check_xslt_dependencies()
                 self.check_util_dependencies()
@@ -373,11 +379,15 @@ class Install(install):
                 print >>sys.stderr, "Error: %s" % e
                 sys.exit(1)
 
+        if db: db.adapt_paths()
+
         # If no build is required, at least build the script
         if self.skip_build:
             self.run_command('build_scripts')
 
         install.run(self)
+
+        if db: db.finalize()
 
 
 class InstallData(install_data):
@@ -402,7 +412,7 @@ class InstallData(install_data):
                         if not(pref):
                             iroot = root
                         else:
-                            iroot = root.split(pref + os.path.sep)[1]
+                            iroot = root.split(pref + os.path.sep, 1)[1]
                         idir = os.path.join(install_base, iroot)
                         files = [os.path.join(root, i) for i in files]
                         if files:
