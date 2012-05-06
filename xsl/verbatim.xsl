@@ -149,6 +149,21 @@
   <xsl:value-of select="concat('&lt;/', $style, '&gt;')"/>
 </xsl:template>
 
+<!-- A latex Processing-Instruction in verbatim is meaningfull, so
+     process it.
+     -->
+
+<xsl:template match="processing-instruction('latex')"
+              mode="latex.programlisting">
+  <xsl:param name="co-tagin" select="'&lt;'"/>
+  <xsl:param name="rnode" select="/"/>
+  <xsl:param name="probe" select="0"/>
+
+  <xsl:value-of select="concat($co-tagin, 't', '&gt;')"/>
+  <xsl:value-of select="."/>
+  <xsl:value-of select="concat('&lt;/', 't', '&gt;')"/>
+</xsl:template>
+
 <!-- ==================================================================== -->
 
 <!-- By default an element in a programlisting environment just prints out its
