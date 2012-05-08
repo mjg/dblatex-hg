@@ -12,7 +12,7 @@
 <xsl:param name="literal.role"/>
 <xsl:param name="literal.class">monospaced</xsl:param>
 <xsl:param name="literal.environment">lstlisting</xsl:param>
-<xsl:param name="literal.extensions">0</xsl:param>
+<xsl:param name="literal.extensions"/>
 <xsl:param name="linenumbering.scope"/>
 <xsl:param name="linenumbering.default"/>
 <xsl:param name="linenumbering.everyNth"/>
@@ -277,20 +277,31 @@
     <xsl:call-template name="linenumbering"/>
   </xsl:variable>
 
+  <xsl:variable name="role">
+    <xsl:choose>
+    <xsl:when test="@role">
+      <xsl:value-of select="@role"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$literal.role"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:variable name="opt">
     <!-- skip empty endlines -->
     <xsl:if test="$literal.lines.showall='0'">
       <xsl:text>showlines=false,</xsl:text>
     </xsl:if>
     <!-- Remove wrap mode if required -->
-    <xsl:if test="@role='overflow' or 
-                  (not(@role) and $literal.role='overflow')">
+    <xsl:if test="$role='overflow'">
       <xsl:text>breaklines=false,</xsl:text>
     </xsl:if>
     <!-- The scaling feature is not available with standard listings -->
-    <xsl:if test="$literal.extensions!=0">
+    <xsl:if test="contains($literal.extensions, 'scale')">
       <xsl:choose>
-      <xsl:when test="@role='scale'">
+      <xsl:when test="$role='scale' or 
+          ($role='' and $literal.extensions='scale.by.width' and $width!='')">
         <xsl:text>scale=true,</xsl:text>
         <!-- don't wrap to scale to the longest line if no width specified -->
         <xsl:if test="$width=''">
