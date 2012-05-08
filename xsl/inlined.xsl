@@ -7,11 +7,13 @@
 
 <xsl:param name="filename.as.url">1</xsl:param>
 <xsl:param name="hyphenation.format">monoseq,sansseq</xsl:param>
+<xsl:param name="hyphenation.setup"/>
 <xsl:param name="monoseq.small">0</xsl:param>
 
 
 <xsl:template name="inline.setup">
-  <xsl:if test="$hyphenation.format='nohyphen'">
+  <xsl:if test="$hyphenation.format='nohyphen' or
+                contains($hyphenation.setup,'sloppy')">
     <xsl:text>\sloppy&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
