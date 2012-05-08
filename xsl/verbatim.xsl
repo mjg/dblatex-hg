@@ -292,6 +292,10 @@
       <xsl:choose>
       <xsl:when test="@role='scale'">
         <xsl:text>scale=true,</xsl:text>
+        <!-- don't wrap to scale to the longest line if no width specified -->
+        <xsl:if test="$width=''">
+          <xsl:text>breaklines=false,</xsl:text>
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>scale=false,</xsl:text>
