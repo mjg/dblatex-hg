@@ -49,15 +49,18 @@
 
 % Lengths to compute the listing width from the number of characters
 \newlength{\lstcharwidth}
+\newlength{\lstcharwidthb}
 \newlength{\lstframesep}
 \newlength{\lstwidth}
-%\setlength{\lstcharwidth}{0.51em}
-\let\lstcharwidth\lst@width
+\setlength{\lstcharwidth}{\lst@width}
+%\let\lstcharwidth\lst@width
 \setlength{\lstframesep}{\lst@frametextsep}
 
-% Setup to compute a char width (provision)
+% Setup to compute a char width
 \def\lstsetup{\sbox{\z@}{\lstinline!x!}%
-  \settowidth{\lstcharwidth}{\usebox{\z@}}}
+  \settowidth{\lstcharwidth}{\usebox{\z@}}%
+  \sbox{\z@}{\lstinline[basicstyle=\ttfamily]!x!}
+  \settowidth{\lstcharwidthb}{\usebox{\z@}}}
 
 % Environment to render fancyvrb like listings does
 \newenvironment{fvlisting}[1][]

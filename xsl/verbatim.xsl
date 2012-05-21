@@ -11,11 +11,21 @@
 <xsl:param name="literal.lines.showall">1</xsl:param>
 <xsl:param name="literal.role"/>
 <xsl:param name="literal.class">monospaced</xsl:param>
-<xsl:param name="literal.environment">lstlisting</xsl:param>
 <xsl:param name="literal.extensions"/>
 <xsl:param name="linenumbering.scope"/>
 <xsl:param name="linenumbering.default"/>
 <xsl:param name="linenumbering.everyNth"/>
+<!-- Use scalable dblatex listing if the feature is required -->
+<xsl:param name="literal.environment">
+  <xsl:choose>
+  <xsl:when test="contains($literal.extensions,'scale')">
+    <xsl:text>lstcode</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:text>lstlisting</xsl:text>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
 
 
 <xsl:template name="verbatim.setup">
@@ -30,6 +40,11 @@
   <xsl:apply-templates select="//screen|//programlisting"
                        mode="save.verbatim.preamble"/>
 </xsl:template>
+
+<xsl:template name="verbatim.setup2">
+  <xsl:text>\lstsetup&#10;</xsl:text>
+</xsl:template>
+
 
 <xsl:template match="address">
   <xsl:call-template name="output.verbatim"/>

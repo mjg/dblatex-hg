@@ -465,6 +465,9 @@
   </xsl:call-template>
   <xsl:call-template name="label.id"/>
 
+  <!-- Setup that must be performed after the begin of document -->
+  <xsl:call-template name="verbatim.setup2"/>
+
   <!-- Apply the legalnotices here, when language is active -->
   <xsl:call-template name="print.legalnotice">
     <xsl:with-param name="nodes" select="$info/legalnotice"/>
