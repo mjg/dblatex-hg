@@ -49,24 +49,20 @@
 %%% New listing option to scale the listing to fit the page width
 \lst@Key{scale}{true}[t]{\lstKV@SetIf{#1}\lst@ifscale}
 
-%%% For reusability of the passed options
-\def\FREE@UseKeyValues{%
-  \def\KV@prefix{KV@lst@}%
-  \expandafter\KV@do\FV@KeyValues,\relax,%
-}
-
+%%% Remember the original fancyvrb macro to handle options
 \let\FV@UseKeyValuesOrig\FV@UseKeyValues
-%
+
 \def\code{\FV@Environment{}{lstcode}}
 \def\FVB@lstcode{%
-  \let\FV@UseKeyValues\FREE@UseKeyValues
+  % Just dump the listing into a file, skip the options used later
+  \let\FV@UseKeyValues\relax
   \FVB@VerbatimOut{lst.tmp}}
 
 \def\FVE@lstcode{%
   \FVE@VerbatimOut
   \let\FV@UseKeyValues\FV@UseKeyValuesOrig
-  % Apply the passed options
-  \FREE@UseKeyValues
+  % Now, apply the passed options
+  \expandafter\lstset\expandafter{\FV@KeyValues}
   % Is there any scaling required?
   \lst@ifscale
     \lst@ifbreaklines
