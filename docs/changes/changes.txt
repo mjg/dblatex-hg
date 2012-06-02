@@ -2,7 +2,7 @@ Release 0.3.4:
 --------------
 
 - Fix a bug in the missing characters display.
-- Fix the global template to actually insert à backmatter tag before backmatter
+- Fix the global template to actually insert a backmatter tag before backmatter
   elements.
 - Fix bug #3520152 by changing a template xpath (looks like a libxslt
   limitation).
