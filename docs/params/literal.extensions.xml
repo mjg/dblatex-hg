@@ -14,13 +14,11 @@
   </refsynopsisdiv>
   <refsection>
     <title>Description</title>
-    <para>When this parameter is set to 0, <command>dblatex</command> only uses options supported by the listings package, in order to ensure that any verbatim environment built upon this standard package will work.</para>
-    <para>When this parameter is not 0, <command>dblatex</command> uses
+    <para>When this parameter is empty, <command>dblatex</command> only uses options supported by the listings package, in order to ensure that any verbatim environment built upon this standard package will work.</para>
+    <para>When this parameter contains "scale", <command>dblatex</command> uses
     additionnal options handled only by the dblatex version of the
-    verbatim environment. For example the scaling feature (see <xref
-    linkend="sec-literal-options"/>)
-    is activated only when
-    extensions are enabled.</para>
+    verbatim environment to provide scaling capabilities (see <xref
+    linkend="sec-scale-verbatim"/>).</para>
   </refsection>
   <refsection>
     <title>See Also</title>

@@ -33,9 +33,10 @@ long.</para>
 <varlistentry>
 <term>scale</term>
 <listitem>
-<para>The verbatim block is automatically scaled so that the longuest line
-fits in the available page width. This feature is activated only when role
-is set to this value and when the parameter <parameter>literal.extensions</parameter> is not set to 0.</para>
+<para>The verbatim block is automatically scaled so that the longest line or
+specified column count
+fits in the available page width. See <xref linkend="sec-scale-verbatim"/>.
+</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -53,6 +54,76 @@ no class attribute is given. By default the value is
 <literal>monospaced</literal>.</para></listitem>
 </itemizedlist>
 
+</section>
+<section id="sec-scale-verbatim">
+<title>Scaling Feature</title>
+
+<para>The user can scale the verbatim block so that the longest line fits in 
+the available page width, or so that the page contains at least a specified width expressed in columns.</para>
+
+<para>The scaling feature is enabled when the parameter <parameter>literal.extensions</parameter> is set as follow:
+
+<variablelist>
+<varlistentry>
+<term>scale</term>
+<listitem>
+<para>The scaling is performed only when the <sgmltag>role</sgmltag> attribute
+is set to "scale", or when the <sgmltag>role</sgmltag> attribute is not set and the parameter <parameter>literal.role</parameter> is set to "scale".</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>scale.by.width</term>
+<listitem>
+<para>The scaling is performed when the <sgmltag>role</sgmltag> attribute
+or <parameter>literal.role</parameter> is properly set, or when the attribute
+<sgmltag>width</sgmltag> is set. When width is set the block is scaled so that
+the specified width fits in the page width.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+<para>Here are some listing examples with several attribute combinations producing or not the scaling. In these examples the parameter <parameter>literal.extensions</parameter> is set to "scale.by.width".</para>
+
+<programlisting width="110">
+<![CDATA[<programlisting width="110">
+The listing is scaled and lines are wrapped after 110 characters. Check yourself: 
+
+123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 1234567 9 123456789
+0         1         2         3         4         5         6         7         8         9         10        11       
+
+</programlisting>]]>
+</programlisting>
+
+<programlisting width="110" role="overflow">
+<![CDATA[<programlisting width="110" role="overflow">
+There is no scaling because the role has precedence over the width attribute:
+                                                                                                            
+123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 1234567 9 123456789
+0         1         2         3         4         5         6         7         8         9         10        11       
+
+</programlisting>]]>
+</programlisting>
+
+<programlisting role="scale">
+<![CDATA[<programlisting role="scale">
+The listing is scaled to display the longest line with no break:
+                                                                                                            
+123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 1234567 9 123456789
+0         1         2         3         4         5         6         7         8         9         10        11       
+
+</programlisting>]]>
+</programlisting>
+
+<programlisting width="110" role="scale">
+<![CDATA[<programlisting width="110" role="scale">
+The listing is scaled to fit up to 110 columns, and the lines are wrapped. In this case role is redundant because @width automatically produces scaling.
+                                                                                                            
+123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 1234567 9 123456789
+0         1         2         3         4         5         6         7         8         9         10        11       
+
+</programlisting>]]>
+</programlisting>
 </section>
 <section>
 <title>Formatting embedded elements</title>

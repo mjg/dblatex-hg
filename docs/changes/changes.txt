@@ -1,3 +1,25 @@
+Release 0.3.4:
+--------------
+
+- Fix a bug in the missing characters display.
+- Fix the global template to actually insert à backmatter tag before backmatter
+  elements.
+- Fix bug #3520152 by changing a template xpath (looks like a libxslt
+  limitation).
+- Improve the verbatim block display to be able to scale the block width to the
+  page width.
+- Allow latex instructions within verbatim blocks through Processing
+  Instructions.
+- Improve the setup script to be close to the debian install rules.
+- Improve the hyphenation of the inlined literal elements.
+- Add the parameter example.float.type to give the possibility to have
+  <example> not floating. The attribute 'floatstyle' is also taken into
+  account.
+- Add the parameter hyphenation.format to specify the inlined format types
+  that must be hyphenated. It replaces the more limited monoseq.hyphenation
+  parameter.
+
+
 Release 0.3.3:
 --------------
 
@@ -28,7 +50,8 @@ Release 0.3.3:
  
 Improvements sponsored by Freexian (http://www.freexian.com) :
 
-- Remove hard-coded paper size and add some parameters for page layout setup:
+- Fix #3191550. Remove hard-coded paper size and add some parameters for page
+  layout setup:
   * Parameters to define page sizes and margins.
   * Parameters to have crop marks for pre-press PDF output.
 - Add the parameters literal.environment and literal.extensions to allow the

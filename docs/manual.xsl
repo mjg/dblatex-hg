@@ -9,6 +9,8 @@
 <!-- Use the Bob Stayton's Tip related to olinking -->
 <xsl:param name="current.docid" select="/*/@id"/>
 
+<!-- Use the literal scaling feature -->
+<xsl:param name="literal.extensions">scale.by.width</xsl:param>
 
 <!-- We want the TOC links in the titles, and in blue. -->
 <xsl:param name="latex.hyperparam">colorlinks,linkcolor=blue,pdfstartview=FitH</xsl:param>

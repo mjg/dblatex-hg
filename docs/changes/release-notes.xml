@@ -25,6 +25,14 @@ the dblatex manual. The full change history is now stored in this release
 note.</para>
 </section>
 
+<section id="sec-changes-034">
+<title>Release 0.3.4</title>
+
+<para>This release contains completed features sponsored by <ulink url="http://www.freexian.com">Freexian</ulink> that were not ready in the previous version.</para>
+
+<xi:include href="changes-0.3.4.xml" />
+</section>
+
 <section id="sec-changes-033">
 <title>Release 0.3.3</title>
 
