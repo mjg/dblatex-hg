@@ -73,7 +73,7 @@
   <xsl:variable name="url2">
     <xsl:choose>
       <!-- Behaviour depending on the texlive version -->
-      <xsl:when test="contains($texlive.version, '2009')">
+      <xsl:when test="number($texlive.version) &gt;= 2009">
         <xsl:call-template name="string-replace">
           <xsl:with-param name="string" select="$url"/>
           <xsl:with-param name="from" select="'\'"/>
