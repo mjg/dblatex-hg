@@ -427,7 +427,8 @@ class InstallData(install_data):
         self.data_files = full_data_files
         rc = install_data.run(self)
 
-        self.adapt_installed_data()
+        if self.distribution.get_command_obj("install").install_layout != "deb":
+            self.adapt_installed_data()
         return rc
 
     def adapt_installed_data(self):
