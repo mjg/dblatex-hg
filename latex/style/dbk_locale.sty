@@ -16,7 +16,13 @@
 
 %% User Babel setup hooks
 \long\def\babelsetup#1#2{ \dolangsetup{bab@#1}{#2} }
-\def\setupbabel#1{ \dosetuplang{bab@#1} }
+\def\setupbabel#1{ \globalbabelsetup\dosetuplang{bab@#1} }
+
+%% Setup common to all babel languages
+\def\globalbabelsetup{
+  % Remove those messy "x shorthands
+  \AtBeginDocument{\shorthandoff{"}}
+}
 
 %% Define the locale setups in docbook
 \langsetupdbk{de}{
