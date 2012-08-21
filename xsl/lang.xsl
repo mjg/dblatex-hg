@@ -214,7 +214,11 @@
 
   <!-- Standard latex font setup -->
   <xsl:choose>
-  <xsl:when test="$use-unicode='1'"/>
+  <xsl:when test="$use-unicode='1'">
+    <!-- Required to have listings in such environment -->
+    <xsl:text>\usepackage{ucs}&#10;</xsl:text>
+    <xsl:text>\def\hyperparamadd{unicode=true}&#10;</xsl:text>
+  </xsl:when>
   <xsl:when test="$latex.encoding='latin1'">
     <xsl:text>\usepackage[T1]{fontenc}&#10;</xsl:text>
     <xsl:text>\usepackage[latin1]{inputenc}&#10;</xsl:text>
