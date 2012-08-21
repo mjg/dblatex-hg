@@ -11,6 +11,10 @@
   <xsl:text>%&#10;</xsl:text>
   <xsl:call-template name="mapheading"/>
   <xsl:apply-templates/>
+  <!-- Force exiting the part. It assumes the bookmark package available -->
+  <xsl:if test="not(following-sibling::part)">
+    <xsl:text>\bookmarksetup{startatroot}&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="part/docinfo"/>
