@@ -209,6 +209,8 @@
   <xsl:text>\ifxetex&#10;</xsl:text>
   <xsl:text>\usepackage{fontspec}&#10;</xsl:text>
   <xsl:text>\usepackage{xltxtra}&#10;</xsl:text>
+  <!-- To support TeX ligatures -->
+  <xsl:text>\defaultfontfeatures{Mapping=tex-text}&#10;</xsl:text>
   <xsl:value-of select="$xetex.font"/>
   <xsl:text>\else&#10;</xsl:text>
 
