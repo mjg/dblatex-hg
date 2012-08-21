@@ -109,6 +109,7 @@
     <xsl:when test="starts-with($lang,'hu')">hungarian</xsl:when>
     <xsl:when test="starts-with($lang,'id')">bahasa</xsl:when>
     <xsl:when test="starts-with($lang,'it')">italian</xsl:when>
+    <xsl:when test="starts-with($lang,'nb')">norsk</xsl:when>
     <xsl:when test="starts-with($lang,'nl')">dutch</xsl:when>
     <xsl:when test="starts-with($lang,'nn')">norsk</xsl:when>
     <xsl:when test="starts-with($lang,'pl')">polish</xsl:when>
