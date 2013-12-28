@@ -20,8 +20,9 @@
 
 %% Setup common to all babel languages
 \def\globalbabelsetup{
-  % Remove those messy "x shorthands
-  \AtBeginDocument{\shorthandoff{"}}
+  % Cannot remove those messy "x shorthands for every language (e.g. not in
+  % french)
+  % \AtBeginDocument{\shorthandoff{"}}
 }
 
 %% Define the locale setups in docbook
@@ -39,6 +40,7 @@
   \def\figurename{{\scshape Abbildung }}%
   \def\tablename{{\scshape Tabelle }}%
    
+  \def\dbequationname{Gleichung}
   \def\examplename{Beispiel}
   \def\ondate{am}
   \renewcommand{\DBKreleaseinfo}{Arbeitspapier}
@@ -70,6 +72,7 @@
   \def\figurename{{\scshape Figure }}%
   \def\tablename{{\scshape Tableau }}%
 
+  \def\dbequationname{\'Equation}
   \def\examplename{Exemple}
   \def\ondate{le}
   \renewcommand{\DBKreleaseinfo}{Document de Travail}
@@ -101,6 +104,7 @@
   \def\figurename{{\scshape Figuur }}%
   \def\tablename{{\scshape Tabel }}%
 
+  \def\dbequationname{Vergelijking}
   \def\examplename{Voorbeeld}
   \def\ondate{}
   \renewcommand{\DBKreleaseinfo}{Werkdocument}
@@ -131,6 +135,7 @@
   \def\figurename{{\scshape Ilustraci\'on }}%
   \def\tablename{{\scshape Tabla }}%
    
+  \def\dbequationname{Ecuaci\'on}
   \def\examplename{Ejemplo}
   \def\ondate{}
   \renewcommand{\DBKreleaseinfo}{Documento de trabajo}
@@ -164,6 +169,7 @@
   \def\figurename{{\scshape Figura }}%
   \def\tablename{{\scshape Tavola }}%
  
+  \def\dbequationname{Equazione}
   \def\examplename{Esempio}
   \def\ondate{l\`i}
   \renewcommand{\DBKreleaseinfo}{Documento di lavoro}
@@ -234,7 +240,9 @@
 \babelsetup{fr}{%
   \ifxetex
   % \NoAutoSpaceBeforeFDP does not seem to work when used with XeTeX
-  \AtBeginDocument{\shorthandoff{:;!?}}
+  % Take into account the frenchb version in the setup (< v2.5)
+  \AtBeginDocument{\@ifundefined{NoAutoSpacing}{%
+    \shorthandoff{:;!?}}{\NoAutoSpacing}}
   \fi
   \NoAutoSpaceBeforeFDP
   % Avoid mess between enumitem and french redefinition
