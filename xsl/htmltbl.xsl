@@ -259,7 +259,7 @@
 <xsl:template match="tr" mode="htmlTable">
   <xsl:param name="rownum"/>
   <xsl:param name="colspec"/>
-  <xsl:param name="oldentries"/>
+  <xsl:param name="oldentries"><nop/></xsl:param>
   <xsl:param name="context"/>
 
   <xsl:variable name="type">

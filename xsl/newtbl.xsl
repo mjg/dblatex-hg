@@ -426,8 +426,8 @@
   <xsl:if test="$colnum &lt;= $cols">
 
     <xsl:variable name="entry"
-                  select="$entries/*[self::entry or self::entrytbl]
-                                    [@colstart=$colnum and @rowend &gt;= $rownum]"/>
+        select="$entries/*[self::entry or self::entrytbl]
+                                [@colstart=$colnum and @rowend &gt;= $rownum]"/>
     <!-- Do we have an existing entry element from a previous row that -->
     <!-- should be copied into this row? -->
     <xsl:choose><xsl:when test="$entry">
@@ -977,7 +977,7 @@
   <xsl:param name="colspec"/>
   <xsl:param name="spanspec"/>
   <xsl:param name="frame"/>
-  <xsl:param name="oldentries"/>
+  <xsl:param name="oldentries"><nop/></xsl:param>
   <xsl:param name="rowstack"/>
 
   <xsl:variable name="picolor">

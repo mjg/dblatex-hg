@@ -9,6 +9,7 @@
 
 <xsl:output method="text" encoding="UTF-8" indent="yes"/>
 
+<xsl:include href="common/misc.xsl"/>
 <xsl:include href="common/l10n.xsl"/>
 <xsl:include href="common/common.xsl"/>
 <xsl:include href="common/gentext.xsl"/>
