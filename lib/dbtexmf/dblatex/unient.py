@@ -170,15 +170,30 @@ unicode_map = {
 0x00389: r"\'{H}", # GREEK CAPITAL LETTER ETA WITH TONOS
 0x0038A: r"\'{}{I}", # GREEK CAPITAL LETTER IOTA WITH TONOS
 0x0038C: r"\'{}O", # GREEK CAPITAL LETTER OMICRON WITH TONOS
+0x00391: r"{A}", # GREEK CAPITAL LETTER ALPHA
+0x00392: r"{B}", # GREEK CAPITAL LETTER BETA
 0x00393: r"\ensuremath{\Gamma}", # GREEK CAPITAL LETTER GAMMA
 0x00394: r"\ensuremath{\Delta}", # GREEK CAPITAL LETTER DELTA
-0x00395: r"\ensuremath{\Epsilon}", # GREEK CAPITAL LETTER EPSILON
+0x00395: r"{E}", # GREEK CAPITAL LETTER EPSILON
+0x00396: r"{Z}", # GREEK CAPITAL LETTER ZETA
+0x00397: r"{H}", # GREEK CAPITAL LETTER ETA
+0x00398: r"\ensuremath{\Theta}", # GREEK CAPITAL LETTER THETA
+0x00399: r"{I}", # GREEK CAPITAL LETTER IOTA
+0x0039A: r"{K}", # GREEK CAPITAL LETTER KAPPA
 0x0039B: r"\ensuremath{\Lambda}", # GREEK CAPITAL LETTER LAMDA
+0x0039C: r"{M}", # GREEK CAPITAL LETTER MU
+0x0039D: r"{N}", # GREEK CAPITAL LETTER NU
+0x0039E: r"\ensuremath{\Xi}", # GREEK CAPITAL LETTER XI
+0x0039F: r"{O}", # GREEK CAPITAL LETTER OMICRON
 0x003A0: r"\ensuremath{\Pi}", # GREEK CAPITAL LETTER PI
+0x003A1: r"{P}", # GREEK CAPITAL LETTER RHO
 0x003A3: r"\ensuremath{\Sigma}", # GREEK CAPITAL LETTER SIGMA
-0x003A4: r"\ensuremath{\Tau}", # GREEK CAPITAL LETTER TAU
+0x003A4: r"{T}", # GREEK CAPITAL LETTER TAU
 0x003A5: r"\ensuremath{\Upsilon}", # GREEK CAPITAL LETTER UPSILON
 0x003A6: r"\ensuremath{\Phi}", # GREEK CAPITAL LETTER PHI
+0x003A7: r"{X}", # GREEK CAPITAL LETTER CHI
+0x003A8: r"\ensuremath{\Psi}", # GREEK CAPITAL LETTER PSI
+0x003A9: r"\ensuremath{\Omega}", # GREEK CAPITAL LETTER OMEGA
 0x003AC: r"\'{\ensuremath{\alpha}}", # GREEK SMALL LETTER ALPHA WITH TONOS
 0x003AD: r"\ensuremath{\acute{\epsilon}}", # GREEK SMALL LETTER EPSILON WITH TONOS
 0x003AE: r"\ensuremath{\acute{\eta}}", # GREEK SMALL LETTER ETA WITH TONOS
@@ -191,7 +206,7 @@ unicode_map = {
 0x003B5: r"\ensuremath{\epsilon}", # GREEK SMALL LETTER EPSILON
 0x003B6: r"\ensuremath{\zeta}", # GREEK SMALL LETTER ZETA
 0x003B7: r"\ensuremath{\eta}", # GREEK SMALL LETTER ETA
-0x003B8: r"\texttheta{}", # GREEK SMALL LETTER THETA
+0x003B8: r"\ensuremath{\theta}", # GREEK SMALL LETTER THETA
 0x003B9: r"\ensuremath{\iota}", # GREEK SMALL LETTER IOTA
 0x003BA: r"\ensuremath{\kappa}", # GREEK SMALL LETTER KAPPA
 0x003BB: r"\ensuremath{\lambda}", # GREEK SMALL LETTER LAMDA
@@ -213,6 +228,7 @@ unicode_map = {
 0x003CC: r"\'{o}", # GREEK SMALL LETTER OMICRON WITH TONOS
 0x003D1: r"\textvartheta{}", # GREEK THETA SYMBOL
 0x003D5: r"\ensuremath{\phi}", # GREEK PHI SYMBOL
+0x003D6: r"\ensuremath{\pi}", # GREEK PI SYMBOL
 0x00401: r"\cyrchar\CYRYO{}", # CYRILLIC CAPITAL LETTER IO
 0x00402: r"\cyrchar\CYRDJE{}", # CYRILLIC CAPITAL LETTER DJE
 0x00403: r"\cyrchar{\'\CYRG}", # CYRILLIC CAPITAL LETTER GJE
@@ -430,6 +446,9 @@ unicode_map = {
 0x02026: r"\ldots{}", # HORIZONTAL ELLIPSIS
 0x02030: r"\textperthousand{}", # PER MILLE SIGN
 0x02031: r"\textpertenthousand{}", # PER TEN THOUSAND SIGN
+0x02032: r"\ensuremath{'}", # PRIME
+0x02033: r"\ensuremath{''}", # DOUBLE PRIME
+0x02034: r"\ensuremath{'''}", # TRIPLE PRIME
 0x020AC: r"\texteuro{}", # EURO
 0x02116: r"\cyrchar\textnumero{}", # NUMERO SIGN
 0x02122: r"\texttrademark{}", # TRADE MARK SIGN
