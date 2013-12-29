@@ -12,7 +12,7 @@
 <xsl:param name="doc.publisher.show">0</xsl:param>
 <xsl:param name="doc.collab.show">1</xsl:param>
 <xsl:param name="doc.alignment"/>
-<xsl:param name="doc.layout">coverpage toc frontmatter mainmatter index </xsl:param>
+<xsl:param name="doc.layout">coverpage toc frontmatter mainmatter index</xsl:param>
 <xsl:param name="draft.mode">maybe</xsl:param>
 <xsl:param name="draft.watermark">1</xsl:param>
 
@@ -436,7 +436,7 @@
 <xsl:template match="book|article" mode="wrapper">
   <xsl:apply-templates select=".">
     <xsl:with-param name="layout">
-      <xsl:if test="contains($doc.layout, 'index ')">
+      <xsl:if test="contains(concat($doc.layout, ' '), 'index ')">
         <xsl:text>index </xsl:text>
       </xsl:if>
     </xsl:with-param>
@@ -444,7 +444,7 @@
 </xsl:template>
 
 <xsl:template match="book|article">
-  <xsl:param name="layout" select="$doc.layout"/>
+  <xsl:param name="layout" select="concat($doc.layout, ' ')"/>
 
   <xsl:variable name="info" select="bookinfo|articleinfo|artheader|info"/>
   <xsl:variable name="lang">
