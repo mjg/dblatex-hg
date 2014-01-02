@@ -1390,7 +1390,7 @@
   <xsl:param name="width"/>
 
   <!-- Now get latex to calculate the 'spare' width of the table -->
-  <!-- (Table width - widths of all specified columns - gaps between columns) -->
+  <!-- (Table width - widths of all specified columns - gaps between columns)-->
   <xsl:text>\setlength{\newtblsparewidth}{</xsl:text>
   <xsl:value-of select="$width"/>
   <xsl:for-each select="$colspec/*">
