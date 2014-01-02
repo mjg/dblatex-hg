@@ -56,11 +56,21 @@
   </xsl:variable>
 
   <xsl:variable name="colspec">
-    <xsl:apply-templates select="(colgroup|col)[1]"
-                         mode="make.colspec">
-      <xsl:with-param name="colnum" select="1"/>
-      <xsl:with-param name="colmax" select="$numcols"/>
-    </xsl:apply-templates>
+    <xsl:choose>
+    <xsl:when test="colgroup or col">
+      <xsl:apply-templates select="(colgroup|col)[1]"
+                           mode="make.colspec">
+        <xsl:with-param name="colnum" select="1"/>
+        <xsl:with-param name="colmax" select="$numcols"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="make.colspec.default">
+        <xsl:with-param name="colnum" select="1"/>
+        <xsl:with-param name="colmax" select="$numcols"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
 
   <!-- Build the <row>s from the <tr>s -->
@@ -122,10 +132,19 @@
 
   <xsl:text>\begingroup%&#10;</xsl:text>
 
-  <!-- Set cellpadding -->
+  <!-- Set cellpadding, but only on columns -->
   <xsl:if test="@cellpadding">
     <xsl:text>\setlength{\tabcolsep}{</xsl:text>
-    <xsl:value-of select="@cellpadding"/>
+    <xsl:choose>
+    <xsl:when test="contains(@cellpadding, '%')">
+      <xsl:value-of
+          select="number(substring-before(@cellpadding,'%')) div 100"/>
+      <xsl:text>\linewidth</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="@cellpadding"/>
+    </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>}%&#10;</xsl:text>
   </xsl:if>
 
@@ -381,11 +400,11 @@
   <xsl:param name="colmax"/>
 
   <xsl:variable name="border" 
-                select="(ancestor::table |
-                         ancestor::informaltable)[last()]/@border"/>
+                select="(ancestor-or-self::table |
+                         ancestor-or-self::informaltable)[last()]/@border"/>
   <xsl:variable name="table.rules"
-                select="(ancestor::table |
-                         ancestor::informaltable)[last()]/@rules"/>
+                select="(ancestor-or-self::table |
+                         ancestor-or-self::informaltable)[last()]/@rules"/>
 
   <xsl:variable name="rules">
     <xsl:choose>
@@ -826,7 +845,8 @@
     <xsl:variable name="newpct">
       <xsl:choose>
       <xsl:when test="substring($width,string-length($width))='%'">
-        <xsl:variable name="pct" select="number(substring-before($width, '%'))"/>
+        <xsl:variable name="pct"
+                      select="number(substring-before($width, '%'))"/>
         <xsl:choose>
         <xsl:when test="$pct &gt; $maxpct">
           <xsl:value-of select="$pct"/>
@@ -888,6 +908,32 @@
     <xsl:value-of select="$maxval"/>
   </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<!-- Build empty default <colspec>s elements.
+-->
+<xsl:template name="make.colspec.default">
+  <xsl:param name="colmax"/>
+  <xsl:param name="colnum"/>
+
+  <xsl:if test="$colnum &lt;= $colmax">
+    <colspec>
+      <xsl:attribute name="colnum">
+        <xsl:value-of select="$colnum"/>
+      </xsl:attribute>
+      <xsl:call-template name="html.table.column.rules">
+        <xsl:with-param name="colnum" select="$colnum"/>
+        <xsl:with-param name="colmax" select="$colmax"/>
+      </xsl:call-template>
+    </colspec>
+
+    <xsl:call-template name="make.colspec.default">
+      <xsl:with-param name="colnum" select="$colnum + 1"/>
+      <xsl:with-param name="colmax" select="$colmax"/>
+    </xsl:call-template>
+  </xsl:if>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -967,21 +1013,10 @@
     </xsl:when>
     <!-- build empty default <colspec>s for missing columns -->
     <xsl:when test="$colnum &lt;= $colmax">
-      <colspec>
-        <xsl:attribute name="colnum">
-          <xsl:value-of select="$colnum"/>
-        </xsl:attribute>
-        <xsl:call-template name="html.table.column.rules">
-          <xsl:with-param name="colnum" select="$colnum"/>
-          <xsl:with-param name="colmax" select="$colmax"/>
-        </xsl:call-template>
-      </colspec>
-
-      <xsl:apply-templates select="." mode="make.colspec">
-        <xsl:with-param name="colnum" select="$colnum + 1"/>
+      <xsl:call-template name="make.colspec.default">
         <xsl:with-param name="colmax" select="$colmax"/>
-        <xsl:with-param name="done" select="$colmax"/>
-      </xsl:apply-templates>
+        <xsl:with-param name="colnum" select="$colnum"/>
+      </xsl:call-template>
     </xsl:when>
     </xsl:choose>
   </xsl:otherwise>
@@ -1083,21 +1118,10 @@
   </xsl:when>
   <!-- build empty default <colspec>s for missing columns -->
   <xsl:when test="$colnum &lt;= $colmax">
-    <colspec>
-      <xsl:attribute name="colnum">
-        <xsl:value-of select="$colnum"/>
-      </xsl:attribute>
-      <xsl:call-template name="html.table.column.rules">
-        <xsl:with-param name="colnum" select="$colnum"/>
-        <xsl:with-param name="colmax" select="$colmax"/>
-      </xsl:call-template>
-    </colspec>
-
-    <xsl:apply-templates select="." mode="make.colspec">
-      <xsl:with-param name="colnum" select="$colnum + 1"/>
+    <xsl:call-template name="make.colspec.default">
       <xsl:with-param name="colmax" select="$colmax"/>
-      <xsl:with-param name="done" select="$colmax"/>
-    </xsl:apply-templates>
+      <xsl:with-param name="colnum" select="$colnum"/>
+    </xsl:call-template>
   </xsl:when>
   </xsl:choose>
 </xsl:template>
