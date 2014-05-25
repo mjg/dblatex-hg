@@ -1,3 +1,29 @@
+Release 0.3.5:
+--------------
+
+- Fix an HTML table bug when no <colgroup> or <col> is specified
+- Fix an HTML table bug when cellpadding is expressed in percentage
+- Fix Debian bug #720624 to have more greek letters correctly translated
+- Fix bug #108 so that setup.py works even if intall-layout not supported
+- Fix bug #107 to be compliant with frenchb v2.5 to remove shorthands
+  in listings
+- Fix bug #106 to have equation label localized
+- Fix bug #104 to have listings correctly displayed in <listitem>s
+- Fix bug #103 to have indexes correctly working in db2latex style
+- Fix Debian bug #682901 to have with XeTeX proper endash in indexes
+- Fix Debian bugs #682936 and #684391 to support Norwegian Bokmål through
+  lang='nb'
+- Fix Debian bug #683166 (SF bug #3553962/#98) to avoid chapters erroneously
+  included in parts.
+- Fix Debian bug #684393 babel setup to allow quote chars for lang='nn'
+- Adapt URL to work with texlive >= 2009.
+- Some fixes to be able work with Saxon
+- Improve setup.py to detect the installed texlive version only on
+  manual install.
+- Include the package 'ucs' and configure listings to work with pdftex and
+  UTF-8 characters.
+
+
 Release 0.3.4:
 --------------
 
