@@ -47,6 +47,10 @@
 \usepackage{dbk_locale}
 \usepackage{dbk_annot}
 
+% For missing options in article
+\@ifundefined{if@openright}
+  {\let\if@openright\iftrue}{}
+
 % LaTeX <othercredit> commands to define
 %
 % #1: mapped to <contrib>
