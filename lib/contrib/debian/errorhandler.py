@@ -6,6 +6,7 @@
 import subprocess
 import sys
 import apt
+import os
 
 from dbtexmf.core.error import ErrorHandler
 from dbtexmf.core.imagedata import ImageConverter
@@ -99,17 +100,19 @@ class DebianHandler(ErrorHandler):
         e.g. the external validation program xmllint not installed.
         """
         obj = self.object.run
-        nulldev = file('/dev/null')
+        nulldev0 = open(os.devnull, "r")
+        nulldev1 = open(os.devnull, "w")
         try:
             rc = subprocess.Popen(['xmllint', '--noout', '--postvalid',
                                    '--xinclude', obj.input],
-                                   stdin=nulldev,
-                                   stderr=nulldev,
-                                   stdout=nulldev).wait()
-            nulldev.close()
+                                   stdin=nulldev0,
+                                   stderr=nulldev1,
+                                   stdout=nulldev1).wait()
         except:
-            nulldev.close()
-            return False
+            rc = -1
+
+        nulldev0.close()
+        nulldev1.close()
 
         if rc == 3 or rc == 4:
             print >> sys.stderr
