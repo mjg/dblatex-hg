@@ -131,6 +131,10 @@
                               self::variablelist][not(child::title)]">
     <xsl:text>~</xsl:text>
   </xsl:when>
+  <!-- add a space to force linebreaks for immediate following listings -->
+  <xsl:when test="child::*[1][self::programlisting][not(child::title)]">
+    <xsl:text>~</xsl:text>
+  </xsl:when>
   <!-- add a space to avoid the term be centered -->
   <xsl:when test="child::*[not(self::indexterm)][1][self::figure]">
     <xsl:text>~ </xsl:text>
