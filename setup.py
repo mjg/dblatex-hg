@@ -252,6 +252,9 @@ class Install(install):
         self.nodeps = None
         self.style = None
         self.use_python_path = None
+        # Prevents from undefined 'install_layout' attribute
+        if not(getattr(self, "install_layout", None)):
+            self.install_layout = None
 
     def check_util_dependencies(self):
         # First, check non critical graphic tools
