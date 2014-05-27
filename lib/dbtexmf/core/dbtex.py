@@ -381,10 +381,15 @@ class DbTex:
 
         # For easy debug
         if self.debug and os.environ.has_key("TEXINPUTS"):
-            f = file("env_tex", "w")
-            f.write("TEXINPUTS=%s\nexport TEXINPUTS\n" % \
-                    os.environ["TEXINPUTS"])
-            f.close()
+            if os.name != "nt":
+                f = file("env_tex", "w")
+                f.write("TEXINPUTS=%s\nexport TEXINPUTS\n" % \
+                        os.environ["TEXINPUTS"])
+                f.close()
+            else:
+                f = file("env_tex.bat", "w")
+                f.write("set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
+                f.close()
 
         # Build the tex file(s), and compile it(them)
         self.make_listings()
