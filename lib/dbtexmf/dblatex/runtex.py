@@ -75,7 +75,7 @@ class RunLatex:
             return
         # Expected format is: '%% <param_name> <param_string>\n'
         p = line.split(" ", 2)
-        self._params[p[1]] = p[2]
+        self._params[p[1]] = p[2].strip()
 
     def compile(self, texfile, binfile, format, batch=1):
         root = os.path.splitext(texfile)[0]
@@ -108,10 +108,13 @@ class RunLatex:
             self.texer.texpost = self.texpost
             self.texer.encoding = self._params.get("latex.encoding", "latin-1")
             self.texer.options = self._params.get("latex.engine.options")
+            self.texer.lang = self._params.get("document.language")
             self.texer.set_format(format)
             self.texer.set_backend(self.backend)
             if self.index_style:
-                self.texer.set_index_style(self.index_style)
+                self.texer.index.style = self.index_style
+            self.texer.index.tool = self._params.get("latex.index.tool")
+            self.texer.index.lang = self._params.get("latex.index.language")
             self.texer.compile(texfile)
             self.texer.print_misschars()
         except:

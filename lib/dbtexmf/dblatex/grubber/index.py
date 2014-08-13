@@ -129,7 +129,9 @@ class Index(TexModule):
             path_var = "INDEXSTYLE"
 
         elif self.tool == "xindy":
-            cmd = ["texindy", "--quiet"]
+            cmd = ["xindy", "-M", "texindy", "--quiet"]
+            if self.doc.encoding == "utf8":
+                cmd.extend(["-C", self.doc.encoding])
             for opt in self.opts:
                 if opt == "-g":
                     if self.lang != "":
@@ -164,7 +166,11 @@ class Index(TexModule):
             return 1
 
         # Beware with UTF-8 encoding, makeindex with headings can be messy
-        if self.doc.encoding == "utf8" and self.style:
+        # because it puts in the headings the first 8bits char of the words
+        # under the heading which can be an invalid character in UTF-8
+        if (self.style and self.doc.encoding == "utf8" and
+            self.tool == "makeindex"):
+
             f = file(self.target, "r")
             error = 0
             for line in f:
@@ -175,9 +181,8 @@ class Index(TexModule):
                     break
             f.close()
             if error:
-                print "here"
-                # Retry without style
-                msg.log(_("%s on UTF8 failed. Retry...") % self.tool)
+                # Retry without style to avoid headings
+                msg.warn(_("%s on UTF8 failed. Retry...") % self.tool)
                 self.style = ""
                 self.md5 = None
                 return self.post_compile()

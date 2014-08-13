@@ -15,6 +15,8 @@
 <xsl:param name="latex.class.options"/>
 <xsl:param name="latex.class.article">article</xsl:param>
 <xsl:param name="latex.class.book">report</xsl:param>
+<xsl:param name="latex.index.tool"/>
+<xsl:param name="latex.index.language"/>
 <xsl:param name="latex.unicode.use">0</xsl:param>
 <xsl:param name="texlive.version">2009</xsl:param>
 

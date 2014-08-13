@@ -169,23 +169,39 @@
 
 <!-- This template should not be there, but currently only encoding needs it -->
 <xsl:template name="py.params.set">
-  <xsl:variable name="use-unicode">
-    <xsl:call-template name="lang-in-unicode">
-      <xsl:with-param name="lang">
-        <xsl:call-template name="l10n.language">
-          <xsl:with-param name="target" select="(/set|/book|/article)[1]"/>
-          <xsl:with-param name="xref-context" select="true()"/>
-        </xsl:call-template>
-      </xsl:with-param>
+  <xsl:variable name="lang">
+    <xsl:call-template name="l10n.language">
+      <xsl:with-param name="target" select="(/set|/book|/article)[1]"/>
+      <xsl:with-param name="xref-context" select="true()"/>
     </xsl:call-template>
   </xsl:variable>
+
+  <xsl:variable name="use-unicode">
+    <xsl:call-template name="lang-in-unicode">
+      <xsl:with-param name="lang" select="$lang"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:text>%%&lt;params&gt;&#10;</xsl:text>
+  <xsl:text>%% document.language </xsl:text>
+  <xsl:value-of select="$lang"/>
+  <xsl:text>&#10;</xsl:text>
   <xsl:if test="$use-unicode='1' or $latex.encoding='utf8'">
     <xsl:text>%% latex.encoding utf8&#10;</xsl:text>
   </xsl:if>
   <xsl:if test="$latex.engine.options != ''">
     <xsl:text>%% latex.engine.options </xsl:text>
     <xsl:value-of select="$latex.engine.options"/>
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$latex.index.tool != ''">
+    <xsl:text>%% latex.index.tool </xsl:text>
+    <xsl:value-of select="$latex.index.tool"/>
+    <xsl:text>&#10;</xsl:text>
+  </xsl:if>
+  <xsl:if test="$latex.index.language != ''">
+    <xsl:text>%% latex.index.language </xsl:text>
+    <xsl:value-of select="$latex.index.language"/>
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
   <xsl:text>%%&lt;/params&gt;&#10;</xsl:text>

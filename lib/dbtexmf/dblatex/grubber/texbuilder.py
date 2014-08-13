@@ -3,8 +3,8 @@
 """
 LaTeX document building system for Grubber.
 
-This module is specific to Grubber and provides a class that encapsulates some of
-the rubber internals.
+This module is specific to Grubber and provides a class that encapsulates some
+of the rubber internals.
 """
 import subprocess
 import os
@@ -13,6 +13,15 @@ from msg import _, msg
 from maker import Maker
 from latex import Latex
 
+
+class IndexBuilder:
+    """
+    Index configuration data to set the index tool maker to use
+    """
+    def __init__(self):
+        self.style = ""
+        self.tool = ""
+        self.lang = ""
 
 class LatexBuilder:
     """
@@ -33,6 +42,8 @@ class LatexBuilder:
         self.encoding = "latin-1"
         self.texpost = ""
         self.options = ""
+        self.lang = ""
+        self.index = IndexBuilder()
 
     def set_format(self, format):
         # Just record it
@@ -41,12 +52,13 @@ class LatexBuilder:
     def set_backend(self, backend):
         self.backend = backend
 
-    def set_index_style(self, index_style):
-        self.index_style = index_style
+#    def set_index_style(self, index_style):
+#        self.index_style = index_style
 
     def compile(self, source):
         self.tex.batch = self.batch
         self.tex.encoding = self.encoding
+        self.tex.lang = self.lang
         self.tex.set_source(source)
         if self.options:
             self.tex.opts += shlex.split(self.options)
@@ -66,10 +78,12 @@ class LatexBuilder:
         # Now load other the modules required to compile this file
         self.tex.prepare()
 
-        # Set the index style
-        if self.index_style and self.tex.modules.has_key("makeidx"):
+        # Set the index configuration
+        if self.tex.modules.has_key("makeidx"):
             idx = self.tex.modules["makeidx"]
-            idx.style = self.index_style
+            if self.index.style: idx.do_style(self.index.style)
+            if self.index.tool: idx.do_tool(self.index.tool)
+            if self.index.lang: idx.do_language(self.index.lang)
 
         # Let's go...
         rc = self.maker.make()
