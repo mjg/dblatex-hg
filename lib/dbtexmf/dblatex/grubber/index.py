@@ -42,10 +42,89 @@ import os
 from os.path import *
 import re, string
 import subprocess
+import xml.dom.minidom
 
 from msg import _, msg
 from plugins import TexModule
 from util import md5_file
+
+
+class Xindy:
+    """
+    Xindy command wrapper
+    """
+    def __init__(self, idxfile, output="", transcript="", encoding="",
+                 opts=None, modules=None,
+                 xindy_lang="", document_lang=""):
+        self.idxfile = idxfile
+        self.output = output
+        self.transcript = transcript
+        self.encoding = encoding
+        self.opts = opts or []
+        self.modules = modules or []
+        self.xindy_lang = xindy_lang
+        self.document_lang = document_lang
+        self.path_var = "XINDY_SEARCHPATH"
+        mapfile = os.path.join(os.path.dirname(__file__), "xindylang.xml")
+        self.languages = self.map_languages(mapfile)
+
+    def map_languages(self, mapfile):
+        languages = {}
+        dom_document = xml.dom.minidom.parse(mapfile)
+        for dom_fontspec in dom_document.getElementsByTagName('map'):
+            lang = dom_fontspec.getAttribute('lang')
+            xindylang = dom_fontspec.getAttribute('xindylang')
+            if xindylang:
+                languages[lang] = xindylang
+        dom_document.unlink()
+        return languages
+
+    def command(self):
+        cmd = ["xindy", "--quiet"]
+        if self.encoding == "utf8":
+            # In UTF-8 texindy cannot be used
+            cmd.extend(["-M", "texindy", "-C", self.encoding])
+        else:
+            # Do like texindy when encoded in latin1 (beware of module order)
+            cmd.extend(["-M", "tex/inputenc/latin",
+                        "-M", "texindy", "-C", "latin",
+                        "-I", "latex"])
+
+        # To behave even more like texindy
+        cmd.extend(["-M", "page-ranges"])
+
+        # Specific output files?
+        if self.output:
+            cmd.extend(["-o", self.output])
+        if self.transcript:
+            cmd.extend(["-t", self.transcript])
+
+        # Find out which language to use
+        if self.xindy_lang:
+            lang = self.xindy_lang
+        elif self.document_lang:
+            lang = self.languages.get(self.document_lang)
+            if not(lang):
+                msg.warn(_("xindy: lang '%s' not found" % \
+                           self.document_lang), pkg="index")
+            else:
+                msg.log(_("xindy: lang '%s' mapped to '%s'" % \
+                           (self.document_lang, lang)), pkg="index")
+        else:
+            lang = None
+
+        if lang:
+            cmd.extend(["-L", lang])
+
+        for mod in self.modules:
+            cmd.extend(["-M", mod])
+
+        if self.opts:
+            cmd.extend(self.opts)
+
+        cmd.append(self.idxfile)
+        return cmd
+
 
 class Index(TexModule):
     """
@@ -75,6 +154,7 @@ class Index(TexModule):
             self.md5 = None
 
         self.tool = "makeindex"
+        self.tool_obj = None
         self.lang = None   # only for xindy
         self.modules = []  # only for xindy
         self.opts = []
@@ -129,28 +209,24 @@ class Index(TexModule):
             path_var = "INDEXSTYLE"
 
         elif self.tool == "xindy":
-            cmd = ["xindy", "-M", "texindy", "--quiet"]
-            if self.doc.encoding == "utf8":
-                cmd.extend(["-C", self.doc.encoding])
-            for opt in self.opts:
-                if opt == "-g":
-                    if self.lang != "":
-                        msg.warn(_("'language' overrides 'order german'"),
-                            pkg="index")
-                    else:
-                        self.lang = "german-din"
-                elif opt == "-l":
-                    self.modules.append("letter-ordering")
-                    msg.warn(_("use 'module letter-ordering' instead of 'order letter'"),
-                        pkg="index")
+            if self.tool_obj:
+                xindy = self.tool_obj
+            else:
+                if self.doc.encoding == "utf8":
+                    encoding = self.doc.encoding
                 else:
-                    msg.error("unknown option to xindy: %s" % opt, pkg="index")
-            for mod in self.modules:
-                cmd.extend(["--module", mod])
-            if self.lang:
-                cmd.extend(["--language", self.lang])
-            cmd.append(self.source)
-            path_var = "XINDY_SEARCHPATH"
+                    encoding = ""
+                xindy = Xindy(self.source,
+                              output=self.target,
+                              transcript=self.transcript,
+                              encoding=encoding,
+                              opts=self.opts,
+                              modules=self.modules,
+                              xindy_lang=self.lang,
+                              document_lang=self.doc.lang)
+                self.tool_obj = xindy
+            cmd = xindy.command()
+            path_var = xindy.path_var
 
         if self.path != []:
             env = { path_var:

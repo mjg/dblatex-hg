@@ -1,5 +1,9 @@
-  <section>
-   <title>Creating an Index</title>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<section xmlns:xi="http://www.w3.org/2001/XInclude">
+<title>Creating an Index</title>
+
   <para>
    An index is automatically generated if some index entries (<sgmltag>indexterm</sgmltag>), telling the terms to put in the index, are written in the document. The <sgmltag>keyword</sgmltag> elements are not printed but are also added to the index.
   </para>
@@ -13,4 +17,35 @@
   <para>
    The index is put at the end of the document. It is not possible to put it somewhere else.
   </para>
-  </section>
+
+<section><title>Internationalized Indexes</title>
+
+<para>The tool used by default to build the index is
+<command>makeindex</command> that works fine for latin charset but it is not
+suited for other charsets and UTF-8 encoding. Moreover its sorting rule is
+not suited for many languages.</para>
+
+<para>Therefore dblatex gives the possibility to use
+<command>xindy</command> that allows internationalized indexing. When xindy
+is used, the sorting language used is deduced from the Docbook document lang.
+If the document lang has no correspondance for xindy, or if you want to force
+the use of a specific sorting language, you can specify the sorting language
+to use. With Xindy you can
+also provide your own sort rules, but see the official Xindy documentation
+for more details.</para>
+
+<para>The following parameters are provided to use xindy and configure it:
+<itemizedlist>
+<listitem><para><parameter>latex.index.tool</parameter>=xindy tells dblatex 
+to use xindy instead of makeindex (default).</para>
+</listitem>
+<listitem><para><parameter>latex.index.language</parameter> specifies the
+language used to sort the indexes. Currently this parameter is relevant
+only for xindy. The language set must be known by xindy (see the xindy
+documentation). When not set (or empty) the sorting language to apply
+is deduced from the document lang.</para>
+</listitem>
+</itemizedlist>
+</para>
+</section>
+</section>
