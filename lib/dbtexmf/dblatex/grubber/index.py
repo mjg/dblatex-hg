@@ -53,17 +53,16 @@ class Xindy:
     """
     Xindy command wrapper
     """
-    def __init__(self, idxfile, output="", transcript="", encoding="",
+    def __init__(self, doc, idxfile, target, transcript="",
                  opts=None, modules=None,
-                 xindy_lang="", document_lang=""):
+                 index_lang="", style=""):
+        self.doc = doc
         self.idxfile = idxfile
-        self.output = output
+        self.target = target
         self.transcript = transcript
-        self.encoding = encoding
         self.opts = opts or []
         self.modules = modules or []
-        self.xindy_lang = xindy_lang
-        self.document_lang = document_lang
+        self.index_lang = index_lang
         self.path_var = "XINDY_SEARCHPATH"
         mapfile = os.path.join(os.path.dirname(__file__), "xindylang.xml")
         self.languages = self.map_languages(mapfile)
@@ -80,36 +79,37 @@ class Xindy:
         return languages
 
     def command(self):
-        cmd = ["xindy", "--quiet"]
-        if self.encoding == "utf8":
-            # In UTF-8 texindy cannot be used
-            cmd.extend(["-M", "texindy", "-C", self.encoding])
+        cmd = []
+        if self.doc.program == "xelatex":
+            # If raw index is in UTF-8 the texindy command cannot be used
+            cmd.extend(["xindy", "-M", "texindy", "-C", self.doc.encoding])
+            # To behave even more like texindy
+            cmd.extend(["-q", "-M", "page-ranges"])
         else:
-            # Do like texindy when encoded in latin1 (beware of module order)
-            cmd.extend(["-M", "tex/inputenc/latin",
-                        "-M", "texindy", "-C", "latin",
-                        "-I", "latex"])
-
-        # To behave even more like texindy
-        cmd.extend(["-M", "page-ranges"])
+            # Call texindy to handle LICR encoded raw index
+            # Equivalent to xindy arguments (beware of module order):
+            #   "xindy", "-M", "tex/inputenc/latin",
+            #            "-M", "texindy", "-C", "latin",
+            #            "-I", "latex"
+            cmd.extend(["texindy"])
 
         # Specific output files?
-        if self.output:
-            cmd.extend(["-o", self.output])
+        if self.target:
+            cmd.extend(["-o", self.target])
         if self.transcript:
             cmd.extend(["-t", self.transcript])
 
         # Find out which language to use
-        if self.xindy_lang:
-            lang = self.xindy_lang
-        elif self.document_lang:
-            lang = self.languages.get(self.document_lang)
+        if self.index_lang:
+            lang = self.index_lang
+        elif self.doc.lang:
+            lang = self.languages.get(self.doc.lang)
             if not(lang):
                 msg.warn(_("xindy: lang '%s' not found" % \
-                           self.document_lang), pkg="index")
+                           self.doc.lang), pkg="index")
             else:
                 msg.log(_("xindy: lang '%s' mapped to '%s'" % \
-                           (self.document_lang, lang)), pkg="index")
+                           (self.doc.lang, lang)), pkg="index")
         else:
             lang = None
 
@@ -124,6 +124,118 @@ class Xindy:
 
         cmd.append(self.idxfile)
         return cmd
+
+    def _find_index_encoding(self, logname):
+        # Texindy produces latin-* indexes. Try to find out which one from
+        # the modules loaded by the script (language dependent)
+        re_lang = re.compile("loading module \"lang/.*/(latin[^.-]*)")
+        logfile = open(logname)
+        encoding = ""
+        for line in logfile:
+            m = re_lang.search(line)
+            if m:
+                encoding = m.group(1)
+                break
+
+        logfile.close()
+        return encoding
+
+    def _index_is_unicode(self):
+        f = file(self.target, "r")
+        is_unicode = True 
+        for line in f:
+            try:
+                line.decode("utf8")
+            except:
+                is_unicode = False
+                break
+        f.close()
+        return is_unicode
+
+    def run(self):
+        cmd = self.command()
+        msg.debug(" ".join(cmd))
+
+        # Collect the script output
+        logname = join(dirname(self.target), "xindy.log")
+        logfile = open(logname, "w")
+        rc = subprocess.call(cmd, stdout=logfile, stderr=msg.stdout)
+        logfile.close()
+        if (rc != 0):
+            msg.error(_("could not make index %s") % self.target)
+            return 1
+
+        # Now convert the built index to UTF-8 if required
+        if cmd[0] == "texindy" and self.doc.encoding == "utf8":
+            if not(self._index_is_unicode()):
+                encoding = self._find_index_encoding(logname)
+                tmpindex = join(dirname(self.target), "new.ind")
+                cmd = ["iconv", "-f", encoding, "-t", "utf8",
+                       "-o", tmpindex, self.target]
+                msg.debug(" ".join(cmd))
+                rc = subprocess.call(cmd)
+                if rc == 0: os.rename(tmpindex, self.target)
+
+        return rc
+
+
+class Makeindex:
+    """
+    Makeindex command wrapper
+    """
+    def __init__(self, doc, idxfile, target, transcript="",
+                 opts=None, modules=None,
+                 index_lang="", style=""):
+        self.doc = doc
+        self.idxfile = idxfile
+        self.target = target
+        self.transcript = transcript
+        self.opts = opts or []
+        self.path_var = "INDEXSTYLE"
+        self.style = style
+
+    def command(self):
+        cmd = ["makeindex", "-o", self.target] + self.opts
+        if self.transcript:
+            cmd.extend(["-t", self.transcript])
+        if self.style:
+            cmd.extend(["-s", self.style])
+        cmd.append(self.idxfile)
+        return cmd
+
+    def _index_is_unicode(self):
+        f = file(self.target, "r")
+        is_unicode = True 
+        for line in f:
+            try:
+                line.decode("utf8")
+            except:
+                is_unicode = False
+                break
+        f.close()
+        return is_unicode
+
+    def run(self):
+        cmd = self.command()
+        msg.debug(" ".join(cmd))
+
+        # Makeindex outputs everything to stderr, even progress messages
+        rc = subprocess.call(cmd, stderr=msg.stdout)
+        if (rc != 0):
+            msg.error(_("could not make index %s") % self.target)
+            return 1
+
+        # Beware with UTF-8 encoding, makeindex with headings can be messy
+        # because it puts in the headings the first 8bits char of the words
+        # under the heading which can be an invalid character in UTF-8
+        if (self.style and self.doc.encoding == "utf8"):
+            if not(self._index_is_unicode()):
+                # Retry without style to avoid headings
+                msg.warn(_("makeindex on UTF8 failed. Retry..."))
+                self.style = ""
+                return self.run()
+
+        return rc
 
 
 class Index(TexModule):
@@ -190,7 +302,7 @@ class Index(TexModule):
 
     def post_compile (self):
         """
-        Run makeindex if needed, with appropriate options and environment.
+        Run the indexer tool
         """
         if not os.path.exists(self.source):
             msg.log(_("strange, there is no %s") % self.source, pkg="index")
@@ -200,68 +312,24 @@ class Index(TexModule):
 
         msg.progress(_("processing index %s") % self.source)
 
-        if self.tool == "makeindex":
-            cmd = ["makeindex", "-o", self.target] + self.opts
-            cmd.extend(["-t", self.transcript])
-            if self.style:
-                cmd.extend(["-s", self.style])
-            cmd.append(self.source)
-            path_var = "INDEXSTYLE"
+        if not(self.tool_obj):
+            if self.tool == "makeindex":
+                index_cls = Makeindex
+            elif self.tool == "xindy":
+                index_cls = Xindy
 
-        elif self.tool == "xindy":
-            if self.tool_obj:
-                xindy = self.tool_obj
-            else:
-                if self.doc.encoding == "utf8":
-                    encoding = self.doc.encoding
-                else:
-                    encoding = ""
-                xindy = Xindy(self.source,
-                              output=self.target,
+            self.tool_obj = index_cls(self.doc,
+                              self.source,
+                              self.target,
                               transcript=self.transcript,
-                              encoding=encoding,
                               opts=self.opts,
                               modules=self.modules,
-                              xindy_lang=self.lang,
-                              document_lang=self.doc.lang)
-                self.tool_obj = xindy
-            cmd = xindy.command()
-            path_var = xindy.path_var
+                              index_lang=self.lang,
+                              style=self.style)
 
-        if self.path != []:
-            env = { path_var:
-                string.join(self.path + [os.getenv(path_var, "")], ":") }
-        else:
-            env = {}
-
-        msg.debug(" ".join(cmd))
-        # Makeindex outputs everything to stderr, even progress messages
-        rc = subprocess.call(cmd, stderr=msg.stdout)
-        if (rc != 0):
-            msg.error(_("could not make index %s") % self.target)
-            return 1
-
-        # Beware with UTF-8 encoding, makeindex with headings can be messy
-        # because it puts in the headings the first 8bits char of the words
-        # under the heading which can be an invalid character in UTF-8
-        if (self.style and self.doc.encoding == "utf8" and
-            self.tool == "makeindex"):
-
-            f = file(self.target, "r")
-            error = 0
-            for line in f:
-                try:
-                    line.decode("utf8")
-                except:
-                    error = 1
-                    break
-            f.close()
-            if error:
-                # Retry without style to avoid headings
-                msg.warn(_("%s on UTF8 failed. Retry...") % self.tool)
-                self.style = ""
-                self.md5 = None
-                return self.post_compile()
+        rc = self.tool_obj.run()
+        if rc != 0:
+            return rc
 
         self.doc.must_compile = 1
         return 0
