@@ -139,9 +139,10 @@
   <xsl:when test="child::*[not(self::indexterm)][1][self::figure]">
     <xsl:text>~ </xsl:text>
   </xsl:when>
-  <!-- force linebreak after the term -->
+  <!-- force linebreak after the term. The space is to avoid side effect
+       with immediate following brackets [...]-->
   <xsl:when test="$term.breakline='1'">
-    <xsl:text>\hspace{0em}\\&#10;</xsl:text>
+    <xsl:text>\hspace{0em}\\~&#10;</xsl:text>
   </xsl:when>
   </xsl:choose>
   <xsl:apply-templates/>
