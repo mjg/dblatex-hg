@@ -92,10 +92,15 @@
               <xsl:with-param name="from">}</xsl:with-param>
               <xsl:with-param name="to">\tbright </xsl:with-param>
               <xsl:with-param name="string">
-                <xsl:call-template name="normalize-scape">
-                  <xsl:with-param name="string" select="$string"/>
-                </xsl:call-template>
-              </xsl:with-param>
+                <xsl:call-template name="scape-replace">
+                <xsl:with-param name="from">"</xsl:with-param>
+                <xsl:with-param name="to">""</xsl:with-param>
+                <xsl:with-param name="string">
+                   <xsl:call-template name="normalize-scape">
+                    <xsl:with-param name="string" select="$string"/>
+                  </xsl:call-template>
+                </xsl:with-param>
+                </xsl:call-template></xsl:with-param>
               </xsl:call-template></xsl:with-param>
             </xsl:call-template></xsl:with-param>
           </xsl:call-template></xsl:with-param>
