@@ -245,7 +245,7 @@
         </term>
         <listitem>
           <simpara>XSLT engine to use. The available engines are:
-          xsltproc (default), 4xslt.</simpara>
+          xsltproc (default), 4xslt, saxon.</simpara>
         </listitem>
       </varlistentry>
       <varlistentry>
