@@ -82,7 +82,7 @@ PostScript and PDF files,</para>
 </listitem>
 
 <listitem>
-<para>create an index,</para>
+<para>create an index with <command>makeindex</command> or <command>xindy</command>,</para>
 </listitem>
 
 <listitem>

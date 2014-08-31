@@ -41,6 +41,8 @@ the DocBook Project documentation.</para>
 <xi:include href="preface.tocdepth.xml"/>
 <xi:include href="glossary.tocdepth.xml"/>
 <xi:include href="index.tocdepth.xml"/>
+<xi:include href="latex.index.tool.xml"/>
+<xi:include href="latex.index.language.xml"/>
 <xi:include href="refentry.tocdepth.xml"/>
 
 </section>
