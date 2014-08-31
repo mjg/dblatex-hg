@@ -98,7 +98,7 @@ that give details for installing dblatex from the source tarball.</para>
 <itemizedlist>
 <listitem>
 <para>An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one
-can also use <ulink url="http://4suite.org">4suite</ulink>.</para>
+can also use <ulink url="http://4suite.org">4suite</ulink> or <ulink url="http://saxon.sourceforge.net">saxon</ulink>.</para>
 </listitem>
 
 <listitem>
@@ -248,7 +248,7 @@ should consider it like a unix like install.</para>
 <para>The following applications are required: <itemizedlist>
 <listitem>
 <para>An XSLT. <filename>xsltproc</filename> is the default XSLT used, but one
-can also use <ulink url="http://4suite.org">4suite</ulink>.</para>
+can also use <ulink url="http://foursuite.sourceforge.net">4suite</ulink>.</para>
 </listitem>
 
 <listitem>
