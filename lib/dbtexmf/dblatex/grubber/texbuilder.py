@@ -55,6 +55,17 @@ class LatexBuilder:
 #    def set_index_style(self, index_style):
 #        self.index_style = index_style
 
+    def _texpost_call(self, source, msg):
+        if isinstance(self.texpost, str):
+            # Expect an external script
+            cmd = [self.texpost, source]
+            msg.log(" ".join(cmd))
+            rc = subprocess.call(cmd, stdout=msg.stdout)
+        else:
+            # Expect a loaded python module
+            rc = self.texpost.main(source, msg.stdout)
+        return rc
+
     def compile(self, source):
         self.tex.batch = self.batch
         self.tex.encoding = self.encoding
@@ -95,7 +106,7 @@ class LatexBuilder:
             return
 
         os.environ["LATEX"] = self.tex.program
-        rc = subprocess.call([self.texpost, source], stdout=msg.stdout)
+        rc = self._texpost_call(source, msg)
         if rc == 1:
             return
         if rc != 0:

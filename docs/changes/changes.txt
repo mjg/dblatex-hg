@@ -1,3 +1,15 @@
+Release 0.3.6:
+--------------
+
+- Adapt the debug env_tex script for Windows
+- Make dblatex work with Xindy, for xetex and pdftex backends. Xindy is selected
+  through the latex.index.tool parameter, and it's sorting is aware of the
+  language used that can be set through the latex.index.language parameter.
+- Allow the Texpost script to be a python plugin.
+- Fix a bug in index escaping: '"' was not escaped.
+- Fix a bug in <listitem> to prevent brackets side effects.
+
+
 Release 0.3.5:
 --------------
 

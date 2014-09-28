@@ -26,7 +26,7 @@
  </listitem>
   <listitem>
   <para>
-  using a <link linkend="sec-texpost">LaTeX post process script</link>.
+  using a <link linkend="sec-texpost">LaTeX post process script or plugin</link>.
   </para>
  </listitem>
  </itemizedlist>
@@ -67,7 +67,7 @@
    The parameters can be stored in a user defined XSL stylesheet. An example of
    configuration stylesheet is given with this manual:
   </para>
-  <programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+  <programlisting language="XML"><xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
                    parse="text" href="../manual.xsl"/></programlisting>
   </section>
   <section id="sec-custom-stylesheet">
@@ -83,7 +83,7 @@
   them in the main user stylesheet by calling <literal>xsl:import</literal>.
   </para>
 <example><title>Overriding templates</title>
-  <programlisting>
+  <programlisting language="XML">
 <![CDATA[<?xml version='1.0' encoding="iso-8859-1"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
  
@@ -147,7 +147,7 @@ for small things to change.</para>
 <para>Here is an example of a style package reusing the default docbook
 style:</para>
 <example><title>Reused LaTeX style</title>
-<programlisting>
+<programlisting language="tex">
 <xi:include href="mystyle.sty" xmlns:xi="http://www.w3.org/2001/XInclude"
             parse="text" encoding="ISO-8859-1"/>
 </programlisting>
@@ -213,6 +213,57 @@ style:</para>
   </listitem>
   </itemizedlist>
   </para>
+  </section>
+  <section><title>Post processing with a Python Plugin</title>
+   <para>You can use a python plugin instead of a script by prefixing
+   the plugin name with the string <literal>"plugin:"</literal>. When using a
+   plugin you must not put the python suffix in the plugin name. If the plugin
+   is in one of the Python system directories, or in the current directory where
+   you call dblatex, or in one of the directories of the
+   <envar>PYTHONPATH</envar>
+   environment variable, you don't need to specify a directory location.
+   Otherwise put the plugin directory path before the plugin name.
+   </para>
+   <para>Here are several plugin call examples:
+   <programlisting><![CDATA[# The texpost.py module is in one of the python paths
+dblatex -r plugin:texpost file.xml
+
+# The texpost.py module location is specified with an absolute path
+dblatex -r plugin:/path/to/texpost file.xml
+
+# The texpost.py module is specified through a relative path from current dir
+dblatex -r plugin:relative/path/from/current/dir/texpost file.xml
+]]></programlisting>
+  </para>
+  <para>The plugin must contain a <function>main</function> entry point. <command>Dblatex</command> will pass the following parameters to the entry point: <parameter>latex_file</parameter> to specify the latex file to post process, and <parameter>stdout</parameter> to specify the output stream to use to be consistent with the dblatex verbosity.</para> 
+<example><title>Texpost Python Plugin Example</title>
+<programlisting language="python"><![CDATA[
+import sys
+import os
+
+def main(latex_file, stdout):
+    """
+    Texpost Plugin Entry point
+    """
+    # Let's find out the backend used
+    tex_engine = os.environ["LATEX"]
+
+    # Let's log something
+    print >>stdout, "Plugin called on '%s' file" % (latex_file)
+
+    # Open the latex file and parse it
+    texfile = open(latex_file)
+    ...
+
+    # Now decide if a new compilation must occur
+    if has_changed:
+      sys.exit(0)
+    else:
+      sys.exit(1)
+
+]]></programlisting>
+</example>
+
   </section>
   </section>
   <section id="sec-specs">

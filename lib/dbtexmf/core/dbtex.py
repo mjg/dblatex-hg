@@ -10,6 +10,7 @@ import tempfile
 import shutil
 import urllib
 import glob
+import imp
 from optparse import OptionParser
 
 from dbtexmf.core.confparser import DbtexConfig, texinputs_parse, texstyle_parse
@@ -502,6 +503,19 @@ class DbTexCommand:
         # The actual engine to use is unknown
         self.run = None
 
+    def load_plugin(self, pathname):
+        moddir, modname = os.path.split(pathname)
+        try:
+            filemod, path, descr = imp.find_module(modname, [moddir])
+        except ImportError:
+            try:
+                filemod, path, descr = imp.find_module(modname)
+            except ImportError:
+                failed_exit("Error: '%s' module not found" % modname)
+        mod = imp.load_module(modname, filemod, path, descr)
+        filemod.close()
+        return mod
+
     def run_setup(self, options):
         run = self.run
 
@@ -579,9 +593,13 @@ class DbTexCommand:
                 run.xslusers.append(xsluser)
 
         if options.texpost:
-            path = os.path.realpath(options.texpost)
-            if not(os.path.isfile(path)):
-                failed_exit("Error: '%s' does not exist" % options.texpost)
+            is_plugin = options.texpost.startswith("plugin:")
+            if is_plugin:
+                path = self.load_plugin(options.texpost[len("plugin:"):])
+            else:
+                path = os.path.realpath(options.texpost)
+                if not(os.path.isfile(path)):
+                    failed_exit("Error: '%s' does not exist" % options.texpost)
             run.texpost = path
 
         if options.no_external:
