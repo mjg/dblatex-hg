@@ -6,7 +6,13 @@
     ############################################################################ -->
 
 <xsl:template match="screenshot">
+  <xsl:if test="not(parent::figure)">
+    <xsl:text>&#10;\begin{center}&#10;</xsl:text>
+  </xsl:if>
   <xsl:apply-templates/>
+  <xsl:if test="not(parent::figure)">
+    <xsl:text>&#10;\end{center}&#10;</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="screeninfo"/>
