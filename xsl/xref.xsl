@@ -1040,7 +1040,7 @@
 
 <!-- ==================================================================== -->
 
-<xsl:template match="link" mode="no.anchor.mode">
+<xsl:template match="link" mode="no.anchor.mode" priority="1">
   <xsl:apply-templates select="." mode="xref.text"/>
 </xsl:template>
 
@@ -1052,19 +1052,21 @@
 <!-- ==================================================================== -->
 
 <xsl:template match="part|chapter|appendix|
-                     sect1|sect2|sect3|sect4|sect5|section" mode="label.markup">
+                     sect1|sect2|sect3|sect4|sect5|section" mode="label.markup"
+                     priority="1">
   <xsl:text>\ref{</xsl:text>
   <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="figure|example|table|equation" mode="label.markup">
+<xsl:template match="figure|example|table|equation" mode="label.markup"
+              priority="1">
   <xsl:text>\ref{</xsl:text>
   <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="step" mode="label.markup">
+<xsl:template match="step" mode="label.markup" priority="1">
   <xsl:text>\ref{</xsl:text>
   <xsl:value-of select="(@id|@xml:id)[1]"/>
   <xsl:text>}</xsl:text>
