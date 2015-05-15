@@ -23,20 +23,23 @@
 <xsl:template name="nolinkurl2">
   <xsl:param name="url" select="@url"/>
   <xsl:param name="command" select="'\nolinkurl'"/>
-  <xsl:variable name="bscount">
-    <xsl:call-template name="bslash-end-count">
-      <xsl:with-param name="url" select="$url"/>
+  <!-- Ignore the URL that contains only a '\n' -->
+  <xsl:if test="$url != '&#10;'">
+    <xsl:variable name="bscount">
+      <xsl:call-template name="bslash-end-count">
+        <xsl:with-param name="url" select="$url"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="$command"/>
+    <xsl:text>{</xsl:text>
+    <xsl:call-template name="scape-encode">
+      <xsl:with-param name="string" select="$url"/>
     </xsl:call-template>
-  </xsl:variable>
-  <xsl:value-of select="$command"/>
-  <xsl:text>{</xsl:text>
-  <xsl:call-template name="scape-encode">
-    <xsl:with-param name="string" select="$url"/>
-  </xsl:call-template>
-  <xsl:if test="$bscount mod 2">
-    <xsl:text> </xsl:text>
+    <xsl:if test="$bscount mod 2">
+      <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:text>}</xsl:text>
   </xsl:if>
-  <xsl:text>}</xsl:text>
 </xsl:template>
 
 
