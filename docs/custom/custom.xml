@@ -214,7 +214,7 @@ style:</para>
   </itemizedlist>
   </para>
   </section>
-  <section><title>Post processing with a Python Plugin</title>
+  <section id="sec-texpost-py"><title>Post processing with a Python Plugin</title>
    <para>You can use a python plugin instead of a script by prefixing
    the plugin name with the string <literal>"plugin:"</literal>. When using a
    plugin you must not put the python suffix in the plugin name. If the plugin

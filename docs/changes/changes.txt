@@ -5,9 +5,15 @@ Release 0.3.6:
 - Make dblatex work with Xindy, for xetex and pdftex backends. Xindy is selected
   through the latex.index.tool parameter, and it's sorting is aware of the
   language used that can be set through the latex.index.language parameter.
+  This is an answer to the Debian bug #756386.
 - Allow the Texpost script to be a python plugin.
+- Add the beginpage.as.pagebreak parameter to be able to inhibit the current
+  behaviour.
 - Fix a bug in index escaping: '"' was not escaped.
 - Fix a bug in <listitem> to prevent brackets side effects.
+- Quick fix for <screenshot> SF bug #74.
+- Fix SF bug #110.
+- Fix Debian bug #771473 and #684393.
 
 
 Release 0.3.5:

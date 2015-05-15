@@ -18,9 +18,9 @@
    The index is put at the end of the document. It is not possible to put it somewhere else.
   </para>
 
-<section><title>Internationalized Indexes</title>
+<section id="sec-index-locale"><title>Internationalized Indexes</title>
 
-<section><title>Indexing Tools</title>
+<section id="sec-index-tools"><title>Indexing Tools</title>
 <para><command>Makeindex</command> is used by default to build the index. It works fine for latin charset but it is not
 suited for other charsets and UTF-8 encoding. Moreover its sorting rule is
 not suited for many languages.</para>
