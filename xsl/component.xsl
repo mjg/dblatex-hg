@@ -7,6 +7,7 @@
 <xsl:param name="preface.tocdepth">0</xsl:param>
 <xsl:param name="dedication.tocdepth">0</xsl:param>
 <xsl:param name="colophon.tocdepth">0</xsl:param>
+<xsl:param name="beginpage.as.pagebreak" select="1"/>
 
 
 <xsl:template match="colophon">
@@ -159,17 +160,19 @@
 
 <!-- don't know where to put it -->
 <xsl:template match="beginpage">
-  <xsl:choose>
-  <xsl:when test="@pagenum != ''">
-    <xsl:message>Cannot start a new page at a specific page number</xsl:message>
-  </xsl:when>
-  <xsl:when test="@role = 'openright'">
-    <xsl:text>\cleardoublepage&#10;</xsl:text>
-  </xsl:when>
-  <xsl:otherwise>
-    <xsl:text>\clearpage&#10;</xsl:text>
-  </xsl:otherwise>
-  </xsl:choose>
+  <xsl:if test="$beginpage.as.pagebreak=1">
+    <xsl:choose>
+    <xsl:when test="@pagenum != ''">
+      <xsl:message>Cannot start a new page at a specific page number</xsl:message>
+    </xsl:when>
+    <xsl:when test="@role = 'openright'">
+      <xsl:text>\cleardoublepage&#10;</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>\clearpage&#10;</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
