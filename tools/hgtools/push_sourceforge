@@ -1,10 +1,10 @@
 #!/bin/sh
-
-#repo_sfbase="/home/ben/project/docbook/db2tex/sf/hg/dblatex"
-#repo_sas="$repo_sfbase/dblatex_sas"
-#repo_proxy="$repo_sfbase/dblatex_proxy"
-
-repo_sfbase="/home/ben/manip/mercurial"
+#
+# This script synchronize the proxy of the remote repository, and/or the
+# remote repository itself when the -R option is used.
+# See the push_remote.py script for more details.
+#
+repo_sfbase="/home/ben/project/docbook/db2tex/sf/hg/dblatex"
 repo_sas="$repo_sfbase/dblatex_sas"
 repo_proxy="$repo_sfbase/dblatex_proxy"
 
