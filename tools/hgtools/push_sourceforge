@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#repo_sfbase="/home/ben/project/docbook/db2tex/sf/hg/dblatex"
+#repo_sas="$repo_sfbase/dblatex_sas"
+#repo_proxy="$repo_sfbase/dblatex_proxy"
+
+repo_sfbase="/home/ben/manip/mercurial"
+repo_sas="$repo_sfbase/dblatex_sas"
+repo_proxy="$repo_sfbase/dblatex_proxy"
+
+python ./tools/hgtools/push_remote.py -u marsgui -i $repo_sas -x $repo_proxy \
+       "$@"
+ 
