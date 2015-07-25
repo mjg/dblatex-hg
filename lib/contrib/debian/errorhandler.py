@@ -83,6 +83,10 @@ class DebianHandler(ErrorHandler):
             and not aptcache['transfig'].is_installed):
             warn_msgs.append('For image conversion Debian package transfig is'
                              + ' needed')
+        if ((cmd.startswith('inkscape') or cmd.find('&& inkscape') > -1)
+            and not aptcache['inkscape'].is_installed):
+            warn_msgs.append('For image conversion Debian package inkscape is'
+                             + ' needed')
         if warn_msgs:
             print >> sys.stderr, "\n" + "\n".join(warn_msgs) + "\n"
             return True
