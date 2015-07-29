@@ -44,12 +44,33 @@
     </xsl:choose>
   </xsl:variable>
 
+  <!-- Force section number counter if required. Nothing checked -->
+  <xsl:if test="@label">
+    <xsl:choose>
+    <xsl:when test="string(number(@label))='NaN' or floor(@label)!=@label">
+      <xsl:message>
+      <xsl:text>Warning: only an integer in @label can be processed: '</xsl:text>
+      <xsl:value-of select="@label"/>
+      <xsl:text>'</xsl:text>
+      </xsl:message>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- The counter name is the same than the command -->
+      <xsl:text>\setcounter{</xsl:text>
+      <xsl:value-of select="substring-after($rcommand, '\')"/>
+      <xsl:text>}{</xsl:text>
+      <xsl:value-of select="number(@label)-1"/>
+      <xsl:text>}&#10;</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:if>
+
   <xsl:value-of select="$rcommand"/>
   <xsl:apply-templates select="$title" mode="format.title">
     <xsl:with-param name="allnum" select="$allnum"/>
   </xsl:apply-templates>
   <xsl:call-template name="label.id"/>
-  <xsl:apply-templates select="title" mode="foottext"/>
+  <xsl:apply-templates select="$title" mode="foottext"/>
 </xsl:template>
 
 <!-- Make a section heading from a title string. It gives something like:
