@@ -4,15 +4,21 @@
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
     ############################################################################ -->
+<!-- FO like parameters. Used only with XeTeX backend -->
+<xsl:param name="body.font.family">DejaVu Serif</xsl:param>
+<xsl:param name="sans.font.family">DejaVu Sans</xsl:param>
+<xsl:param name="monospace.font.family">DejaVu Sans Mono</xsl:param>
+
 
 <xsl:param name="latex.encoding">latin1</xsl:param>
 <xsl:param name="latex.engine.options"/>
 <xsl:param name="korean.package">CJK</xsl:param>
 <xsl:param name="cjk.font">cyberbit</xsl:param>
 <xsl:param name="xetex.font">
-  <xsl:text>\setmainfont{DejaVu Serif}&#10;</xsl:text>
-  <xsl:text>\setsansfont{DejaVu Sans}&#10;</xsl:text>
-  <xsl:text>\setmonofont{DejaVu Sans Mono}&#10;</xsl:text>
+  <xsl:value-of select="concat('\setmainfont{',$body.font.family,'}&#10;')"/>
+  <xsl:value-of select="concat('\setsansfont{',$sans.font.family,'}&#10;')"/>
+  <xsl:value-of
+       select="concat('\setmonofont{',$monospace.font.family,'}&#10;')"/>
 </xsl:param>
 
 
