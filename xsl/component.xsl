@@ -70,9 +70,11 @@
   <xsl:otherwise>
     <!-- don't use starred headings, but rely on counters instead -->
     <xsl:text>\setcounter{secnumdepth}{-1}&#10;</xsl:text>
-    <xsl:call-template name="set-tocdepth">
-      <xsl:with-param name="depth" select="$tocdepth - 1"/>
-    </xsl:call-template>
+    <xsl:if test="$tocdepth &lt;= $toc.section.depth">
+      <xsl:call-template name="set-tocdepth">
+        <xsl:with-param name="depth" select="$tocdepth - 1"/>
+      </xsl:call-template>
+    </xsl:if>
     <!-- those sections have optional title -->
     <xsl:choose>
       <xsl:when test="$titlenode">
@@ -101,9 +103,11 @@
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
     <xsl:value-of select="$doc.section.depth"/>
     <xsl:text>}&#10;</xsl:text>
-    <xsl:call-template name="set-tocdepth">
-      <xsl:with-param name="depth" select="$toc.section.depth"/>
-    </xsl:call-template>
+    <xsl:if test="$tocdepth &lt;= $toc.section.depth">
+      <xsl:call-template name="set-tocdepth">
+        <xsl:with-param name="depth" select="$toc.section.depth"/>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 

@@ -15,6 +15,18 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<!-- An empty label specifies an unnumbered chapter -->
+<xsl:template match="chapter[@label and @label='']">
+  <xsl:text>&#10;</xsl:text>
+  <xsl:text>% ------------------ &#10;</xsl:text>
+  <xsl:text>% Unnumbered Chapter &#10;</xsl:text>
+  <xsl:text>% ------------------ &#10;</xsl:text>
+  <xsl:call-template name="section.unnumbered">
+    <xsl:with-param name="tocdepth" select="$toc.section.depth + 1"/>
+    <xsl:with-param name="level" select="0"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="chapter/title"/>
 <xsl:template match="chapter/titleabbrev"/>
 <xsl:template match="chapter/subtitle"/>

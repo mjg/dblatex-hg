@@ -44,8 +44,8 @@
     </xsl:choose>
   </xsl:variable>
 
-  <!-- Force section number counter if required. Nothing checked -->
-  <xsl:if test="@label">
+  <!-- Force section number counter if required. No consistency checked -->
+  <xsl:if test="@label and @label!=''">
     <xsl:choose>
     <xsl:when test="string(number(@label))='NaN' or floor(@label)!=@label">
       <xsl:message>
