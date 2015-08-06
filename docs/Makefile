@@ -76,6 +76,10 @@ native db2latex simple: version.xml
 	                   -P current.docid=usermanual \
                            -T $@ -o manual-$@.pdf -
 
+# Use the PDF image because the PNG from .fig is ugly
+pagesetup2.pdf: pagesetup2.fig
+	fig2dev -L pdf $< $@
+
 # Build the Olink database
 %.db: %.xml
 	$(XSLTPROC) --xinclude --stringparam  collect.xref.targets "only" \
@@ -83,7 +87,7 @@ native db2latex simple: version.xml
 	mv target.db $@
 
 # Build the PDF
-%.pdf: %.xml version.xml $(TABLES) $(CHANGES)
+%.pdf: %.xml version.xml $(TABLES) $(CHANGES) pagesetup2.pdf
 	@$(XSLTPROC) --xinclude \
 	            --param profile.attribute "'output'" \
                     --param profile.value "'manual;pdf'" $(XSLPROF) $< | \

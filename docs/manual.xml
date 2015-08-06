@@ -11,7 +11,7 @@
 <surname>Guillon</surname>
 </author>
 
-<date>3 July 2011</date>
+<date>6 August 2015</date>
 
 <subtitle>User Manual</subtitle>
 
@@ -19,7 +19,7 @@
 
 <address>Valence</address>
 
-<edition>03</edition>
+<edition>08</edition>
 
 <releaseinfo>v<xi:include href="version.xml"
 xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
@@ -74,48 +74,71 @@ about the PyPI distribution.</para>
 </revdescription>
 </revision>
 
+<revision>
+<revnumber>04</revnumber>
+
+<date>2012/04/10</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.3.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>05</revnumber>
+
+<date>2012/06/03</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.4.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>06</revnumber>
+
+<date>2014/05/26</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.5.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>07</revnumber>
+
+<date>2015/05/15</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.6: add the ability to use a texpost
+python plugin, and new index capabilities.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>08</revnumber>
+
+<date>2015/08/06</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.7: add section <xref linkend="sec-section-num"/>.</para>
+</revdescription>
+</revision>
+
 </revhistory>
 </bookinfo>
 
-<bibliography>
-<title>Documentation</title>
-
-<bibliodiv>
-<title>Reference</title>
-
-<biblioentry>
-<abbrev>TDG</abbrev>
-
-<title>DocBook: The Definitive Guide</title>
-
-<authorgroup>
-<author>
-<firstname>Norman</firstname>
-
-<surname>Walsh</surname>
-</author>
-
-<author>
-<firstname>Leonard</firstname>
-
-<surname>Muellner</surname>
-</author>
-</authorgroup>
-
-<copyright>
-<year>1999, 2000, 2001</year>
-
-<holder>O'Reilly &amp; Associates, Inc.</holder>
-</copyright>
-
-<isbn>156592-580-7</isbn>
-
-<publisher>
-<publishername>O'Reilly</publishername>
-</publisher>
-</biblioentry>
-</bibliodiv>
-</bibliography>
+<xi:include href="document.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
@@ -136,6 +159,8 @@ about the PyPI distribution.</para>
 <xi:include href="publish.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="pagesetup.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="secnum.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="figure.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 

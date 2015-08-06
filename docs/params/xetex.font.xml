@@ -15,7 +15,17 @@
   </refsynopsisdiv>
   <refsection>
     <title>Description</title>
-    <para>Font specification for XeTeX. Meaningful only when the xetex backend is
-used.</para>
+    <para>Font specification for XeTeX. Meaningful only when the xetex backend
+    is used. By default the parameter sets the XeTeX configuration from the
+    parameters <parameter>body.font.family</parameter>,
+    <parameter>sans.font.family</parameter>, and
+    <parameter>monospace.font.family</parameter> but you can completely
+    override it to define a more complex setup.</para>
   </refsection>
-</refentry>
+  <refsection>
+    <title>See Also</title>
+    <para><parameter>body.font.family</parameter>,
+    <parameter>sans.font.family</parameter>,
+    <parameter>monospace.font.family</parameter></para>
+  </refsection>
+ </refentry>
