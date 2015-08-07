@@ -91,6 +91,7 @@ rm -f $tmpbuild/xsl/mathml2/Makefile
 rm -r $tmpbuild/tests/mathml/build
 rm -f $tmpbuild/tests/mathml/excluded*
 rm -rf $tmpbuild/tools/cvstools
+rm -rf $tmpbuild/tools/hgtools
 
 # Remove some python test files
 find $tmpbuild -name "test*.py" | xargs rm
