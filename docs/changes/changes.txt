@@ -3,7 +3,8 @@ Release 0.3.7:
 
 - Fix Debian bug #766945: catch 'inskscape' not installed (Andreas Hoenen patch)
 - Fix Debian bug #792898: improve the PDF metadata setup
-- Fix Debian bug #684772: section @label is used to force the section counter
+- Fix Debian bug #684772 and SF bug #85: section @label is used to force
+  the section counter
 - Fix Debian bug #684772: a chapter with an empty @label is not numbered
 - Fix Debian bug #793077: allow to put a figure anchor at the top even if the
   caption is at the bottom, thanks to the parameter figure.anchor.top.

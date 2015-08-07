@@ -10,10 +10,10 @@ Subject field is now filled with the data contained by the elements
 </listitem>
 
 <listitem>
-<para>Fix Debian bug #684772: the <sgmltag>label</sgmltag> attribute of the
-formal headings (e.g. <sgmltag>chapter</sgmltag>, <sgmltag>sect1</sgmltag> to
-<sgmltag>sect5</sgmltag>, <sgmltag>section</sgmltag>) is used by
-<command>dblatex</command> to:
+<para>Fix Debian bug #684772 and SF bug #85: the <sgmltag>label</sgmltag>
+attribute of the formal headings (e.g. <sgmltag>chapter</sgmltag>,
+<sgmltag>sect1</sgmltag> to <sgmltag>sect5</sgmltag>,
+<sgmltag>section</sgmltag>) is used by <command>dblatex</command> to:
 
 <itemizedlist>
 <listitem>
