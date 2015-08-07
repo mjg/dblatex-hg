@@ -188,7 +188,7 @@ class Build(build):
     def build_doc(self):
         log.info("running build_doc")
         htmldir = os.path.join("docs", "xhtml")
-        pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
+        pdfdocs = glob.glob(os.path.join("docs", "[mr]*.pdf"))
         manpage = os.path.join("docs", "manpage", "dblatex.1.gz")
 
         # Lazy check to avoid a rebuild for nothing
@@ -474,7 +474,7 @@ def get_version():
 
 
 if __name__ == "__main__":
-    pdfdocs = glob.glob(os.path.join("docs", "*.pdf"))
+    pdfdocs = glob.glob(os.path.join("docs", "[mr]*.pdf"))
     htmldoc = [os.path.join("docs", "xhtml")]
     classifiers = [
        "Operating System :: OS Independent",
