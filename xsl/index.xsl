@@ -167,4 +167,9 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<!-- Hook the endnotes to an element to print out -->
+<xsl:template match="index[@type='endnotes']">
+  <xsl:apply-templates select="." mode="endnotes"/>
+</xsl:template>
+
 </xsl:stylesheet>

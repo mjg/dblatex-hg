@@ -86,6 +86,7 @@
   <xsl:call-template name="image.setup"/>
   <xsl:call-template name="citation.setup"/>
   <xsl:call-template name="biblio.setup"/>
+  <xsl:call-template name="footnote.setup"/>
   <xsl:call-template name="annotation.setup"/>
   <xsl:call-template name="user.params.set2"/>
   <xsl:call-template name="inline.setup"/>
