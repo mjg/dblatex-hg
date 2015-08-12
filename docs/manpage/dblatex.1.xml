@@ -30,6 +30,9 @@
       <year>2010</year>
       <year>2011</year>
       <year>2012</year>
+      <year>2013</year>
+      <year>2014</year>
+      <year>2015</year>
       <holder>Andreas Hoenen</holder>
     </copyright>
     <legalnotice>
@@ -48,7 +51,7 @@
         <filename>/usr/share/common-licenses/GPL</filename>.
       </para>
     </legalnotice>
-    <date>March 6, 2012</date>
+    <date>March 6, 2015</date>
   </refentryinfo>
 
   <refmeta>
@@ -308,15 +311,16 @@
         </listitem>
       </varlistentry>
       <varlistentry>
-        <term><option>-r <replaceable>script</replaceable></option></term>
+        <term><option>-r <optional>plugin:</optional><replaceable>script</replaceable></option></term>
         <term>
-          <option>--texpost=<replaceable>script</replaceable></option>
+          <option>--texpost=<optional>plugin:</optional><replaceable>script</replaceable></option>
         </term>
         <listitem>
           <simpara>
             Script called at the very end of the tex compilation. Its role is to
             modify the tex file or one of the compilation files before the last
-            round.
+            round. The <replaceable>script</replaceable> can be a python plugin.
+            In this case add the prefix term '<literal>plugin:</literal>'.
             <phrase output="manual">See <xref linkend="sec-texpost"/>.</phrase>
           </simpara>
         </listitem>
@@ -470,6 +474,10 @@
     <para>
       To set some XSL parameters from the command line:
       <screen>dblatex -P latex.babel.language=de myfile.xml</screen>
+    </para>
+    <para>
+      To use your XSL stylesheet:
+      <screen>dblatex -p myconfig.xsl myfile.xml</screen>
     </para>
     <para>
       To use the db2latex output style:
