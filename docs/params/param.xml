@@ -151,6 +151,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="annotation.support.xml"/>
 <xi:include href="beginpage.as.pagebreak.xml"/>
 <xi:include href="doc.section.depth.xml"/>
+<xi:include href="endnotes.properties.xml"/>
 <xi:include href="equation.default.position.xml"/>
 <xi:include href="example.default.position.xml"/>
 <xi:include href="example.float.type.xml"/>
@@ -158,6 +159,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="figure.default.position.xml"/>
 <xi:include href="figure.title.top.xml"/>
 <xi:include href="filename.as.url.xml"/>
+<xi:include href="footnote.as.endnote.xml"/>
 <xi:include href="hyphenation.format.xml"/>
 <xi:include href="literal.layout.options.xml"/>
 <xi:include href="literal.lines.showall.xml"/>

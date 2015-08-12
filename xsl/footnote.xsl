@@ -113,6 +113,9 @@
     <xsl:text>\let\footnotemark=\endnotemark&#10;</xsl:text>
     <xsl:text>\let\c@footnote=\c@endnote&#10;</xsl:text>
     <xsl:text>\makeatother&#10;</xsl:text>
+    <!-- Endnotes now uses the footnote counter: prevent from chapter reset -->
+    <xsl:text>\usepackage{chngcntr}&#10;</xsl:text>
+    <xsl:text>\counterwithout{footnote}{chapter}&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 

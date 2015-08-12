@@ -179,6 +179,8 @@ python plugin, and new index capabilities.</para>
 <xi:include href="locale.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="xref.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="footnote.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
 
 <xi:include href="custom/custom.xml"
