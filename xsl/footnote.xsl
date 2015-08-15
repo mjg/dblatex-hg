@@ -8,6 +8,9 @@
     XSLT Stylesheet DocBook -> LaTeX
     ############################################################################ -->
 <xsl:param name="footnote.as.endnote" select="0"/>
+<xsl:param name="endnotes.heading.style" select="'select:title'"/>
+<xsl:param name="endnotes.heading.group" select="'document'"/>
+<xsl:param name="endnotes.heading.command"/>
 
 <xsl:attribute-set name="endnotes.properties.default">
   <xsl:attribute name="package">endnotes</xsl:attribute>
@@ -114,8 +117,11 @@
     <xsl:text>\let\c@footnote=\c@endnote&#10;</xsl:text>
     <xsl:text>\makeatother&#10;</xsl:text>
     <!-- Endnotes now uses the footnote counter: prevent from chapter reset -->
-    <xsl:text>\usepackage{chngcntr}&#10;</xsl:text>
-    <xsl:text>\counterwithout{footnote}{chapter}&#10;</xsl:text>
+    <xsl:if test="not(contains($endnotes.heading.group,'chapter'))
+                  and count(//chapter)!=0">
+      <xsl:text>\usepackage{chngcntr}&#10;</xsl:text>
+      <xsl:text>\counterwithout{footnote}{chapter}&#10;</xsl:text>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
@@ -166,6 +172,64 @@
   <xsl:apply-templates select="*"/>
   <xsl:if test="$footnote.as.endnote=1">
     <xsl:text>\theendnotes&#10;</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="chapter" mode="endnotes">
+  <xsl:param name="verbose" select="1"/>
+
+  <xsl:variable name="endnotes.section"
+                select="//index[@type='endnotes'][1]/parent::*"/>
+
+  <xsl:message>Endnotes sections: <xsl:value-of
+               select="count($endnotes.section)"/></xsl:message>
+  <xsl:if test="$footnote.as.endnote=1 and 
+                contains($endnotes.heading.group, local-name(.)) and
+                count($endnotes.section)!=0 and count(descendant::footnote)!=0">
+
+    <xsl:variable name="level">
+      <xsl:call-template name="get.sect.level">
+        <xsl:with-param name="n" select="$endnotes.section"/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:message>Endnotes level: <xsl:value-of select="$level"/></xsl:message>
+    <xsl:variable name="title">
+      <xsl:call-template name="xref.nolink">
+        <xsl:with-param name="string">
+          <xsl:apply-templates select="." mode="object.xref.markup">
+            <xsl:with-param name="purpose" select="'xref'"/>
+            <xsl:with-param name="xrefstyle" select="$endnotes.heading.style"/>
+            <xsl:with-param name="referrer" select="."/>
+            <xsl:with-param name="verbose" select="$verbose"/>
+          </xsl:apply-templates>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:message>ici4</xsl:message>
+    <xsl:variable name="heading">
+      <xsl:choose>
+      <xsl:when test="$endnotes.heading.command!=''">
+        <xsl:value-of
+                select="concat($endnotes.heading.command, '{', $title, '}')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="maketitle">
+          <xsl:with-param name="level" select="$level+1"/>
+          <xsl:with-param name="allnum" select="'0'"/>
+          <xsl:with-param name="num" select="'0'"/>
+          <xsl:with-param name="title" select="$title"/>
+          <xsl:with-param name="with-label" select="0"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:text>\addtoendnotes{\protect</xsl:text>
+    <xsl:value-of select="$heading"/>
+    <xsl:text>}&#10;</xsl:text>
+
   </xsl:if>
 </xsl:template>
 
