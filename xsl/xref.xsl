@@ -442,13 +442,14 @@
 <!-- ==================================================================== -->
 
 <xsl:template name="xref.nolink">
+  <xsl:param name="string">
+    <xsl:apply-templates select="."/>
+  </xsl:param>
 
   <!-- Get the normal markup but replace hot links by counters -->
   <xsl:variable name="xref.text">
     <xsl:call-template name="string-replace">
-      <xsl:with-param name="string">
-        <xsl:apply-templates select="."/>
-      </xsl:with-param>
+      <xsl:with-param name="string" select="$string"/>
       <xsl:with-param name="from" select="'\ref{'"/>
       <xsl:with-param name="to" select="'\ref*{'"/>
     </xsl:call-template>
@@ -456,8 +457,10 @@
 
   <!-- Remove an internal hyperlink wrapper (external links seem ok) -->
   <xsl:choose>
-    <xsl:when test="starts-with($xref.text, '\hyperlink{')">
-      <xsl:value-of select="substring-after($xref.text, '}')"/>
+    <xsl:when test="contains($xref.text, '\hyperlink{')">
+      <xsl:value-of select="substring-before($xref.text,'\hyperlink{')"/>
+      <xsl:value-of select="substring-after(substring-after($xref.text,
+                                            '\hyperlink{'), '}')"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:value-of select="$xref.text"/>

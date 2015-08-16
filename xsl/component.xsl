@@ -44,6 +44,8 @@
   <xsl:param name="titlenode" select="(title|info/title)[1]"/>
   <xsl:param name="title"/>
 
+  <xsl:apply-templates select="." mode="endnotes"/>
+
   <xsl:call-template name="section.unnumbered.begin">
     <xsl:with-param name="tocdepth" select="$tocdepth"/>
     <xsl:with-param name="level" select="$level"/>

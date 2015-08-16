@@ -11,6 +11,7 @@
   <xsl:text>% ------- &#10;</xsl:text>
   <xsl:text>% Chapter &#10;</xsl:text>
   <xsl:text>% ------- &#10;</xsl:text>
+  <xsl:apply-templates select="." mode="endnotes"/>
   <xsl:call-template name="mapheading"/>
   <xsl:apply-templates/>
 </xsl:template>

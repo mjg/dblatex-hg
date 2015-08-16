@@ -9,7 +9,7 @@
     ############################################################################ -->
 <xsl:param name="footnote.as.endnote" select="0"/>
 <xsl:param name="endnotes.heading.style" select="'select:title'"/>
-<xsl:param name="endnotes.heading.group" select="'document'"/>
+<xsl:param name="endnotes.heading.groups" select="'none'"/>
 <xsl:param name="endnotes.heading.command"/>
 
 <xsl:attribute-set name="endnotes.properties.default">
@@ -117,7 +117,7 @@
     <xsl:text>\let\c@footnote=\c@endnote&#10;</xsl:text>
     <xsl:text>\makeatother&#10;</xsl:text>
     <!-- Endnotes now uses the footnote counter: prevent from chapter reset -->
-    <xsl:if test="not(contains($endnotes.heading.group,'chapter'))
+    <xsl:if test="not(contains($endnotes.heading.groups,'chapter'))
                   and count(//chapter)!=0">
       <xsl:text>\usepackage{chngcntr}&#10;</xsl:text>
       <xsl:text>\counterwithout{footnote}{chapter}&#10;</xsl:text>
@@ -167,24 +167,39 @@
   </xsl:if>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
 <!-- Just append the endnotes to the other content -->
-<xsl:template match="*" mode="endnotes">
+<xsl:template match="index" mode="endnotes">
   <xsl:apply-templates select="*"/>
   <xsl:if test="$footnote.as.endnote=1">
     <xsl:text>\theendnotes&#10;</xsl:text>
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="chapter" mode="endnotes">
+<xsl:template match="*" mode="endnotes"/>
+
+<!-- By default only these elements are known to be endnotes groups -->
+<xsl:template match="chapter|part" mode="endnotes">
+  <xsl:call-template name="endnotes.add.header">
+    <xsl:with-param name="reset-counter" select="1"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="endnotes.add.header">
   <xsl:param name="verbose" select="1"/>
+  <xsl:param name="reset-counter" select="0"/>
 
   <xsl:variable name="endnotes.section"
                 select="//index[@type='endnotes'][1]/parent::*"/>
 
-  <xsl:message>Endnotes sections: <xsl:value-of
+  <xsl:if test="$verbose=2">
+    <xsl:message>Endnotes sections found: <xsl:value-of
                select="count($endnotes.section)"/></xsl:message>
+  </xsl:if>
+
   <xsl:if test="$footnote.as.endnote=1 and 
-                contains($endnotes.heading.group, local-name(.)) and
+                contains($endnotes.heading.groups, local-name(.)) and
                 count($endnotes.section)!=0 and count(descendant::footnote)!=0">
 
     <xsl:variable name="level">
@@ -193,7 +208,13 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <xsl:message>Endnotes level: <xsl:value-of select="$level"/></xsl:message>
+    <xsl:if test="$verbose=2">
+      <xsl:message>
+         <xsl:text>Endnotes headings level: </xsl:text>
+         <xsl:value-of select="$level+1"/></xsl:message>
+    </xsl:if>
+
+    <!-- Use xref templates to format the title with xrefstyle features -->
     <xsl:variable name="title">
       <xsl:call-template name="xref.nolink">
         <xsl:with-param name="string">
@@ -207,7 +228,7 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <xsl:message>ici4</xsl:message>
+    <!-- Use a defined heading command, or compute one from section level -->
     <xsl:variable name="heading">
       <xsl:choose>
       <xsl:when test="$endnotes.heading.command!=''">
@@ -226,6 +247,9 @@
       </xsl:choose>
     </xsl:variable>
 
+    <xsl:if test="$reset-counter!=0">
+      <xsl:text>\setcounter{endnote}{0}</xsl:text>
+    </xsl:if>
     <xsl:text>\addtoendnotes{\protect</xsl:text>
     <xsl:value-of select="$heading"/>
     <xsl:text>}&#10;</xsl:text>

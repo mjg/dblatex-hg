@@ -9,6 +9,7 @@
   <xsl:text>%&#10;</xsl:text>
   <xsl:text>% PART&#10;</xsl:text>
   <xsl:text>%&#10;</xsl:text>
+  <xsl:apply-templates select="." mode="endnotes"/>
   <xsl:call-template name="mapheading"/>
   <xsl:apply-templates/>
   <!-- Force exiting the part. It assumes the bookmark package available -->

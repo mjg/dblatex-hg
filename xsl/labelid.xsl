@@ -79,6 +79,7 @@
 <xsl:template name="maketitle">
   <xsl:param name="num" select="'1'"/>
   <xsl:param name="allnum" select="'0'"/>
+  <xsl:param name="with-label" select="1"/>
   <xsl:param name="level"/>
   <xsl:param name="name"/>
   <xsl:param name="command"/>
@@ -104,7 +105,9 @@
   <xsl:text>{</xsl:text>
   <xsl:value-of select="$title"/>
   <xsl:text>}&#10;</xsl:text>
-  <xsl:call-template name="label.id"/>
+  <xsl:if test="$with-label != 0">
+    <xsl:call-template name="label.id"/>
+  </xsl:if>
 </xsl:template>
 
 
