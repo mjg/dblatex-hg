@@ -17,10 +17,13 @@
 #                                                      PDF_Day_A_Look_Inside.pdf
 #
 #
-import zlib
+import os
 import sys
+import zlib
 import re
 import logging
+import tempfile
+import shutil
 
 def pdfstring_is_list(data):
     return (data and data[0] == "[" and data[-1] == "]")
@@ -34,11 +37,11 @@ class PDFFile:
     SHOW_DETAILS = 2
     SHOW_SUMMARY = 1
 
-    def __init__(self, write_stream=False):
+    def __init__(self, stream_manager=None):
         self.filename = ""
         self.pdfobjects = None
         self.page_objects = []
-        self.write_stream = write_stream
+        self.stream_manager = stream_manager or StreamManager()
         self._log = logging.getLogger("pdfscan.pdffile")
 
     def debug(self, text):
@@ -47,6 +50,9 @@ class PDFFile:
         self._log.error(text)
     def info(self, text):
         self._log.info(text)
+
+    def cleanup(self):
+        self.stream_manager.cleanup()
 
     def parse_file(self, file_read):
         pdfobj = None
@@ -59,7 +65,7 @@ class PDFFile:
             elif " obj" in line:
                 number, revision = line.split()[0:2]
                 pdfobj = PDFObject(number, revision,
-                                   write_stream=self.write_stream)
+                                   stream_manager=self.stream_manager)
             elif pdfobj:
                 pdfobj.append_string(line)
 
@@ -209,7 +215,7 @@ class PDFObject:
     The data contained by a PDF object can be dictionnaries (descriptors),
     stream contents and other stuff.
     """
-    def __init__(self, number, revision, write_stream=False):
+    def __init__(self, number, revision, stream_manager=None):
         self.string = ""
         self.number = number
         self.revision = revision
@@ -218,7 +224,7 @@ class PDFObject:
         self.data = ""
         self.stream = None
         self.outfile = ""
-        self.write_stream = write_stream
+        self.stream_manager = stream_manager or StreamManager()
         self._log = logging.getLogger("pdfscan.pdfobject")
         self.debug("New Object")
 
@@ -286,28 +292,24 @@ class PDFObject:
         stream_size = int(self.descriptor.get("/Length"))
         self.stream = self.stream[0:stream_size]
 
+        # Put the stream in a cache
+        self.stream_cache = self.stream_manager.cache(number=self.number,
+                                                      revision=self.revision)
+
         method = self.descriptor.get("/Filter")
-        if method != "/FlateDecode":
+        if method == "/FlateDecode":
+            method = "zlib"
+        elif method != "":
             self.error("don't know how to decode stream with filter '%s'" \
                      % method)
             return
 
-        self.outfile = "Stream.%s.%s" % (self.number, self.revision)
-        if not(self.write_stream):
-            return
-
-        print len(self.stream)
-        stream_text = zlib.decompress(self.stream)
-        f = open(self.outfile, "wb")
-        f.write(stream_text)
-        f.close()
+        self.stream_cache.write(self.stream, compress_type=method)
 
     def stream_text(self):
         if not(self.stream):
             return ""
-        if self.outfile:
-            return open(self.outfile).read()
-        return ""
+        return self.stream_cache.read()
 
     def get_type(self):
         _type = self.descriptor.get("/Type")
@@ -416,6 +418,102 @@ class PDFDescriptor:
                     self.debug("Substitute %s: %s" % (param, objects[0]))
  
 
+class StreamManager:
+    CACHE_REFRESH = 1
+    CACHE_REMANENT = 2
+    CACHE_TMPDIR = 4
+
+    def __init__(self, cache_method="file", cache_dirname="", flags=0):
+        self.cache_method = cache_method
+        self.cache_format = "pdfstream.%(number)s.%(revision)s"
+        self.cache_dirname = cache_dirname
+        self.cache_files = []
+        self.flags = flags
+        # Don't want to remove something in a user directory
+        if cache_dirname:
+            self.flags = self.flags | self.CACHE_REMANENT
+
+    def cleanup(self):
+        if (self.cache_method != "file"):
+            return
+
+        if (self.flags & self.CACHE_REMANENT):
+            if (self.flags & self.CACHE_TMPDIR):
+                print "'%s' not removed" % (self.cache_dirname)
+            return
+
+        if (self.flags & self.CACHE_TMPDIR):
+            shutil.rmtree(self.cache_dirname)
+        else:
+            for fname in self.cache_files:
+                print "shutil.remove(", fname
+
+    def cache(self, **kwargs):
+        if self.cache_method == "file":
+            return self.cache_file(kwargs)
+        else:
+            return self.cache_memory(kwargs)
+    
+    def cache_file(self, kwargs):
+        if not(self.cache_dirname):
+            self.cache_dirname = tempfile.mkdtemp()
+            self.flags = self.flags | self.CACHE_TMPDIR
+
+        if not(os.path.exists(self.cache_dirname)):
+            os.mkdir(self.cache_dirname)
+
+        cache_path = os.path.join(self.cache_dirname,
+                                  self.cache_format % kwargs)
+        stream_cache = StreamCacheFile(cache_path, flags=self.flags)
+        self.cache_files.append(cache_path)
+        return stream_cache
+
+    def cache_memory(self, kwargs):
+        stream_cache = StreamCacheMemory(flags=self.flags)
+        return stream_cache
+
+
+class StreamCache:
+    def __init__(self, outfile, flags=0):
+        self.flags = flags
+
+    def decompress(self, data, compress_type):
+        if not(compress_type):
+            return data
+        if compress_type == "zlib":
+            return zlib.decompress(data)
+
+class StreamCacheFile(StreamCache):
+    def __init__(self, outfile, flags=0):
+        self.flags = flags
+        self.outfile = outfile
+
+    def write(self, data, compress_type=""):
+        if ((self.flags & StreamManager.CACHE_REFRESH)
+            or not(os.path.exists(self.outfile))):
+            data = self.decompress(data, compress_type)
+            f = open(self.outfile, "w")
+            f.write(data)
+            f.close()
+
+    def read(self):
+        f = open(self.outfile)
+        data = f.read()
+        f.close()
+        return data
+
+class StreamCacheMemory(StreamCache):
+    def __init__(self, outfile, flags=0):
+        self.flags = flags
+        self._buffer = ""
+
+    def write(self, data, compress_type=""):
+        self._buffer = self.decompress(data, compress_type)
+
+    def read(self):
+        return self._buffer
+
+
 class PDFStream:
     """
     Data between the 'stream ... endstream' tags in a PDF object.
@@ -511,6 +609,33 @@ def option_show_items(show):
     show_items = show.split(",")
     return show_items
 
+def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
+
+    flags = 0
+    if cache_flags:
+        cache_flags = cache_flags.split(",")
+        for cflag in cache_flags:
+            if cflag == "remanent":
+                flags = flags | StreamManager.CACHE_REMANENT
+            elif cflag == "refresh":
+                flags = flags | StreamManager.CACHE_REFRESH
+
+    if cache_in_memory:
+        mgr = StreamManager(cache_method="memory")
+    elif cache_dirname:
+        cache_dirname = os.path.realpath(cache_dirname)
+        if not(os.path.exists(cache_dirname)):
+            print "Invalid cache dir: '%s'. Temporary dir used instead" % \
+                  cache_dirname
+            return None
+        mgr = StreamManager(cache_method="file",
+                            cache_dirname=cache_dirname,
+                            flags=flags)
+    else:
+        mgr = StreamManager(flags=flags)
+
+    return mgr
+
 
 def main():
     from optparse import OptionParser
@@ -523,6 +648,13 @@ def main():
                "group in 'pdffile', 'pdfobject', 'descriptor'")
     parser.add_option("-s", "--show",
           help="Information to show")
+    parser.add_option("-c", "--cache-stream-dir",
+          help="Directory where to store the decompressed stream")
+    parser.add_option("-m", "--no-cache-stream", action="store_true",
+          help="No stream cache on disk used: leave streams in memory")
+    parser.add_option("-f", "--cache-flags",
+          help="Comma separated list of stream cache setup options: 'remanent'"\
+               " and/or 'refresh'")
     
     (options, args) = parser.parse_args()
 
@@ -533,12 +665,15 @@ def main():
     page_ranges = option_page_ranges(options.pages)
     log_groups = option_group_loglevels(options.verbose)
     show_items = option_show_items(options.show)
+    stream_manager = option_cache_setup(options.no_cache_stream,
+                                        options.cache_stream_dir,
+                                        options.cache_flags)
 
     logger_setup(log_groups)
 
     pdffile = args[0]
 
-    pdf = PDFFile()
+    pdf = PDFFile(stream_manager=stream_manager)
     pdf.load(pdffile)
 
     pdfobjects = pdf.pdfobjects
@@ -565,6 +700,8 @@ def main():
     if scope != 0:
         for page_range in page_ranges:
             pdf.show_fonts(page_range=page_range, print_level=scope)
+
+    pdf.cleanup()
 
     if False:
         misc_objs = pdfobjects.get_objects_by_type("misc")
