@@ -9,7 +9,7 @@
     ############################################################################ -->
 <xsl:param name="footnote.as.endnote" select="0"/>
 <xsl:param name="endnotes.heading.style" select="'select:title'"/>
-<xsl:param name="endnotes.heading.groups" select="'none'"/>
+<xsl:param name="endnotes.heading.groups"/>
 <xsl:param name="endnotes.heading.command"/>
 
 <xsl:attribute-set name="endnotes.properties.default">
