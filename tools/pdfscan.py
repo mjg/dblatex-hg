@@ -60,12 +60,18 @@ class PDFFile:
 
         for line in file_read:
             if "endobj" in line and pdfobj:
+                fields = line.split()
+                if fields[0] != "endobj":
+                    pdfobj.append_string(" ".join(fields[:-1])+"\n")
                 pdfobj.compute()
                 self.pdfobjects.add_object(pdfobj)
             elif " obj" in line:
-                number, revision = line.split()[0:2]
+                fields = line.split()
+                number, revision = fields[0:2]
                 pdfobj = PDFObject(number, revision,
                                    stream_manager=self.stream_manager)
+                if fields[-1] != "obj":
+                    pdfobj.append_string(fields[-1]+"\n")
             elif pdfobj:
                 pdfobj.append_string(line)
 
@@ -137,7 +143,7 @@ class PDFFile:
 
         page_objects = self.page_objects[page_first-1:page_last]
 
-        header_fmt = "%4s %40s %s"
+        header_fmt = "%4s %-40s %s"
         self.details(header_fmt % ("PAGE", "FONT", "SIZE"))
         self.details(header_fmt % (4*"-", 40*"-", 10*"-"))
 
@@ -155,6 +161,9 @@ class PDFFile:
             self.debug("Page %d %s: contents: %s, resources: %s" % \
                          (page_num, page, contents, resources))
 
+            if not(isinstance(contents, list)):
+                contents = [contents]
+
             for content in contents:
                 b = PDFStream(content.stream_text(), fontdict)
                 used_fonts = b.used_fonts()
@@ -168,7 +177,7 @@ class PDFFile:
 
             self.details(header_fmt % (4*"-", 40*"-", 10*"-"))
 
-        print "\nFont used in pages %d-%d:" % (page_first, page_last)
+        print "\nFonts used in pages %d-%d:" % (page_first, page_last)
         for font in fonts_used:
             print font
 
@@ -256,6 +265,9 @@ class PDFObject:
             self.stream = s[1].strip()
 
         string = s[0]
+
+        # Iterate to build all the nested dictionnaries/descriptors,
+        # from the deepest to the main one
         self.descriptors = []
         while True:
             descs = re.findall("(<<[^<>]+<?[^<>]+>?[^<>]+>>)",
@@ -350,8 +362,23 @@ class PDFDescriptor:
     def warning(self, text):
         self._log.warning(text)
 
+    def normalize_fields(self, string):
+        # It must detect the fields for these cases:
+        # <<
+        #  /Type /Page                  : the value is another keyword
+        #  /Contents 5 0 R              : the value is a string up next keyword
+        #  /Resources 4 0 R                   
+        #  /MediaBox [0 0 595.276 841.89] : the value is an array
+        #  /Parent 12 0 R
+        # >>
+        string = string.replace(">>", "")
+        string = string.replace("<<", "")
+        fields = re.findall("/\w+\s*/[^\s]+|/\w+\s*\[.*\]|/\w+\s*[^/]+", string)
+        fields = [ f.strip() for f in fields if (f and f.strip()) ]
+        return fields
+
     def compute(self, descriptors=None):
-        lines = self.string.split("\n")
+        lines = self.normalize_fields(self.string)
         for line in lines:
             #print line
             m = re.match("(/[^ \({/\[<]*)", line)
@@ -524,7 +551,8 @@ class PDFStream:
 
     def used_fonts(self):
         pdffonts = []
-        fonts = re.findall("([^\s]+\s[^\s]+\sTf)", 
+        # Search something like that: '/F10 9.47 Tf'
+        fonts = re.findall("(/\w+\s+[^\s]+\sTf)", 
                            self.string, re.MULTILINE)
         fonts = list(set(fonts))
         for font in fonts:
