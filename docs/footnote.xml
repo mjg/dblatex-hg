@@ -133,6 +133,75 @@ definition and the default one done by dblatex.</para>
 ]]></programlisting>
 
 </section>
+<section id="sec-endnotes-group">
+<title>Grouping Endnotes</title>
 
+<para>By default the endnotes are displayed for the whole document as a global
+list. You can configure dblatex to show the endnotes grouped per part or per chapter. A heading is put before each group of notes to recall the component (part, chapter, or another section) that contains these notes. The purpose is to make the research of the notes at the end of the document easier for the reader.</para>
+
+<para>To group the endnotes according to the granularity you wish,
+you just need to
+set the <parameter>endnotes.heading.groups</parameter> with the expected section
+types separated by a space. For example, the following setup displays
+notes per part and per chapter:</para>
+
+<programlisting language="XML"><![CDATA[
+  <xsl:param name="footnote.as.endnote" select="1"/>
+  <xsl:param name="endnotes.heading.groups" select="'part chapter'"/>
+]]></programlisting>
+
+<section>
+<title>Adding new Groups</title>
+
+<para>By default dblatex can group the notes per chapter and/or per part,
+provided that the section type is declared in <parameter>endnotes.heading.groups</parameter> as explained previously. If you want to add another section type you need to override the template called in mode <literal>endnotes</literal>, and to add this type to the declared groups. Usually the <literal>endnotes</literal> mode template only calls the <function>endnotes.add.header</function> template. The example below makes a new group for <sgmltag>preface</sgmltag>.</para>
+
+<programlisting language="XML"><![CDATA[
+  <xsl:param name="endnotes.heading.groups" select="'part chapter preface'"/>
+
+  <xsl:template match="preface" mode="endnotes">
+    <xsl:call-template name="endnotes.add.header">
+      <xsl:with-param name="reset-counter" select="1"/>
+    </xsl:call-template>
+  </xsl:template>
+]]></programlisting>
+
+</section>
+<section>
+<title>Formatting the Headings text</title>
+
+<para>You can use the parameter
+<parameter>endnotes.heading.style</parameter> to format the headings of the groups with the same syntax than <sgmltag>xrefstyle</sgmltag> does. The example below gives a template where the title and the page of the chapter containing
+the notes are displayed.</para>
+
+<programlisting language="XML"><![CDATA[
+  <xsl:param name="endnotes.heading.style">
+    <xsl:text>template:Notes of the chapter "%t", page %p</xsl:text>
+  </xsl:param>
+]]></programlisting>
+
+</section>
+<section>
+<title>LaTeX Command to make the Headings</title>
+
+<para>By default <command>dblatex</command> creates the headings of the groups
+with a section command whose level is just below the level of the endnotes 
+section. For example, if the endnotes section is a chapter, the headings are
+created by using a <literal>\section*</literal> latex command. If the endnotes
+section is a section, the headings are done by using
+<literal>\subsection*</literal>, and so on.</para>
+
+<para>If this behaviour does not fit your needs you can specify the command to use with the parameter <parameter>endnotes.heading.command</parameter>. It can be usefull if you want to format these heading in a specific way. The heading markup produced following the <parameter>endnotes.heading.style</parameter> template is passed as an argument of
+the specified command. The example below uses the command
+<literal>\enoteheader*</literal> to create the headings. It assumes that this
+macro is defined somewhere else (e.g. in a user latex style).</para>
+
+<programlisting language="XML"><![CDATA[
+  <xsl:param name="endnotes.heading.command" select="'\enoteheader*'"/>
+]]></programlisting>
+
+</section>
+
+</section>
 </section>
 </section>

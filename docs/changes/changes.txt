@@ -1,3 +1,10 @@
+  Release 0.3.7.1:
+  ~~~~~~~~~~~~~~~~
+- Add the endnotes features: the <footnote>s can be turned to be end notes in
+  the printed document. Some parameters are added to configure the endnotes
+  display.
+
+
 Release 0.3.7:
 --------------
 
