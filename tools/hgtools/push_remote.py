@@ -37,6 +37,39 @@ def hg_export_patches(repo_src, repo_sas, patch_dir):
     cmd += ["-r%s" % (r) for r in patch_revs]
     exec_command(cmd)
 
+def hg_tag_command(repo_proxy, patch, user=""):
+    cmd = ["grep", "-c", "^diff.*\.hgtags", patch]
+    print " ".join(cmd)
+    p = Popen(cmd, stdout=PIPE)
+    data = p.communicate()[0]
+
+    if int(data) == 0:
+        return []
+
+    tag1, tag2, tag_date = "", "", ""
+    for line in open(patch).readlines():
+        m = re.search("Added tag ([^\s]+) for changeset", line)
+        if m:
+            tag1 = m.group(1)
+            continue
+        m = re.search("^\+\+\+ .*\s+(\w+ \w+ \d+ \d+:\d+:\d+ \d+)", line)
+        if m:
+            tag_date = m.group(1)
+            continue
+        m = re.search("^\+.* (.*)", line)
+        if m:
+            tag2 = m.group(1)
+            continue
+
+    if not(tag1 and tag1 == tag2):
+        print "Something wrong: '%s' vs '%s'" % (tag1, tag2)
+        return []
+
+    cmd = ["hg", "-R", repo_proxy, "tag", "-d", '"'+tag_date+'"']
+    if user: cmd += ["-u", user]
+    cmd += [tag1]
+    return cmd
+
 def hg_import_patches(repo_proxy, patch_dir, user=""):
     patches = glob.glob(os.path.join(patch_dir, "*.diff"))
     patches.sort()
@@ -44,7 +77,9 @@ def hg_import_patches(repo_proxy, patch_dir, user=""):
     if user: cmdbase += ["-u", user]
 
     for patch in patches:
-        cmd = cmdbase + [patch]
+        cmd = hg_tag_command(repo_proxy, patch, user)
+        if not(cmd):
+            cmd = cmdbase + [patch]
         exec_command(cmd)
 
 def hg_command(repo_sas, what):
