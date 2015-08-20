@@ -19,11 +19,31 @@
 #
 import os
 import sys
+import traceback
 import zlib
 import re
 import logging
 import tempfile
 import shutil
+
+class ErrorHandler:
+    def __init__(self):
+        self._dump_stack = False
+        self.rc = 0
+
+    def dump_stack(self, dump=True):
+        self._dump_stack = dump
+
+    def failure_track(self, msg, rc=1):
+        self.rc = rc
+        print >>sys.stderr, (msg)
+        if self._dump_stack:
+            traceback.print_exc()
+
+    def failed_exit(self, rc=1):
+        self.failure_track(msg, rc)
+        sys.exit(self.rc)
+
 
 def pdfstring_is_list(data):
     return (data and data[0] == "[" and data[-1] == "]")
@@ -270,7 +290,8 @@ class PDFObject:
         # from the deepest to the main one
         self.descriptors = []
         while True:
-            descs = re.findall("(<<[^<>]+<?[^<>]+>?[^<>]+>>)",
+            # descs = re.findall("(<<[^<>]+<?[^<>]+>?[^<>]+>>)",
+            descs = re.findall("(<<(?:(?<!<)<(?!<)|[^<>]|(?<!>)>(?!>))+>>)",
                                string, re.MULTILINE)
             if not(descs):
                 break
@@ -373,7 +394,10 @@ class PDFDescriptor:
         # >>
         string = string.replace(">>", "")
         string = string.replace("<<", "")
-        fields = re.findall("/\w+\s*/[^\s]+|/\w+\s*\[.*\]|/\w+\s*[^/]+", string)
+        string = string.replace("\n", " ")
+        print string
+        fields = re.findall("/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+",
+                            string)
         fields = [ f.strip() for f in fields if (f and f.strip()) ]
         return fields
 
@@ -456,9 +480,16 @@ class StreamManager:
         self.cache_dirname = cache_dirname
         self.cache_files = []
         self.flags = flags
+        self._log = logging.getLogger("pdfscan.pdffile")
         # Don't want to remove something in a user directory
-        if cache_dirname:
-            self.flags = self.flags | self.CACHE_REMANENT
+        if cache_dirname: self.flags = self.flags | self.CACHE_REMANENT
+
+    def debug(self, text):
+        self._log.debug(text)
+    def error(self, text):
+        self._log.error(text)
+    def info(self, text):
+        self._log.info(text)
 
     def cleanup(self):
         if (self.cache_method != "file"):
@@ -470,6 +501,7 @@ class StreamManager:
             return
 
         if (self.flags & self.CACHE_TMPDIR):
+            self.info("Remove cache directory '%s'" % (self.cache_dirname))
             shutil.rmtree(self.cache_dirname)
         else:
             for fname in self.cache_files:
@@ -664,6 +696,36 @@ def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
 
     return mgr
 
+def pdf_load_and_show(pdf, pdffile, show_items):
+    pdf.load(pdffile)
+    pdfobjects = pdf.pdfobjects
+
+    if not("objects_summary" in show_items):
+        return
+
+    print "Found %s PDFObjects" % pdfobjects.count()
+    print "Found the following PDFObject types:"
+    types = pdfobjects.types()
+    types.sort()
+
+    total = 0
+    for typ in types:
+        n_type = len(pdfobjects.get_objects_by_type(typ))
+        print " %20s: %5d objects" % (typ, n_type)
+        total = total + n_type
+    print " %20s: %5d objects" % ("TOTAL", total)
+
+def font_scan_and_show(pdf, page_ranges, show_items):
+    scope = 0
+    if "fonts_summary" in show_items:
+        scope = pdf.SHOW_SUMMARY
+    if "fonts_detail" in show_items:
+        scope = pdf.SHOW_DETAILS
+    
+    if scope != 0:
+        for page_range in page_ranges:
+            pdf.show_fonts(page_range=page_range, print_level=scope)
+
 
 def main():
     from optparse import OptionParser
@@ -683,12 +745,17 @@ def main():
     parser.add_option("-f", "--cache-flags",
           help="Comma separated list of stream cache setup options: 'remanent'"\
                " and/or 'refresh'")
+    parser.add_option("-D", "--dump-stack", action="store_true",
+          help="Dump error stack (debug purpose)")
     
     (options, args) = parser.parse_args()
 
     if len(args) != 1:
         parser.parse_args(["-h"])
         exit(0)
+
+    error = ErrorHandler()
+    if options.dump_stack: error.dump_stack()
 
     page_ranges = option_page_ranges(options.pages)
     log_groups = option_group_loglevels(options.verbose)
@@ -702,34 +769,15 @@ def main():
     pdffile = args[0]
 
     pdf = PDFFile(stream_manager=stream_manager)
-    pdf.load(pdffile)
 
-    pdfobjects = pdf.pdfobjects
-
-    if "objects_summary" in show_items:
-        print "Found %s PDFObjects" % pdfobjects.count()
-        print "Found the following PDFObject types:"
-        types = pdfobjects.types()
-        types.sort()
-
-        total = 0
-        for typ in types:
-            n_type = len(pdfobjects.get_objects_by_type(typ))
-            print " %20s: %5d objects" % (typ, n_type)
-            total = total + n_type
-        print " %20s: %5d objects" % ("TOTAL", total)
-
-    scope = 0
-    if "fonts_summary" in show_items:
-        scope = pdf.SHOW_SUMMARY
-    if "fonts_detail" in show_items:
-        scope = pdf.SHOW_DETAILS
-    
-    if scope != 0:
-        for page_range in page_ranges:
-            pdf.show_fonts(page_range=page_range, print_level=scope)
+    try:
+        pdf_load_and_show(pdf, pdffile, show_items)
+        font_scan_and_show(pdf, page_ranges, show_items)
+    except Exception, e:
+        error.failure_track("Error: '%s'" % (e))
 
     pdf.cleanup()
+    sys.exit(error.rc)
 
     if False:
         misc_objs = pdfobjects.get_objects_by_type("misc")
