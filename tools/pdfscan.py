@@ -95,11 +95,21 @@ class PDFFile:
             elif pdfobj:
                 pdfobj.append_string(line)
 
+    def populate_object_streams(self):
+        pdfobjects = self.pdfobjects.get_objects_by_type("/ObjStm")
+        if not(pdfobjects):
+            return
+        for pdfobject in pdfobjects:
+            objstm = PDFObjectStream(pdfobject)
+            for pdfobj in objstm.pdfobjects():
+                self.pdfobjects.add_object(pdfobj)
+
     def load(self, filename):
         self.filename = filename
         file_pdf = open(filename, 'rb')
         self.parse_file(file_pdf)
         file_pdf.close()
+        self.populate_object_streams()
         self.pdfobjects.link_objects()
 
     def _expand_pages(self, page_kids):
@@ -235,6 +245,80 @@ class PDFObjectGroup:
     def link_objects(self):
         for pdfobj in self.pdfobjects.values():
             pdfobj.link_to(self.pdfobjects)
+
+
+class PDFObjectStream:
+    """
+    A PDF Object Stream contains in its stream some compressed PDF objects.
+    This class works on a PDF object stream to build the containded PDF objects.
+    """
+    def __init__(self, pdfobject):
+        self.stream_object = pdfobject
+        self._pdfobjects = []
+
+    def debug(self, text):
+        self.stream_object.debug(text)
+    def error(self, text):
+        self.stream_object.error(text)
+    def info(self, text):
+        self.stream_object.info(text)
+
+    def pdfobjects(self):
+        if not(self._pdfobjects):
+            self.compute()
+        return self._pdfobjects
+
+    def _getinfo(self, what):
+        return self.stream_object.descriptor.get(what)
+
+    def parse_object_list(self, data):
+        values = data.split()
+        objlist = []
+
+        for i in range(0, len(values), 2):
+            # The pair is ('object number', byte_offset)
+            objlist.append((values[i], int(values[i+1])))
+        return objlist
+
+    def compute(self):
+        _type = self._getinfo("/Type")
+        if  _type != "/ObjStm":
+            self.error("Cannot read object stream: Invalid type '%s'" % _type)
+            return
+
+        nb_objects = int(self._getinfo("/N"))
+        objlist_b = int(self._getinfo("/First"))
+        stream = self.stream_object.stream_cache
+
+        objlist = self.parse_object_list(stream.read(objlist_b))
+
+        if len(objlist) != nb_objects:
+            self.warning("Error in parsing the Stream Object: found %d"\
+                         "objects instead of %d" % (len(objlist), nb_object))
+
+        # List Terminator
+        objlist.append(("",-1))
+
+        bytes_read = 0
+        for i in range(len(objlist)-1):
+            # In ObjectStream, a PDF object revision is always '0'
+            number, revision = objlist[i][0], "0"
+
+            # The size of the object data is given by the position of the next
+            objsize = objlist[i+1][1] - bytes_read
+            if objsize >= 0:
+                data = stream.read(objsize)
+            else:
+                data = stream.read()
+            bytes_read += len(data)
+            self.debug("Object[%d] in stream: '%s' has %d bytes" % \
+                       (i, number, objsize))
+
+            # Build the PDF Object from stream data
+            pdfobj = PDFObject(number, revision)
+            pdfobj.append_string(data)
+            pdfobj.compute()
+            self._pdfobjects.append(pdfobj)
 
 
 class PDFObject:
@@ -395,7 +479,7 @@ class PDFDescriptor:
         string = string.replace(">>", "")
         string = string.replace("<<", "")
         string = string.replace("\n", " ")
-        print string
+        #print string
         fields = re.findall("/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+",
                             string)
         fields = [ f.strip() for f in fields if (f and f.strip()) ]
@@ -546,6 +630,7 @@ class StreamCacheFile(StreamCache):
     def __init__(self, outfile, flags=0):
         self.flags = flags
         self.outfile = outfile
+        self._file = None
 
     def write(self, data, compress_type=""):
         if ((self.flags & StreamManager.CACHE_REFRESH)
@@ -555,22 +640,37 @@ class StreamCacheFile(StreamCache):
             f.write(data)
             f.close()
 
-    def read(self):
-        f = open(self.outfile)
-        data = f.read()
-        f.close()
+    def read(self, size=-1):
+        if not(self._file):
+            self._file = open(self.outfile)
+        if size >= 0:
+            data = self._file.read(size)
+        else:
+            data = self._file.read()
         return data
+
+    def _close(self):
+        if (self._file):
+            self._file.close()
 
 class StreamCacheMemory(StreamCache):
     def __init__(self, outfile, flags=0):
         self.flags = flags
         self._buffer = ""
+        self._read_pos = 0
 
     def write(self, data, compress_type=""):
-        self._buffer = self.decompress(data, compress_type)
+        self._buffer += self.decompress(data, compress_type)
 
-    def read(self):
-        return self._buffer
+    def read(self, size=-1):
+        remain = len(self._buffer)-self.read_pos
+        if size >= 0:
+            size = min(size, remain)
+        else:
+            size = remain
+        _buf = self._buffer[self._read_pos:self._read_pos+size]
+        self._read_pos += size
+        return _buf
 
 
 class PDFStream:
@@ -670,7 +770,6 @@ def option_show_items(show):
     return show_items
 
 def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
-
     flags = 0
     if cache_flags:
         cache_flags = cache_flags.split(",")
