@@ -328,6 +328,10 @@ class PDFObject:
     The data contained by a PDF object can be dictionnaries (descriptors),
     stream contents and other stuff.
     """
+    # Extract a dictionnary '<<...>>' leaf (does not contain another dict)
+    _re_desc = re.compile("(<<(?:(?<!<)<(?!<)|[^<>]|(?<!>)>(?!>))+>>)",
+                          re.MULTILINE)
+
     def __init__(self, number, revision, stream_manager=None):
         self.string = ""
         self.number = number
@@ -340,6 +344,7 @@ class PDFObject:
         self.stream_manager = stream_manager or StreamManager()
         self._log = logging.getLogger("pdfscan.pdfobject")
         self.debug("New Object")
+        self.re_desc = self._re_desc
 
     def debug(self, text):
         self._log.debug(self.logstr(text))
@@ -374,9 +379,7 @@ class PDFObject:
         # from the deepest to the main one
         self.descriptors = []
         while True:
-            # descs = re.findall("(<<[^<>]+<?[^<>]+>?[^<>]+>>)",
-            descs = re.findall("(<<(?:(?<!<)<(?!<)|[^<>]|(?<!>)>(?!>))+>>)",
-                               string, re.MULTILINE)
+            descs = self.re_desc.findall(string)
             if not(descs):
                 break
             for desc_str in descs:
@@ -453,10 +456,34 @@ class PDFDescriptor:
     Contains the data between the << ... >> brackets in PDF objects. It is
     a dictionnary that can contain other descriptors/dictionnaries.
     """
+    # Detect the dictionnary fields for these cases:
+    # <<
+    #  /Type /Page                  : the value is another keyword
+    #  /Contents 5 0 R              : the value is a string up next keyword
+    #  /Resources 4 0 R                   
+    #  /MediaBox [0 0 595.276 841.89] : the value is an array
+    #  /Parent 12 0 R
+    # >>
+    _re_dict = re.compile("/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+")
+
+    # Extract a dictionnary keyword
+    _re_key = re.compile("(/[^ \({/\[<]*)")
+
+    # Extract the substituted descriptors
+    _re_descobj = re.compile("{descriptor\((\d+)\)}")
+
+    # Find the PDF object references
+    _re_objref = re.compile("(\d+ \d+ R)")
+
     def __init__(self, string=""):
         self.string = string
         self.params = {}
         self._log = logging.getLogger("pdfscan.descriptor")
+
+        self.re_dict = self._re_dict
+        self.re_key = self._re_key
+        self.re_descobj = self._re_descobj
+        self.re_objref = self._re_objref
 
     def debug(self, text):
         self._log.debug(text)
@@ -468,20 +495,11 @@ class PDFDescriptor:
         self._log.warning(text)
 
     def normalize_fields(self, string):
-        # It must detect the fields for these cases:
-        # <<
-        #  /Type /Page                  : the value is another keyword
-        #  /Contents 5 0 R              : the value is a string up next keyword
-        #  /Resources 4 0 R                   
-        #  /MediaBox [0 0 595.276 841.89] : the value is an array
-        #  /Parent 12 0 R
-        # >>
         string = string.replace(">>", "")
         string = string.replace("<<", "")
         string = string.replace("\n", " ")
         #print string
-        fields = re.findall("/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+",
-                            string)
+        fields = self.re_dict.findall(string)
         fields = [ f.strip() for f in fields if (f and f.strip()) ]
         return fields
 
@@ -489,12 +507,12 @@ class PDFDescriptor:
         lines = self.normalize_fields(self.string)
         for line in lines:
             #print line
-            m = re.match("(/[^ \({/\[<]*)", line)
+            m = self.re_key.match(line)
             if not(m):
                 continue
             param = m.group(1)
             value = line.replace(param, "").strip()
-            m = re.match("{descriptor\((\d{1,})\)}", value)
+            m = self.re_descobj.match(value)
             if m and descriptors:
                 value = descriptors[int(m.group(1))]
             self.params[param] = value
@@ -526,7 +544,7 @@ class PDFDescriptor:
                 continue
 
             objects = []
-            objrefs = re.findall("(\d{1,} \d{1,} R)", value)
+            objrefs = self.re_objref.findall(value)
             value2 = value
             #print objrefs
             for objref in objrefs:
@@ -760,13 +778,24 @@ def option_group_loglevels(verbose):
     return log_groups
 
 def option_show_items(show):
-    show_items_default = ["objects_summary", "fonts_detail", "fonts_summary"]
+    show_items_all = ["objects_summary", "fonts_detail", "fonts_summary"]
     show_items_default = ["objects_summary", "fonts_summary"]
 
     if not(show):
         return show_items_default
 
-    show_items = show.split(",")
+    show_items = []
+    errors = 0
+    for show in show.split(","):
+        if show in show_items_all:
+            show_items.append(show)
+        else:
+            errors += 1
+            print "Invalid show item: '%s'" % (show)
+
+    if errors:
+        print "Valid show items are: %s" % ", ".join(show_items_all)
+
     return show_items
 
 def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
@@ -851,14 +880,18 @@ def main():
 
     if len(args) != 1:
         parser.parse_args(["-h"])
-        exit(0)
+        exit(1)
+
+    show_items = option_show_items(options.show)
+    if not(show_items):
+        parser.parse_args(["-h"])
+        exit(1)
 
     error = ErrorHandler()
     if options.dump_stack: error.dump_stack()
 
     page_ranges = option_page_ranges(options.pages)
     log_groups = option_group_loglevels(options.verbose)
-    show_items = option_show_items(options.show)
     stream_manager = option_cache_setup(options.no_cache_stream,
                                         options.cache_stream_dir,
                                         options.cache_flags)
