@@ -79,21 +79,29 @@ class PDFFile:
         self.pdfobjects = PDFObjectGroup()
 
         for line in file_read:
-            if "endobj" in line and pdfobj:
-                fields = line.split()
-                if fields[0] != "endobj":
-                    pdfobj.append_string(" ".join(fields[:-1])+"\n")
-                pdfobj.compute()
-                self.pdfobjects.add_object(pdfobj)
-            elif " obj" in line:
-                fields = line.split()
-                number, revision = fields[0:2]
-                pdfobj = PDFObject(number, revision,
-                                   stream_manager=self.stream_manager)
-                if fields[-1] != "obj":
-                    pdfobj.append_string(fields[-1]+"\n")
-            elif pdfobj:
-                pdfobj.append_string(line)
+            while line:
+                if pdfobj:
+                    fields = line.split("endobj", 1)
+                    if len(fields) > 1:
+                        if fields[0]:
+                            pdfobj.append_string(fields[0])
+                        pdfobj.compute()
+                        self.pdfobjects.add_object(pdfobj)
+                        pdfobj = None
+                        line = fields[1]
+                    else:
+                        pdfobj.append_string(line)
+                        line = ""
+                else:
+                    m = re.search("(\d+) (\d+) obj(.*$)", line, re.DOTALL)
+                    if m:
+                        number, revision = m.group(1), m.group(2)
+                        pdfobj = PDFObject(number, revision,
+                                       stream_manager=self.stream_manager)
+                        line = m.group(3)
+                    else:
+                        # drop the line
+                        line = ""
 
     def populate_object_streams(self):
         pdfobjects = self.pdfobjects.get_objects_by_type("/ObjStm")
@@ -179,17 +187,17 @@ class PDFFile:
 
         fonts_used = []
         for i, page in enumerate(page_objects):
+            page_num = i+page_first
             contents = page.descriptor.get("/Contents")
             resources = page.descriptor.get("/Resources")
+            self.debug("Page %d %s: contents: %s, resources: %s" % \
+                         (page_num, page, contents, resources))
+
             font = resources.descriptor.get("/Font")
             if font:
                 fontdict = font.infos()
             else:
                 fontdict = {}
-
-            page_num = i+page_first
-            self.debug("Page %d %s: contents: %s, resources: %s" % \
-                         (page_num, page, contents, resources))
 
             if not(isinstance(contents, list)):
                 contents = [contents]
