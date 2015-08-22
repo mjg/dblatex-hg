@@ -64,6 +64,9 @@ class PDFFile:
         self.stream_manager = stream_manager or StreamManager()
         self._log = logging.getLogger("pdfscan.pdffile")
 
+        # Detect the beginning of a PDF Object
+        self.re_objstart = re.compile("(\d+) (\d+) obj(.*$)", re.DOTALL)
+
     def debug(self, text):
         self._log.debug(text)
     def error(self, text):
@@ -93,7 +96,7 @@ class PDFFile:
                         pdfobj.append_string(line)
                         line = ""
                 else:
-                    m = re.search("(\d+) (\d+) obj(.*$)", line, re.DOTALL)
+                    m = self.re_objstart.search(line)
                     if m:
                         number, revision = m.group(1), m.group(2)
                         pdfobj = PDFObject(number, revision,
@@ -193,7 +196,12 @@ class PDFFile:
             self.debug("Page %d %s: contents: %s, resources: %s" % \
                          (page_num, page, contents, resources))
 
-            font = resources.descriptor.get("/Font")
+            if (isinstance(resources, PDFDescriptor)):
+                rsc_descriptor = resources
+            else:
+                rsc_descriptor = resources.descriptor
+
+            font = rsc_descriptor.get("/Font")
             if font:
                 fontdict = font.infos()
             else:
@@ -203,7 +211,7 @@ class PDFFile:
                 contents = [contents]
 
             for content in contents:
-                b = PDFStream(content.stream_text(), fontdict)
+                b = PDFContentStream(content, fontdict)
                 used_fonts = b.used_fonts()
                 for f in used_fonts:
                     font_used = "%-40s %fpt" % \
@@ -356,6 +364,8 @@ class PDFObject:
 
     def debug(self, text):
         self._log.debug(self.logstr(text))
+    def warning(self, text):
+        self._log.warning(self.logstr(text))
     def error(self, text):
         self._log.error(self.logstr(text))
     def info(self, text):
@@ -406,7 +416,7 @@ class PDFObject:
         else:
             self.descriptor = PDFDescriptor()
 
-        self.data = re.sub("{descriptor\(\d{1,}\)}", "",
+        self.data = re.sub("{descriptor\(\d+\)}", "",
                            string, flags=re.MULTILINE).strip()
         self.debug("Data: '%s'" % self.data)
 
@@ -464,10 +474,10 @@ class PDFDescriptor:
     Contains the data between the << ... >> brackets in PDF objects. It is
     a dictionnary that can contain other descriptors/dictionnaries.
     """
-    # Detect the dictionnary fields for these cases:
+    # Detect the dictionnary fields covering these cases:
     # <<
-    #  /Type /Page                  : the value is another keyword
-    #  /Contents 5 0 R              : the value is a string up next keyword
+    #  /Type /Page                    : the value is another keyword
+    #  /Contents 5 0 R                : the value is a string up next keyword
     #  /Resources 4 0 R                   
     #  /MediaBox [0 0 595.276 841.89] : the value is an array
     #  /Parent 12 0 R
@@ -699,25 +709,102 @@ class StreamCacheMemory(StreamCache):
         return _buf
 
 
-class PDFStream:
+class PDFContentStream:
     """
-    Data between the 'stream ... endstream' tags in a PDF object.
+    Data between the 'stream ... endstream' tags in a PDF object used as
+    content (and not as image or object storage).
     """
-    def __init__(self, string, fontobjects=None):
-        self.string = string
+    # Detect a 'Tf', 'Tm', 'Tj', or 'TJ' operator sequence in a text object
+    _re_seq = re.compile("(/\w+\s+[^\s]+\s+Tf|"+\
+                         6*"[^\s]+\s+"+"Tm"+"|"+\
+                         "Tj|TJ)", re.MULTILINE)
+
+    # Find a font setup operator, like '/F10 9.47 Tf'
+    _re_font = re.compile("(/\w+\s+[^\s]+\sTf)", re.MULTILINE)
+
+    def __init__(self, pdfobject, fontobjects=None):
+        self.stream_object = pdfobject
+        self.string = pdfobject.stream_text()
         self.fontobjects = fontobjects or {}
+        self.pdffonts = []
+        self.allfonts = []
+        self.re_seq = self._re_seq
+        self.re_font = self._re_font
+
+    def debug(self, text):
+        self.stream_object.debug(text)
+    def warning(self, text):
+        self.stream_object.warning(text)
+    def error(self, text):
+        self.stream_object.error(text)
+    def info(self, text):
+        self.stream_object.info(text)
+
+    def record_font(self, fontname, fontsize):
+        pdffont = PDFFont(self.fontobjects.get(fontname), fontsize)
+        self.pdffonts.append(pdffont)
+
+    def record_font_if_new(self, fontname, fontsize, scale="1"):
+        self.debug("Try to add font (%s,%s,%s)" % (fontname, fontsize, scale))
+        if ((fontname, fontsize, scale) in self.allfonts):
+            return
+        self.allfonts.append((fontname, fontsize, scale))
+        self.record_font(fontname, float(scale)*float(fontsize))
 
     def used_fonts(self):
-        pdffonts = []
-        # Search something like that: '/F10 9.47 Tf'
-        fonts = re.findall("(/\w+\s+[^\s]+\sTf)", 
-                           self.string, re.MULTILINE)
+        m = re.search("\sTm", self.string, re.MULTILINE)
+        if m:
+            self.find_scaled_fonts()
+        else:
+            self.find_unscaled_fonts()
+        return self.pdffonts
+
+    def find_scaled_fonts(self):
+        # Search the text objects limited by ' BT ... ET '
+        texts = re.findall("(\sBT\s.*\sET\s)", 
+                           self.string, re.MULTILINE|re.DOTALL)
+        self.debug("Contains %d texts" % len(texts))
+
+        for text in texts:
+            self.find_scaled_font_text(text)
+
+    def find_scaled_font_text(self, text):
+        # Find the operator sequences
+        tf_tm = self.re_seq.findall(text)
+
+        factor = "1"
+        font = ""
+        last_key = ""
+
+        for tx in tf_tm:
+            # print "%s: %s" % (self.objid, tx)
+            fields = tx.split()
+            key = fields[-1]
+            # Found a font setup, memorize the fontname and fontsize base
+            if key == "Tf":
+                font = fields[0]
+                size = fields[1]
+            # Found a matrix setup, memorize the fontsize scale factor
+            elif key == "Tm":
+                if fields[0] != fields[3]:
+                    self.warning("Something wrong with Tm matrix: %s" % tx)
+                else:
+                    factor = fields[0]
+            # When text is shown, the current font/size setup applies and is
+            # then recorded
+            elif key in ("Tj", "TJ"):
+                if last_key != "TJ":
+                    self.record_font_if_new(font, size, factor)
+                key = "TJ"
+            last_key = key
+
+    def find_unscaled_fonts(self):
+        # Find directly the fonts, because no matrix to check
+        fonts = self.re_font.findall(self.string)
         fonts = list(set(fonts))
         for font in fonts:
             rsc, size = font.split()[0:2]
-            pdffont = PDFFont(self.fontobjects.get(rsc), float(size))
-            pdffonts.append(pdffont)
-        return pdffonts
+            self.record_font(rsc, float(size))
 
 
 class PDFFont:
@@ -878,6 +965,8 @@ def main():
           help="Directory where to store the decompressed stream")
     parser.add_option("-m", "--no-cache-stream", action="store_true",
           help="No stream cache on disk used: leave streams in memory")
+    parser.add_option("-d", "--cache-remanent", action="store_true",
+          help="Equivalent to -fremanent")
     parser.add_option("-f", "--cache-flags",
           help="Comma separated list of stream cache setup options: 'remanent'"\
                " and/or 'refresh'")
@@ -897,6 +986,12 @@ def main():
 
     error = ErrorHandler()
     if options.dump_stack: error.dump_stack()
+
+    if options.cache_remanent:
+        if options.cache_flags:
+            options.cache_flags += ",remanent"
+        else:
+            options.cache_flags = "remanent"
 
     page_ranges = option_page_ranges(options.pages)
     log_groups = option_group_loglevels(options.verbose)
