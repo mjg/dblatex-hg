@@ -474,6 +474,9 @@ class PDFDescriptor:
     Contains the data between the << ... >> brackets in PDF objects. It is
     a dictionnary that can contain other descriptors/dictionnaries.
     """
+    # Unique identifier for these objects
+    _id = 0
+
     # Detect the dictionnary fields covering these cases:
     # <<
     #  /Type /Page                    : the value is another keyword
@@ -494,6 +497,7 @@ class PDFDescriptor:
     _re_objref = re.compile("(\d+ \d+ R)")
 
     def __init__(self, string=""):
+        self._ident = self._get_ident()
         self.string = string
         self.params = {}
         self._log = logging.getLogger("pdfscan.descriptor")
@@ -503,14 +507,25 @@ class PDFDescriptor:
         self.re_descobj = self._re_descobj
         self.re_objref = self._re_objref
 
+    def _get_ident(self):
+        _id = PDFDescriptor._id
+        PDFDescriptor._id += 1
+        return _id
+
+    def ident(self):
+        return self._ident
+
     def debug(self, text):
-        self._log.debug(text)
+        self._log.debug("Descriptor [%d]: %s" % (self._ident, text))
     def error(self, text):
-        self._log.error(text)
+        self._log.error("Descriptor [%d]: %s" % (self._ident, text))
     def info(self, text):
-        self._log.info(text)
+        self._log.info("Descriptor [%d]: %s" % (self._ident, text))
     def warning(self, text):
-        self._log.warning(text)
+        self._log.warning("Descriptor [%d]: %s" % (self._ident, text))
+
+    def __repr__(self):
+        return "desc[%d]" % self._ident
 
     def normalize_fields(self, string):
         string = string.replace(">>", "")
