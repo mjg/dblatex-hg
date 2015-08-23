@@ -120,6 +120,8 @@ class PDFFile:
         file_pdf = open(filename, 'rb')
         self.parse_file(file_pdf)
         file_pdf.close()
+        self.pdfobjects.link_objects()
+        self.pdfobjects.stream_decode()
         self.populate_object_streams()
         self.pdfobjects.link_objects()
 
@@ -141,7 +143,8 @@ class PDFFile:
                 elif kid.get_type() == "/Page":
                     kids = [kid]
                 else:
-                    self.error("What's wrong? '%s'" % kid.get_type())
+                    self.error("%s: %s" % (kid, kid.descriptor.params))
+                    self.error("%s: What's wrong? '%s'" % (kid, kid.get_type()))
                     kids = []
                 newlist = newlist + kids
             page_list = newlist
@@ -236,6 +239,8 @@ class PDFObjectGroup:
     def __init__(self):
         self.pdfobjects = {}
         self.objtypes = {}
+        self.unresolved = []
+        self._log = logging.getLogger("pdfscan.pdffile")
 
     def count(self):
         return len(self.pdfobjects.values())
@@ -251,6 +256,7 @@ class PDFObjectGroup:
         lst = self.objtypes.get(objtype, [])
         lst.append(pdfobject)
         self.objtypes[objtype] = lst
+        self.unresolved.append(pdfobject)
 
     def get_objects_by_type(self, objtype):
         return self.objtypes.get(objtype, [])
@@ -259,9 +265,16 @@ class PDFObjectGroup:
         return self.pdfobjects.get(ident, None)
 
     def link_objects(self):
-        for pdfobj in self.pdfobjects.values():
-            pdfobj.link_to(self.pdfobjects)
+        self._log.debug("%d objects to resolve" % (len(self.unresolved)))
+        unresolved = []
+        for pdfobj in self.unresolved:
+            if pdfobj.link_to(self.pdfobjects):
+                unresolved.append(pdfobj)
+        self.unresolved = unresolved
 
+    def stream_decode(self):
+        for pdfobj in self.pdfobjects.values():
+            pdfobj.stream_decode()
 
 class PDFStreamHandler:
     """
@@ -354,7 +367,7 @@ class PDFObject:
     stream contents and other stuff.
     """
     # Extract a dictionnary '<<...>>' leaf (does not contain another dict)
-    _re_desc = re.compile("(<<(?:(?<!<)<(?!<)|[^<>]|(?<!>)>(?!>))+>>)",
+    _re_desc = re.compile("(<<(?:(?<!<)<(?!<)|[^<>]|(?<!>)>(?!>))*>>)",
                           re.MULTILINE)
 
     def __init__(self, number, revision, stream_manager=None):
@@ -386,6 +399,9 @@ class PDFObject:
     def __repr__(self):
         return "(%s R)" % self.ident()
 
+    def __int__(self):
+        return int(self.data)
+
     def logstr(self, text):
         return "Object [%s %s]: %s" % (self.number,self.revision,text)
 
@@ -395,7 +411,7 @@ class PDFObject:
     def compute(self):
         string = self.string
 
-        s = re.split("stream", string, re.MULTILINE)
+        s = re.split("stream\s", string, re.MULTILINE)
         if len(s) > 1:
             self.debug("Contains stream")
             self.stream = s[1].strip()
@@ -429,11 +445,12 @@ class PDFObject:
                            string, flags=re.MULTILINE).strip()
         self.debug("Data: '%s'" % self.data)
 
-        self.stream_decode()
+        #self.stream_decode()
 
     def stream_decode(self):
         if not(self.stream):
             return
+        self.debug("Try to decode stream...")
 
         # Consolidate stream buffer from the /Length information
         stream_size = int(self.descriptor.get("/Length"))
@@ -580,6 +597,7 @@ class PDFDescriptor:
             return False
 
     def link_to(self, pdfobjects):
+        unresolved = 0
         for param, value in self.params.items():
             # Point to something else than a string? Skip it
             if not(isinstance(value, str)):
@@ -591,6 +609,11 @@ class PDFDescriptor:
             #print objrefs
             for objref in objrefs:
                 o = pdfobjects.get(objref.replace(" R", ""), None)
+                # If the object is missing, keep the reference for another trial
+                if not(o):
+                    self.warning("Object '%s' not resolved" % objref)
+                    unresolved += 1
+                    o = objref
                 objects.append(o)
                 value2 = value2.replace(objref, "", 1)
 
@@ -611,6 +634,8 @@ class PDFDescriptor:
                 else:
                     self.params[param] = objects[0]
                     self.debug("Substitute %s: %s" % (param, objects[0]))
+
+        return unresolved
  
 
 class StreamManager:
@@ -746,6 +771,16 @@ class PDFContentStream(PDFStreamHandler):
     # Find a font setup operator, like '/F10 9.47 Tf'
     _re_font = re.compile("(/\w+\s+[^\s]+\sTf)", re.MULTILINE)
 
+    # Find a sequence '(...\(...\)...) Tj'
+    _re_text_show1 = re.compile("\((" + "[^()]" + "|" +\
+                                   r"(?<=\\)\(" + "|" +\
+                                   r"(?<=\\)\)" + ")*\)\s+Tj", re.M)
+                                
+    # Find a sequence '[...\[...\]...] TJ'
+    _re_text_show2 = re.compile("\[(" + "[^\[\]]" + "|" +\
+                                     r"(?<=\\)\[" + "|" +\
+                                     r"(?<=\\)\]" + ")*\]\s+TJ", re.M)
+ 
     def __init__(self, pdfobject, fontobjects=None):
         PDFStreamHandler.__init__(self, pdfobject)
         self.string = pdfobject.stream_text()
@@ -756,8 +791,12 @@ class PDFContentStream(PDFStreamHandler):
         self.re_font = self._re_font
 
     def record_font(self, fontname, fontsize):
-        pdffont = PDFFont(self.fontobjects.get(fontname), fontsize)
-        self.pdffonts.append(pdffont)
+        fontobj = self.fontobjects.get(fontname)
+        if not(fontobj):
+            self.error("No font object for '%s'" % fontname)
+        else:
+            pdffont = PDFFont(fontobj, fontsize)
+            self.pdffonts.append(pdffont)
 
     def record_font_if_new(self, fontname, fontsize, scale="1"):
         self.debug("Try to add font (%s,%s,%s)" % (fontname, fontsize, scale))
@@ -767,6 +806,10 @@ class PDFContentStream(PDFStreamHandler):
         self.record_font(fontname, float(scale)*float(fontsize))
 
     def used_fonts(self):
+        # Skip the text to show, because it can alterate further parsing
+        s = self._re_text_show1.sub("() Tj", self.string)
+        self.string = self._re_text_show2.sub("[] TJ", s)
+
         m = re.search("\sTm", self.string, re.MULTILINE)
         if m:
             self.find_scaled_fonts()
