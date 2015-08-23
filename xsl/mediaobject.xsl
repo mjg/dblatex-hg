@@ -1,5 +1,7 @@
 <?xml version='1.0'?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version='1.0'>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:exsl="http://exslt.org/common"
+                exclude-result-prefixes="exsl" version='1.0'>
 
 <!--############################################################################
     XSLT Stylesheet DocBook -> LaTeX 
@@ -84,6 +86,26 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="align.environment2">
+  <xsl:param name="align"/>
+  <xsl:param name="align-default" select="'center'"/>
+
+  <xsl:choose>
+    <xsl:when test="$align = 'right'">
+      <xsl:text>flushright</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'left'">
+      <xsl:text>flushleft</xsl:text>
+    </xsl:when>
+    <xsl:when test="$align = 'center'">
+      <xsl:text>center</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$align-default"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 
 <xsl:template match="videoobject">
   <xsl:apply-templates select="videodata"/>
@@ -95,6 +117,23 @@
 
 <xsl:template match="textobject">
   <xsl:apply-templates/>
+</xsl:template>
+
+<!-- ==================================================================== -->
+
+<xsl:template match="mediaobject/caption" mode="environment">
+  <xsl:param name="parent-align"/>
+
+  <xsl:variable name="align">
+    <xsl:call-template name="align.environment2">
+      <xsl:with-param name="align" select="@align"/>
+      <xsl:with-param name="align-default" select="$parent-align"/>
+    </xsl:call-template>
+  </xsl:variable>
+
+  <xsl:value-of select="concat('\begin{',$align,'}&#10;')"/>
+  <xsl:apply-templates select="."/>
+  <xsl:value-of select="concat('\end{',$align,'}&#10;')"/>
 </xsl:template>
 
 <xsl:template match="mediaobject/caption">
@@ -119,29 +158,66 @@
   <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- ==================================================================== -->
+
 <xsl:template match="mediaobject|inlinemediaobject">
   <xsl:variable name="figcount"
                 select="count(ancestor::figure/mediaobject[imageobject])"/>
+
+  <xsl:variable name="mediaobject.alone">
+    <xsl:if test="self::mediaobject and not(parent::figure)">
+      <xsl:value-of select="1"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="idx">
+    <xsl:call-template name="mediaobject.select.idx"/>
+  </xsl:variable>
+
+  <xsl:variable name="img"
+                select="(imageobject|imageobjectco)[position()=$idx]"/>
+
+  <!-- Is there an explicit viewport handled by the image data -->
+  <xsl:variable name="viewport">
+    <xsl:if test="$img">
+      <xsl:apply-templates select="$img/descendant::imagedata"
+                           mode="viewport"/>
+    </xsl:if>
+  </xsl:variable>
+
+  <!-- The global alignment here applies only if there is no explicit viewport.
+       In case of a viewport, it is processed by imagedata, so keep the default
+       here -->
+  <xsl:variable name="align">
+    <xsl:choose>
+    <xsl:when test="not($img) or
+                    not($img/descendant::imagedata/@align) or
+                    $viewport=1">
+      <xsl:value-of select="'center'"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="align.environment2">
+        <xsl:with-param name="align"
+                        select="$img/descendant::imagedata/@align"/>
+      </xsl:call-template>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <!--
   within a figure don't put each mediaobject into a separate paragraph, 
   to let the subfigures correctly displayed.
   -->
-  <xsl:if test="self::mediaobject and not(parent::figure)">
+  <xsl:if test="$mediaobject.alone = 1">
     <xsl:text>&#10;\noindent</xsl:text>
     <xsl:text>\begin{minipage}[c]{\linewidth}&#10;</xsl:text>
-    <xsl:text>\begin{center}&#10;</xsl:text>
+    <xsl:value-of select="concat('\begin{',$align,'}&#10;')"/>
   </xsl:if>
   <xsl:if test="self::inlinemediaobject">
     <xsl:text>\noindent</xsl:text>
   </xsl:if>
   <xsl:choose>
-    <xsl:when test="imageobject|imageobjectco">
-      <xsl:variable name="idx">
-        <xsl:call-template name="mediaobject.select.idx"/>
-      </xsl:variable>
-      <xsl:variable name="img"
-                    select="(imageobject|imageobjectco)[position()=$idx]"/>
-
+    <xsl:when test="$img">
       <xsl:if test="$imagedata.file.check='1'">
         <xsl:text>\imgexists{</xsl:text>
         <xsl:apply-templates
@@ -162,12 +238,12 @@
   </xsl:choose>
   <!-- print the caption if not in a float, or is single -->
   <xsl:if test="caption and ($figcount &lt;= 1)">
-    <xsl:text>\begin{center}&#10;</xsl:text>
-    <xsl:apply-templates select="caption"/>
-    <xsl:text>\end{center}&#10;</xsl:text>
+    <xsl:apply-templates select="caption" mode="environment">
+      <xsl:with-param name="parent-align" select="$align"/>
+    </xsl:apply-templates>
   </xsl:if> 
-  <xsl:if test="self::mediaobject and not(parent::figure)">
-    <xsl:text>\end{center}&#10;</xsl:text>
+  <xsl:if test="$mediaobject.alone = 1">
+    <xsl:value-of select="concat('\end{',$align,'}&#10;')"/>
     <xsl:text>\end{minipage}&#10;</xsl:text>
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
@@ -302,6 +378,19 @@
 
 <!-- ==================================================================== -->
 
+<xsl:template match="imagedata" mode="viewport">
+  <xsl:choose>
+  <xsl:when test="(@width or @depth) and
+                  (@contentwidth or @contentdepth or @scale or
+                  (@scalefit and @scalefit='0'))">
+    <xsl:value-of select="1"/>
+  </xsl:when>
+  <xsl:otherwise>
+    <xsl:value-of select="0"/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- Process an imagedata -->
 
 <xsl:template match="imagedata" name="imagedata">
@@ -337,16 +426,7 @@
        scale. TDG says that viewport spec without content/scale and scalefit=0
        is ignored. -->
   <xsl:variable name="viewport">
-    <xsl:choose>
-    <xsl:when test="(@width or @depth) and
-                    (@contentwidth or @contentdepth or @scale or
-                    (@scalefit and @scalefit='0'))">
-      <xsl:value-of select="1"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="0"/>
-    </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="viewport"/>
   </xsl:variable>
   <!-- check if some percentage is applied to the content -->
   <xsl:variable name="widthperct">
