@@ -263,21 +263,30 @@ class PDFObjectGroup:
             pdfobj.link_to(self.pdfobjects)
 
 
-class PDFObjectStream:
+class PDFStreamHandler:
+    """
+    Core abstract class in charge to handle the stream of <pdfobject>
+    """
+    def __init__(self, pdfobject):
+        self.stream_object = pdfobject
+
+    def debug(self, text):
+        self.stream_object.debug(text)
+    def warning(self, text):
+        self.stream_object.warning(text)
+    def error(self, text):
+        self.stream_object.error(text)
+    def info(self, text):
+        self.stream_object.info(text)
+
+class PDFObjectStream(PDFStreamHandler):
     """
     A PDF Object Stream contains in its stream some compressed PDF objects.
     This class works on a PDF object stream to build the containded PDF objects.
     """
     def __init__(self, pdfobject):
-        self.stream_object = pdfobject
+        PDFStreamHandler.__init__(self, pdfobject)
         self._pdfobjects = []
-
-    def debug(self, text):
-        self.stream_object.debug(text)
-    def error(self, text):
-        self.stream_object.error(text)
-    def info(self, text):
-        self.stream_object.info(text)
 
     def pdfobjects(self):
         if not(self._pdfobjects):
@@ -572,8 +581,8 @@ class PDFDescriptor:
 
     def link_to(self, pdfobjects):
         for param, value in self.params.items():
-            # Point to another descriptor? Skip it
-            if isinstance(value, PDFDescriptor):
+            # Point to something else than a string? Skip it
+            if not(isinstance(value, str)):
                 continue
 
             objects = []
@@ -705,7 +714,7 @@ class StreamCacheFile(StreamCache):
             self._file.close()
 
 class StreamCacheMemory(StreamCache):
-    def __init__(self, outfile, flags=0):
+    def __init__(self, flags=0):
         self.flags = flags
         self._buffer = ""
         self._read_pos = 0
@@ -714,7 +723,7 @@ class StreamCacheMemory(StreamCache):
         self._buffer += self.decompress(data, compress_type)
 
     def read(self, size=-1):
-        remain = len(self._buffer)-self.read_pos
+        remain = len(self._buffer)-self._read_pos
         if size >= 0:
             size = min(size, remain)
         else:
@@ -724,7 +733,7 @@ class StreamCacheMemory(StreamCache):
         return _buf
 
 
-class PDFContentStream:
+class PDFContentStream(PDFStreamHandler):
     """
     Data between the 'stream ... endstream' tags in a PDF object used as
     content (and not as image or object storage).
@@ -738,22 +747,13 @@ class PDFContentStream:
     _re_font = re.compile("(/\w+\s+[^\s]+\sTf)", re.MULTILINE)
 
     def __init__(self, pdfobject, fontobjects=None):
-        self.stream_object = pdfobject
+        PDFStreamHandler.__init__(self, pdfobject)
         self.string = pdfobject.stream_text()
         self.fontobjects = fontobjects or {}
         self.pdffonts = []
         self.allfonts = []
         self.re_seq = self._re_seq
         self.re_font = self._re_font
-
-    def debug(self, text):
-        self.stream_object.debug(text)
-    def warning(self, text):
-        self.stream_object.warning(text)
-    def error(self, text):
-        self.stream_object.error(text)
-    def info(self, text):
-        self.stream_object.info(text)
 
     def record_font(self, fontname, fontsize):
         pdffont = PDFFont(self.fontobjects.get(fontname), fontsize)
