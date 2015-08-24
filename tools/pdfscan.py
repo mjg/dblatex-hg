@@ -358,6 +358,8 @@ class PDFObjectStream(PDFStreamHandler):
             pdfobj.compute()
             self._pdfobjects.append(pdfobj)
 
+        stream.close()
+
 
 class PDFObject:
     """
@@ -473,7 +475,9 @@ class PDFObject:
     def stream_text(self):
         if not(self.stream):
             return ""
-        return self.stream_cache.read()
+        data = self.stream_cache.read()
+        self.stream_cache.close()
+        return data
 
     def get_type(self):
         _type = self.descriptor.get("/Type")
@@ -642,6 +646,7 @@ class StreamManager:
     CACHE_REFRESH = 1
     CACHE_REMANENT = 2
     CACHE_TMPDIR = 4
+    CACHE_DELONCLOSE = 8
 
     def __init__(self, cache_method="file", cache_dirname="", flags=0):
         self.cache_method = cache_method
@@ -685,7 +690,7 @@ class StreamManager:
     def cache_file(self, kwargs):
         if not(self.cache_dirname):
             self.cache_dirname = tempfile.mkdtemp()
-            self.flags = self.flags | self.CACHE_TMPDIR
+            self.flags = self.flags | self.CACHE_TMPDIR | self.CACHE_DELONCLOSE
 
         if not(os.path.exists(self.cache_dirname)):
             os.mkdir(self.cache_dirname)
@@ -734,9 +739,13 @@ class StreamCacheFile(StreamCache):
             data = self._file.read()
         return data
 
-    def _close(self):
+    def close(self):
         if (self._file):
             self._file.close()
+        if (not(self.flags & StreamManager.CACHE_REMANENT) and \
+            (self.flags & StreamManager.CACHE_DELONCLOSE)):
+            print >>sys.stderr, "remove %s" % self.outfile
+            os.remove(self.outfile)
 
 class StreamCacheMemory(StreamCache):
     def __init__(self, flags=0):
@@ -756,6 +765,11 @@ class StreamCacheMemory(StreamCache):
         _buf = self._buffer[self._read_pos:self._read_pos+size]
         self._read_pos += size
         return _buf
+
+    def close(self):
+        if (self.flags & StreamManager.CACHE_DELONCLOSE):
+            del self._buffer
+            self._buffer = None
 
 
 class PDFContentStream(PDFStreamHandler):
