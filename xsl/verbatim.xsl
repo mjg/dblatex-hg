@@ -330,9 +330,9 @@
     </xsl:if>
     <!-- language option is only for programlisting -->
     <xsl:if test="@language">
-      <xsl:text>language=</xsl:text>
+      <xsl:text>language={</xsl:text>
       <xsl:value-of select="@language"/>
-      <xsl:text>,</xsl:text>
+      <xsl:text>},</xsl:text>
     </xsl:if>
     <!-- listing width -->
     <xsl:if test="$width!=''">
