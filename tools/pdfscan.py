@@ -744,7 +744,6 @@ class StreamCacheFile(StreamCache):
             self._file.close()
         if (not(self.flags & StreamManager.CACHE_REMANENT) and \
             (self.flags & StreamManager.CACHE_DELONCLOSE)):
-            print >>sys.stderr, "remove %s" % self.outfile
             os.remove(self.outfile)
 
 class StreamCacheMemory(StreamCache):
