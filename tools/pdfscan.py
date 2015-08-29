@@ -857,8 +857,10 @@ class PDFContentStream(PDFStreamHandler):
                 size = fields[1]
             # Found a matrix setup, memorize the fontsize scale factor
             elif key == "Tm":
-                if fields[0] != fields[3]:
-                    self.warning("Something wrong with Tm matrix: %s" % tx)
+                # A scaling matrix looks like: 'Sx 0 0 Sx ...'
+                if (abs(float(fields[0])) != abs(float(fields[3])) or
+                    float(fields[1]) != 0 or float(fields[2]) != 0):
+                    self.warning("Cannot interpret Tm matrix: %s" % tx)
                 else:
                     factor = fields[0]
             # When text is shown, the current font/size setup applies and is
