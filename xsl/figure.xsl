@@ -9,6 +9,7 @@
 <xsl:param name="figure.title.top">0</xsl:param>
 <xsl:param name="figure.anchor.top" select="$figure.title.top"/>
 <xsl:param name="figure.default.position">[htbp]</xsl:param>
+<xsl:param name="figure.default.align">center</xsl:param>
 
 
 <xsl:template match="figure">
@@ -33,9 +34,9 @@
   </xsl:apply-templates>
 
   <!-- <xsl:text>&#10;\centering&#10;</xsl:text> -->
-  <xsl:text>&#10;\begin{center}&#10;</xsl:text>
+  <xsl:call-template name="figure.begin"/>
   <xsl:apply-templates select="*[not(self::title)]"/>
-  <xsl:text>&#10;\end{center}&#10;</xsl:text>
+  <xsl:call-template name="figure.end"/>
 
   <!-- title caption after the image -->
   <xsl:apply-templates select="." mode="caption.and.label">
@@ -46,9 +47,20 @@
 
 
 <xsl:template match="informalfigure">
-  <xsl:text>&#10;\begin{center}&#10;</xsl:text>
+  <xsl:call-template name="figure.begin"/>
   <xsl:apply-templates/>
-  <xsl:text>&#10;\end{center}&#10;</xsl:text>
+  <xsl:call-template name="figure.end"/>
+</xsl:template>
+
+
+<xsl:template name="figure.begin">
+  <xsl:param name="align" select="$figure.default.align"/>
+  <xsl:value-of select="concat('&#10;\begin{',$align,'}&#10;')"/>
+</xsl:template>
+
+<xsl:template name="figure.end">
+  <xsl:param name="align" select="$figure.default.align"/>
+  <xsl:value-of select="concat('&#10;\end{',$align,'}&#10;')"/>
 </xsl:template>
 
 

@@ -7,11 +7,11 @@
 
 <xsl:template match="screenshot">
   <xsl:if test="not(parent::figure)">
-    <xsl:text>&#10;\begin{center}&#10;</xsl:text>
+    <xsl:call-template name="figure.begin"/>
   </xsl:if>
   <xsl:apply-templates/>
   <xsl:if test="not(parent::figure)">
-    <xsl:text>&#10;\end{center}&#10;</xsl:text>
+    <xsl:call-template name="figure.end"/>
   </xsl:if>
 </xsl:template>
 
