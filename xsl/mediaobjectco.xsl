@@ -11,12 +11,12 @@
   <xsl:if test="not(parent::figure)">
     <xsl:text>&#10;</xsl:text>
     <xsl:text>\begin{minipage}{\linewidth}&#10;</xsl:text>
-    <xsl:text>\begin{center}&#10;</xsl:text>
+    <xsl:call-template name="figure.begin"/>
   </xsl:if>
   <!-- Forget the textobject -->
   <xsl:apply-templates select="imageobjectco[1]"/>
   <xsl:if test="not(parent::figure)">
-    <xsl:text>\end{center}&#10;</xsl:text>
+    <xsl:call-template name="figure.end"/>
     <xsl:text>\end{minipage}&#10;</xsl:text>
     <xsl:text>&#10;</xsl:text>
   </xsl:if>
