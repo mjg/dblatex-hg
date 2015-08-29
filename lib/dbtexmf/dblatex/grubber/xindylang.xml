@@ -46,7 +46,7 @@
 <map lang="mn" name="Mongolian" xindylang="mongolian"/>
 <map lang="nb" name="Norwegian Bokmål" xindylang="norwegian"/>
 <map lang="nl" name="Dutch"/>
-<map lang="nn" name="Nynorsk"/>
+<map lang="nn" name="Nynorsk" xindylang="norwegian"/>
 <map lang="no" name="Norwegian" xindylang="norwegian"/>
 <map lang="or" name="Oriya"/>
 <map lang="pa" name="Punjabi"/>
