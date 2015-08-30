@@ -95,7 +95,7 @@ PASSIVETEX PACKAGES
 --------------------------------------------------------------------------------
   A customized version of Rubber by Emmanuel Beffara 
   (http://www.pps.jussieu.fr/~beffara/soft/rubber) is integrated to compile the
-  LaTeX documents. The code used by dblatex IS NOT the offical rubber package
+  LaTeX documents. The code used by dblatex IS NOT the official rubber package
   and is not maintained by the rubber author or maintainer. The dblatex rubber
   customization is called grubber.
 
