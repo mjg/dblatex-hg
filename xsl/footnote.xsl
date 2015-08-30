@@ -11,6 +11,7 @@
 <xsl:param name="endnotes.heading.style" select="'select:title'"/>
 <xsl:param name="endnotes.heading.groups"/>
 <xsl:param name="endnotes.heading.command"/>
+<xsl:param name="endnotes.counter.resetby" select="'part chapter'"/>
 
 <xsl:attribute-set name="endnotes.properties.default">
   <xsl:attribute name="package">endnotes</xsl:attribute>
@@ -117,8 +118,9 @@
     <xsl:text>\let\c@footnote=\c@endnote&#10;</xsl:text>
     <xsl:text>\makeatother&#10;</xsl:text>
     <!-- Endnotes now uses the footnote counter: prevent from chapter reset -->
-    <xsl:if test="not(contains($endnotes.heading.groups,'chapter'))
-                  and count(//chapter)!=0">
+    <xsl:if test="(not(contains($endnotes.heading.groups,'chapter'))
+                   or not(contains($endnotes.counter.resetby, 'chapter')))
+                   and count(//chapter)!=0 ">
       <xsl:text>\usepackage{chngcntr}&#10;</xsl:text>
       <xsl:text>\counterwithout{footnote}{chapter}&#10;</xsl:text>
     </xsl:if>
@@ -181,14 +183,21 @@
 
 <!-- By default only these elements are known to be endnotes groups -->
 <xsl:template match="chapter|part" mode="endnotes">
-  <xsl:call-template name="endnotes.add.header">
-    <xsl:with-param name="reset-counter" select="1"/>
-  </xsl:call-template>
+  <xsl:call-template name="endnotes.add.header"/>
 </xsl:template>
 
 <xsl:template name="endnotes.add.header">
   <xsl:param name="verbose" select="1"/>
-  <xsl:param name="reset-counter" select="0"/>
+  <xsl:param name="reset-counter">
+    <xsl:choose>
+    <xsl:when test="contains($endnotes.counter.resetby,local-name(.))">
+      <xsl:value-of select="1"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="0"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:variable name="endnotes.section"
                 select="//index[@type='endnotes'][1]/parent::*"/>
