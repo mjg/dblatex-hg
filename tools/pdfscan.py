@@ -25,6 +25,8 @@ import re
 import logging
 import tempfile
 import shutil
+import struct
+
 
 class ErrorHandler:
     def __init__(self):
@@ -44,44 +46,181 @@ class ErrorHandler:
         self.failure_track(msg, rc)
         sys.exit(self.rc)
 
-
 def pdfstring_is_list(data):
     return (data and data[0] == "[" and data[-1] == "]")
 
 
-class PDFFile:
-    """
-    Main object that parses the PDF file and extract the objects used for
-    scanning.
-    """
-    SHOW_DETAILS = 2
-    SHOW_SUMMARY = 1
+class PDFBaseObject:
+    _log = logging.getLogger("pdfscan.base")
 
-    def __init__(self, stream_manager=None):
-        self.filename = ""
-        self.pdfobjects = None
-        self.page_objects = []
-        self.stream_manager = stream_manager or StreamManager()
-        self._log = logging.getLogger("pdfscan.pdffile")
-
-        # Detect the beginning of a PDF Object
-        self.re_objstart = re.compile("(\d+) (\d+) obj(.*$)", re.DOTALL)
-
+    def __init__(self):
+        pass
     def debug(self, text):
         self._log.debug(text)
+    def warning(self, text):
+        self._log.warning(text)
     def error(self, text):
         self._log.error(text)
     def info(self, text):
         self._log.info(text)
 
+
+class PDFFile(PDFBaseObject):
+    """
+    Main object that parses the PDF file and extract the objects needed for
+    scanning.
+    """
+    _log = logging.getLogger("pdfscan.pdffile")
+
+    def __init__(self, stream_manager=None):
+        self._file = None
+        self.filesize = 0
+        self.startxref_pos = 0
+        self.trailer = None
+        self.xref_first = None
+        self.xref_table = {}
+        self.xref_objstm = {}
+        self.objstm_objects = {}
+        self.page_objects = []
+        self.pdfobjects = PDFObjectGroup()
+        self.resolver = PDFObjectResolver(self)
+        self.stream_manager = stream_manager or StreamManager()
+
+        # Detect the beginning of a PDF Object
+        self.re_objstart = re.compile("(\d+) (\d+) obj(.*$)", re.DOTALL)
+
     def cleanup(self):
         self.stream_manager.cleanup()
 
-    def parse_file(self, file_read):
-        pdfobj = None
-        self.pdfobjects = PDFObjectGroup()
+    def load(self, filename):
+        self.filesize = os.path.getsize(filename)
+        self._file = open(filename, "rb")
+        self.read_xref()
+        self.build_final_xref()
 
-        for line in file_read:
+    def find_startxref(self, offset_trailer=160):
+        # Look for the first xref from the end
+        offset, data = self.filesize, ""
+        while not("startxref" in data) or offset == 0:
+            offset = max(0, offset - offset_trailer)
+            self._file.seek(offset)
+            data = self._file.read(offset_trailer) + data
+
+        m = re.search("\sstartxref\s+(\d+)\s+%%EOF", data, re.M)
+        if not(m):
+            self.error("Problem in PDF file: startxref not found")
+            return 0
+        self.startxref_pos = int(m.group(1))
+        return self.startxref_pos
+
+    def read_xref(self):
+        startxref = self.find_startxref()
+        xref = None
+
+        while startxref:
+            self._file.seek(startxref)
+            line = self._file.readline()
+            m = re.search("xref\s(.*)", line, re.M|re.DOTALL)
+            if (m):
+                found_xref = PDFXrefSection(self._file)
+                found_xref.read_table(m.group(1))
+            elif self.re_objstart.search(line):
+                self.info("Xref section not found. Try to load XRef object")
+                pdfobject, remain_line = self._parse_object(startxref)
+                found_xref = PDFXrefObject(pdfobject)
+
+            startxref = int(found_xref.trailer.get("/Prev", 0))
+
+            if xref: xref.set_older(found_xref)
+            xref = found_xref
+
+        self.xref_first = xref
+
+    def build_final_xref(self):
+        xref = self.xref_first
+        while xref:
+            self.trailer = xref.trailer
+            self.xref_table.update(xref.table)
+            self.xref_objstm.update(xref.objstm)
+            xref = xref.newer
+
+    def get_objstm(self, objstm_id):
+        return self.objstm_objects.get(objstm_id, None)
+
+    def create_objstm(self, pdfobject):
+        self.debug("Create objstm %s" % pdfobject.ident())
+        pdfobject.compute()
+        pdfobject.stream_decode()
+        self.pdfobjects.add_object(pdfobject)
+        objstm = PDFObjectStream(pdfobject)
+        self.objstm_objects[objstm.ident()] = objstm
+        return objstm
+
+    def xref_resolve_object(self, ident):
+        offset = self.xref_table.get(ident, 0)
+        if offset != 0:
+            #print "Object '%s' found at offset: %d" % (ident, offset)
+            pdfobject, remain_line = self._parse_object(offset)
+            return pdfobject
+
+    def xref_resolve(self, ident):
+        # Try to resolve a standard object
+        pdfobject = self.xref_resolve_object(ident)
+        if pdfobject:
+            return pdfobject
+
+        # Find the ObjStm infos that contains that object
+        objstm_data = self.xref_objstm.get(ident, 0)
+        if objstm_data == 0:
+            self.warning("ObjStm id for '%s' not found in xref table" % ident)
+            return None
+
+        # If the ObjStm itself is not resolved, resolve it first
+        objstm_id = "%d 0" % objstm_data[0]
+        object_idx = objstm_data[1]
+
+        objstm = self.get_objstm(objstm_id)
+        if not(objstm):
+            pdfobject = self.xref_resolve_object(objstm_id)
+            if pdfobject: objstm = self.create_objstm(pdfobject)
+        if not(objstm):
+            self.error("Object '%s' cannot be resolved: ObjStm '%s' not found" \
+                      % (ident, objstm_id))
+            return None
+
+        # Ok, now get the object from the ObjStm
+        pdfobject = objstm.get_object(object_idx)
+
+        return pdfobject
+
+    def resolve_object(self, ident):
+        pdfobject = self.pdfobjects.get_object(ident)
+        if not(pdfobject):
+            #print "Try to resolve object '%s'" % ident
+            pdfobject = self.xref_resolve(ident)
+            if pdfobject:
+                self.pdfobjects.add_object(pdfobject)
+        return pdfobject
+
+    def get_object(self, ident):
+        ident = ident.replace(" R", "").strip()
+        pdfobject = self.resolver.get(ident)
+        if pdfobject:
+            pdfobject.link_to(self.resolver)
+        return pdfobject
+
+    def _parse_object(self, offset):
+        pdfobj = None
+        parsed_object = None
+        remain_line = ""
+
+        self._file.seek(offset)
+
+        while not(parsed_object):
+            line = self._file.readline()
+            if not(line):
+                break
+
             while line:
                 if pdfobj:
                     fields = line.split("endobj", 1)
@@ -89,12 +228,11 @@ class PDFFile:
                         if fields[0]:
                             pdfobj.append_string(fields[0])
                         pdfobj.compute()
-                        self.pdfobjects.add_object(pdfobj)
-                        pdfobj = None
-                        line = fields[1]
+                        remain_line = fields[1]
+                        parsed_object = pdfobj
                     else:
                         pdfobj.append_string(line)
-                        line = ""
+                    line = ""
                 else:
                     m = self.re_objstart.search(line)
                     if m:
@@ -106,24 +244,7 @@ class PDFFile:
                         # drop the line
                         line = ""
 
-    def populate_object_streams(self):
-        pdfobjects = self.pdfobjects.get_objects_by_type("/ObjStm")
-        if not(pdfobjects):
-            return
-        for pdfobject in pdfobjects:
-            objstm = PDFObjectStream(pdfobject)
-            for pdfobj in objstm.pdfobjects():
-                self.pdfobjects.add_object(pdfobj)
-
-    def load(self, filename):
-        self.filename = filename
-        file_pdf = open(filename, 'rb')
-        self.parse_file(file_pdf)
-        file_pdf.close()
-        self.pdfobjects.link_objects()
-        self.pdfobjects.stream_decode()
-        self.populate_object_streams()
-        self.pdfobjects.link_objects()
+        return (parsed_object, remain_line)
 
     def _expand_pages(self, page_kids):
         # Iterations to make a list of unitary pages (/Page) from a list
@@ -136,6 +257,8 @@ class PDFFile:
             newlist = []
             has_kid = 0
             for kid in page_list:
+                #print kid
+                kid.link_to(self.resolver)
                 if kid.get_type() == "/Pages":
                     kids = kid.descriptor.get("/Kids")
                     self.debug("Expand page list: %s -> %s" % (kid, kids))
@@ -150,97 +273,42 @@ class PDFFile:
             page_list = newlist
         return page_list
 
-    def arrange_pages(self):
-        # From the PDF objects tree, make a flat list of the pages contained
-        # by the the document
-        if self.page_objects:
-            return
-        catalog = self.pdfobjects.get_objects_by_type("/Catalog")[0]
+    def load_pages(self):
+        root = self.trailer.get("/Root")
+        catalog = self.get_object(root)
         pages = catalog.descriptor.get("/Pages")
         page_count = int(pages.descriptor.get("/Count"))
+
+        self.info("Found %d pages" % page_count)
+        pages.link_to(self.resolver)
         page_kids = pages.descriptor.get("/Kids")
         self.page_objects = self._expand_pages(page_kids)
         if len(self.page_objects) != page_count:
             self.error("Unconsistent pages found: %d vs %d" % \
                   (len(self.page_objects), page_count))
 
-    def _page_range(self, page_range):
-        if not(page_range): page_range = [1, len(self.page_objects)]
-        if page_range[0] == 0: page_range[0] = 1
-        if page_range[1] == 0 or page_range[1] > len(self.page_objects):
-            page_range[1] = len(self.page_objects)
-        return page_range
 
-    def details(self, text):
-        self._print(self.SHOW_DETAILS, text)
+class PDFObjectResolver:
+    def __init__(self, pdffile):
+        self.pdffile = pdffile
 
-    def _print(self, level, text):
-        if self.print_level >= level:
-            print text
-
-    def show_fonts(self, page_range=None, print_level=SHOW_SUMMARY):
-        self.print_level = print_level
-
-        self.arrange_pages()
-
-        page_first, page_last = self._page_range(page_range)
-
-        page_objects = self.page_objects[page_first-1:page_last]
-
-        header_fmt = "%4s %-40s %s"
-        self.details(header_fmt % ("PAGE", "FONT", "SIZE"))
-        self.details(header_fmt % (4*"-", 40*"-", 10*"-"))
-
-        fonts_used = []
-        for i, page in enumerate(page_objects):
-            page_num = i+page_first
-            contents = page.descriptor.get("/Contents")
-            resources = page.descriptor.get("/Resources")
-            self.debug("Page %d %s: contents: %s, resources: %s" % \
-                         (page_num, page, contents, resources))
-
-            if (isinstance(resources, PDFDescriptor)):
-                rsc_descriptor = resources
-            else:
-                rsc_descriptor = resources.descriptor
-
-            font = rsc_descriptor.get("/Font")
-            if font:
-                fontdict = font.infos()
-            else:
-                fontdict = {}
-
-            if not(isinstance(contents, list)):
-                contents = [contents]
-
-            for content in contents:
-                b = PDFContentStream(content, fontdict)
-                used_fonts = b.used_fonts()
-                for f in used_fonts:
-                    font_used = "%-40s %fpt" % \
-                          (f.fontobject.descriptor.get("/BaseFont"),
-                           f.fontsize)
-                    self.details("%4d %s" % (page_num, font_used))
-                    if not(font_used in fonts_used):
-                        fonts_used.append(font_used)
-
-            self.details(header_fmt % (4*"-", 40*"-", 10*"-"))
-
-        print "\nFonts used in pages %d-%d:" % (page_first, page_last)
-        for font in fonts_used:
-            print font
+    def get(self, ident, default=None):
+        pdfobject = self.pdffile.resolve_object(ident)
+        if not(pdfobject): pdfobject = default
+        return pdfobject
 
 
-class PDFObjectGroup:
+class PDFObjectGroup(PDFBaseObject):
     """
     Group of the PDF Objects contained in a file. This wrapper is a dictionnary
     of the objects, and consolidates the links between the objects.
     """
+    _log = logging.getLogger("pdfscan.pdffile")
+
     def __init__(self):
         self.pdfobjects = {}
         self.objtypes = {}
         self.unresolved = []
-        self._log = logging.getLogger("pdfscan.pdffile")
 
     def count(self):
         return len(self.pdfobjects.values())
@@ -265,7 +333,7 @@ class PDFObjectGroup:
         return self.pdfobjects.get(ident, None)
 
     def link_objects(self):
-        self._log.debug("%d objects to resolve" % (len(self.unresolved)))
+        self.debug("%d objects to resolve" % (len(self.unresolved)))
         unresolved = []
         for pdfobj in self.unresolved:
             if pdfobj.link_to(self.pdfobjects):
@@ -276,6 +344,119 @@ class PDFObjectGroup:
         for pdfobj in self.pdfobjects.values():
             pdfobj.stream_decode()
 
+
+class PDFPage:
+    def __init__(self, page, pagenum=0, pdfobjects=None):
+        self.pagenum = pagenum
+        contents = page.descriptor.get("/Contents")
+        resources = page.descriptor.get("/Resources")
+
+        if (isinstance(resources, PDFDescriptor)):
+            rsc_descriptor = resources
+        else:
+            rsc_descriptor = resources.descriptor
+
+        rsc_descriptor.link_to(pdfobjects)
+        font = rsc_descriptor.get("/Font")
+        if font:
+            font.link_to(pdfobjects)
+            fontdict = font.infos()
+        else:
+            fontdict = {}
+
+        if not(isinstance(contents, list)):
+            contents = [contents]
+
+        self.page = page
+        self.contents = contents
+        self.fontdict = fontdict
+        self.fontmgr = FontManager(fontdict)
+        self.streams = []
+        
+        if not(pdfobjects):
+            return
+
+        self.link_to(pdfobjects)
+        self.load_streams()
+
+    def link_to(self, pdfobjects):
+        for content in self.contents:
+            content.link_to(pdfobjects)
+
+    def load_streams(self):
+        for content in self.contents:
+            stream = PDFContentStream(content, self.fontmgr)
+            self.streams.append(stream)
+
+    def find_fonts(self):
+        return self.fontmgr.get_used()
+
+
+class PDFXrefSection(PDFBaseObject):
+    """
+    Section starting by 'xref' and followed by the 'trailer'. The xref data
+    contain information about how to access to objects in the file and is
+    therefore a crucial part of the object resolution.
+    """
+    _log = logging.getLogger("pdfscan.xref")
+
+    _re_desc = re.compile("(<<(?:(?<!<)<(?!<)|[^<>]|(?<!>)>(?!>))*>>)",
+                          re.MULTILINE)
+
+    def __init__(self, fd):
+        self.trailer = None
+        self.table = {}
+        self.objstm = {}
+        self._file = fd
+        self.older = None
+        self.newer = None
+
+    def set_older(self, older):
+        self.older = older
+        older.newer = self
+
+    def _xref_fill_entry(self, fields, obj_id):
+        offset, revision, what = fields
+        if what == "n":
+            ident = "%d %d" % (obj_id, int(revision))
+            self.table[ident] = int(offset)
+
+    def read_table(self, linestart=""):
+        line = linestart.strip() or self._file.readline()
+        subsection = line.split()
+
+        while subsection[0] != "trailer":
+            start_ref = int(subsection[0])
+            object_count = int(subsection[1])
+            if len(subsection) == 5:
+                self._xref_fill_entry(subsection[2:], start_ref)
+                start_ref += 1
+                object_count -= 1
+
+            for i in range(object_count):
+                line = self._file.readline()
+                self._xref_fill_entry(line.split(), start_ref+i)
+
+            line = self._file.readline()
+            subsection = line.split()
+
+        #print len(self.table.values())
+
+        if subsection[0] == "trailer":
+            data = " ".join(subsection)
+        
+        # Ensure we have a complete dictionnary
+        while not(">>" in data):
+            data += self._file.readline()
+
+        m = self._re_desc.search(data)
+        if not(m):
+            self.error("Problem in PDF file: cannot find valid trailer")
+            return
+        self.trailer = PDFDescriptor(string=m.group(1))
+        self.trailer.compute()
+
+
 class PDFStreamHandler:
     """
     Core abstract class in charge to handle the stream of <pdfobject>
@@ -283,6 +464,8 @@ class PDFStreamHandler:
     def __init__(self, pdfobject):
         self.stream_object = pdfobject
 
+    def ident(self):
+        return self.stream_object.ident()
     def debug(self, text):
         self.stream_object.debug(text)
     def warning(self, text):
@@ -291,6 +474,83 @@ class PDFStreamHandler:
         self.stream_object.error(text)
     def info(self, text):
         self.stream_object.info(text)
+
+class PDFXrefObject(PDFStreamHandler):
+    """
+    A specific object that contains XRef entries in binary format. It is an
+    alternative to the xref section.
+    """
+    def __init__(self, pdfobject):
+        PDFStreamHandler.__init__(self, pdfobject)
+        self.trailer = pdfobject.descriptor
+        self.table = {}
+        self.objstm = {}
+        self.older = None
+        self.newer = None
+
+        if pdfobject.descriptor.get("/Type") != "/XRef":
+            self.error("Not an XRef object. Give up")
+            return
+
+        _format = pdfobject.descriptor.get("/W")
+        _format = _format.replace("[", "").replace("]", "")
+        self._format = [ int(f) for f in _format.split() ]
+
+        # An /XRef object must contains a stream
+        pdfobject.stream_decode()
+        self.data = pdfobject.stream_text()
+        self.read_table()
+
+    def set_older(self, older):
+        self.older = older
+        older.newer = self
+
+    def _xref_fill_entry(self, fields, obj_id):
+        offset, revision, what = fields
+        if what == "n":
+            ident = "%d %d" % (obj_id, int(revision))
+            self.table[ident] = int(offset)
+            self.debug("Record xref entry: '%s' @ %s" % (ident, offset))
+
+    def _xref_fill_objstm(self, fields, obj_id):
+        objstm_id, obj_index = fields
+        ident = "%d %d" % (obj_id, 0)
+        self.objstm[ident] = (objstm_id, obj_index)
+        self.debug("Record xref entry in objstm: '%s' @ %s" % \
+                   (ident, fields))
+
+    def _int_of(self, string):
+        # Convert to int from bytes string that can be of any size
+        m = len(string)
+        d = 0
+        for i, c in enumerate(string):
+            d += (1 << (8*(m - i-1))) * struct.unpack("B", c)[0]
+        return d
+
+    def read_table(self, linestart=""):
+        data = self.data
+        fields = 3 * [0]
+        entry_size = sum(self._format)
+        # TODO: use /Index
+        obj_id = 0
+
+        while data:
+            first = 0
+            last = 0
+            for i in range(3):
+                last += self._format[i]
+                fields[i] = self._int_of(data[first:last])
+                first = last
+
+            data = data[entry_size:]
+            
+            if fields[0] == 1:
+                self._xref_fill_entry(fields[1:3] + ["n"], obj_id)
+            elif fields[0] == 2:
+                self._xref_fill_objstm(fields[1:3], obj_id)
+
+            obj_id += 1
+
 
 class PDFObjectStream(PDFStreamHandler):
     """
@@ -309,6 +569,13 @@ class PDFObjectStream(PDFStreamHandler):
     def _getinfo(self, what):
         return self.stream_object.descriptor.get(what)
 
+    def get_object(self, idx):
+        if not(self._pdfobjects):
+            self.compute()
+        if idx < 0 or idx >= len(self._pdfobjects):
+            return None
+        return self._pdfobjects[idx]
+
     def parse_object_list(self, data):
         values = data.split()
         objlist = []
@@ -316,6 +583,7 @@ class PDFObjectStream(PDFStreamHandler):
         for i in range(0, len(values), 2):
             # The pair is ('object number', byte_offset)
             objlist.append((values[i], int(values[i+1])))
+        self.objlist = objlist
         return objlist
 
     def compute(self):
@@ -447,8 +715,6 @@ class PDFObject:
                            string, flags=re.MULTILINE).strip()
         self.debug("Data: '%s'" % self.data)
 
-        #self.stream_decode()
-
     def stream_decode(self):
         if not(self.stream):
             return
@@ -561,7 +827,6 @@ class PDFDescriptor:
         string = string.replace(">>", "")
         string = string.replace("<<", "")
         string = string.replace("\n", " ")
-        #print string
         fields = self.re_dict.findall(string)
         fields = [ f.strip() for f in fields if (f and f.strip()) ]
         return fields
@@ -569,7 +834,6 @@ class PDFDescriptor:
     def compute(self, descriptors=None):
         lines = self.normalize_fields(self.string)
         for line in lines:
-            #print line
             m = self.re_key.match(line)
             if not(m):
                 continue
@@ -582,8 +846,8 @@ class PDFDescriptor:
 
         self.debug(self.params)
 
-    def get(self, param):
-        return self.params.get(param, "")
+    def get(self, param, default=""):
+        return self.params.get(param, default)
     
     def values(self):
         return self.params.values()
@@ -610,7 +874,7 @@ class PDFDescriptor:
             objects = []
             objrefs = self.re_objref.findall(value)
             value2 = value
-            #print objrefs
+            #print value, objrefs
             for objref in objrefs:
                 o = pdfobjects.get(objref.replace(" R", ""), None)
                 # If the object is missing, keep the reference for another trial
@@ -642,11 +906,13 @@ class PDFDescriptor:
         return unresolved
  
 
-class StreamManager:
+class StreamManager(PDFBaseObject):
     CACHE_REFRESH = 1
     CACHE_REMANENT = 2
     CACHE_TMPDIR = 4
     CACHE_DELONCLOSE = 8
+
+    _log = logging.getLogger("pdfscan.pdffile")
 
     def __init__(self, cache_method="file", cache_dirname="", flags=0):
         self.cache_method = cache_method
@@ -654,16 +920,8 @@ class StreamManager:
         self.cache_dirname = cache_dirname
         self.cache_files = []
         self.flags = flags
-        self._log = logging.getLogger("pdfscan.pdffile")
         # Don't want to remove something in a user directory
         if cache_dirname: self.flags = self.flags | self.CACHE_REMANENT
-
-    def debug(self, text):
-        self._log.debug(text)
-    def error(self, text):
-        self._log.error(text)
-    def info(self, text):
-        self._log.info(text)
 
     def cleanup(self):
         if (self.cache_method != "file"):
@@ -771,113 +1029,363 @@ class StreamCacheMemory(StreamCache):
             self._buffer = None
 
 
+
+def extract_string_objects(data, re_pattern, replace_fmt,
+                           delims=None, object_cls=None,  object_id=0,
+                           **kwargs):
+
+    if isinstance(re_pattern, str):
+        strings_found = re.findall(re_pattern, data, re.M|re.DOTALL)
+    else:
+        strings_found = re_pattern.findall(data)
+
+    #print strings_found
+    strings_objects = []
+    for i, to in enumerate(strings_found):
+        repl = replace_fmt % (i+object_id)
+        if delims:
+            to = delims[0] + to + delims[1]
+            repl = delims[0] + repl + delims[1] 
+        data = data.replace(to, repl, 1)
+        if object_cls:
+            strings_objects.append(object_cls(to, **kwargs))
+        else:
+            strings_objects.append(to)
+    return (strings_objects, data)
+
+
 class PDFContentStream(PDFStreamHandler):
     """
     Data between the 'stream ... endstream' tags in a PDF object used as
     content (and not as image or object storage).
     """
-    # Detect a 'Tf', 'Tm', 'Tj', or 'TJ' operator sequence in a text object
+    def __init__(self, pdfobject, fontmgr=None):
+        PDFStreamHandler.__init__(self, pdfobject)
+        self.data = ""
+        self.qnode_root = None
+        self.textobjects = None
+        self.fontmgr = fontmgr or FontManager({})
+        pdfobject.stream_decode()
+        self.extract_textobjects(pdfobject.stream_text())
+        self.make_graph_tree()
+
+    def extract_textobjects(self, data):
+        fields = re.split("((?<=\s)BT(?=\s)|(?<=\s)ET(?=\s))", data)
+
+        start_text = False
+        textdata = ""
+        textobject = None
+        textobjects = []
+
+        for field in fields:
+            if field == "BT":
+                start_text = True
+                textdata = ""
+            elif field == "ET":
+                textobject = PDFTextObject(textdata, fontmgr=self.fontmgr)
+                data = data.replace(textdata,
+                                    " textobj(%d) " % len(textobjects), 1)
+                textobjects.append(textobject)
+                start_text = False
+            elif start_text:
+                textdata += field
+
+        self.debug("Found %d textobjects" % len(textobjects))
+        self.textobjects = textobjects
+        self.data = data
+
+    def make_graph_tree(self):
+        graph_stacks = re.split("(q\s|\sQ)", self.data)
+
+        self.qnode_root = GraphState()
+        qnode = self.qnode_root
+        for field in graph_stacks:
+            if "q" in field:
+                qnode = qnode.push(GraphState())
+            elif "Q" in field:
+                qnode = qnode.pop()
+            elif field.strip():
+                qnode.set_data(field)
+                qnode.fill_textobjects(self.textobjects)
+
+    def dump(self):
+        self.qnode_root.dump()
+
+
+
+class PDFMatrix(PDFBaseObject):
+    """
+             | a  b  0 |
+        Tm = | c  d  0 |
+             | e  f  1 |
+
+        [x , y , 1] = [x1, y1, 1] x Tm1
+        [x1, y1, 1] = [x2, y2, 1] x Tm2
+        
+     => [x , y , 1] = [x2, y2, 1] x Tm2 x Tm1
+
+    """
+    IDENT = [1, 0, 0, 1, 0, 0]
+
+    def __init__(self, vector):
+        self.vector = vector
+
+    def tx(self):
+        return self.vector[4]
+
+    def ty(self):
+        return self.vector[5]
+
+    def scale(self):
+        a, b, c, d, e, f = self.vector
+        if (abs(a) != abs(d) or b != 0 or c != 0):
+            self.warning("Cannot interpret Tm matrix scale: %s" % self)
+        # Always return the first even if something is weird
+        return a
+    
+    def __str__(self):
+        return str(self.vector)
+
+    def __len__(self):
+        return len(self.vector)
+
+    def __mul__(self, vector):
+        a, b, c, d, e, f = self.vector
+        if len(vector) == 6:
+            ar, br, cr, dr, er, fr = vector.vector
+            a2 = a * ar + b * cr + 0 * er
+            b2 = a * br + b * dr + 0 * fr
+            c2 = c * ar + d * cr + 0 * er
+            d2 = c * br + d * dr + 0 * fr
+            e2 = e * ar + f * cr + 1 * er        
+            f2 = e * br + f * dr + 1 * fr        
+
+            m = PDFMatrix([a2,b2,c2,d2,e2,f2])
+            return m
+        else:
+            x, y = vector[0:2]
+            x2 = a * x + c * y + e
+            y2 = b * x + d * y + f
+            return [x2, y2, 1]
+
+
+class GraphState:
+    """
+    Graphic state starts with 'q' and ends with 'Q' in content stream.
+    It can contain other graphic states and/or text objects.
+    """
+    def __init__(self):
+        self._parent = None
+        self._children = []
+        self._level = 0
+        self._data = ""
+        self.textobjects = []
+        self.matrix = PDFMatrix(PDFMatrix.IDENT)
+
+    def level(self):
+        return self._level
+
+    def set_parent(self, qnode):
+        self._parent = qnode
+        self._level = qnode.level()+1
+
+    def push(self, qnode):
+        self._children.append(qnode)
+        qnode.set_parent(self)
+        return qnode
+
+    def pop(self):
+        qnode = self._parent
+        return qnode
+
+    def set_data(self, data, textobjects=None):
+        self._data = data
+        if textobjects:
+            self.fill_textobjects(textobjects)
+        self.extract_matrix()
+
+    def fill_textobjects(self, textobjects):
+        #print self._data #***
+        tos = re.findall(" (textobj\(\d+\))", self._data)
+        for to in tos:
+            m = re.match("textobj\((\d+)\)", to)
+            if m:
+                textobject = textobjects[int(m.group(1))]
+                textobject.set_graphstate(self)
+                self.textobjects.append(textobject)
+
+        self._data = re.sub(" textobj\(\d+\)", "",
+                       self._data, flags=re.MULTILINE).strip()
+
+    def extract_matrix(self):
+        m = re.search("("+6*"[^\s]+\s+"+"cm"+")", self._data)
+        if m:
+            vector = [ float(v) for v in m.group(1).split()[0:6] ]
+            self.matrix = PDFMatrix(vector)
+
+    def dump(self):
+        s = self._level * "  " + "q '" + self._data + "'"
+        print s
+        for q in self._children:
+            q.dump()
+        s = self._level * "  " + "Q"
+        print s
+
+
+class PDFTextObject:
+    """
+    Data between the 'BT' and 'ET' tokens found in content streams.
+    """
+    # Detect a 'Tf', 'Tm', 'Tj', 'TJ', Td, TD operator sequence in a text object
+    # To use only when strings are extracted and replaced by their reference
     _re_seq = re.compile("(/\w+\s+[^\s]+\s+Tf|"+\
                          6*"[^\s]+\s+"+"Tm"+"|"+\
-                         "Tj|TJ)", re.MULTILINE)
+                         "\(textcontent\{\d+\}\)\s*Tj|"+\
+                         "\[[^\]]*\]\s*TJ|"+\
+                         "[^\s]+\s+[^\s]+\s+T[dD])", re.MULTILINE)
 
     # Find a font setup operator, like '/F10 9.47 Tf'
     _re_font = re.compile("(/\w+\s+[^\s]+\sTf)", re.MULTILINE)
 
     # Find a sequence '(...\(...\)...) Tj'
-    _re_text_show1 = re.compile("\((" + "[^()]" + "|" +\
-                                   r"(?<=\\)\(" + "|" +\
-                                   r"(?<=\\)\)" + ")*\)\s+Tj", re.M)
+    _re_text_show1 = re.compile("\(((?:" + "[^()]" + "|" +\
+                                      r"(?<=\\)\(" + "|" +\
+                                      r"(?<=\\)\)" + ")*)\)\s*Tj", re.M)
                                 
     # Find a sequence '[...\[...\]...] TJ'
-    _re_text_show2 = re.compile("\[(" + "[^\[\]]" + "|" +\
-                                     r"(?<=\\)\[" + "|" +\
-                                     r"(?<=\\)\]" + ")*\]\s+TJ", re.M)
- 
-    def __init__(self, pdfobject, fontobjects=None):
-        PDFStreamHandler.__init__(self, pdfobject)
-        self.string = pdfobject.stream_text()
-        self.fontobjects = fontobjects or {}
-        self.pdffonts = []
-        self.allfonts = []
-        self.re_seq = self._re_seq
-        self.re_font = self._re_font
+    _re_text_show2 = re.compile("\[((?:" + "[^\[\]]" + "|" +\
+                                        r"(?<=\\)\[" + "|" +\
+                                        r"(?<=\\)\]" + ")*)\]\s*TJ", re.M)
 
-    def record_font(self, fontname, fontsize):
-        fontobj = self.fontobjects.get(fontname)
-        if not(fontobj):
-            self.error("No font object for '%s'" % fontname)
-        else:
-            pdffont = PDFFont(fontobj, fontsize)
-            self.pdffonts.append(pdffont)
+    def __init__(self, data, fontmgr=None):
+        self.data = data
+        self.matrix = PDFMatrix(PDFMatrix.IDENT)
+        self.fontmgr = fontmgr or FontManager({})
+        self.qnode = None
+        self.strings = []
+        self.textsegments = []
+        self.textlines = []
+        self.extract_strings()
+        self.extract_matrix()
+        self.parse_data()
 
-    def record_font_if_new(self, fontname, fontsize, scale="1"):
-        self.debug("Try to add font (%s,%s,%s)" % (fontname, fontsize, scale))
-        if ((fontname, fontsize, scale) in self.allfonts):
-            return
-        self.allfonts.append((fontname, fontsize, scale))
-        self.record_font(fontname, float(scale)*float(fontsize))
+    def set_graphstate(self, gs):
+        self.qnode = gs
 
-    def used_fonts(self):
-        # Skip the text to show, because it can alterate further parsing
-        s = self._re_text_show1.sub("() Tj", self.string)
-        self.string = self._re_text_show2.sub("[] TJ", s)
+    def set_fontmanager(self, fontmgr):
+        self.fontmgr = fontmgr
 
-        m = re.search("\sTm", self.string, re.MULTILINE)
+    def extract_matrix(self):
+        m = re.search("("+6*"[^\s]+\s+"+"Tm"+")", self.data)
         if m:
-            self.find_scaled_fonts()
-        else:
-            self.find_unscaled_fonts()
-        return self.pdffonts
+            vector = [ float(v) for v in m.group(1).split()[0:6] ]
+            self.matrix = PDFMatrix(vector)
+    
+    def extract_strings(self):
+        #print self.data
+        objects, data = extract_string_objects(self.data, self._re_text_show1,
+                                               "textcontent{%d}",
+                                               delims=["(",")"])
+        self.strings = objects                                       
+        objects, data = extract_string_objects(data, self._re_text_show2,
+                                               "textcontent{%d}",
+                                               delims=["[","]"],
+                                               object_id=len(self.strings))
+        #print data
+        self.strings += objects
+        self.data = data
 
-    def find_scaled_fonts(self):
-        # Search the text objects limited by ' BT ... ET '
-        texts = re.findall("(\sBT\s.*\sET\s)", 
-                           self.string, re.MULTILINE|re.DOTALL)
-        self.debug("Contains %d texts" % len(texts))
+    def _newline(self):
+        linerow = []
+        self.textlines.append(linerow)
+        return linerow
 
-        for text in texts:
-            self.find_scaled_font_text(text)
+    def get_font(self, font, size, scale):
+        return self.fontmgr.get_font(font, float(size)*scale)
 
-    def find_scaled_font_text(self, text):
+    def parse_data(self):
+        linerow = self._newline()
+        textline = PDFTextSegment("", PDFMatrix(PDFMatrix.IDENT))
+        linerow.append(textline)
+
         # Find the operator sequences
-        tf_tm = self.re_seq.findall(text)
+        operators = self._re_seq.findall(self.data)
 
-        factor = "1"
-        font = ""
+        font, size = "", 1
         last_key = ""
 
-        for tx in tf_tm:
-            # print "%s: %s" % (self.objid, tx)
+        for tx in operators:
             fields = tx.split()
             key = fields[-1]
+
             # Found a font setup, memorize the fontname and fontsize base
             if key == "Tf":
                 font = fields[0]
                 size = fields[1]
-            # Found a matrix setup, memorize the fontsize scale factor
+            # Found the matrix setup, memorize it
             elif key == "Tm":
-                # A scaling matrix looks like: 'Sx 0 0 Sx ...'
-                if (abs(float(fields[0])) != abs(float(fields[3])) or
-                    float(fields[1]) != 0 or float(fields[2]) != 0):
-                    self.warning("Cannot interpret Tm matrix: %s" % tx)
-                else:
-                    factor = fields[0]
+                vector = [ float(c) for c in fields[0:6]]
+                self.matrix = PDFMatrix(vector)
+            # Found a text positionning
+            elif key in ("Td", "TD"):
+                tx, ty = [ float(c) for c in fields[0:2]]
+                matrix = PDFMatrix([1, 0, 0, 1, tx, ty])
+                textline = PDFTextSegment("", matrix)
+                self.textsegments.append(textline)
+                if matrix.ty() != 0:
+                    linerow = self._newline()
+                linerow.append(textline)
             # When text is shown, the current font/size setup applies and is
             # then recorded
-            elif key in ("Tj", "TJ"):
-                if last_key != "TJ":
-                    self.record_font_if_new(font, size, factor)
-                key = "TJ"
+            elif "Tj" in key or "TJ" in key:
+                m = re.search("textcontent\{(\d+)\}", tx)
+                text_string = self.strings[int(m.group(1))]
+                scale = self.matrix.scale()
+                #print font, size, scale #****
+                pdffont = self.get_font(font, size, scale)
+                text_shown = PDFTextShow(text_string, pdffont)
+                textline.add_text_show(text_shown)
             last_key = key
 
-    def find_unscaled_fonts(self):
-        # Find directly the fonts, because no matrix to check
-        fonts = self.re_font.findall(self.string)
-        fonts = list(set(fonts))
-        for font in fonts:
-            rsc, size = font.split()[0:2]
-            self.record_font(rsc, float(size))
+class PDFTextSegment:
+    """
+    A text segment is a portion of text related to a text position operator 'Td'
+    or 'TD'. It contains all the texts shown related to this position, signaled
+    with the 'Tj' and 'TJ' tokens
+    """
+    def __init__(self, data, matrix):
+        self.matrix = matrix
+        self.data = data
+        self.strings = None
+        self.text_shown = []
+
+    def __str__(self):
+        s = ""
+        for o in self.text_shown:
+            s += str(o)
+        return s
+
+    def set_strings(self, strings):
+        self.strings = strings
+
+    def add_text_show(self, text_shown):
+        self.text_shown.append(text_shown)
+
+class PDFTextShow:
+    """
+    Data between the '( )' of the 'Tj' operator or '[ ]' of the 'TJ' operator
+    that is intended to be shown.
+    """
+    def __init__(self, data, font):
+        self.data = data
+        self.font = font
+
+    def __str__(self):
+        return self.data.replace("\n", " ")
+
+    def get_font(self):
+        return self.font
+
 
 
 class PDFFont:
@@ -885,86 +1393,48 @@ class PDFFont:
         self.fontobject = fontobject
         self.fontsize = fontsize
 
+    def key(self):
+        key = "%s/%6.2f" % (self.name(), self.size())
+        return key
 
-def logger_setup(log_groups):
-    loglevels = { "error":   logging.ERROR,
-                  "warning": logging.WARNING,
-                  "info":    logging.INFO,
-                  "debug":   logging.DEBUG }
+    def __cmp__(self, other):
+        a = (cmp(self.name(), other.name()) or
+             cmp(self.size(), other.size()))
+        return a
 
-    console = logging.StreamHandler()
-    fmt = logging.Formatter("%(message)s")
-    console.setFormatter(fmt)
+    def name(self):
+        return self.fontobject.descriptor.get("/BaseFont")
 
-    for group, level in log_groups.items():
-        log = logging.getLogger("pdfscan.%s" % group)
-        log.setLevel(loglevels.get(level, logging.INFO)-1)
-        log.addHandler(console)
+    def size(self):
+        return self.fontsize
 
+class FontManager:
+    def __init__(self, fontdict):
+        self.fontdict = fontdict
+        self.fontused = {}
 
-def option_page_ranges(pages):
-    page_ranges = []
-    if not(pages):
-        page_ranges.append([0, 0])
-        return page_ranges
-
-    for page_range in pages:
-        p1, p2 = (page_range + "-x").split("-")[0:2]
-        if not(p2):
-            p2 = 0
-        elif (p2 == "x"):
-            p2 = p1
-        page_ranges.append([int(p1), int(p2)])
-
-    return page_ranges
-
-def option_group_loglevels(verbose):
-    log_groups = {"pdffile":   "info",
-                 "pdfobject": "info",
-                 "descriptor": "error"}
-
-    log_levels = ("debug", "info", "warning", "error")
-
-    if not(verbose):
-        return log_groups
-
-    groups = log_groups.keys()
-    for verbose_opt in verbose:
-        group, level = ("all:" + verbose_opt).split(":")[-2:]
-        if not(level in log_levels):
-            print "Invalid verbose level: '%s'" % level
-            continue
-        if group == "all":
-            for group in groups:
-                log_groups[group] = level
-        elif group in groups:
-            log_groups[group] = level
+    def _get_font(self, fontobj, fontsize):
+        key = fontobj.descriptor.get("/BaseFont")+"/"+"%6.2f" % fontsize
+        if self.fontused.has_key(key):
+            return self.fontused.get(key)
         else:
-            print "Invalid verbose group: '%s'" % group
-            continue
+            pdffont = PDFFont(fontobj, fontsize)
+            self.fontused[key] = pdffont
+            return pdffont
 
-    return log_groups
+    def get_font(self, fontref, size):
+        fontobj = self.fontdict.get(fontref)
+        if not(fontobj):
+            return fontobj
+        return self._get_font(fontobj, size)
 
-def option_show_items(show):
-    show_items_all = ["objects_summary", "fonts_detail", "fonts_summary"]
-    show_items_default = ["objects_summary", "fonts_summary"]
+    def get_used(self):
+        return self.fontused.values()
 
-    if not(show):
-        return show_items_default
-
-    show_items = []
-    errors = 0
-    for show in show.split(","):
-        if show in show_items_all:
-            show_items.append(show)
-        else:
-            errors += 1
-            print "Invalid show item: '%s'" % (show)
-
-    if errors:
-        print "Valid show items are: %s" % ", ".join(show_items_all)
-
-    return show_items
+#
+# Starting from here is the command stuff
+#
+#
 
 def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
     flags = 0
@@ -992,35 +1462,155 @@ def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
 
     return mgr
 
-def pdf_load_and_show(pdf, pdffile, show_items):
-    pdf.load(pdffile)
-    pdfobjects = pdf.pdfobjects
+def option_page_ranges(pages):
+    page_ranges = []
+    if not(pages):
+        page_ranges.append([0, 0])
+        return page_ranges
 
-    if not("objects_summary" in show_items):
-        return
+    for page_range in pages:
+        p1, p2 = (page_range + "-x").split("-")[0:2]
+        if not(p2):
+            p2 = 0
+        elif (p2 == "x"):
+            p2 = p1
+        page_ranges.append([int(p1), int(p2)])
 
-    print "Found %s PDFObjects" % pdfobjects.count()
-    print "Found the following PDFObject types:"
-    types = pdfobjects.types()
-    types.sort()
+    return page_ranges
 
-    total = 0
-    for typ in types:
-        n_type = len(pdfobjects.get_objects_by_type(typ))
-        print " %20s: %5d objects" % (typ, n_type)
-        total = total + n_type
-    print " %20s: %5d objects" % ("TOTAL", total)
 
-def font_scan_and_show(pdf, page_ranges, show_items):
-    scope = 0
-    if "fonts_summary" in show_items:
-        scope = pdf.SHOW_SUMMARY
-    if "fonts_detail" in show_items:
-        scope = pdf.SHOW_DETAILS
-    
-    if scope != 0:
-        for page_range in page_ranges:
-            pdf.show_fonts(page_range=page_range, print_level=scope)
+def page_range_real(page_range, max_range):
+    if not(page_range): page_range = [1, max_range]
+    if page_range[0] == 0: page_range[0] = 1
+    if page_range[1] == 0 or page_range[1] > max_range:
+        page_range[1] = max_range
+    return page_range
+
+def build_pages_from_objects(pdf, page_objects, page_first):
+    pdf_pages = []
+    for i, pg in enumerate(page_objects):
+        pagenum = i+page_first
+        page = PDFPage(pg, pagenum, pdf.resolver)
+        pdf_pages.append(page)
+    return pdf_pages
+
+def print_page_fonts(pdf_pages, unit=1):
+    # print "\nFonts used in pages %d-%d:" % (page_first, page_last)
+    header_fmt = "%4s %-40s %s"
+    print header_fmt % ("PAGE", "FONT", "SIZE")
+    print header_fmt % (4*"-", 40*"-", 10*"-")
+    fonts_total = {}
+
+    for page in pdf_pages:
+        fonts_used = page.find_fonts()
+        fonts_used.sort()
+        for font in fonts_used:
+            fonts_total[font.key()] = font
+            #print "%4d %-40s %6.2f pt" % (pagenum, font.name(), font.size())
+            print "%4d %-40s %fpt" % (page.pagenum, font.name(),
+                                      unit * font.size())
+        print header_fmt % (4*"-", 40*"-", 10*"-")
+    return fonts_total
+
+def print_page_layout(pdf_pages, unit=1):
+    for page in pdf_pages:
+        fonts_used = page.find_fonts()
+        fonts_used.sort()
+        print "\nPage %d fonts used:" % page.pagenum
+        for i, font in enumerate(fonts_used):
+            print "[%d] %-40s %6.2f pt" % (i, font.name(), unit*font.size())
+
+        print "\nPage %d layout:" % page.pagenum
+        content_stream = page.streams[0]
+        xp, yp = 0., 0.
+        for textobject in content_stream.textobjects:
+            xp, yp = print_textobject_layout(textobject, xp, yp, fonts_used)
+
+
+def print_textobject_layout(textobject, xp, yp, fonts_used):
+    # The first qnode is the last enclosing textobject
+    qnode = textobject.qnode
+
+    # The textobject matrix change is the last one, so on the full left
+    m = textobject.matrix
+    s = str(m)
+    # We climb the graph stack from the deepest (newer) to the upper
+    # (oldest) node so:
+    # Absolute Matrix = Newest (m) x ... x Oldest (qnode.matrix)
+    while qnode:
+        s += str(qnode.matrix)
+        m = m * qnode.matrix 
+        qnode = qnode.pop()
+
+    print
+    m2 = m
+    for line in textobject.textlines:
+        # Track the fonts used per line
+        font_line = []
+        for seg in line:
+            for text_shown in seg.text_shown:
+                font = text_shown.get_font()
+                if not(font):
+                    continue
+                idx = fonts_used.index(font)
+                if not(idx in font_line):
+                    font_line.append(idx)
+
+        m2 = line[0].matrix * m2
+        x, y = m2.tx(), m2.ty()
+        x, y = float(x/72), float(y/72)
+        dx, dy = x - xp, y - yp
+        print "%5.2f %5.2f | %5.2f %5.2f | %4s : '%s'" % \
+              (dx, dy, x, y, font_line, "".join([str(s) for s in line]))
+        xp, yp = x, y
+        for l in line[1:]:
+            m2 = l.matrix * m2
+
+    return (xp, yp)
+
+
+def option_group_loglevels(verbose):
+    log_groups = {"pdffile":   "info",
+                  "pdfobject": "info",
+                  "descriptor": "error",
+                  "base": "info"}
+
+    log_levels = ("debug", "info", "warning", "error")
+
+    if not(verbose):
+        return log_groups
+
+    groups = log_groups.keys()
+    for verbose_opt in verbose:
+        group, level = ("all:" + verbose_opt).split(":")[-2:]
+        if not(level in log_levels):
+            print "Invalid verbose level: '%s'" % level
+            continue
+        if group == "all":
+            for group in groups:
+                log_groups[group] = level
+        elif group in groups:
+            log_groups[group] = level
+        else:
+            print "Invalid verbose group: '%s'" % group
+            continue
+
+    return log_groups
+
+def logger_setup(log_groups):
+    loglevels = { "error":   logging.ERROR,
+                  "warning": logging.WARNING,
+                  "info":    logging.INFO,
+                  "debug":   logging.DEBUG }
+
+    console = logging.StreamHandler()
+    fmt = logging.Formatter("%(message)s")
+    console.setFormatter(fmt)
+
+    for group, level in log_groups.items():
+        log = logging.getLogger("pdfscan.%s" % group)
+        log.setLevel(loglevels.get(level, logging.INFO)-1)
+        log.addHandler(console)
 
 
 def main():
@@ -1034,6 +1624,8 @@ def main():
                "group in 'pdffile', 'pdfobject', 'descriptor'")
     parser.add_option("-s", "--show",
           help="Information to show")
+    parser.add_option("-u", "--point-unit", default="ps",
+          help="Point type to use: 'tex' or 'ps' (default)")
     parser.add_option("-c", "--cache-stream-dir",
           help="Directory where to store the decompressed stream")
     parser.add_option("-m", "--no-cache-stream", action="store_true",
@@ -1052,10 +1644,7 @@ def main():
         parser.parse_args(["-h"])
         exit(1)
 
-    show_items = option_show_items(options.show)
-    if not(show_items):
-        parser.parse_args(["-h"])
-        exit(1)
+    pdffile = args[0]
 
     error = ErrorHandler()
     if options.dump_stack: error.dump_stack()
@@ -1074,23 +1663,54 @@ def main():
 
     logger_setup(log_groups)
 
-    pdffile = args[0]
+
+    # dtp = 1./72 inch
+    # ptex = 1/72.27 inch = 72./72.27 dtp
+    # dtp = 72.27/72 ptex
+    pt_unit = 1
 
     pdf = PDFFile(stream_manager=stream_manager)
 
     try:
-        pdf_load_and_show(pdf, pdffile, show_items)
-        font_scan_and_show(pdf, page_ranges, show_items)
+        pdf.load(pdffile)
+        pdf.load_pages()
+
+        if options.show and "page_objects"  in options.show:
+            page_first = 1
+            for i, page in enumerate(pdf.page_objects):
+                page_num = i+page_first
+                contents = page.descriptor.get("/Contents")
+                resources = page.descriptor.get("/Resources")
+                print "Page %d %s: contents: %s, resources: %s" % \
+                                     (page_num, page, contents, resources)
+            print
+
+        fonts_total = {}
+        page_count = len(pdf.page_objects)
+        for page_range in page_ranges:
+            page_first, page_last = page_range_real(page_range, page_count)
+            page_objects = pdf.page_objects[page_first-1:page_last]
+
+            pdf_pages = build_pages_from_objects(pdf, page_objects, page_first)
+
+            fonts = print_page_fonts(pdf_pages, pt_unit)
+            fonts_total.update(fonts)
+
+            if options.show and "page_layout"  in options.show:
+                print_page_layout(pdf_pages, pt_unit)
+
+        print "\nFonts used in pages %d-%d:" % (page_first, page_last)
+        fonts_total = fonts_total.values()
+        fonts_total.sort()
+        for font in fonts_total:
+            print "%-40s %fpt" % (font.name(), font.size())
+
+
     except Exception, e:
         error.failure_track("Error: '%s'" % (e))
 
     pdf.cleanup()
     sys.exit(error.rc)
-
-    if False:
-        misc_objs = pdfobjects.get_objects_by_type("misc")
-        for o in misc_objs:
-            print o.ident()
 
 
 if __name__ == "__main__":
