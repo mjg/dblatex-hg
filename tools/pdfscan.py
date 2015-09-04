@@ -1138,9 +1138,14 @@ class PDFMatrix(PDFBaseObject):
 
     def scale(self):
         a, b, c, d, e, f = self.vector
-        if (abs(a) != abs(d) or b != 0 or c != 0):
-            self.warning("Cannot interpret Tm matrix scale: %s" % self)
+        # Horizontal orientation
+        if (abs(a) == abs(d) and b == 0 and c == 0):
+            return abs(a)
+        # vertical orientation
+        if (abs(b) == abs(c) and a == 0 and d == 0):
+            return abs(b)
         # Always return the first even if something is weird
+        self.warning("Cannot interpret Tm matrix scale: %s" % self)
         return a
     
     def __str__(self):
@@ -1276,6 +1281,19 @@ class PDFTextObject:
 
     def set_fontmanager(self, fontmgr):
         self.fontmgr = fontmgr
+
+    def matrix_absolute(self):
+        # The textobject matrix change is the last one, so on the full left
+        m = self.matrix
+
+        # We climb the graph stack from the deepest (newer) to the upper
+        # (oldest) node so:
+        # Absolute Matrix = Newest (m) x ... x Oldest (qnode.matrix)
+        qnode = self.qnode
+        while qnode:
+            m = m * qnode.matrix 
+            qnode = qnode.pop()
+        return m
 
     def extract_matrix(self):
         m = re.search("("+6*"[^\s]+\s+"+"Tm"+")", self.data)
@@ -1543,24 +1561,11 @@ def print_page_layout(pdf_pages, unit=1):
 
 
 def print_textobject_layout(textobject, xp, yp, fonts_used):
-    # The first qnode is the last enclosing textobject
-    qnode = textobject.qnode
-
-    # The textobject matrix change is the last one, so on the full left
-    m = textobject.matrix
-    s = str(m)
-    # We climb the graph stack from the deepest (newer) to the upper
-    # (oldest) node so:
-    # Absolute Matrix = Newest (m) x ... x Oldest (qnode.matrix)
-    while qnode:
-        s += str(qnode.matrix)
-        m = m * qnode.matrix 
-        qnode = qnode.pop()
-
     padding = "%5s %5s | %5s %5s | %8s | " % (" "," "," "," "," ")
-    m2 = m
     width = 90
     wraplen = width - len(padding)
+
+    m2 = textobject.matrix_absolute()
 
     for line in textobject.textlines:
         # Track the fonts used per line
@@ -1575,6 +1580,7 @@ def print_textobject_layout(textobject, xp, yp, fonts_used):
                     font_line.append(idx)
 
         m2 = line[0].matrix * m2
+        #print "%s" % m2
         x, y = m2.tx(), m2.ty()
         x, y = float(x/72), float(y/72)
         dx, dy = x - xp, y - yp
