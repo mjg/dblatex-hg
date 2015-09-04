@@ -1367,6 +1367,10 @@ class PDFTextSegment:
             s += str(o)
         return s
 
+    def text(self):
+        s = " ".join([o.text() for o in self.text_shown])
+        return s
+
     def set_strings(self, strings):
         self.strings = strings
 
@@ -1378,12 +1382,18 @@ class PDFTextShow:
     Data between the '( )' of the 'Tj' operator or '[ ]' of the 'TJ' operator
     that is intended to be shown.
     """
+    _re_textdata = re.compile(r"\(((?:[^)]|(?<=\\)\))*)\)", re.M)
+
     def __init__(self, data, font):
         self.data = data
         self.font = font
 
     def __str__(self):
         return self.data.replace("\n", " ")
+
+    def text(self):
+        textdata = self._re_textdata.findall(self.data)
+        return "".join(textdata).replace("\(", "(").replace("\)", ")")
 
     def get_font(self):
         return self.font
@@ -1437,6 +1447,7 @@ class FontManager:
 # Starting from here is the command stuff
 #
 #
+import textwrap
 
 def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
     flags = 0
@@ -1525,6 +1536,8 @@ def print_page_layout(pdf_pages, unit=1):
         print "\nPage %d layout:" % page.pagenum
         content_stream = page.streams[0]
         xp, yp = 0., 0.
+        print "%5s %5s | %5s %5s | %8s | " % ("dX","dY","X","Y","Fonts")
+        print "%5s %5s | %5s %5s | %8s | " % (5*"_",5*"_",5*"_",5*"_",8*"_")
         for textobject in content_stream.textobjects:
             xp, yp = print_textobject_layout(textobject, xp, yp, fonts_used)
 
@@ -1544,8 +1557,11 @@ def print_textobject_layout(textobject, xp, yp, fonts_used):
         m = m * qnode.matrix 
         qnode = qnode.pop()
 
-    print
+    padding = "%5s %5s | %5s %5s | %8s | " % (" "," "," "," "," ")
     m2 = m
+    width = 90
+    wraplen = width - len(padding)
+
     for line in textobject.textlines:
         # Track the fonts used per line
         font_line = []
@@ -1562,12 +1578,22 @@ def print_textobject_layout(textobject, xp, yp, fonts_used):
         x, y = m2.tx(), m2.ty()
         x, y = float(x/72), float(y/72)
         dx, dy = x - xp, y - yp
-        print "%5.2f %5.2f | %5.2f %5.2f | %4s : '%s'" % \
-              (dx, dy, x, y, font_line, "".join([str(s) for s in line]))
+        info = "%5.2f %5.2f | %5.2f %5.2f | %8s | " % \
+              (dx, dy, x, y, font_line)
+        text = "".join([s.text() for s in line])
+        textw = textwrap.wrap(text, wraplen)
+
+        print "%s%s" % (info, textw[0])
+        for txt in textw[1:]:
+            print "%s%s" % (padding, txt)
+
+        #     (dx, dy, x, y, font_line, "".join([s.text() for s in line]))
+        #print "%5.2f %5.2f | %5.2f %5.2f | %8s : %s" % \
         xp, yp = x, y
         for l in line[1:]:
             m2 = l.matrix * m2
 
+    print padding
     return (xp, yp)
 
 
