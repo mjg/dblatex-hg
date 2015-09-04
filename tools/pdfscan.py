@@ -1236,16 +1236,18 @@ class PDFTextObject:
     """
     Data between the 'BT' and 'ET' tokens found in content streams.
     """
+    _font_op_pattern = "/[^\s]+\s+[^\s]+\s+Tf"
+
     # Detect a 'Tf', 'Tm', 'Tj', 'TJ', Td, TD operator sequence in a text object
     # To use only when strings are extracted and replaced by their reference
-    _re_seq = re.compile("(/\w+\s+[^\s]+\s+Tf|"+\
+    _re_seq = re.compile("(" + _font_op_pattern + "|"+\
                          6*"[^\s]+\s+"+"Tm"+"|"+\
                          "\(textcontent\{\d+\}\)\s*Tj|"+\
                          "\[[^\]]*\]\s*TJ|"+\
                          "[^\s]+\s+[^\s]+\s+T[dD])", re.MULTILINE)
 
     # Find a font setup operator, like '/F10 9.47 Tf'
-    _re_font = re.compile("(/\w+\s+[^\s]+\sTf)", re.MULTILINE)
+    _re_font = re.compile("("+_font_op_pattern+")", re.MULTILINE)
 
     # Find a sequence '(...\(...\)...) Tj'
     _re_text_show1 = re.compile("\(((?:" + "[^()]" + "|" +\
