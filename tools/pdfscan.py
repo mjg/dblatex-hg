@@ -1467,96 +1467,50 @@ class FontManager:
 #
 import textwrap
 
-class ScanRunner:
-    def __init__(self, pdf):
-        self.commands_to_call = []
-        self.commands_list = [ \
-          ("page_objects", self.print_page_objects, "global"),
-          ("page_fonts", self.print_page_fonts, "page"),
-          ("page_layout", self.print_page_layout, "page"),
-          ("font_summary", self.print_font_summary, "global"),
-        ]
-        self.pdf = pdf
-        self.pt_factor = 1
-        self.page_ranges = []
-        self.page_groups = []
+class BasicCmd:
+    def __init__(self):
+        pass
+    def setup_parser(self, parser):
+        return True
+    def help(self, cmd):
+        if self.__doc__:
+            return self.__doc__
+        else:
+            return None
+
+class PageLayoutCmd(BasicCmd):
+    """
+    Show the position and fonts used for each text line contained by a page
+    """
+    def __init__(self, scanner):
+        self.scanner = scanner
+        layout_fmt = "%5s %5s | %5s %5s | %8s | "
+        self.padding = layout_fmt % (" "," "," "," "," ")
+        self.headline = layout_fmt % (5*"_",5*"_",5*"_",5*"_",8*"_")
+        self.header = layout_fmt % ("dX","dY","X","Y","FONTS")
+        self.width = 90
         self.show_matrix = False
-        self.layout_width = 90
-        self.fonts_used = {}
+        self.raw_text = False
+        self.pt_factor = 1
 
-    def default_commands(self):
-        return ["font_summary"]
+    def setup_parser(self, parser):
+        parser.add_argument("-w", "--width",
+               help="Width of the printed layout information")
+        parser.add_argument("-m", "--show-matrix", action="store_true",
+               help="Print absolute Transformation Matrix for each textobject")
+        parser.add_argument("-r", "--raw-text", action="store_true",
+               help="Print the raw text contained by textobjects")
 
-    def set_commands(self, commands):
-        if not(commands):
-            commands = self.default_commands()
-
-        for cmdname, cmdfunc, level in self.commands_list:
-            if cmdname in commands:
-                commands.remove(cmdname)
-                self.commands_to_call.append((cmdfunc, level))
-            
-        for cmdname in commands:
-            print >>sys.stderr, "%s: unknown command" % cmdname
-
-    def run(self):
-        self._build_pages()
-        for command, level in self.commands_to_call:
-            if level == "global":
-                command()
-            elif level == "page":
-                for pdf_pages in self.page_groups:
-                    command(pdf_pages)
-
-    def _build_pages(self):
-        page_count = len(self.pdf.page_objects)
-        for page_range in self.page_ranges:
-            page_first, page_last = self._page_range(page_range, page_count)
-            page_objects = self.pdf.page_objects[page_first-1:page_last]
-
-            pdf_pages = self._build_pages_from_objects(page_objects, page_first)
-            self.page_groups.append(pdf_pages)
-
-    def _build_pages_from_objects(self, page_objects, page_first):
-        pdf_pages = []
-        for i, pg in enumerate(page_objects):
-            pagenum = i+page_first
-            page = PDFPage(pg, pagenum, self.pdf.resolver)
-            pdf_pages.append(page)
-        return pdf_pages
-
-    def print_page_objects(self):
-        page_first = 1
-        for i, page in enumerate(self.pdf.page_objects):
-            page_num = i+page_first
-            contents = page.descriptor.get("/Contents")
-            resources = page.descriptor.get("/Resources")
-            print "Page %d %s: contents: %s, resources: %s" % \
-                                 (page_num, page, contents, resources)
-        print
-
-    def print_page_fonts(self, pdf_pages, show=True):
-        header_fmt = "%4s %-40s %s"
-        if show:
-            print header_fmt % ("PAGE", "FONT", "SIZE")
-            print header_fmt % (4*"-", 40*"-", 10*"-")
-
-        for page in pdf_pages:
-            fonts_used = page.find_fonts()
-            fonts_used.sort()
-            for font in fonts_used:
-                self.fonts_used[font.key()] = font
-                if show:
-                    print "%4d %-40s %6.2f pt" % (page.pagenum, font.name(),
-                                          self.pt_factor * font.size())
-            if show: print header_fmt % (4*"-", 40*"-", 10*"-")
-
-    def _page_range(self, page_range, max_range):
-        if not(page_range): page_range = [1, max_range]
-        if page_range[0] == 0: page_range[0] = 1
-        if page_range[1] == 0 or page_range[1] > max_range:
-            page_range[1] = max_range
-        return page_range
+    def run(self, parser, args):
+        if args.width:
+            self.width = int(args.width)
+        if args.show_matrix:
+            self.show_matrix = True
+        if args.raw_text:
+            self.raw_text = True
+        
+        for pg in self.scanner.page_groups:
+            self.print_page_layout(pg)
 
     def print_page_layout(self, pdf_pages):
         for page in pdf_pages:
@@ -1570,16 +1524,14 @@ class ScanRunner:
             print "\nPage %d layout:" % page.pagenum
             content_stream = page.streams[0]
             xp, yp = 0., 0.
-            print "%5s %5s | %5s %5s | %8s | " % ("dX","dY","X","Y","FONTS")
-            print "%5s %5s | %5s %5s | %8s | " % (5*"_",5*"_",5*"_",5*"_",8*"_")
+            print self.header
+            print self.headline
             for textobject in content_stream.textobjects:
                 xp, yp = self._print_textobject_layout(textobject, xp, yp,
                                                        fonts_used)
 
     def _print_textobject_layout(self, textobject, xp, yp, fonts_used):
-        padding = "%5s %5s | %5s %5s | %8s | " % (" "," "," "," "," ")
-        width = 90
-        wraplen = width - len(padding)
+        wraplen = self.width - len(self.padding)
 
         m2 = textobject.matrix_absolute()
 
@@ -1603,196 +1555,352 @@ class ScanRunner:
             dx, dy = x - xp, y - yp
             info = "%5.2f %5.2f | %5.2f %5.2f | %8s | " % \
                   (dx, dy, x, y, font_line)
-            text = "".join([s.text() for s in line])
+            if self.raw_text:
+                text = "".join([str(s) for s in line])
+            else:
+                text = "".join([s.text() for s in line])
             textw = textwrap.wrap(text, wraplen)
 
             if textw:
                 print "%s%s" % (info, textw[0])
                 for txt in textw[1:]:
-                    print "%s%s" % (padding, txt)
+                    print "%s%s" % (self.padding, txt)
 
             xp, yp = x, y
             for l in line[1:]:
                 m2 = l.matrix * m2
 
-        #print padding
         return (xp, yp)
+
+class PageObjectCmd(BasicCmd):
+    """
+    List the PDF objects used per page
+    """
+    def __init__(self, scanner):
+        self.scanner = scanner
+
+    def run(self, parser, args):
+        page_first = 1
+        for i, page in enumerate(self.scanner.pdf.page_objects):
+            page_num = i+page_first
+            contents = page.descriptor.get("/Contents")
+            resources = page.descriptor.get("/Resources")
+            print "Page %d %s: contents: %s, resources: %s" % \
+                                 (page_num, page, contents, resources)
+        print
+
+class PageFontCmd(BasicCmd):
+    def __init__(self, scanner):
+        self.scanner = scanner
+        self.header_fmt = "%4s %-40s %s"
+        self.fonts_used = {}
+        self.pt_factor = 1
+        self.font_unit = "pt"
+
+    def help(self, cmd):
+        if cmd == "font_summary":
+            _help = "List the fonts used and their size in the specified pages"
+        else:
+            _help = "List the fonts used and their size for each page"
+        return _help
+
+    def setup_parser(self, parser):
+        parser.add_argument("-pt", "--point-type",
+              help="Point type to use: 'dtp' (default), 'tex'")
+
+    def run(self, parser, args):
+        if args.point_type == "tex":
+            self.pt_factor = 72.27/72
+            self.font_unit = "pt tex"
+
+        if args.name == "font_summary":
+            self.print_font_summary()
+        else:
+            self.print_font_page()
+
+    def print_font_page(self):
+        for pg in self.scanner.page_groups:
+            self.print_fonts_in_pages(pg)
+
+    def print_fonts_in_pages(self, pdf_pages, show=True):
+        if show:
+            print self.header_fmt % ("PAGE", "FONT", "SIZE")
+            print self.header_fmt % (4*"-", 40*"-", 10*"-")
+
+        for page in pdf_pages:
+            fonts_used = page.find_fonts()
+            fonts_used.sort()
+            for font in fonts_used:
+                self.fonts_used[font.key()] = font
+                if show:
+                    print "%4d %-40s %6.2f %s" % (page.pagenum, font.name(),
+                              self.pt_factor * font.size(), self.font_unit)
+            if show: print self.header_fmt % (4*"-", 40*"-", 10*"-")
 
     def print_font_summary(self):
         fonts_defined = self.fonts_used or None
         pages = []
-        for pg in self.page_groups:
+
+        for pg in self.scanner.page_groups:
+            if not(pg):
+                continue
             s = "%d" % (pg[0].pagenum)
             if len(pg) > 1:
                 s += "-%d" % (pg[-1].pagenum)
             pages.append(s)
             if not(fonts_defined):
-                self.print_page_fonts(pg, show=False)
+                self.print_fonts_in_pages(pg, show=False)
 
         print "\nFonts used in pages %s:" % (",".join(pages))
         fonts_total = self.fonts_used.values()
         fonts_total.sort()
         for font in fonts_total:
-            print "%-40s %6.2f pt" % (font.name(), font.size())
+            print "%-40s %6.2f %s" % \
+                  (font.name(), self.pt_factor*font.size(), self.font_unit)
 
 
+class PDFScannerCommand:
+    def __init__(self):
+        self._commands = [
+             ("page_object", PageObjectCmd),
+             ("page_font", PageFontCmd),
+             ("page_layout", PageLayoutCmd),
+             ("font_summary", PageFontCmd)
+            ]
+        self.commands_to_run = []
+        self.pdf = None
+        self.page_ranges = []
+        self.page_groups = []
+        self.fonts_used = {}
 
-def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
-    flags = 0
-    if cache_flags:
-        cache_flags = cache_flags.split(",")
-        for cflag in cache_flags:
-            if cflag == "remanent":
-                flags = flags | StreamManager.CACHE_REMANENT
-            elif cflag == "refresh":
-                flags = flags | StreamManager.CACHE_REFRESH
+    def commands(self):
+        return [c[0] for c in self._commands]
 
-    if cache_in_memory:
-        mgr = StreamManager(cache_method="memory")
-    elif cache_dirname:
-        cache_dirname = os.path.realpath(cache_dirname)
-        if not(os.path.exists(cache_dirname)):
-            print "Invalid cache dir: '%s'. Temporary dir used instead" % \
-                  cache_dirname
-            return None
-        mgr = StreamManager(cache_method="file",
-                            cache_dirname=cache_dirname,
-                            flags=flags)
-    else:
-        mgr = StreamManager(flags=flags)
+    def setup_options(self, parser):
+        parser.add_argument("-p", "--pages", action="append",
+              help="Page range in the form '<first>[-[<last>]]'")
+        parser.add_argument("-v", "--verbose", action="append",
+              help="Verbose mode in the form '[group:]level' with level "\
+                   "in 'debug', 'info', 'warning', 'error' and "\
+                   "group in 'pdffile', 'pdfobject', 'descriptor'")
+        parser.add_argument("-c", "--cache-stream-dir",
+              help="Directory where to store the decompressed stream")
+        parser.add_argument("-m", "--no-cache-stream", action="store_true",
+              help="No stream cache on disk used: leave streams in memory")
+        parser.add_argument("-d", "--cache-remanent", action="store_true",
+              help="Equivalent to -fremanent")
+        parser.add_argument("-f", "--cache-flags",
+              help="Comma separated list of stream cache setup options: "\
+                   "'remanent' and/or 'refresh'")
 
-    return mgr
+    def setup_parser(self, parser):
+        self.setup_options(parser)
 
-def option_page_ranges(pages):
-    page_ranges = []
-    if not(pages):
-        page_ranges.append([0, 0])
+        if not(self._commands):
+            return
+        partial = True
+        subparsers = parser.add_subparsers() #title=title)
+        clsused = []
+        cmdobjs = []
+        for cmd, cls in self._commands:
+            # Don't duplicate objects used for several commands
+            if cls in clsused:
+                cmdobj = cmdobjs[clsused.index(cls)]
+            else:
+                cmdobj = cls(self)
+                cmdobjs.append(cmdobj)
+                clsused.append(cls)
+            kwargs = {}
+            if cmdobj.help(cmd):
+                kwargs["help"] = cmdobj.help(cmd)
+            p = subparsers.add_parser(cmd, **kwargs)
+            partial = cmdobj.setup_parser(p) or partial
+            p.set_defaults(run=cmdobj.run, name=cmd)
+        return partial
+
+    def prepare(self, parser, options, argslist, pdffile):
+        self.options = options
+        # Sort the commands in the right order
+        cmds = [ args.name for args in argslist ]
+        self.commands_to_run = []
+        for cmd in self.commands():
+            if cmd in cmds:
+                i = cmds.index(cmd)
+                self.commands_to_run.append(argslist[i])
+        
+        log_groups = self._option_group_loglevels()
+        self.logger_setup(log_groups)
+
+        self.page_ranges = self._option_page_ranges()
+
+        stream_manager = self._option_cache_setup()
+        self.pdf = PDFFile(stream_manager=stream_manager)
+
+    def cleanup(self):
+        if self.pdf:
+            self.pdf.cleanup()
+
+    def run(self, parser, options, argslist, pdffile):
+        self.prepare(parser, options, argslist, pdffile)
+        self.pdf.load(pdffile)
+        self.pdf.load_pages()
+        self._build_pages()
+        for args in self.commands_to_run:
+            args.run(parser, args)
+
+    def _build_pages(self):
+        page_count = len(self.pdf.page_objects)
+        for page_range in self.page_ranges:
+            page_first, page_last = self._page_range(page_range, page_count)
+            page_objects = self.pdf.page_objects[page_first-1:page_last]
+
+            pdf_pages = self._build_pages_from_objects(page_objects, page_first)
+            self.page_groups.append(pdf_pages)
+
+    def _build_pages_from_objects(self, page_objects, page_first):
+        pdf_pages = []
+        for i, pg in enumerate(page_objects):
+            pagenum = i+page_first
+            page = PDFPage(pg, pagenum, self.pdf.resolver)
+            pdf_pages.append(page)
+        return pdf_pages
+
+    def _page_range(self, page_range, max_range):
+        if not(page_range): page_range = [1, max_range]
+        if page_range[0] == 0: page_range[0] = 1
+        if page_range[1] == 0 or page_range[1] > max_range:
+            page_range[1] = max_range
+        return page_range
+
+    def _option_page_ranges(self):
+        page_ranges = []
+        if not(self.options.pages):
+            page_ranges.append([0, 0])
+            return page_ranges
+
+        for page_range in self.options.pages:
+            p1, p2 = (page_range + "-x").split("-")[0:2]
+            if not(p2):
+                p2 = 0
+            elif (p2 == "x"):
+                p2 = p1
+            page_ranges.append([int(p1), int(p2)])
+
         return page_ranges
 
-    for page_range in pages:
-        p1, p2 = (page_range + "-x").split("-")[0:2]
-        if not(p2):
-            p2 = 0
-        elif (p2 == "x"):
-            p2 = p1
-        page_ranges.append([int(p1), int(p2)])
+    def _option_group_loglevels(self):
+        verbose = self.options.verbose
+        log_groups = {"pdffile":   "info",
+                      "pdfobject": "info",
+                      "descriptor": "error",
+                      "base": "info"}
 
-    return page_ranges
+        log_levels = ("debug", "info", "warning", "error")
 
-def option_group_loglevels(verbose):
-    log_groups = {"pdffile":   "info",
-                  "pdfobject": "info",
-                  "descriptor": "error",
-                  "base": "info"}
+        if not(verbose):
+            return log_groups
 
-    log_levels = ("debug", "info", "warning", "error")
-
-    if not(verbose):
+        groups = log_groups.keys()
+        for verbose_opt in verbose:
+            group, level = ("all:" + verbose_opt).split(":")[-2:]
+            if not(level in log_levels):
+                print "Invalid verbose level: '%s'" % level
+                continue
+            if group == "all":
+                for group in groups:
+                    log_groups[group] = level
+            elif group in groups:
+                log_groups[group] = level
+            else:
+                print "Invalid verbose group: '%s'" % group
+                continue
         return log_groups
 
-    groups = log_groups.keys()
-    for verbose_opt in verbose:
-        group, level = ("all:" + verbose_opt).split(":")[-2:]
-        if not(level in log_levels):
-            print "Invalid verbose level: '%s'" % level
-            continue
-        if group == "all":
-            for group in groups:
-                log_groups[group] = level
-        elif group in groups:
-            log_groups[group] = level
+    def _option_cache_setup(self):
+        cache_in_memory = self.options.no_cache_stream
+        cache_dirname = self.options.cache_stream_dir
+        cache_flags = self.options.cache_flags
+
+        if self.options.cache_remanent:
+            if cache_flags:
+                cache_flags += ",remanent"
+            else:
+                cache_flags = "remanent"
+
+        flags = 0
+        if cache_flags:
+            cache_flags = cache_flags.split(",")
+            for cflag in cache_flags:
+                if cflag == "remanent":
+                    flags = flags | StreamManager.CACHE_REMANENT
+                elif cflag == "refresh":
+                    flags = flags | StreamManager.CACHE_REFRESH
+
+        if cache_in_memory:
+            mgr = StreamManager(cache_method="memory")
+        elif cache_dirname:
+            cache_dirname = os.path.realpath(cache_dirname)
+            if not(os.path.exists(cache_dirname)):
+                print "Invalid cache dir: '%s'. Temporary dir used instead" % \
+                      cache_dirname
+                return None
+            mgr = StreamManager(cache_method="file",
+                                cache_dirname=cache_dirname,
+                                flags=flags)
         else:
-            print "Invalid verbose group: '%s'" % group
-            continue
+            mgr = StreamManager(flags=flags)
 
-    return log_groups
+        return mgr
 
-def logger_setup(log_groups):
-    loglevels = { "error":   logging.ERROR,
-                  "warning": logging.WARNING,
-                  "info":    logging.INFO,
-                  "debug":   logging.DEBUG }
+    def logger_setup(self, log_groups):
+        loglevels = { "error":   logging.ERROR,
+                      "warning": logging.WARNING,
+                      "info":    logging.INFO,
+                      "debug":   logging.DEBUG }
 
-    console = logging.StreamHandler()
-    fmt = logging.Formatter("%(message)s")
-    console.setFormatter(fmt)
+        console = logging.StreamHandler()
+        fmt = logging.Formatter("%(message)s")
+        console.setFormatter(fmt)
 
-    for group, level in log_groups.items():
-        log = logging.getLogger("pdfscan.%s" % group)
-        log.setLevel(loglevels.get(level, logging.INFO)-1)
-        log.addHandler(console)
+        for group, level in log_groups.items():
+            log = logging.getLogger("pdfscan.%s" % group)
+            log.setLevel(loglevels.get(level, logging.INFO)-1)
+            log.addHandler(console)
 
 
 def main():
-    from optparse import OptionParser
-    parser = OptionParser(usage="%s [options] file.pdf" % sys.argv[0])
-    parser.add_option("-p", "--pages", action="append",
-          help="Page range in the form '<first>[-[<last>]]'")
-    parser.add_option("-v", "--verbose", action="append",
-          help="Verbose mode in the form '[group:]level' with level "\
-               "in 'debug', 'info', 'warning', 'error' and "\
-               "group in 'pdffile', 'pdfobject', 'descriptor'")
-    parser.add_option("-s", "--show", action="append",
-          help="Information to show")
-    parser.add_option("-u", "--point-unit", default="ps",
-          help="Point type to use: 'tex' or 'ps' (default)")
-    parser.add_option("-c", "--cache-stream-dir",
-          help="Directory where to store the decompressed stream")
-    parser.add_option("-m", "--no-cache-stream", action="store_true",
-          help="No stream cache on disk used: leave streams in memory")
-    parser.add_option("-d", "--cache-remanent", action="store_true",
-          help="Equivalent to -fremanent")
-    parser.add_option("-f", "--cache-flags",
-          help="Comma separated list of stream cache setup options: 'remanent'"\
-               " and/or 'refresh'")
-    parser.add_option("-D", "--dump-stack", action="store_true",
+    from argparse import ArgumentParser
+    parser = ArgumentParser(description='Scan information from a PDF file')
+    parser.add_argument("-D", "--dump-stack", action="store_true",
           help="Dump error stack (debug purpose)")
-    
-    (options, args) = parser.parse_args()
 
-    if len(args) != 1:
+    scanner = PDFScannerCommand()
+    scanner.setup_parser(parser)
+
+    options, remain_args =  parser.parse_known_args()
+ 
+    argslist = []
+    remain_args = sys.argv[1:]
+    while len(remain_args) > 1:
+        args, remain_args =  parser.parse_known_args(remain_args)
+        args.remain_args = remain_args
+        argslist.append(args)
+
+    if not(remain_args) or remain_args[0] in scanner.commands():
+        print "Missing the PDF File"
         parser.parse_args(["-h"])
-        exit(1)
-
-    pdffile = args[0]
 
     error = ErrorHandler()
     if options.dump_stack: error.dump_stack()
 
-    if options.cache_remanent:
-        if options.cache_flags:
-            options.cache_flags += ",remanent"
-        else:
-            options.cache_flags = "remanent"
-
-    page_ranges = option_page_ranges(options.pages)
-    log_groups = option_group_loglevels(options.verbose)
-    stream_manager = option_cache_setup(options.no_cache_stream,
-                                        options.cache_stream_dir,
-                                        options.cache_flags)
-
-    logger_setup(log_groups)
-
-    pdf = PDFFile(stream_manager=stream_manager)
-    scanner = ScanRunner(pdf)
-
-    scanner.page_ranges = page_ranges
-    scanner.set_commands(options.show)
-    # dtp = 1./72 inch
-    # ptex = 1/72.27 inch = 72./72.27 dtp
-    # dtp = 72.27/72 ptex
-
     try:
-        pdf.load(pdffile)
-        pdf.load_pages()
-
-        scanner.run()
+        pdffile = remain_args[0]
+        scanner.run(parser, options, argslist, pdffile)
     except Exception, e:
         error.failure_track("Error: '%s'" % (e))
 
-    pdf.cleanup()
+    scanner.cleanup()
     sys.exit(error.rc)
-
 
 if __name__ == "__main__":
     main()
