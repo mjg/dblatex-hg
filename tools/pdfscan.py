@@ -1467,6 +1467,176 @@ class FontManager:
 #
 import textwrap
 
+class ScanRunner:
+    def __init__(self, pdf):
+        self.commands_to_call = []
+        self.commands_list = [ \
+          ("page_objects", self.print_page_objects, "global"),
+          ("page_fonts", self.print_page_fonts, "page"),
+          ("page_layout", self.print_page_layout, "page"),
+          ("font_summary", self.print_font_summary, "global"),
+        ]
+        self.pdf = pdf
+        self.pt_factor = 1
+        self.page_ranges = []
+        self.page_groups = []
+        self.show_matrix = False
+        self.layout_width = 90
+        self.fonts_used = {}
+
+    def default_commands(self):
+        return ["font_summary"]
+
+    def set_commands(self, commands):
+        if not(commands):
+            commands = self.default_commands()
+
+        for cmdname, cmdfunc, level in self.commands_list:
+            if cmdname in commands:
+                commands.remove(cmdname)
+                self.commands_to_call.append((cmdfunc, level))
+            
+        for cmdname in commands:
+            print >>sys.stderr, "%s: unknown command" % cmdname
+
+    def run(self):
+        self._build_pages()
+        for command, level in self.commands_to_call:
+            if level == "global":
+                command()
+            elif level == "page":
+                for pdf_pages in self.page_groups:
+                    command(pdf_pages)
+
+    def _build_pages(self):
+        page_count = len(self.pdf.page_objects)
+        for page_range in self.page_ranges:
+            page_first, page_last = self._page_range(page_range, page_count)
+            page_objects = self.pdf.page_objects[page_first-1:page_last]
+
+            pdf_pages = self._build_pages_from_objects(page_objects, page_first)
+            self.page_groups.append(pdf_pages)
+
+    def _build_pages_from_objects(self, page_objects, page_first):
+        pdf_pages = []
+        for i, pg in enumerate(page_objects):
+            pagenum = i+page_first
+            page = PDFPage(pg, pagenum, self.pdf.resolver)
+            pdf_pages.append(page)
+        return pdf_pages
+
+    def print_page_objects(self):
+        page_first = 1
+        for i, page in enumerate(self.pdf.page_objects):
+            page_num = i+page_first
+            contents = page.descriptor.get("/Contents")
+            resources = page.descriptor.get("/Resources")
+            print "Page %d %s: contents: %s, resources: %s" % \
+                                 (page_num, page, contents, resources)
+        print
+
+    def print_page_fonts(self, pdf_pages, show=True):
+        header_fmt = "%4s %-40s %s"
+        if show:
+            print header_fmt % ("PAGE", "FONT", "SIZE")
+            print header_fmt % (4*"-", 40*"-", 10*"-")
+
+        for page in pdf_pages:
+            fonts_used = page.find_fonts()
+            fonts_used.sort()
+            for font in fonts_used:
+                self.fonts_used[font.key()] = font
+                if show:
+                    print "%4d %-40s %6.2f pt" % (page.pagenum, font.name(),
+                                          self.pt_factor * font.size())
+            if show: print header_fmt % (4*"-", 40*"-", 10*"-")
+
+    def _page_range(self, page_range, max_range):
+        if not(page_range): page_range = [1, max_range]
+        if page_range[0] == 0: page_range[0] = 1
+        if page_range[1] == 0 or page_range[1] > max_range:
+            page_range[1] = max_range
+        return page_range
+
+    def print_page_layout(self, pdf_pages):
+        for page in pdf_pages:
+            fonts_used = page.find_fonts()
+            fonts_used.sort()
+            print "\nPage %d fonts used:" % page.pagenum
+            for i, font in enumerate(fonts_used):
+                print "[%d] %-40s %6.2f pt" % (i, font.name(),
+                                               self.pt_factor*font.size())
+
+            print "\nPage %d layout:" % page.pagenum
+            content_stream = page.streams[0]
+            xp, yp = 0., 0.
+            print "%5s %5s | %5s %5s | %8s | " % ("dX","dY","X","Y","FONTS")
+            print "%5s %5s | %5s %5s | %8s | " % (5*"_",5*"_",5*"_",5*"_",8*"_")
+            for textobject in content_stream.textobjects:
+                xp, yp = self._print_textobject_layout(textobject, xp, yp,
+                                                       fonts_used)
+
+    def _print_textobject_layout(self, textobject, xp, yp, fonts_used):
+        padding = "%5s %5s | %5s %5s | %8s | " % (" "," "," "," "," ")
+        width = 90
+        wraplen = width - len(padding)
+
+        m2 = textobject.matrix_absolute()
+
+        for line in textobject.textlines:
+            # Track the fonts used per line
+            font_line = []
+            for seg in line:
+                for text_shown in seg.text_shown:
+                    font = text_shown.get_font()
+                    if not(font):
+                        continue
+                    idx = fonts_used.index(font)
+                    if not(idx in font_line):
+                        font_line.append(idx)
+
+            m2 = line[0].matrix * m2
+            if self.show_matrix: print "%s" % m2
+
+            x, y = m2.tx(), m2.ty()
+            x, y = float(x/72), float(y/72)
+            dx, dy = x - xp, y - yp
+            info = "%5.2f %5.2f | %5.2f %5.2f | %8s | " % \
+                  (dx, dy, x, y, font_line)
+            text = "".join([s.text() for s in line])
+            textw = textwrap.wrap(text, wraplen)
+
+            if textw:
+                print "%s%s" % (info, textw[0])
+                for txt in textw[1:]:
+                    print "%s%s" % (padding, txt)
+
+            xp, yp = x, y
+            for l in line[1:]:
+                m2 = l.matrix * m2
+
+        #print padding
+        return (xp, yp)
+
+    def print_font_summary(self):
+        fonts_defined = self.fonts_used or None
+        pages = []
+        for pg in self.page_groups:
+            s = "%d" % (pg[0].pagenum)
+            if len(pg) > 1:
+                s += "-%d" % (pg[-1].pagenum)
+            pages.append(s)
+            if not(fonts_defined):
+                self.print_page_fonts(pg, show=False)
+
+        print "\nFonts used in pages %s:" % (",".join(pages))
+        fonts_total = self.fonts_used.values()
+        fonts_total.sort()
+        for font in fonts_total:
+            print "%-40s %6.2f pt" % (font.name(), font.size())
+
+
+
 def option_cache_setup(cache_in_memory, cache_dirname, cache_flags):
     flags = 0
     if cache_flags:
@@ -1508,100 +1678,6 @@ def option_page_ranges(pages):
         page_ranges.append([int(p1), int(p2)])
 
     return page_ranges
-
-
-def page_range_real(page_range, max_range):
-    if not(page_range): page_range = [1, max_range]
-    if page_range[0] == 0: page_range[0] = 1
-    if page_range[1] == 0 or page_range[1] > max_range:
-        page_range[1] = max_range
-    return page_range
-
-def build_pages_from_objects(pdf, page_objects, page_first):
-    pdf_pages = []
-    for i, pg in enumerate(page_objects):
-        pagenum = i+page_first
-        page = PDFPage(pg, pagenum, pdf.resolver)
-        pdf_pages.append(page)
-    return pdf_pages
-
-def print_page_fonts(pdf_pages, unit=1):
-    # print "\nFonts used in pages %d-%d:" % (page_first, page_last)
-    header_fmt = "%4s %-40s %s"
-    print header_fmt % ("PAGE", "FONT", "SIZE")
-    print header_fmt % (4*"-", 40*"-", 10*"-")
-    fonts_total = {}
-
-    for page in pdf_pages:
-        fonts_used = page.find_fonts()
-        fonts_used.sort()
-        for font in fonts_used:
-            fonts_total[font.key()] = font
-            #print "%4d %-40s %6.2f pt" % (pagenum, font.name(), font.size())
-            print "%4d %-40s %fpt" % (page.pagenum, font.name(),
-                                      unit * font.size())
-        print header_fmt % (4*"-", 40*"-", 10*"-")
-    return fonts_total
-
-def print_page_layout(pdf_pages, unit=1):
-    for page in pdf_pages:
-        fonts_used = page.find_fonts()
-        fonts_used.sort()
-        print "\nPage %d fonts used:" % page.pagenum
-        for i, font in enumerate(fonts_used):
-            print "[%d] %-40s %6.2f pt" % (i, font.name(), unit*font.size())
-
-        print "\nPage %d layout:" % page.pagenum
-        content_stream = page.streams[0]
-        xp, yp = 0., 0.
-        print "%5s %5s | %5s %5s | %8s | " % ("dX","dY","X","Y","Fonts")
-        print "%5s %5s | %5s %5s | %8s | " % (5*"_",5*"_",5*"_",5*"_",8*"_")
-        for textobject in content_stream.textobjects:
-            xp, yp = print_textobject_layout(textobject, xp, yp, fonts_used)
-
-
-def print_textobject_layout(textobject, xp, yp, fonts_used):
-    padding = "%5s %5s | %5s %5s | %8s | " % (" "," "," "," "," ")
-    width = 90
-    wraplen = width - len(padding)
-
-    m2 = textobject.matrix_absolute()
-
-    for line in textobject.textlines:
-        # Track the fonts used per line
-        font_line = []
-        for seg in line:
-            for text_shown in seg.text_shown:
-                font = text_shown.get_font()
-                if not(font):
-                    continue
-                idx = fonts_used.index(font)
-                if not(idx in font_line):
-                    font_line.append(idx)
-
-        m2 = line[0].matrix * m2
-        #print "%s" % m2
-        x, y = m2.tx(), m2.ty()
-        x, y = float(x/72), float(y/72)
-        dx, dy = x - xp, y - yp
-        info = "%5.2f %5.2f | %5.2f %5.2f | %8s | " % \
-              (dx, dy, x, y, font_line)
-        text = "".join([s.text() for s in line])
-        textw = textwrap.wrap(text, wraplen)
-
-        print "%s%s" % (info, textw[0])
-        for txt in textw[1:]:
-            print "%s%s" % (padding, txt)
-
-        #     (dx, dy, x, y, font_line, "".join([s.text() for s in line]))
-        #print "%5.2f %5.2f | %5.2f %5.2f | %8s : %s" % \
-        xp, yp = x, y
-        for l in line[1:]:
-            m2 = l.matrix * m2
-
-    print padding
-    return (xp, yp)
-
 
 def option_group_loglevels(verbose):
     log_groups = {"pdffile":   "info",
@@ -1656,7 +1732,7 @@ def main():
           help="Verbose mode in the form '[group:]level' with level "\
                "in 'debug', 'info', 'warning', 'error' and "\
                "group in 'pdffile', 'pdfobject', 'descriptor'")
-    parser.add_option("-s", "--show",
+    parser.add_option("-s", "--show", action="append",
           help="Information to show")
     parser.add_option("-u", "--point-unit", default="ps",
           help="Point type to use: 'tex' or 'ps' (default)")
@@ -1697,49 +1773,20 @@ def main():
 
     logger_setup(log_groups)
 
+    pdf = PDFFile(stream_manager=stream_manager)
+    scanner = ScanRunner(pdf)
 
+    scanner.page_ranges = page_ranges
+    scanner.set_commands(options.show)
     # dtp = 1./72 inch
     # ptex = 1/72.27 inch = 72./72.27 dtp
     # dtp = 72.27/72 ptex
-    pt_unit = 1
-
-    pdf = PDFFile(stream_manager=stream_manager)
 
     try:
         pdf.load(pdffile)
         pdf.load_pages()
 
-        if options.show and "page_objects"  in options.show:
-            page_first = 1
-            for i, page in enumerate(pdf.page_objects):
-                page_num = i+page_first
-                contents = page.descriptor.get("/Contents")
-                resources = page.descriptor.get("/Resources")
-                print "Page %d %s: contents: %s, resources: %s" % \
-                                     (page_num, page, contents, resources)
-            print
-
-        fonts_total = {}
-        page_count = len(pdf.page_objects)
-        for page_range in page_ranges:
-            page_first, page_last = page_range_real(page_range, page_count)
-            page_objects = pdf.page_objects[page_first-1:page_last]
-
-            pdf_pages = build_pages_from_objects(pdf, page_objects, page_first)
-
-            fonts = print_page_fonts(pdf_pages, pt_unit)
-            fonts_total.update(fonts)
-
-            if options.show and "page_layout"  in options.show:
-                print_page_layout(pdf_pages, pt_unit)
-
-        print "\nFonts used in pages %d-%d:" % (page_first, page_last)
-        fonts_total = fonts_total.values()
-        fonts_total.sort()
-        for font in fonts_total:
-            print "%-40s %fpt" % (font.name(), font.size())
-
-
+        scanner.run()
     except Exception, e:
         error.failure_track("Error: '%s'" % (e))
 
