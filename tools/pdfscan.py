@@ -929,11 +929,11 @@ class StreamManager(PDFBaseObject):
 
         if (self.flags & self.CACHE_REMANENT):
             if (self.flags & self.CACHE_TMPDIR):
-                print "'%s' not removed" % (self.cache_dirname)
+                self.warning("'%s' not removed" % (self.cache_dirname))
             return
 
         if (self.flags & self.CACHE_TMPDIR):
-            self.info("Remove cache directory '%s'" % (self.cache_dirname))
+            self.debug("Remove cache directory '%s'" % (self.cache_dirname))
             shutil.rmtree(self.cache_dirname)
         else:
             for fname in self.cache_files:
@@ -1589,6 +1589,98 @@ class PageObjectCmd(BasicCmd):
                                  (page_num, page, contents, resources)
         print
 
+class PdfObjectCmd(BasicCmd):
+    """
+    Scan data on the PDF objects of the PDF File
+    """
+    def __init__(self, scanner):
+        self.scanner = scanner
+
+    def setup_parser(self, parser):
+        group = parser.add_mutually_exclusive_group()
+        group.add_argument("-list", "--list-loaded", action="store_true",
+               help="List the object loaded by the scanner")
+        group.add_argument("-dict", "--dictionnary",
+               metavar="'<number> <generation>'",
+               help="Show the dictionnary of the object specified by its "\
+                    "reference '<number> <generation>'")
+        group.add_argument("-dump", "--dump-stream", nargs=2,
+               metavar=("'<number> <generation>'","OUTFILE"),
+               help="Write the stream content of the object specified by its "\
+                    "reference '<number> <generation>'")
+
+    def run(self, parser, args):
+        if args.list_loaded:
+            self.list_pdfobjects()
+        elif args.dictionnary:
+            ident = self._sanitize_objref(args.dictionnary)
+            if not(ident): return
+            self.show_dictionnary(ident)
+        elif args.dump_stream:
+            ident = self._sanitize_objref(args.dump_stream[0])
+            if not(ident): return
+            self.dump_stream(ident, args.dump_stream[1])
+
+    def _sanitize_objref(self, ident):
+        flds = ident.split()
+        if len(flds) != 2:
+            print "Invalid object reference: must be in the form "\
+                  "'number generation'"
+            return ""
+        else:
+            return "%s %s" % (flds[0], flds[1])
+
+    def show_dictionnary(self, ident):
+        pdfobject = self.scanner.pdf.get_object(ident)
+        if not(pdfobject):
+            print "PDF Object '%s' not found" % ident
+            return
+        if pdfobject.stream:
+            print "PDF Object '%s' has a stream. Its dictionnary:" % ident
+        else:
+            print "PDF Object '%s' dictionnary:" % ident
+        self._print_dictionnary(pdfobject.descriptor)
+
+    def _print_dictionnary(self, descriptor, level=1):
+        indent = "  "*level
+        print "%s<<" % indent
+        for p, v in descriptor.infos().items():
+            if isinstance(v, PDFDescriptor):
+                print "%s%s:" % (indent, p)
+                self._print_dictionnary(v, level=level+1)
+            else:
+                print "%s%s: %s" % (indent, p, v)
+        print "%s>>" % indent
+
+    def list_pdfobjects(self):
+        pdfobjects = self.scanner.pdf.pdfobjects
+        print "Found %s PDFObjects" % pdfobjects.count()
+        print "Found the following PDFObject types:"
+        types = pdfobjects.types()
+        types.sort()
+        total = 0
+        for typ in types:
+            n_type = len(pdfobjects.get_objects_by_type(typ))
+            print " %20s: %5d objects" % (typ, n_type)
+            total = total + n_type
+        print " %20s: %5d objects" % ("TOTAL", total)
+
+    def dump_stream(self, ident, outfile):
+        pdfobject = self.scanner.pdf.get_object(ident)
+        if not(pdfobject):
+            print "PDF Object '%s' not found" % ident
+            return
+        if not(pdfobject.stream):
+            print "PDF Object '%s' has no stream. Give up." % ident
+            return
+        pdfobject.stream_decode()
+        f = open(outfile, "wb")
+        f.write(pdfobject.stream_text())
+        f.close()
+        print "PDF Object '%s' stream written to file %s" % (ident, outfile)
+
+
+
 class PageFontCmd(BasicCmd):
     def __init__(self, scanner):
         self.scanner = scanner
@@ -1665,7 +1757,8 @@ class PDFScannerCommand:
              ("page_object", PageObjectCmd),
              ("page_font", PageFontCmd),
              ("page_layout", PageLayoutCmd),
-             ("font_summary", PageFontCmd)
+             ("font_summary", PageFontCmd),
+             ("pdfobject", PdfObjectCmd)
             ]
         self.commands_to_run = []
         self.pdf = None
