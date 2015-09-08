@@ -1532,9 +1532,9 @@ class ToUnicode(PDFStreamHandler):
     translate the text content to readable text
     """
     _re_token = re.compile("(" + \
-                 "(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
-                 "(?:endcodespacerange|endbfchar|endbfrange)" + \
-                 ")", re.M)
+             "(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
+             "(?:endcodespacerange|endbfchar|endbfrange)" + \
+             ")", re.M)
 
     def __init__(self, pdfobject):
         PDFStreamHandler.__init__(self, pdfobject)
@@ -1568,10 +1568,14 @@ class ToUnicode(PDFStreamHandler):
                 self.add_bfrange(bfrange)
                 bfrange = None
             elif bfchar:
+                fld = re.sub("<\s+", "<", fld)
+                fld = re.sub("\s+>", ">", fld)
                 data = fld.split()
                 for i in range(0, len(data), 2):
                     bfchar.add_mapstr(data[i], data[i], data[i+1])
             elif bfrange:
+                fld = re.sub("<\s+", "<", fld)
+                fld = re.sub("\s+>", ">", fld)
                 data = fld.split()
                 for i in range(0, len(data), 3):
                     bfrange.add_mapstr(data[i], data[i+1], data[i+2])
