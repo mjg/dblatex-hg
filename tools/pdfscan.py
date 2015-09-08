@@ -26,6 +26,7 @@ import logging
 import tempfile
 import shutil
 import struct
+import codecs
 
 
 class ErrorHandler:
@@ -48,6 +49,18 @@ class ErrorHandler:
 
 def pdfstring_is_list(data):
     return (data and data[0] == "[" and data[-1] == "]")
+
+
+class PDFResolver:
+    _resolver = None
+
+    @classmethod
+    def set_resolver(cls, resolver):
+        cls._resolver = resolver
+
+    @classmethod
+    def get_resolver(cls):
+        return cls._resolver
 
 
 class PDFBaseObject:
@@ -83,8 +96,12 @@ class PDFFile(PDFBaseObject):
         self.objstm_objects = {}
         self.page_objects = []
         self.pdfobjects = PDFObjectGroup()
-        self.resolver = PDFObjectResolver(self)
         self.stream_manager = stream_manager or StreamManager()
+        # Create an publish the object resolver
+        self.resolver = PDFObjectResolver(self)
+        PDFResolver.set_resolver(self.resolver)
+        # Create a global font manager
+        self.fontmgr = FontManager({})
 
         # Detect the beginning of a PDF Object
         self.re_objstart = re.compile("(\d+) (\d+) obj(.*$)", re.DOTALL)
@@ -346,8 +363,9 @@ class PDFObjectGroup(PDFBaseObject):
 
 
 class PDFPage:
-    def __init__(self, page, pagenum=0, pdfobjects=None):
+    def __init__(self, pdf, page, pagenum=0):
         self.pagenum = pagenum
+        self.pdf = pdf
         contents = page.descriptor.get("/Contents")
         resources = page.descriptor.get("/Resources")
 
@@ -356,10 +374,10 @@ class PDFPage:
         else:
             rsc_descriptor = resources.descriptor
 
-        rsc_descriptor.link_to(pdfobjects)
+        rsc_descriptor.link_to(pdf.resolver)
         font = rsc_descriptor.get("/Font")
         if font:
-            font.link_to(pdfobjects)
+            font.link_to(pdf.resolver)
             fontdict = font.infos()
         else:
             fontdict = {}
@@ -370,18 +388,15 @@ class PDFPage:
         self.page = page
         self.contents = contents
         self.fontdict = fontdict
-        self.fontmgr = FontManager(fontdict)
+        self.fontmgr = FontManager(fontdict, pdf.fontmgr)
         self.streams = []
         
-        if not(pdfobjects):
-            return
-
-        self.link_to(pdfobjects)
+        self.link_to(pdf.resolver)
         self.load_streams()
 
-    def link_to(self, pdfobjects):
+    def link_to(self, resolver):
         for content in self.contents:
-            content.link_to(pdfobjects)
+            content.link_to(resolver)
 
     def load_streams(self):
         for content in self.contents:
@@ -1255,9 +1270,9 @@ class PDFTextObject:
     _re_font = re.compile("("+_font_op_pattern+")", re.MULTILINE)
 
     # Find a sequence '(...\(...\)...) Tj'
-    _re_text_show1 = re.compile("\(((?:" + "[^()]" + "|" +\
+    _re_text_show1 = re.compile("(\((?:" + "[^()]" + "|" +\
                                       r"(?<=\\)\(" + "|" +\
-                                      r"(?<=\\)\)" + ")*)\)\s*Tj", re.M)
+                                      r"(?<=\\)\)" + ")*\)\s*Tj)", re.M)
                                 
     # Find a sequence '[...\[...\]...] TJ'
     _re_text_show2 = re.compile("\[((?:" + "[^\[\]]" + "|" +\
@@ -1304,8 +1319,7 @@ class PDFTextObject:
     def extract_strings(self):
         #print self.data
         objects, data = extract_string_objects(self.data, self._re_text_show1,
-                                               "textcontent{%d}",
-                                               delims=["(",")"])
+                                               "(textcontent{%d}) Tj")
         self.strings = objects                                       
         objects, data = extract_string_objects(data, self._re_text_show2,
                                                "textcontent{%d}",
@@ -1361,7 +1375,7 @@ class PDFTextObject:
                 m = re.search("textcontent\{(\d+)\}", tx)
                 text_string = self.strings[int(m.group(1))]
                 scale = self.matrix.scale()
-                #print font, size, scale #****
+                #print font, size, scale #*****
                 pdffont = self.get_font(font, size, scale)
                 text_shown = PDFTextShow(text_string, pdffont)
                 textline.add_text_show(text_shown)
@@ -1395,33 +1409,57 @@ class PDFTextSegment:
     def add_text_show(self, text_shown):
         self.text_shown.append(text_shown)
 
+
 class PDFTextShow:
     """
     Data between the '( )' of the 'Tj' operator or '[ ]' of the 'TJ' operator
     that is intended to be shown.
     """
-    _re_textdata = re.compile(r"\(((?:[^)]|(?<=\\)\))*)\)", re.M)
+    _re_textascii = re.compile(r"\(((?:[^)]|(?<=\\)\))*)\)", re.M)
+    _re_textunicode = re.compile(r"<([^>]+)>", re.M)
+    _codec_handler_installed = {}
 
     def __init__(self, data, font):
         self.data = data
         self.font = font
+        self.encode = codecs.getencoder("latin1")
+        if not(self._codec_handler_installed):
+            codecs.register_error("substitute", PDFTextShow._encode_subs)
+            self._codec_handler_installed["substitute"] = PDFTextShow._encode_subs
 
     def __str__(self):
         return self.data.replace("\n", " ")
 
     def text(self):
-        textdata = self._re_textdata.findall(self.data)
-        return "".join(textdata).replace("\(", "(").replace("\)", ")")
+        textdata = self._re_textascii.findall(self.data)
+        textdata = "".join(textdata).replace("\(", "(").replace("\)", ")")
+        if textdata:
+            return textdata
+        if (self.font.tounicode):
+            textdata = self._re_textunicode.findall(self.data)
+            s = u" ".join(self.font.tounicode.decode(textdata))
+            return self.encode(s, "substitute")[0]
+        else:
+            return ""
 
     def get_font(self):
         return self.font
 
+    @classmethod
+    def _encode_subs(cls, exc):
+        if not isinstance(exc, UnicodeEncodeError):
+            return u""
+        l = []
+        for c in exc.object[exc.start:exc.end]:
+            l.append(u"&#x%x;" % ord(c))
+        return (u"".join(l), exc.end)
 
 
 class PDFFont:
-    def __init__(self, fontobject, fontsize):
+    def __init__(self, fontobject, fontsize, tounicode=None):
         self.fontobject = fontobject
         self.fontsize = fontsize
+        self.tounicode = tounicode
 
     def key(self):
         key = "%s/%6.2f" % (self.name(), self.size())
@@ -1439,27 +1477,157 @@ class PDFFont:
         return self.fontsize
 
 class FontManager:
-    def __init__(self, fontdict):
+    def __init__(self, fontdict, global_fontmgr=None):
         self.fontdict = fontdict
         self.fontused = {}
+        self.tounicode = {}
+        self.global_fontmgr = global_fontmgr
+        self.resolver = PDFResolver.get_resolver()
 
-    def _get_font(self, fontobj, fontsize):
+    def get_pdffont(self, fontobj, fontsize):
         key = fontobj.descriptor.get("/BaseFont")+"/"+"%6.2f" % fontsize
         if self.fontused.has_key(key):
             return self.fontused.get(key)
-        else:
-            pdffont = PDFFont(fontobj, fontsize)
+        elif self.global_fontmgr:
+            pdffont = self.global_fontmgr.get_pdffont(fontobj, fontsize)
             self.fontused[key] = pdffont
-            return pdffont
+        else:
+            pdffont = self._make_pdffont(fontobj, fontsize)
+            self.fontused[key] = pdffont
+        return pdffont
+
+    def _make_pdffont(self, fontobj, fontsize):
+        fontobj.link_to(self.resolver)
+        pdfobject = fontobj.descriptor.get("/ToUnicode")
+        if pdfobject:
+            pdfobject.link_to(self.resolver)
+            tuc = self._get_tounicode(pdfobject)
+        else:
+            tuc = None
+        pdffont = PDFFont(fontobj, fontsize, tuc)
+        return pdffont
+
+    def _get_tounicode(self, pdfobject):
+        key = pdfobject.ident()
+        if self.tounicode.has_key(key):
+            tuc = self.tounicode.get(key)
+        else:
+            tuc = ToUnicode(pdfobject)
+            self.tounicode[key] = tuc
+        return tuc
 
     def get_font(self, fontref, size):
         fontobj = self.fontdict.get(fontref)
         if not(fontobj):
-            return fontobj
-        return self._get_font(fontobj, size)
+            return None
+        return self.get_pdffont(fontobj, size)
 
     def get_used(self):
         return self.fontused.values()
+
+
+class ToUnicode(PDFStreamHandler):
+    """
+    Handle the /ToUnicode CMap object found in a font, in order to be able to
+    translate the text content to readable text
+    """
+    _re_token = re.compile("(" + \
+                 "(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
+                 "(?:endcodespacerange|endbfchar|endbfrange)" + \
+                 ")", re.M)
+
+    def __init__(self, pdfobject):
+        PDFStreamHandler.__init__(self, pdfobject)
+        self.charmaps = []
+        pdfobject.stream_decode()
+        self.data = pdfobject.stream_text()
+        self.parse_cmap(self.data)
+        self.debug("Create a ToUnicode object for '%s'" % pdfobject.ident())
+
+    def parse_cmap(self, data):
+        flds = self._re_token.split(data)
+
+        bfchar = None
+        bfrange = None
+        for fld in flds:
+            if "begincodespacerange" in fld:
+                # TODO
+                pass
+            elif "beginbfchar" in fld:
+                n = int(fld.split()[0])
+                bfchar = BfRange(n)
+            elif "beginbfrange" in fld:
+                n = int(fld.split()[0])
+                bfrange = BfRange(n)
+            elif "endcodespacerange" in fld:
+                pass
+            elif "endbfchar" in fld:
+                self.add_bfrange(bfchar)
+                bfchar = None
+            elif "endbfrange" in fld:
+                self.add_bfrange(bfrange)
+                bfrange = None
+            elif bfchar:
+                data = fld.split()
+                for i in range(0, len(data), 2):
+                    bfchar.add_mapstr(data[i], data[i], data[i+1])
+            elif bfrange:
+                data = fld.split()
+                for i in range(0, len(data), 3):
+                    bfrange.add_mapstr(data[i], data[i+1], data[i+2])
+ 
+    def add_bfrange(self, bfrange):
+        self.charmaps.extend(bfrange.charmaps)
+        self.charmaps.sort()
+
+    def get_uccode(self, bfchar):
+        mustbe_in_next = False
+        for m in self.charmaps:
+            if bfchar >= m.bffirst:
+                if bfchar <= m.bflast:
+                    return m.uccode + (bfchar - m.bffirst)
+                else:
+                    mustbe_in_next = True
+            elif mustbe_in_next:
+                return 0
+        return 0
+
+    def decode_string(self, data):
+        ul = []
+        for i in range(0, len(data), 4):
+            s = data[i:i+4]
+            #print s
+            ul.append(unichr(self.get_uccode(int(s,16))))
+        return u"".join(ul)
+
+    def decode(self, data):
+        if isinstance(data, list):
+            return [self.decode_string(s) for s in data]
+        else:
+            return self.decode_string(data)
+
+
+class CharMap:
+    def __init__(self, bffirst, bflast, uccode):
+        self.bffirst = bffirst
+        self.bflast = bflast
+        self.uccode = uccode
+
+    def __cmp__(self, other):
+        return cmp(self.bffirst, other.bffirst)
+
+class BfRange:
+    def __init__(self, entry_count):
+        self.entry_count = entry_count
+        self.charmaps = []
+
+    def add_mapstr(self, bffirst_str, bflast_str, ucfirst_str):
+        # Take strings like <045D>
+        bffirst = int(bffirst_str[1:-1], 16)
+        bflast = int(bflast_str[1:-1], 16)
+        ucfirst = int(ucfirst_str[1:-1], 16)
+        self.charmaps.append(CharMap(bffirst, bflast, ucfirst))
+
 
 #
 # Starting from here is the command stuff
@@ -1685,7 +1853,6 @@ class PageFontCmd(BasicCmd):
     def __init__(self, scanner):
         self.scanner = scanner
         self.header_fmt = "%4s %-40s %s"
-        self.fonts_used = {}
         self.pt_factor = 1
         self.font_unit = "pt"
 
@@ -1723,16 +1890,13 @@ class PageFontCmd(BasicCmd):
             fonts_used = page.find_fonts()
             fonts_used.sort()
             for font in fonts_used:
-                self.fonts_used[font.key()] = font
                 if show:
                     print "%4d %-40s %6.2f %s" % (page.pagenum, font.name(),
                               self.pt_factor * font.size(), self.font_unit)
             if show: print self.header_fmt % (4*"-", 40*"-", 10*"-")
 
     def print_font_summary(self):
-        fonts_defined = self.fonts_used or None
         pages = []
-
         for pg in self.scanner.page_groups:
             if not(pg):
                 continue
@@ -1740,13 +1904,11 @@ class PageFontCmd(BasicCmd):
             if len(pg) > 1:
                 s += "-%d" % (pg[-1].pagenum)
             pages.append(s)
-            if not(fonts_defined):
-                self.print_fonts_in_pages(pg, show=False)
 
         print "\nFonts used in pages %s:" % (",".join(pages))
-        fonts_total = self.fonts_used.values()
-        fonts_total.sort()
-        for font in fonts_total:
+        fonts_used = self.scanner.pdf.fontmgr.get_used()
+        fonts_used.sort()
+        for font in fonts_used:
             print "%-40s %6.2f %s" % \
                   (font.name(), self.pt_factor*font.size(), self.font_unit)
 
@@ -1854,7 +2016,7 @@ class PDFScannerCommand:
         pdf_pages = []
         for i, pg in enumerate(page_objects):
             pagenum = i+page_first
-            page = PDFPage(pg, pagenum, self.pdf.resolver)
+            page = PDFPage(self.pdf, pg, pagenum)
             pdf_pages.append(page)
         return pdf_pages
 
