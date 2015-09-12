@@ -66,6 +66,8 @@ class Xindy:
         self.path_var = "XINDY_SEARCHPATH"
         mapfile = os.path.join(os.path.dirname(__file__), "xindylang.xml")
         self.languages = self.map_languages(mapfile)
+        self._re_hyperindex = re.compile(r"hyperindexformat{\\(.*?)}}{",
+                                         re.M|re.DOTALL)
 
     def map_languages(self, mapfile):
         languages = {}
@@ -152,7 +154,25 @@ class Xindy:
         f.close()
         return is_unicode
 
+    def _sanitize_idxfile(self):
+        #
+        # Remove the 'hyperindexformat' of the new hyperref that makes a mess
+        # with Xindy. If not, the following error is raised by Xindy:
+        # "WARNING: unknown cross-reference-class `hyperindexformat'! (ignored)"
+        #
+        f = file(self.idxfile, "r")
+        data = f.read()
+        f.close()
+        data, nsub = self._re_hyperindex.subn(r"\1}{", data)
+        if not(nsub):
+            return
+        msg.debug("Remove %d unsupported 'hyperindexformat' calls" % nsub)
+        f = file(self.idxfile, "w")
+        f.write(data)
+        f.close()
+
     def run(self):
+        self._sanitize_idxfile()
         cmd = self.command()
         msg.debug(" ".join(cmd))
 
