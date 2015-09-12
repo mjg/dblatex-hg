@@ -52,7 +52,7 @@
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:if test="./seealso">
-    <xsl:text>|see{</xsl:text>
+    <xsl:text>|seealso{</xsl:text>
     <xsl:call-template name="normalize-scape">
       <xsl:with-param name="string" select="./seealso"/>
     </xsl:call-template>
