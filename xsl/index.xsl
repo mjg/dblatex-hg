@@ -26,8 +26,9 @@
   </xsl:if>
 </xsl:template>
 
-<xsl:template match="indexterm">
+<xsl:template match="indexterm" name="indexterm">
   <xsl:param name="close" select="''"/>
+  <xsl:param name="seealso" select="0"/>
   <xsl:text>\index{</xsl:text>
   <xsl:call-template name="index.print">
     <xsl:with-param name="node" select="./primary"/>
@@ -51,7 +52,7 @@
     </xsl:call-template>
     <xsl:text>}</xsl:text>
   </xsl:if>
-  <xsl:if test="./seealso">
+  <xsl:if test="$seealso = 1 and ./seealso">
     <xsl:text>|seealso{</xsl:text>
     <xsl:call-template name="normalize-scape">
       <xsl:with-param name="string" select="./seealso"/>
@@ -97,6 +98,16 @@
                                            (@id=$id or @xml:id=$id)]">
     <xsl:with-param name="close" select="'|)'"/>
   </xsl:apply-templates>
+</xsl:template>
+
+<!-- See also requires page numbers, so proceed twice to have both pages and
+     'see also' -->
+
+<xsl:template match="indexterm[seealso]">
+  <xsl:call-template name="indexterm"/>
+  <xsl:call-template name="indexterm">
+    <xsl:with-param name="seealso" select="1"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="primary|secondary|tertiary|see|seealso"/>
