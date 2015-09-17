@@ -44,6 +44,7 @@ import re, string
 import subprocess
 import xml.dom.minidom
 
+from subprocess import Popen, PIPE
 from msg import _, msg
 from plugins import TexModule
 from util import md5_file
@@ -68,6 +69,7 @@ class Xindy:
         self.languages = self.map_languages(mapfile)
         self._re_hyperindex = re.compile(r"hyperindexformat{\\(.*?)}}{",
                                          re.M|re.DOTALL)
+        self.invalid_index_ranges = []
 
     def map_languages(self, mapfile):
         languages = {}
@@ -171,19 +173,79 @@ class Xindy:
         f.write(data)
         f.close()
 
+    def _fix_invalid_ranges(self):
+        if not(self.invalid_index_ranges): return
+        f = open(self.idxfile)
+        lines = f.readlines()
+        f.close()
+
+        # Track the lines with the wrong index ranges
+        for i, line in enumerate(lines):
+            for entry in self.invalid_index_ranges:
+                if entry.index_key in line:
+                    entry.add_line(i, line)
+
+        # Summary of the lines to remove in order to fix the ranges
+        skip_lines = []
+        for entry in self.invalid_index_ranges:
+            skip_lines.extend(entry.skip_lines)
+            entry.reinit()
+        if not(skip_lines): return
+        
+        # Remove the lines starting from the end to always have valid line num
+        msg.debug("xindy: lines to remove from %s to fix ranges: %s" %\
+                  (self.idxfile, skip_lines))
+        skip_lines.sort()
+        skip_lines.reverse()
+        for line_num in skip_lines:
+            del lines[line_num]
+        f = open(self.idxfile, "w")
+        f.writelines(lines)
+        f.close()
+
+    def _detect_invalid_ranges(self, data):
+        # Look for warnings like this:
+        #
+        # WARNING: Found a :close-range in the index that wasn't opened before!
+        #          Location-reference is 76 in keyword (Statute of Anne (1710))
+        #          I'll continue and ignore this.
+        #
+        # Do it only once on the first run to find wrong indexes.
+        if (self.invalid_index_ranges): return
+        blocks = re.split("(WARNING:|ERROR:)", data, re.M)
+        check_next_block = False
+        for block in blocks:
+            if "WARNING" in block:
+                check_next_block = True
+            elif check_next_block:
+                m = re.search("Found.*?-range .*"\
+                              "Location-reference is \d+ in keyword \((.*)\)",
+                              block, re.M|re.DOTALL)
+                if m: self.invalid_index_ranges.append(Indexentry(m.group(1)))
+                check_next_block = False
+
     def run(self):
         self._sanitize_idxfile()
+        self._fix_invalid_ranges()
         cmd = self.command()
         msg.debug(" ".join(cmd))
 
-        # Collect the script output
+        # Collect the script output, and errors
         logname = join(dirname(self.target), "xindy.log")
         logfile = open(logname, "w")
-        rc = subprocess.call(cmd, stdout=logfile, stderr=msg.stdout)
+        p = Popen(cmd, stdout=logfile, stderr=PIPE)
+        errdata = p.communicate()[1]
+        rc = p.wait()
+        if msg.stdout:
+            msg.stdout.write(errdata)
+        else:
+            msg.warn(_(errdata.strip()))
         logfile.close()
         if (rc != 0):
             msg.error(_("could not make index %s") % self.target)
             return 1
+
+        self._detect_invalid_ranges(errdata)
 
         # Now convert the built index to UTF-8 if required
         if cmd[0] == "texindy" and self.doc.encoding == "utf8":
@@ -198,6 +260,50 @@ class Xindy:
 
         return rc
 
+class Indexentry:
+    """
+    Index entry wrapper from idxfile. Its role is to detect range anomalies
+    """
+    _re_entry = re.compile("\indexentry{(.*)\|([\(\)]?).*}{(\d+)}", re.DOTALL)
+
+    def __init__(self, index_key):
+        self.index_key = index_key
+        self.skip_lines = []
+        self.last_range_page = 0
+        self.last_range_line = -1
+        self.last_range_open = False
+
+    def reinit(self):
+        self.__init__(self.index_key)
+
+    def add_line(self, line_num, indexentry):
+        m = self._re_entry.search(indexentry)
+        if not(m):
+            return
+        index_key = m.group(1).split("!")[-1]
+        if index_key != self.index_key:
+            return
+        range_state = m.group(2)
+        page = int(m.group(3))
+
+        #print "Found %s at %d" % (index_key, page)
+        if range_state == "(":
+            # If a starting range overlap the previous range remove
+            # this intermediate useless range close/open
+            if page <= self.last_range_page:
+                self.skip_lines += [self.last_range_line, line_num]
+            self.last_range_page = page
+            self.last_range_line = line_num
+            self.last_range_open = True
+        elif range_state == ")":
+            self.last_range_page = page
+            self.last_range_line = line_num
+            self.last_range_open = False
+        elif range_state == "":
+            # If a single indexentry is within a range, skip it
+            if self.last_range_open == True:
+                self.skip_lines += [line_num]
+        
 
 class Makeindex:
     """
