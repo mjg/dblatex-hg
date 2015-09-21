@@ -201,6 +201,15 @@ macro is defined somewhere else (e.g. in a user latex style).</para>
 ]]></programlisting>
 
 </section>
+<section>
+<title>Endnotes Counter Scope</title>
+
+<para>By default the endnotes counter restarts from one in each chapter or
+part when they are grouped. You can change this behaviour by overriding
+the <parameter>endnotes.counter.resetby</parameter> parameter that lists
+the section types where the counter is reset. If you want a global
+counter running for the whole document, just set the parameter empty.</para>
+</section>
 
 </section>
 </section>
