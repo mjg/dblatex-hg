@@ -204,7 +204,7 @@ class Imagedata:
 
         conv = self.converters.get_converters(ext, self.output_format)
         if not(conv):
-            self.log.warning("Cannot convert '%s' to %s" % (fig,
+            self.log.debug("Cannot convert '%s' to %s" % (fig,
                              self.output_format))
             # Unknown conversion to do, or nothing to do
             return self._safe_file(fig, realfig, ext)
