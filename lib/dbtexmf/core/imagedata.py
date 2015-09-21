@@ -5,69 +5,153 @@ import shutil
 import logging
 import urllib
 from dbtexmf.core.error import signal_error
+from commander import CommandRunner
+
+class PoolManager:
+    def __init__(self): 
+        self._used_pool = None
+        self._pending_pools = []
+    
+    def set_pool(self, pool):
+        self._used_pool = pool
+        for p in self._pending_pools:
+            pool.preprend(p)
+        self._pending_pools = []
+    
+    def prepend_pool(self, pool):
+        if self._used_pool:
+            self._used_pool.prepend(pool)
+        else:
+            self._pending_pools.append(pool)
+
+_pool_manager = PoolManager()
+    
+def set_config(data):
+    global _pool_manager
+    _pool_manager.prepend_pool(data)
+
+def set_pool(pool):
+    global _pool_manager
+    _pool_manager.set_pool(pool)
 
 #
 # Objects to convert an image format to another. Actually use the underlying
 # tools.
 #
 class ImageConverter:
-    def __init__(self):
-        self.debug = 1
-        self.log = None
-        self.fake = 0
+    _log = logging.getLogger("dblatex")
 
-    def system(self, cmd, doexec=1):
-        if not(cmd):
-            return ""
-        if self.log:
-            self.log.info(cmd)
-        if doexec:
-            if not(self.fake):
-                if (os.system(cmd)):
-                    signal_error(self, cmd)
-        else:
-            return cmd
+    def __init__(self, imgsrc, imgdst="", docformat="", backend=""):
+        self.imgsrc = imgsrc
+        self.imgdst = imgdst or "*"
+        self.docformat = docformat or "*"
+        self.backend = backend or "*"
+        self.command = CommandRunner(log=self._log)
+
+    def add_command(self, *args, **kwargs):
+        self.command.add_command(*args, **kwargs)
 
     def convert(self, input, output, format, doexec=1):
-        pass
+        rc = self.command.run(kw={"input": input, "output": output,
+                                  "dst": format})
+        if rc != 0: signal_error(self, "")
+
+class ImageConverterPool:
+    def __init__(self):
+        self.converters = []
+
+    def add_converter(self, converter):
+        self.converters.append(converter)
+
+    def extend(self, other):
+        self.converters.extend(other.converters)
+
+    def prepend(self, other):
+        self.converters = other.converters + self.converters
+
+    def _re_multi_or_star(self, searched):
+        if not(searched):
+            searched = r"\w*"
+        else:
+            s = searched.split()
+            #searched = "|".join(["(?<=[/ ])%s" % p for p in s])
+            searched = "|".join(["%s" % p for p in s])
+        searched += r"|\*"
+        return "("+searched+")"
+
+    def get_converters(self, imgsrc="", imgdst="", docformat="", backend=""):
+        converters = self.converters
+        imgsrc = self._re_multi_or_star(imgsrc)
+        imgdst = self._re_multi_or_star(imgdst)
+        docfmt = self._re_multi_or_star(docformat)
+        backend = self._re_multi_or_star(backend)
+        founds = []
+        for converter in converters:
+            lookup = {imgsrc: converter.imgsrc,
+                      imgdst: converter.imgdst,
+                      docfmt: converter.docformat,
+                      backend: converter.backend}
+
+            for re_expr, data in lookup.items():
+                m = re.search(re_expr, data)
+                if not(m): break
+            if m: founds.append(converter)
+        return founds
+
+
+class ImageConverters(ImageConverterPool):
+    def __init__(self):
+        ImageConverterPool.__init__(self)
+        # Default setup
+        self.add_converter(GifConverter("gif"))
+        self.add_converter(EpsConverter("eps", "pdf"))
+        self.add_converter(EpsConverter("eps", "png"))
+        self.add_converter(FigConverter("fig", "pdf"))
+        self.add_converter(FigConverter("fig", "png"))
+        self.add_converter(SvgConverter("svg"))
+
+        # Register as main pool
+        set_pool(self)
 
 
 class GifConverter(ImageConverter):
-    def convert(self, input, output, format, doexec=1):
-        cmd = "convert \"%s\" %s" % (input, output)
-        return self.system(cmd, doexec)
+    def __init__(self, imgsrc, imgdst="", docformat="", backend=""):
+        ImageConverter.__init__(self, imgsrc="gif bmp", imgdst="*")
+        self.add_command(["convert", "%(input)s", "%(output)s"])
 
 class EpsConverter(ImageConverter):
-    def convert(self, input, output, format, doexec=1):
-        if format == "pdf":
-            cmd = "epstopdf --outfile=%s \"%s\"" % (output, input)
-        elif format == "png":
-            cmd = "convert \"%s\" %s" % (input, output)
-        else:
-            cmd = ""
-        return self.system(cmd, doexec)
+    def __init__(self, imgsrc, imgdst="", docformat="", backend=""):
+        ImageConverter.__init__(self, imgsrc="eps", imgdst=imgdst)
+        if imgdst == "pdf":
+            self.add_command(["epstopdf", "--outfile=%(output)s", "%(input)s"],
+                             shell=True)
+        elif imgdst == "png":
+            self.add_command(["convert", "%(input)s", "%(output)s"])
 
 class FigConverter(ImageConverter):
-    def convert(self, input, output, format, doexec=1):
-        if (format != "eps"):
-            conv = EpsConverter()
-            conv.fake = self.fake
-            conv.log = self.log
-            epsfile = "tmp_fig.eps"
-            post = " && "
-            post += conv.convert(epsfile, output, format, doexec=0)
+    def __init__(self, imgsrc, imgdst="", docformat="", backend=""):
+        ImageConverter.__init__(self, imgsrc="fig", imgdst=imgdst)
+        self.add_command(["fig2dev", "-L", "eps", "%(input)s"],
+                         stdout="%(output)s")
+        if imgdst != "eps":
+            self.conv_next = EpsConverter("eps", imgdst=imgdst)
         else:
-            post = ""
-            epsfile = output
+            self.conv_next = None
 
-        cmd = "fig2dev -L eps \"%s\" > %s" % (input, epsfile)
-        cmd += post
-        self.system(cmd)
+    def convert(self, input, output, format):
+        if self.conv_next:
+            epsfile = "tmp_fig.eps"
+        else:
+            epsfile = output
+        ImageConverter.convert(self, input, epsfile, "eps")
+        if self.conv_next:
+            self.conv_next.convert(epsfile, output, format)
 
 class SvgConverter(ImageConverter):
-    def convert(self, input, output, format, doexec=1):
-        cmd = "inkscape -z -D --export-%s=%s \"%s\"" % (format, output, input)
-        return self.system(cmd, doexec)
+    def __init__(self, imgsrc, imgdst="", docformat="", backend=""):
+        ImageConverter.__init__(self, imgsrc="svg", imgdst=imgdst)
+        self.add_command(["inkscape", "-z", "-D", "--export-%(dst)s=%(output)s",
+                          "%(input)s"])
 
 
 #
@@ -80,6 +164,7 @@ class Imagedata:
         self.paths = []
         self.input_format = "png"
         self.output_format = "pdf"
+        self.converters = ImageConverters()
         self.converted = {}
         self.log = logging.getLogger("dblatex")
         self.output_encoding = ""
@@ -117,17 +202,15 @@ class Imagedata:
         count = len(self.converted)
         newfig = "fig%d.%s" % (count, self.output_format)
 
-        if (ext == "fig" and self.output_format in ("eps", "pdf", "png")):
-            conv = FigConverter()
-        elif (ext == "svg" and self.output_format in ("eps", "pdf", "png")):
-            conv = SvgConverter()
-        elif (ext == "eps"):
-            conv = EpsConverter()
-        elif (ext in ("gif", "bmp")):
-            conv = GifConverter()
-        else:
+        conv = self.converters.get_converters(ext, self.output_format)
+        if not(conv):
+            self.log.warning("Cannot convert '%s' to %s" % (fig,
+                             self.output_format))
             # Unknown conversion to do, or nothing to do
             return self._safe_file(fig, realfig, ext)
+        else:
+            # Take the first converter that does the trick
+            conv = conv[0]
 
         # Convert the image and put it in the cache
         conv.log = self.log
@@ -207,9 +290,4 @@ class Imagedata:
                 return realfig
 
         return None
-       
-    def system(self, cmd):
-        self.log.info(cmd)
-        rc = os.system(cmd)
-        # TODO: raise error when system call failed
-
+ 

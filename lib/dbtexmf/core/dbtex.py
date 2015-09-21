@@ -13,7 +13,8 @@ import glob
 import imp
 from optparse import OptionParser
 
-from dbtexmf.core.confparser import DbtexConfig, texinputs_parse, texstyle_parse
+from dbtexmf.core.txtparser import texinputs_parse, texstyle_parse
+from dbtexmf.core.confparser import DbtexConfig
 from dbtexmf.xslt import xslt
 import dbtexmf.core.logger as logger
 from dbtexmf.core.error import signal_error, failed_exit, dump_stack
@@ -661,6 +662,9 @@ class DbTexCommand:
 
         # Load the specified configurations
         conf = DbtexConfig()
+        if options.dump:
+            dump_stack()
+
         if options.style:
             try:
                 conf.paths = self.get_config_paths()

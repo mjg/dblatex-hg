@@ -1,107 +1,72 @@
-#
-# DbTex configuration parser. Maybe we could use or extend ConfigParser.
-#
 import os
-import re
+import sys
+from xml.etree.ElementTree import ParseError
+from xmlparser import XmlConfig
+from txtparser import TextConfig
+from imagedata import ImageConverterPool, ImageConverter
+from imagedata import set_config
 
-def texinputs_parse(strpath, basedir=None):
+
+class ConfigFactory:
     """
-    Transform the TEXINPUTS string to absolute normalized paths,
-    but keep intact the '//' suffix if any. The absolute paths are
-    computed from current one or from <basedir> when specified.
+    Build the actual objects that configure the other modules from the XML
+    parsed configuration, and publish them to the related modules
     """
-    paths = []
-    for p in strpath.split(":"):
-        if not(os.path.isabs(p)):
-            if not(basedir):
-                d = os.path.realpath(p)
-            else:
-                d = os.path.normpath(os.path.join(basedir, p))
-        else:
-            d = os.path.normpath(p)
-        if p.endswith("//"):
-            d += "//"
-        paths.append(d)
-    return paths
+    def __init__(self, xmlconfig):
+        self.xmlconfig = xmlconfig
 
-def texstyle_parse(texstyle):
-    sty = os.path.basename(texstyle)
-    dir = os.path.dirname(texstyle)
-    if sty.endswith(".sty"):
-        path = os.path.realpath(dir)
-        sty = sty[:-4]
-        if not(os.path.isfile(texstyle)):
-            raise ValueError("Latex style '%s' not found" % texstyle)
-    elif (dir):
-        raise ValueError("Invalid latex style path: missing .sty")
-    else:
-        path = ""
-    return ("latex.style=%s" % sty, path)
+    def publish(self):
+        pool = self.imagedata_config()
+        if pool: set_config(pool)
 
-
-class OptMap:
-    def __init__(self, option):
-        self.option = option
-
-    def format(self, dir, value):
-        return ["%s=%s" % (self.option, value)]
-
-class PathMap(OptMap):
-    def format(self, dir, value):
-        if not(os.path.isabs(value)):
-            value = os.path.normpath(os.path.join(dir, value))
-        return OptMap.format(self, dir, value)
-
-class TexMap(OptMap):
-    def format(self, dir, value):
-        paths = texinputs_parse(value, basedir=dir)
-        return OptMap.format(self, dir, ":".join(paths))
-
-class NoneMap(OptMap):
-    def format(self, dir, value):
-        return value.split()
+    def imagedata_config(self):
+        converters = self.xmlconfig.get("imagedata").get("converter")
+        if not(converters):
+            return None
+        pool = ImageConverterPool()
+        for cv in converters:
+            imc = ImageConverter(cv.imgsrc, cv.imgdst, cv.docformat, cv.backend)
+            for cmd in cv.commands:
+                imc.add_command(cmd.args, stdin=cmd.stdin, stdout=cmd.stdout,
+                                shell=cmd.shell)
+            pool.add_converter(imc)
+        return pool
 
 
 class DbtexConfig:
-    conf_mapping = {
-        'TexInputs' : TexMap('--texinputs'),
-        #'PdfInputs' : OptMap('--pdfinputs'),
-        'TexPost'   : PathMap('--texpost'),
-        'FigPath'   : PathMap('--fig-path'),
-        'XslParam'  : PathMap('--xsl-user'),
-        'TexStyle'  : OptMap('--param=latex.style'),
-        'Options'   : NoneMap('')
-    }
-
+    """
+    Main configuration object, in charge to parse the configuration files
+    and populate the setup.
+    """
     def __init__(self):
         self.options = []
-        self.reparam = re.compile("^\s*([^:=\s]+)\s*:\s*(.*)")
         self.paths = []
-        self.exts = ["", ".specs", ".conf"]
+        self.style_exts = ["", ".xml", ".specs", ".conf"]
 
-    def clear(self):
-        self.options = []
+    def warn(self, text):
+        print >>sys.stderr, text
 
-    def fromfile(self, file):
-        dir = os.path.dirname(os.path.realpath(file))
-        f = open(file)
+    def fromfile(self, filename):
+        try:
+            self.fromxmlfile(filename)
+        except ParseError, e:
+            self.warn("Text configuration files are deprecated. "\
+                      "Use the XML format instead")
+            self.fromtxtfile(filename)
+        except Exception, e:
+            raise e
 
-        for line in f:
-            # Remove the comment
-            line = line.split("#")[0]
-            m = self.reparam.match(line)
-            if not(m):
-                continue
-            key = m.group(1)
-            value = m.group(2).strip()
-            if not self.conf_mapping.has_key(key):
-                continue
-            o = self.conf_mapping[key]
+    def fromxmlfile(self, filename):
+        xmlconfig = XmlConfig()
+        xmlconfig.fromfile(filename)
+        self.options += xmlconfig.options()
+        factory = ConfigFactory(xmlconfig)
+        factory.publish()
 
-            # The paths can be relative to the config file
-            self.options += o.format(dir, value)
-
-        f.close()
+    def fromtxtfile(self, filename):
+        txtconfig = TextConfig()
+        txtconfig.fromfile(filename)
+        self.options += txtconfig.options()
 
     def fromstyle(self, style, paths=None):
         # First, find the related config file
@@ -109,7 +74,7 @@ class DbtexConfig:
             paths = self.paths
 
         for p in paths:
-            for e in self.exts:
+            for e in self.style_exts:
                 file = os.path.join(p, style + e)
                 if os.path.isfile(file):
                     self.fromfile(file)
