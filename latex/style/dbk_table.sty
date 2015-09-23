@@ -38,8 +38,12 @@
 \newdimen\tablewidth%
 
 % Avoid table counter mess with (informal) longtable
-\def\emptyrefstepcounter#1{}
+% but leave other counters working in longtable like ordered lists
+% (thanks to Yung-ching Hsiao patch)
 \let\stdrefstepcounter\refstepcounter%
+\def\emptyrefstepcounter#1{\begingroup%
+  \def\a{table}\def\b{#1}\ifx\a\b\relax\else\stdrefstepcounter{#1}\fi
+  \endgroup}
 \def\savetablecounter{%
   \let\refstepcounter\emptyrefstepcounter%
 }
