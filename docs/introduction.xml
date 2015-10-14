@@ -111,7 +111,7 @@ PostScript and PDF files,</para>
 <title>Version</title>
 
 <para>This manual is for dblatex version <xi:include href="version.xml"
-xmlns:xi="http://www.w3.org/2001/XInclude" />.</para>
+xmlns:xi="http://www.w3.org/2001/XInclude"/>.</para>
 </section>
 
 <section id="sec-changelog">
