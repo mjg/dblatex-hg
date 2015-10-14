@@ -45,6 +45,9 @@ class Document:
         self.texfile = self.basename + ".tex"
         self.binfile = self.basename + "." + binfmt
 
+    def has_subext(self, ext):
+        return (os.path.splitext(self.basename)[1] == ext)
+
     def __cmp__(self, other):
         """
         Comparaison method mainly to check if the document is in a list
@@ -99,6 +102,7 @@ class DbTex:
         # Temporary files
         self.documents = []
         self.interms = []
+        self.included = []
         self.basefile = ""
         self.rawfile = ""
 
@@ -292,7 +296,10 @@ class DbTex:
         for rawfile in rawfiles:
             if not(rawfile in self.documents):
                 d = Document(rawfile, binfmt=self.format)
-                self.interms.append(d)
+                if d.has_subext(".input"):
+                    self.included.append(d)
+                else:
+                    self.interms.append(d)
 
     def make_tex(self):
         self.rawtex.set_format(self.format, self.backend)
@@ -302,7 +309,7 @@ class DbTex:
         # By default figures are relative to the source file directory
         self.rawtex.set_fig_paths([self.inputdir] + self.fig_paths)
 
-        for d in self.documents + self.interms:
+        for d in self.documents + self.interms + self.included:
             self.rawtex.parse(d.rawfile, d.texfile)
 
     def make_bin(self):
