@@ -369,6 +369,25 @@
   <xsl:text>}&#10;</xsl:text>
 </xsl:template>
 
+<!-- FIXME: work only for a single address -->
+<xsl:template match="publisher" mode="docinfo">
+  <xsl:apply-templates mode="docinfo"/>
+</xsl:template>
+
+<xsl:template match="publishername" mode="docinfo">
+  <xsl:text>\def\DBKpublishername{</xsl:text>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
+  <xsl:text>}&#10;</xsl:text>
+</xsl:template>
+
+<xsl:template match="publisher/address" mode="docinfo">
+  <xsl:text>\def\DBKpublisheraddress{</xsl:text>
+  <xsl:variable name="content"><xsl:apply-templates/></xsl:variable>
+  <xsl:value-of select="normalize-space($content)"/>
+  <xsl:text>}&#10;</xsl:text>
+</xsl:template>
+
 <xsl:template match="releaseinfo">
   <xsl:apply-templates/>
 </xsl:template>
