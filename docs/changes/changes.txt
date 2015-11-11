@@ -1,8 +1,34 @@
-  Release 0.3.7.1:
-  ~~~~~~~~~~~~~~~~
-- Add the endnotes features: the <footnote>s can be turned to be end notes in
+Release 0.3.8:
+--------------
+
+Enhancements:
+- Add the endnotes feature: the <footnote>s can be turned to be end notes in
   the printed document. Some parameters are added to configure the endnotes
   display.
+- Add the 'pdfscan.py' script to find out the fonts and their size used in a PDF
+  file.
+- Add the XML configuration feature: it replaces the simple text configuration
+  file. It gives a more consistent setup and more possibilities to
+  configure dblatex, like overriding the commands used to convert images.
+- Add the parameter figure.default.align to change the default <figure> and
+  <informalfigure> alignment
+- Add a workaround to fix a Xindy bug appearing when ranges of an index
+  overlap.
+- Add a workaround to fix the incompatibilities between Xindy and the new
+  hyperref when hyperindex is on.
+- Add the possibility to build a document from a tex file that includes
+  other tex files.
+
+Bug fixes:
+- Fix a bug when passing a dialect language (e.g. '[5.2]Lua')
+  to <programlisting>
+- Link the 'nn' lang to 'norwegian' for Xindy.
+- Fix the alignment of <imagedata> that is now handled even without an explicit
+  viewport
+- Take into account the <caption> align attribute.
+- Fix <seealso> in <indexterm>.
+- Fix a bug about ordered lists that loose their counter in <informaltable>s.
+- Put the <dedication>s in the book front matter (was in the body matter).
 
 
 Release 0.3.7:
