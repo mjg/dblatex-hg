@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 #
 # This tool is provided by dblatex (http://dblatex.sourceforge.net) and has
 # the same copyright.
@@ -378,7 +379,10 @@ class PDFPage:
         font = rsc_descriptor.get("/Font")
         if font:
             font.link_to(pdf.resolver)
-            fontdict = font.infos()
+            if (isinstance(font, PDFDescriptor)):
+                fontdict = font.infos()
+            else:
+                fontdict = font.descriptor.infos()
         else:
             fontdict = {}
 
