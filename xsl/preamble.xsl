@@ -477,6 +477,8 @@
     <xsl:text>\maketitle&#10;</xsl:text>
   </xsl:if>
 
+  <xsl:apply-templates select="dedication"/>
+
   <!-- Print the TOC/LOTs -->
   <xsl:if test="contains($layout, 'toc ')">
     <xsl:apply-templates select="." mode="toc_lots"/>
@@ -484,7 +486,7 @@
 
   <!-- Print the abstract and front matter content -->
   <xsl:apply-templates select="(abstract|$info/abstract)[1]"/>
-  <xsl:apply-templates select="dedication|preface"/>
+  <xsl:apply-templates select="preface"/>
 
   <!-- Body content -->
   <xsl:if test="contains($layout, 'mainmatter ')">
