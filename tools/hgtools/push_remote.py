@@ -18,8 +18,9 @@ def exec_command(cmd):
         if rc != 0:
             raise Exception("'%s' failed (%d)" % (cmd, rc))
 
-def hg_export_patches(repo_src, repo_sas, patch_dir):
+def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
     cmd = ["hg", "-R", repo_sas, "incoming"]
+    if add_source: cmd.append(repo_src)
     print " ".join(cmd)
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
