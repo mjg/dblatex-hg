@@ -15,6 +15,10 @@
   </para>
  </listitem>
   <listitem>
+    <para>using <link linkend="sec-pi-usage">Processing Instructions</link>
+    to create some instructions very specific to dblatex,</para>
+  </listitem>
+  <listitem>
   <para>
   using some <link linkend="sec-custom-stylesheet">customized stylesheets</link>,
   </para>
@@ -34,7 +38,7 @@
   All these customization methods can be used independently and in exceptional cases, but it can also be combined and registered in a master configuration file, called a specification file (cf. <xref linkend="sec-specs"/>) to create a new tool dedicated to your needs.
  </para>
 <section id="sec-param">
-   <title>Using XSL Parameters</title>
+  <title>Using XSL Parameters</title>
   <para>
    The PDF rendering can be customised by using some XSL configuration
    parameters.
@@ -52,6 +56,39 @@
 <![CDATA[  dblatex -P latex.hyperparam=colorlinks,linkcolor=blue myfile.xml
 ]]></programlisting>
   </para>
+</section>
+
+<section id="sec-pi-usage">
+  <title>Using Processing Instructions</title>
+
+  <para>Some Processing Instructions (PI) may be included in the document to
+  alter the default formatting.  Usually these instructions alter the
+  output formatting of specific DocBook elements, like table cells.
+</para>
+
+  <para>To alter formatting globally it is better to set an
+  appropriate <link linkend="sec-param">stylesheet
+  parameter</link>.</para>
+
+  <para>Processing instructions are written
+  <literal>&lt;?</literal><replaceable>name</replaceable>
+  <replaceable>content</replaceable> <literal>?&gt;</literal>.  Most
+  often <replaceable>content</replaceable> will have the form of an
+  XML attribute with a value, as follows:
+  <literal>&lt;?</literal><replaceable>name</replaceable>
+  <replaceable>attribute</replaceable><literal>="</literal><replaceable>value</replaceable><literal>" ?&gt;</literal>.</para>
+
+  <para>The list of the available Processing Instructions are given in <xref
+  linkend="sec-pis"/>.</para>
+
+  <para>Here is an example of a PI used in a table:</para>
+  <example>
+    <title>Table width specified with a Processing Instruction</title>
+    <xi:include href="../tables/table.xml"
+                xpointer="xpointer(id('lst-table-autowidth'))"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
+  </example>
+
 </section>
 
 <section>

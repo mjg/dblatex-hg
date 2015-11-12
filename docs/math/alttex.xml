@@ -75,17 +75,23 @@ section).</para>
 
 </section>
 
-<section>
+<section id="sec-alttex-delimiters">
 <title>Mathematical Delimiters</title>
 
 <para>The dblatex implementation is as light as possible. This is why it is
 up to the writer to properly use the mathematical delimiters ($, \(, \), \[,
 \]). By this way the writer fully controls how he writes equations.</para>
 
-<para>By default <command>dblatex</command> checks that consistent mathematical
+<para id="pi-texmath-user">By default <command>dblatex</command> checks that
+consistent mathematical
 delimiters or environment are used in <sgmltag>alt</sgmltag> and it inserts the
 default math mode delimiters if dblatex thinks they are missing, but
-you can ask dblatex to write directly the <sgmltag>alt</sgmltag> content without any action. To do this, use the <literal>texmath</literal> Processing Instruction with <literal>delimiters</literal> set to 'user' as shown in <xref linkend="eq-with-texmath-pi"/>:</para>
+you can ask dblatex to write directly the <sgmltag>alt</sgmltag> content 
+without any action. To do this, use the <literal>texmath</literal> Processing 
+Instruction with <literal>delimiters</literal> set to 'user'.</para>
+
+<para>For example, <xref linkend="eq-with-texmath-pi"/> has user specific
+delimiters:</para>
 
 <example id="eq-with-texmath-pi">
 <title>Equation with user delimiters</title>

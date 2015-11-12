@@ -90,7 +90,7 @@ width.</para>
 
 <para>A table width can be expressed as:</para>
 
-<itemizedlist>
+<itemizedlist id="table-width-format">
 <listitem>
 <para>A valid length (e.g. 15cm),</para>
 </listitem>
@@ -101,9 +101,11 @@ width.</para>
 
 <listitem>
 <para>A keyword telling to apply an automatic column width (e.g.
-autowidth.all). See <xref linkend="sec-autowidth" /> for more details.</para>
+autowidth.all).</para>
 </listitem>
 </itemizedlist>
+
+<para>The automatic column width setup is detailed in <xref linkend="sec-autowidth" />.</para>
 </section>
 
 <section>
@@ -213,7 +215,9 @@ incidently sets the column width with this size.</para>
 
 <para>It is possible to change this sizing policy of not-fixed-width columns
 by playing with the <parameter>newtbl.autowidth</parameter> parameter. The
-parameter can take the following values: <variablelist>
+parameter can take the following values:
+
+<variablelist id="autowidth-items">
 <varlistentry>
 <term>default</term>
 
@@ -251,22 +255,25 @@ instead of using <parameter>newtbl.autowidth</parameter>.</para>
 <section id="sec-newtbl-autowidth2">
 <title>Local Setting</title>
 
-<para>If you want to apply an automatic width only to some specific tables you
-can put the Processing Instruction <literal>&lt;?dblatex
+<para id="pi-autowidth">If you want to apply an automatic width only to some
+specific tables you can put the Processing Instruction <literal>&lt;?dblatex
 table-with="autowidth.<replaceable>scope</replaceable>" ?&gt;</literal> in the
 related tables. The PI has precedence over the
 <parameter>newtbl.autowidth</parameter> parameter.</para>
 
 <para>The <replaceable>scope</replaceable> can take the same values and have
 the same effects than for the <parameter>newtbl.autowidth</parameter>
-parameter (<literal>default</literal> or <literal>all</literal>) and it can
-take another value: <literal>column</literal>. When set to
-<literal>column</literal>, the number of the columns subject to automatic
-width must be specified after a colon separator, as shown by the following
-example:</para>
+parameter (<literal>default</literal> or <literal>all</literal>).</para>
+
+<para id="pi-autowidth-column">In addition to these keywords, <parameter>table.width</parameter> 
+can also take for its value keywords of the form 
+<literal>autowidth.column: <replaceable>N</replaceable><replaceable> ...</replaceable></literal>, where <replaceable>N</replaceable> is the number of the 
+column (counting from 1) which is to have its width automatically sized.</para>
+
+<para>See the following example:</para>
 
 <para>
-<programlisting>&lt;informaltable&gt;<emphasis role="bold">&lt;?dblatex table-width="autowidth.column: 1 3"?&gt;</emphasis>
+<programlisting id="lst-table-autowidth">&lt;informaltable&gt;<emphasis role="bold">&lt;?dblatex table-width="autowidth.column: 1 3"?&gt;</emphasis>
   &lt;tgroup cols="4" colsep="1" rowsep="1" align="left"&gt;
   &lt;colspec colname="c1"/&gt;                 &lt;!-- automatic width is applied to column #1 --&gt;
   &lt;colspec align="left" colwidth="*"/&gt;
@@ -486,7 +493,7 @@ href="table-small3.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 xmlns:xi="http://www.w3.org/2001/XInclude" /></para>
 </section>
 
-<section>
+<section id="sec-table-color">
 <title>Coloured tables</title>
 
 <para>You can color all the table by setting its <sgmltag>bgcolor</sgmltag>
@@ -501,9 +508,9 @@ beginning of a <sgmltag>row</sgmltag>, or to cells when put in a
 <para>The entry colour has precedence over the row colour, that has precedence
 over the column colour, that has precedence over the table colour.</para>
 
-<para>The color can be expressed in hexadecimal notation like for HTML (e.g.
-<literal>#C0C0C0</literal>) or in a syntax understood by the
-<filename>colortbl</filename> latex package.</para>
+<para id="table-color-format">The color can be expressed in hexadecimal
+notation like for HTML (e.g. <literal>#C0C0C0</literal>) or in a syntax
+understood by the <filename>colortbl</filename> latex package.</para>
 
 <para>Here is a<phrase output="pdf">n</phrase><phrase output="html"> PDF
 output</phrase> example.</para>

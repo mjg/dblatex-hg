@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<refentry id="latex">
+  <refmeta>
+    <refentrytitle>latex</refentrytitle>
+  </refmeta>
+  <refnamediv>
+    <refname><package>latex</package>, <package>db2latex</package></refname>
+    <refpurpose>Insert Arbitrary text into the LaTeX file</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <programlisting><![CDATA[<?latex ]]><replaceable>content</replaceable><![CDATA[ ?>]]></programlisting>
+  </refsynopsisdiv>
+  <refsection>
+    <title>Description</title>
+    <para>These Processing Instructions are unusual in that they have no
+    <quote>attribute</quote>. Instead, the
+    <replaceable>content</replaceable> is put directly into the
+    generated LaTeX document.</para>
+
+    <para>The <package>db2latex</package> PI is deprecated and should not
+    be used anymore. It was provided for backward compatibility. Use the
+    <package>latex</package> PI instead.</para>
+
+    <para>This can provide the ultimate in customization, but can be
+    very dangerous since it breaks the abstractions provided by
+    dblatex.</para>
+
+    <warning>
+      <para>These Processing Instructions can be used
+      to inject arbitrary LaTeX into the output stream. Please check if a
+      safer customization method can be used instead. See the other
+      <link linkend="sec-custom">customization methods</link>.</para>
+
+      <para>While it is pretty clear that insertion of certain sorts
+      of LaTeX text, at some points within the document, will always
+      be expected to work, there is no guarantee that
+      <emphasis>any</emphasis> inserted LaTeX will continue to work in
+      the future with newer versions of dblatex or its underlying
+      software stack.</para>
+
+      <para>Inserting LaTeX into <code>CDATA</code>, i.e. in places
+      where document text appears, is likely to be more robust than
+      inserting LaTeX elsewhere.  But again, no guarantees are
+      made.</para>
+    </warning>
+
+    <para>The <package>latex</package> Processing Instruction takes
+    special steps to work in verbatim blocks,
+    <sgmltag>screen</sgmltag>, <sgmltag>programlisting</sgmltag>, and
+    <sgmltag>literallayout</sgmltag> elements, while
+    <package>db2latex</package> is directly written as is.</para>
+  </refsection>
+
+  <refsection>
+    <title>Context</title>
+    <para>Recognized in all elements.</para>
+  </refsection>
+</refentry>

@@ -191,5 +191,6 @@ python plugin, and new index capabilities.</para>
 <xi:include href="thanks.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="params/param.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+<xi:include href="pis/pi.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 </book>

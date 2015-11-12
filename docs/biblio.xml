@@ -1,4 +1,7 @@
-<section>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<section xmlns:xi="http://www.w3.org/2001/XInclude">
   <title>Writing a Bibliography</title>
   <para>
    A bibliography (<sgmltag>bibliography</sgmltag>) can be written and put anywhere in the document. It appears as a chapter or a section and is composed by several divisions (<sgmltag>bibliodiv</sgmltag>) displayed as sections or subsections.
@@ -46,7 +49,7 @@ and the style to apply.</para>
 <para>More precisely here are the attributes supported by the
 <literal>bibtex</literal> PI:
 
-<variablelist>
+<variablelist id="bibtex-attributes">
 <varlistentry><term>bibfiles</term>
 <listitem><para>This attribute is mandatory and specifies the databases to use.
 The databases are separated by
