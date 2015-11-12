@@ -71,7 +71,7 @@ can be added by using the <option>-l</option> option.</para>
 <varlistentry><term>mode</term>
 <listitem>
 <para>Optional print mode. The available values are:
-  <variablelist>
+  <variablelist id="biblio-output-modes">
   <varlistentry><term>all</term>
   <listitem><para>Print all the entries contained in the databases.</para></listitem>
   </varlistentry>

@@ -18,13 +18,20 @@
 <literal>width</literal> attribute on <tag>table</tag>s that do not specify an
 alternate width (with the
 <tag class="xmlpi">dblatex table-width</tag> processing instruction, or with 
-the <parameter>newtbl.autowidth</parameter> parameter). For more details see
-<xref linkend="sec-table-width"/> and
-<xref linkend="sec-autowidth"/>.</para>
+the <parameter>newtbl.autowidth</parameter> parameter).</para>
+
+    <para>The parameter takes one of the following values:</para>
+    <xi:include href="../tables/table.xml"
+                xpointer="xpointer(id('table-width-format'))"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
 
   </refsection>
   <refsection>
     <title>See Also</title>
-    <para><parameter>newtbl.autowidth</parameter>.</para>
+    <itemizedlist>
+      <listitem><xref linkend="sec-table-width"/></listitem>
+      <listitem><xref linkend="sec-autowidth"/></listitem>
+      <listitem><xref linkend="newtbl.autowidth" /></listitem>
+    </itemizedlist>
   </refsection>
 </refentry>

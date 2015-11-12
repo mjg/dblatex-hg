@@ -16,6 +16,19 @@
   <refsection>
     <title>Description</title>
     <para>Defines if the table column widths must be automatically sized by
-latex. See <xref linkend="sec-newtbl-autowidth"/>.</para>
+    latex. The allowed values are:
+    <xi:include href="../tables/table.xml"
+                xpointer="xpointer(id('autowidth-items'))"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </para>
+
+  </refsection>
+  <refsection>
+    <title>See Also</title>
+    <itemizedlist>
+      <listitem><xref linkend="sec-newtbl-autowidth"/></listitem>
+      <listitem><xref linkend="sec-autowidth"/></listitem>
+      <listitem><xref linkend="default.table.width" /></listitem>
+    </itemizedlist>
   </refsection>
 </refentry>

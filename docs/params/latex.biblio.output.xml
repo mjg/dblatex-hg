@@ -14,7 +14,18 @@
   </refsynopsisdiv>
   <refsection>
     <title>Description</title>
-    <para>Defines how the BibTeX bibliographic entries are printed out. The
-available values are defined in <xref linkend="sec-bibtex"/>.</para>
+    <para>The available print mode values are:
+    <xi:include href="../biblio.xml"
+                xpointer="xpointer(id('biblio-output-modes'))"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </para>
+    <para>The default print mode is 'all'.</para>
+  </refsection>
+  <refsection>
+    <title>See Also</title>
+    <itemizedlist>
+      <listitem><xref linkend="sec-bibtex"/></listitem>
+      <listitem><xref linkend="pi-bibtex" /></listitem>
+    </itemizedlist>
   </refsection>
 </refentry>

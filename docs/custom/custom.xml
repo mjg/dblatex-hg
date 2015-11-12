@@ -61,8 +61,8 @@
 <section id="sec-pi-usage">
   <title>Using Processing Instructions</title>
 
-  <para>Some Processing Instructions (PI) may be included in the document to
-  alter the default formatting.  Usually these instructions alter the
+  <para>Dblatex has Processing Instructions (PI) which can modify the default 
+  document formatting. Usually these instructions alter the
   output formatting of specific DocBook elements, like table cells.
 </para>
 

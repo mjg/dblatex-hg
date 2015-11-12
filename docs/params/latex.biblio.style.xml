@@ -9,12 +9,18 @@
     <refpurpose>Default BibTeX style to apply</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
-    <programlisting>
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="syn/latex.biblio.style.xml"/></programlisting>
+    <programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="syn/latex.biblio.style.xml"/></programlisting>
   </refsynopsisdiv>
   <refsection>
     <title>Description</title>
     <para>Defines the default BibTeX style to apply. Meaningful when not empty,
-only for the used bibtex databases. See <xref linkend="sec-bibtex"/>.</para>
+only for the used bibtex databases.</para>
+  </refsection>
+  <refsection>
+    <title>See Also</title>
+    <itemizedlist>
+      <listitem><xref linkend="sec-bibtex"/></listitem>
+      <listitem><xref linkend="pi-bibtex" /></listitem>
+    </itemizedlist>
   </refsection>
 </refentry>
