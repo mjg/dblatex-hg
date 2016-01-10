@@ -56,4 +56,17 @@
   </xsl:call-template>
 </xsl:template>
 
+<!-- ==================================================================== -->
+<!-- The dblatex PI.  -->
+
+<xsl:template name="pi.dblatex_angle">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'angle'"/>
+  </xsl:call-template>
+</xsl:template>
+
+
 </xsl:stylesheet>

@@ -401,9 +401,8 @@
     <xsl:call-template name="graphic.end.get"/>
   </xsl:variable>
   <xsl:variable name="piangle">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="../processing-instruction('dblatex')"/>
-      <xsl:with-param name="attribute" select="'angle'"/>
+    <xsl:call-template name="pi.dblatex_angle">
+      <xsl:with-param name="node" select=".."/>
     </xsl:call-template>
   </xsl:variable>
 
