@@ -76,10 +76,7 @@
 <xsl:template match="citation" mode="cite-style">
   <!-- maybe a citation style from PI -->
   <xsl:variable name="pi">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
-      <xsl:with-param name="attribute" select="'citestyle'"/>
-    </xsl:call-template>
+    <xsl:call-template name="pi.dblatex_citestyle"/>
   </xsl:variable>
 
   <xsl:choose>

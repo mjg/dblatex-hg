@@ -68,5 +68,14 @@
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="pi.dblatex_citestyle">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'citestyle'"/>
+  </xsl:call-template>
+</xsl:template>
+
 
 </xsl:stylesheet>
