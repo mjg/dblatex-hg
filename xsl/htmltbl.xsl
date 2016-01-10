@@ -973,13 +973,7 @@
     <xsl:when test="$done &lt; $span">
       <!-- bgcolor specified via a PI -->
       <xsl:variable name="bgcolor">
-        <xsl:if test="processing-instruction('dblatex')">
-          <xsl:call-template name="pi-attribute">
-            <xsl:with-param name="pis"
-                            select="processing-instruction('dblatex')"/>
-            <xsl:with-param name="attribute" select="'bgcolor'"/>
-          </xsl:call-template>
-        </xsl:if>
+        <xsl:call-template name="pi.dblatex_bgcolor"/>
       </xsl:variable>
 
       <colspec>
@@ -1054,22 +1048,19 @@
   <!-- clone the same <colspec> span times -->
   <xsl:when test="$done &lt; $span">
     <!-- bgcolor specified via a PI or a colgroup parent PI -->
+    <xsl:variable name="bgcolor.pi">
+      <xsl:call-template name="pi.dblatex_bgcolor"/>
+    </xsl:variable>
     <xsl:variable name="bgcolor">
       <xsl:choose>
-      <xsl:when test="processing-instruction('dblatex')">
-        <xsl:call-template name="pi-attribute">
-          <xsl:with-param name="pis"
-                          select="processing-instruction('dblatex')"/>
-          <xsl:with-param name="attribute" select="'bgcolor'"/>
-        </xsl:call-template>
+      <xsl:when test="$bgcolor.pi != ''">
+        <xsl:value-of select="$bgcolor.pi"/>
       </xsl:when>
-      <xsl:when test="../processing-instruction('dblatex')">
-        <xsl:call-template name="pi-attribute">
-          <xsl:with-param name="pis"
-                          select="../processing-instruction('dblatex')"/>
-          <xsl:with-param name="attribute" select="'bgcolor'"/>
+      <xsl:otherwise>
+        <xsl:call-template name="pi.dblatex_bgcolor">
+          <xsl:with-param name="node" select=".."/>
         </xsl:call-template>
-      </xsl:when>
+      </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 

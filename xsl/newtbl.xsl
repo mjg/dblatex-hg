@@ -246,17 +246,12 @@
       </xsl:attribute>
     </xsl:if>
     <!-- bgcolor specified via a PI -->
-    <xsl:if test="processing-instruction('dblatex')">
-      <xsl:variable name="bgcolor">
-        <xsl:call-template name="pi-attribute">
-          <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
-          <xsl:with-param name="attribute" select="'bgcolor'"/>
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:if test="$bgcolor != ''">
-        <xsl:attribute name="bgcolor"><xsl:value-of select="$bgcolor"/>
-        </xsl:attribute>
-      </xsl:if>
+    <xsl:variable name="bgcolor">
+      <xsl:call-template name="pi.dblatex_bgcolor"/>
+    </xsl:variable>
+    <xsl:if test="$bgcolor != ''">
+      <xsl:attribute name="bgcolor"><xsl:value-of select="$bgcolor"/>
+      </xsl:attribute>
     </xsl:if>
 
   </xsl:copy>
@@ -595,12 +590,7 @@
       </xsl:variable>
 
       <xsl:variable name="cellcolor">
-        <xsl:if test="processing-instruction('dblatex')">
-          <xsl:call-template name="pi-attribute">
-            <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
-            <xsl:with-param name="attribute" select="'bgcolor'"/>
-          </xsl:call-template>
-        </xsl:if>
+        <xsl:call-template name="pi.dblatex_bgcolor"/>
       </xsl:variable>
 
       <xsl:variable name="bgcolor">
@@ -981,17 +971,14 @@
   <xsl:param name="oldentries"><nop/></xsl:param>
   <xsl:param name="rowstack"/>
 
-  <xsl:variable name="picolor">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="processing-instruction('dblatex')"/>
-      <xsl:with-param name="attribute" select="'bgcolor'"/>
-    </xsl:call-template>
+  <xsl:variable name="bgcolor.pi">
+    <xsl:call-template name="pi.dblatex_bgcolor"/>
   </xsl:variable>
 
   <xsl:variable name="rowcolor">
     <xsl:choose>
-      <xsl:when test="$picolor!=''">
-        <xsl:value-of select="$picolor"/>
+      <xsl:when test="$bgcolor.pi!=''">
+        <xsl:value-of select="$bgcolor.pi"/>
       </xsl:when>
       <xsl:when test="ancestor::thead">
         <xsl:value-of select="$newtbl.bgcolor.thead"/>
@@ -1344,9 +1331,8 @@
   <xsl:param name="exclude"/>
 
   <xsl:variable name="piwidth">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="../processing-instruction('dblatex')"/>
-      <xsl:with-param name="attribute" select="'table-width'"/>
+    <xsl:call-template name="pi.dblatex_table-width">
+      <xsl:with-param name="node" select=".."/>
     </xsl:call-template>
   </xsl:variable>
 

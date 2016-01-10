@@ -77,5 +77,22 @@
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="pi.dblatex_bgcolor">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'bgcolor'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="pi.dblatex_table-width">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'table-width'"/>
+  </xsl:call-template>
+</xsl:template>
 
 </xsl:stylesheet>
