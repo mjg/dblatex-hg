@@ -27,13 +27,9 @@
 
 <xsl:template match="equation">
   <xsl:variable name="delim">
-    <xsl:if test="descendant::alt/processing-instruction('texmath')">
-      <xsl:call-template name="pi-attribute">
-        <xsl:with-param name="pis"
-                   select="descendant::alt/processing-instruction('texmath')"/>
-        <xsl:with-param name="attribute" select="'delimiters'"/>
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="pi.texmath_delimiters">
+      <xsl:with-param name="node" select="descendant::alt"/>
+    </xsl:call-template>
   </xsl:variable>
 
   <xsl:choose>
@@ -82,13 +78,7 @@
 
 <xsl:template match="alt" mode="latex">
   <xsl:variable name="delim">
-    <xsl:if test="processing-instruction('texmath')">
-      <xsl:call-template name="pi-attribute">
-        <xsl:with-param name="pis"
-                   select="processing-instruction('texmath')"/>
-        <xsl:with-param name="attribute" select="'delimiters'"/>
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="pi.texmath_delimiters"/>
   </xsl:variable>
 
   <xsl:variable name="tex">

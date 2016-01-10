@@ -44,5 +44,16 @@
   </xsl:call-template>
 </xsl:template>
 
+<!-- ==================================================================== -->
+<!-- The texmath PI.  -->
+
+<xsl:template name="pi.texmath_delimiters">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('texmath')"/>
+    <xsl:with-param name="attribute" select="'delimiters'"/>
+  </xsl:call-template>
+</xsl:template>
 
 </xsl:stylesheet>
