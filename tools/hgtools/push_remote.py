@@ -71,13 +71,21 @@ def hg_tag_command(repo_proxy, patch, user=""):
     cmd += [tag1]
     return cmd
 
-def hg_import_patches(repo_proxy, patch_dir, user=""):
+def hg_import_patches(repo_proxy, patch_dir, user="", exclude_patches=None):
+    excluded = exclude_patches or []
     patches = glob.glob(os.path.join(patch_dir, "*.diff"))
     patches.sort()
     cmdbase = ["hg", "-R", repo_proxy, "import"]
     if user: cmdbase += ["-u", user]
 
+    if exclude_patches:
+        excluded = [ os.path.join(patch_dir, "%s-inc.diff" % (p)) for p in
+                     exclude_patches ]
+    else:
+        excluded = []
+
     for patch in patches:
+        if patch in excluded: continue
         cmd = hg_tag_command(repo_proxy, patch, user)
         if not(cmd):
             cmd = cmdbase + [patch]
@@ -89,7 +97,7 @@ def hg_command(repo_sas, what):
 
 
 def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
-                  push_remote=False):
+                  push_remote=False, exclude_patches=None):
     """
     The update principle is as follow:
 
@@ -122,7 +130,8 @@ def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
     # be changed. So, use raw patch export/import method.
     try:
         hg_export_patches(repo_src, repo_sas, patch_dir)
-        hg_import_patches(repo_proxy, patch_dir, user=user)
+        hg_import_patches(repo_proxy, patch_dir, user=user,
+                          exclude_patches=exclude_patches)
         hg_command(repo_sas, "pull")
         if push_remote:
             hg_command(repo_proxy, "push")
@@ -156,6 +165,8 @@ def main():
                       help="Debug mode. Temporary dir nor removed")
     parser.add_option("-n", "--dry-run", action="store_true",
                       help="Print the command but do nothing")
+    parser.add_option("-z", "--exclude-patch", action="append",
+                      help="Username of the destination commits")
 
     (options, args) = parser.parse_args()
 
@@ -163,8 +174,10 @@ def main():
     debug = False
     push_remote = False
     user = ""
+    exclude_patches = None
     global dry_run
 
+    errors = 0
     if options.source:
         repo_src = os.path.realpath(options.source)
     if options.dry_run:
@@ -175,8 +188,17 @@ def main():
         debug = options.debug
     if options.push_remote:
         push_remote = options.push_remote
+    if options.exclude_patch:
+        exclude_patches = []
+        for patch in options.exclude_patch:
+            patches = [ p.strip() for p in patch.split(",") ]
+            for p in patches:
+                try: d = int(p)
+                except:
+                    print "Invalid revision identifier: %s" % p
+                    errors = errors + 1
+            exclude_patches += patches
 
-    errors = 0
     if not(options.intermediate):
         print >> sys.stderr, "Option -i required"
         errors = errors + 1
@@ -192,7 +214,8 @@ def main():
 
     # Local synchronization between repositories
     rc = push_to_proxy(repo_src, repo_sas, repo_proxy,
-                       user=user, debug=debug, push_remote=push_remote)
+                       user=user, debug=debug, push_remote=push_remote,
+                       exclude_patches=exclude_patches)
 
     sys.exit(rc)
 
