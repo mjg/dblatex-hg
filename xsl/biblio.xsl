@@ -148,26 +148,21 @@
 
 <xsl:template name="bibtex.process">
   <xsl:param name="level"/>
-  <xsl:variable name="pi"
-                select="bibliomixed/processing-instruction('bibtex')"/>
 
   <!-- take all the details from the bibtex PI -->
   <xsl:variable name="bibfiles">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="$pi"/>
-      <xsl:with-param name="attribute" select="'bibfiles'"/>
+    <xsl:call-template name="pi.bibtex_bibfiles">
+      <xsl:with-param name="node" select="bibliomixed"/>
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="bibstyle">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="$pi"/>
-      <xsl:with-param name="attribute" select="'bibstyle'"/>
+    <xsl:call-template name="pi.bibtex_bibstyle">
+      <xsl:with-param name="node" select="bibliomixed"/>
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="print">
-    <xsl:call-template name="pi-attribute">
-      <xsl:with-param name="pis" select="$pi"/>
-      <xsl:with-param name="attribute" select="'mode'"/>
+    <xsl:call-template name="pi.bibtex_mode">
+      <xsl:with-param name="node" select="bibliomixed"/>
     </xsl:call-template>
   </xsl:variable>
 
