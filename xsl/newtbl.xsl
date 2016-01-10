@@ -143,6 +143,7 @@
       <xsl:choose>
         <xsl:when test="string(number($width))='NaN'">1</xsl:when>
         <xsl:otherwise>
+          <!-- Use number() to ensure to have something well formatted -->
           <xsl:value-of select="number($width)"/>
         </xsl:otherwise>
       </xsl:choose>
