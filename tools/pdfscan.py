@@ -750,6 +750,10 @@ class PDFObject:
         method = self.descriptor.get("/Filter")
         if method == "/FlateDecode":
             method = "zlib"
+        elif method == "/DCTDecode":
+            # This is JPEG. Just dump it
+            self.warning("this is a JPEG stream")
+            method = ""
         elif method != "":
             self.error("don't know how to decode stream with filter '%s'" \
                      % method)
