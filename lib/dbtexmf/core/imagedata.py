@@ -176,6 +176,9 @@ class Imagedata:
         # Translate the URL to an actual local path
         fig = urllib.url2pathname(fig)
 
+        # Always use '/' in path: work even on windows and is required by tex
+        if os.path.sep != '/': fig = fig.replace(os.path.sep, '/')
+
         # First, scan the available formats
         (realfig, ext) = self.scanformat(fig)
 
