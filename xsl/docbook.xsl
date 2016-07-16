@@ -83,6 +83,8 @@
 
 <xsl:key name="id" match="*" use="@id|@xml:id"/>
 
+<!--
 <xsl:strip-space elements="book article articleinfo chapter"/>
+-->
 
 </xsl:stylesheet>

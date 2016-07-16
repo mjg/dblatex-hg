@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:db="http://docbook.org/ns/docbook"
                 xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
                 xmlns:dyn="http://exslt.org/dynamic"
                 xmlns:saxon="http://icl.com/saxon"
-                exclude-result-prefixes="doc dyn saxon"
+                exclude-result-prefixes="db doc dyn saxon"
                 version='1.0'>
 
 <!-- ********************************************************************
@@ -40,8 +41,8 @@
 <xsl:preserve-space elements="*"/>
 
 <xsl:strip-space elements="
-abstract affiliation anchor answer appendix area areaset areaspec
-artheader article audiodata audioobject author authorblurb authorgroup
+abstract affiliation anchor answer appendix area areaset areaspec artheader
+article articleinfo audiodata audioobject author authorblurb authorgroup
 beginpage bibliodiv biblioentry bibliography biblioset blockquote book
 bookbiblio bookinfo callout calloutlist caption caution chapter
 citerefentry cmdsynopsis co collab colophon colspec confgroup
@@ -79,6 +80,54 @@ oointerface
 simplemsgentry
 manvolnum
 "/>
+
+<!-- Directly strip the docbook 5 elements, since docbook 4
+     stripping setup is not applied on the RTF built in stripNS mode, when
+     xsl:imports are used in stylesheets, which is the case in dblatex
+     -->
+<xsl:strip-space elements="
+db:abstract db:affiliation db:anchor db:answer db:appendix db:area db:areaset
+db:areaspec db:artheader db:article db:audiodata db:audioobject db:author
+db:authorblurb db:authorgroup db:beginpage db:bibliodiv db:biblioentry
+db:bibliography db:biblioset db:blockquote db:book db:bookbiblio
+db:callout db:calloutlist db:caption db:caution db:chapter db:citerefentry
+db:cmdsynopsis db:co db:collab db:colophon db:colspec db:confgroup db:copyright
+db:dedication db:docinfo db:editor db:entrytbl db:epigraph db:equation
+db:example db:figure db:footnote db:footnoteref db:formalpara db:funcprototype
+db:funcsynopsis db:glossary db:glossdef db:glossdiv db:glossentry db:glosslist
+db:graphicco db:group db:highlights db:imagedata db:imageobject
+db:imageobjectco db:important db:index db:indexdiv db:indexentry db:indexterm
+db:info db:informalequation db:informalexample db:informalfigure
+db:informaltable db:inlineequation db:inlinemediaobject db:itemizedlist
+db:itermset db:keycombo db:keywordset db:legalnotice db:listitem db:lot
+db:mediaobject db:mediaobjectco db:menuchoice db:msg db:msgentry db:msgexplan
+db:msginfo db:msgmain db:msgrel db:msgset db:msgsub db:msgtext db:note
+db:orderedlist db:othercredit db:part db:partintro db:preface
+db:printhistory db:procedure db:programlistingco db:publisher db:qandadiv
+db:qandaentry db:qandaset db:question db:refentry db:reference db:refmeta
+db:refnamediv db:refsection db:refsect1 db:refsect2 db:refsect3
+db:refsynopsisdiv db:revhistory db:revision db:row db:sbr db:screenco
+db:screenshot db:sect1 db:sect2 db:sect3 db:sect4 db:sect5 db:section
+db:seglistitem db:segmentedlist db:seriesinfo db:set
+db:setindex db:setinfo db:shortcut db:sidebar db:simplelist db:simplesect
+db:spanspec db:step db:subject db:subjectset db:substeps db:synopfragment
+db:table db:tbody db:textobject db:tfoot db:tgroup db:thead db:tip db:toc
+db:tocchap db:toclevel1 db:toclevel2 db:toclevel3 db:toclevel4 db:toclevel5
+db:tocpart db:varargs db:variablelist db:varlistentry db:videodata
+db:videoobject db:void db:warning db:subjectset
+db:classsynopsis
+db:constructorsynopsis
+db:destructorsynopsis
+db:fieldsynopsis
+db:methodparam
+db:methodsynopsis
+db:ooclass
+db:ooexception
+db:oointerface
+db:simplemsgentry
+db:manvolnum
+"/>
+
 <!-- ====================================================================== -->
 
 <doc:template name="is.component" xmlns="">
