@@ -234,7 +234,7 @@ colwidth attribute.</para>
 <term>all</term>
 
 <listitem>
-<para>the automatic width is applied to any column, whatever a colspec is
+<para>the automatic width is applied to any column, whether a colspec is
 provided or not.</para>
 </listitem>
 </varlistentry>
