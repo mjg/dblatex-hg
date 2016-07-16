@@ -5,11 +5,9 @@ Enhancements:
 - Add the endnotes feature: the <footnote>s can be turned to be end notes in
   the printed document. Some parameters are added to configure the endnotes
   display.
-- Add the 'pdfscan.py' script to find out the fonts and their size used in a PDF
-  file.
-- Add the XML configuration feature: it replaces the simple text configuration
-  file. It gives a more consistent setup and more possibilities to
-  configure dblatex, like overriding the commands used to convert images.
+- Add an XML configuration file format: it replaces the simple text
+  configuration format. It gives a more consistent setup and more possibilities
+  to configure dblatex, like overriding the commands used to convert images.
 - Add the parameter figure.default.align to change the default <figure> and
   <informalfigure> alignment
 - Add a workaround to fix a Xindy bug appearing when ranges of an index
@@ -18,6 +16,16 @@ Enhancements:
   hyperref when hyperindex is on.
 - Add the possibility to build a document from a tex file that includes
   other tex files.
+- Allow a <segmentedlist> to be formatted as a table if the parameter
+  segmentedlist.as.table is set to '1' or if the list-presentation Processing
+  Instruction is set to 'table' (Karl O. Pinc patch). Other PIs can be used if
+  a segmentedlist is formatted as a table.
+
+Other features:
+- Internal refactoring of Processing Instructions.
+- Add a 'pdfscan.py' script to find out the fonts and their size used in a PDF
+  file and find out how the PDF is built.
+- Documentation: add references to the supported Processing Instructions
 
 Bug fixes:
 - Fix a bug when passing a dialect language (e.g. '[5.2]Lua')
@@ -29,6 +37,12 @@ Bug fixes:
 - Fix <seealso> in <indexterm>.
 - Fix a bug about ordered lists that loose their counter in <informaltable>s.
 - Put the <dedication>s in the book front matter (was in the body matter).
+- Add the table.continue.caption parameter to fix the hardcoded 'continued'
+  caption used for tables covering several pages (Ricard Mones patch)
+- Fix SF bug #102: the figure paths used in windows.
+- Fix SF bug #111: adapt the file paths used in windows by saxon or xsltproc.
+- Fix dbk_locale.sty to be an ASCII file.
+- Correctly strip spaces for docbook 5 elements.
 
 
 Release 0.3.7:
