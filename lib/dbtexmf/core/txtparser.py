@@ -14,7 +14,7 @@ def texinputs_parse(strpath, basedir=None):
     computed from current one or from <basedir> when specified.
     """
     paths = []
-    for p in strpath.split(":"):
+    for p in strpath.split(os.pathsep):
         if not(os.path.isabs(p)):
             if not(basedir):
                 d = os.path.realpath(p)

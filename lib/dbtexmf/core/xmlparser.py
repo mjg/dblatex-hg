@@ -68,7 +68,7 @@ class TexPath(BaseOption):
         self.paths = []
 
     def optvalue(self):
-        return ":".join(self.paths)
+        return os.pathsep.join(self.paths)
 
     def fromnode(self, xmlnode):
         if not(xmlnode.text): return
