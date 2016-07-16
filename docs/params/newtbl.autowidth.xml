@@ -21,7 +21,15 @@
                 xpointer="xpointer(id('autowidth-items'))"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
     </para>
+    <para>The default value is empty. This is the
+    same as <literal>none</literal>.</para>
 
+    <para id="newtbl-autowidth-and-seglists">The values
+    <literal>all</literal> and <literal>default</literal> have
+    identical effect in the tabular presentation of
+    <sgmltag>segmentedlist</sgmltag>s.
+    (<sgmltag>segmentedlist</sgmltag> elements have no
+    <parameter>colwidth</parameter> attribute.)</para>
   </refsection>
   <refsection>
     <title>See Also</title>
