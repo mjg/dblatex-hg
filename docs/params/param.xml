@@ -97,6 +97,7 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="newtbl.format.tfoot.xml"/>
 <xi:include href="newtbl.format.thead.xml"/>
 <xi:include href="newtbl.use.hhline.xml"/>
+<xi:include href="table.continue.caption.xml"/>
 <xi:include href="table.default.position.xml"/>
 <xi:include href="table.default.tabstyle.xml"/>
 <xi:include href="table.in.float.xml"/>
@@ -164,6 +165,9 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="filename.as.url.xml"/>
 <xi:include href="footnote.as.endnote.xml"/>
 <xi:include href="hyphenation.format.xml"/>
+<xi:include href="linenumbering.scope.xml"/>
+<xi:include href="linenumbering.default.xml"/>
+<xi:include href="linenumbering.everyNth.xml"/>
 <xi:include href="literal.layout.options.xml"/>
 <xi:include href="literal.lines.showall.xml"/>
 <xi:include href="literal.width.ignore.xml"/>
@@ -171,13 +175,11 @@ refentry.pagebreak — Start each refentry on a new page
 <xi:include href="literal.role.xml"/>
 <xi:include href="literal.environment.xml"/>
 <xi:include href="literal.extensions.xml"/>
-<xi:include href="linenumbering.scope.xml"/>
-<xi:include href="linenumbering.default.xml"/>
-<xi:include href="linenumbering.everyNth.xml"/>
 <xi:include href="mediaobject.caption.style.xml"/>
 <xi:include href="monoseq.hyphenation.xml"/>
 <xi:include href="monoseq.small.xml"/>
 <xi:include href="pdf.annot.options.xml"/>
+<xi:include href="segmentedlist.as.table.xml"/>
 <xi:include href="seg.item.separator.xml"/>
 <xi:include href="show.comments.xml"/>
 <xi:include href="texlive.version.xml"/>
