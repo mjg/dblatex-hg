@@ -55,4 +55,33 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template match="sgmltag[@class='xmlpi']">
+  <xsl:variable name="name" select="normalize-space(.)"/>
+  <xsl:variable name="nameref" select="concat('pi-',translate($name,' ','_'))"/>
+  <xsl:variable name="target" select="key('id',$nameref)[1]"/>
+
+  <xsl:choose>
+  <xsl:when test="count($target) &gt; 0">
+    <!-- Hot link to the parameter refentry -->
+    <xsl:call-template name="hyperlink.markup">
+      <xsl:with-param name="linkend" select="$nameref"/>
+      <xsl:with-param name="text">
+        <xsl:apply-imports/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <!-- Index entry for this parameter -->
+    <xsl:text>\index{Processing Instructions!</xsl:text>
+    <xsl:value-of select="$name"/>
+    <xsl:text>}</xsl:text>
+  </xsl:when>
+  <xsl:otherwise>
+    <!--
+    <xsl:message>No reference for parameter: '<xsl:value-of
+    select="$name"/>'</xsl:message>
+    -->
+    <xsl:apply-imports/>
+  </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 </xsl:stylesheet>

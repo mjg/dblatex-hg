@@ -5,7 +5,7 @@
     <refentrytitle>bibtex</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname><package>bibtex</package></refname>
+    <refname><sgmltag class="xmlpi">bibtex</sgmltag></refname>
     <refpurpose>Specify how to fill a Bibliography with BibTeX</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

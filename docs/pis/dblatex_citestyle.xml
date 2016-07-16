@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<refentry id="dblatex_citestyle">
+<refentry id="pi-dblatex_citestyle">
   <refmeta>
     <refentrytitle>dblatex citestyle</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname><package>dblatex</package>
-             <parameter>citestyle</parameter></refname>
+    <refname><sgmltag class="xmlpi">dblatex
+             <parameter>citestyle</parameter></sgmltag></refname>
     <refpurpose>Sets Natbib Citation Style</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

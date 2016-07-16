@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<refentry id="texmath_delimiters">
+<refentry id="pi-texmath_delimiters">
   <refmeta>
     <refentrytitle>texmath delimiters</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname><package>texmath</package>
-             <parameter>delimiters</parameter></refname>
+    <refname><sgmltag class="xmlpi">texmath
+             <parameter>delimiters</parameter></sgmltag></refname>
     <refpurpose>Disable The LaTeX Mathematical Delimiters Control</refpurpose>
   </refnamediv>
   <refsynopsisdiv>

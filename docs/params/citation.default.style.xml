@@ -19,7 +19,7 @@
     <title>See Also</title>
     <itemizedlist>
       <listitem><xref linkend="sec-natbib"/></listitem>
-      <listitem><xref linkend="dblatex_citestyle"/></listitem>
+      <listitem><xref linkend="pi-dblatex_citestyle"/></listitem>
     </itemizedlist>
   </refsection>
 </refentry>

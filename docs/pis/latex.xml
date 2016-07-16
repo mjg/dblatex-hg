@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<refentry id="latex">
+<refentry id="pi-latex">
   <refmeta>
     <refentrytitle>latex</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname><package>latex</package>, <package>db2latex</package></refname>
+    <refname><sgmltag class="xmlpi">latex</sgmltag>, <sgmltag class="xmlpi">db2latex</sgmltag></refname>
     <refpurpose>Insert Arbitrary text into the LaTeX file</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
@@ -18,9 +18,9 @@
     <replaceable>content</replaceable> is put directly into the
     generated LaTeX document.</para>
 
-    <para>The <package>db2latex</package> PI is deprecated and should not
+    <para>The <sgmltag class="xmlpi">db2latex</sgmltag> PI is deprecated and should not
     be used anymore. It was provided for backward compatibility. Use the
-    <package>latex</package> PI instead.</para>
+    <sgmltag class="xmlpi">latex</sgmltag> PI instead.</para>
 
     <para>This can provide the ultimate in customization, but can be
     very dangerous since it breaks the abstractions provided by
@@ -45,11 +45,11 @@
       made.</para>
     </warning>
 
-    <para>The <package>latex</package> Processing Instruction takes
+    <para>The <sgmltag class="xmlpi">latex</sgmltag> Processing Instruction takes
     special steps to work in verbatim blocks,
     <sgmltag>screen</sgmltag>, <sgmltag>programlisting</sgmltag>, and
     <sgmltag>literallayout</sgmltag> elements, while
-    <package>db2latex</package> is directly written as is.</para>
+    <sgmltag class="xmlpi">db2latex</sgmltag> is directly written as is.</para>
   </refsection>
 
   <refsection>

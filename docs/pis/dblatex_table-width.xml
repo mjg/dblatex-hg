@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<refentry id="dblatex_table-width">
+<refentry id="pi-dblatex_table-width">
   <refmeta>
     <refentrytitle>dblatex table-width</refentrytitle>
   </refmeta>
   <refnamediv>
-    <refname><package>dblatex</package>
-             <parameter>table-width</parameter></refname>
+    <refname><sgmltag class="xmlpi">dblatex
+             <parameter>table-width</parameter></sgmltag></refname>
     <refpurpose>Control the Automatic Width of a Table</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
