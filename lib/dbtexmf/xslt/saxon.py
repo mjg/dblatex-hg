@@ -17,7 +17,7 @@ class Saxon:
         return ["saxon"]
 
     def run(self, xslfile, xmlfile, outfile, opts=None, params=None):
-        cmd = ["saxon-xslt", "-o", outfile] + self.run_opts
+        cmd = ["saxon-xslt", "-o", os.path.basename(outfile)] + self.run_opts
         if opts:
             cmd += opts
         cmd += [xmlfile, xslfile]

@@ -22,7 +22,7 @@ class XsltProc:
         return ["xsltproc"]
 
     def run(self, xslfile, xmlfile, outfile, opts=None, params=None):
-        cmd = ["xsltproc", "-o", outfile] + self.run_opts
+        cmd = ["xsltproc", "-o", os.path.basename(outfile)] + self.run_opts
         if self.use_catalogs and self.catalogs:
             cmd.append("--catalogs")
         if params:
