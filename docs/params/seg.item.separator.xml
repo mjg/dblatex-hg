@@ -7,7 +7,7 @@
   <refnamediv>
     <refname><parameter>seg.item.separator</parameter></refname>
     <refpurpose>Separator to use between several
-<sgmltag>segitem</sgmltag>s</refpurpose>
+<sgmltag>seg</sgmltag>s</refpurpose>
   </refnamediv>
   <refsynopsisdiv>
     <programlisting>
@@ -16,6 +16,6 @@
   <refsection>
     <title>Description</title>
     <para>Defines the separator to use between several
-<sgmltag>segitem</sgmltag>s.</para>
+<sgmltag>seg</sgmltag>s.</para>
   </refsection>
 </refentry>
