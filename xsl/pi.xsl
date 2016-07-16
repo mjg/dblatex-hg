@@ -77,6 +77,15 @@
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="pi.dblatex_colwidth">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'colwidth'"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="pi.dblatex_bgcolor">
   <xsl:param name="node" select="."/>
   <xsl:call-template name="pi-attribute">
@@ -92,6 +101,24 @@
     <xsl:with-param name="pis"
                     select="$node/processing-instruction('dblatex')"/>
     <xsl:with-param name="attribute" select="'table-width'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="pi.dblatex_autowidth">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'autowidth'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="pi.dblatex_list-presentation">
+  <xsl:param name="node" select="."/>
+  <xsl:call-template name="pi-attribute">
+    <xsl:with-param name="pis"
+                    select="$node/processing-instruction('dblatex')"/>
+    <xsl:with-param name="attribute" select="'list-presentation'"/>
   </xsl:call-template>
 </xsl:template>
 
