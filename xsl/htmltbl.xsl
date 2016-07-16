@@ -821,6 +821,13 @@
         </xsl:attribute>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:if test="@width != ''">
+          <xsl:message>
+            <xsl:text>Warning: Unrecognized width attribute (</xsl:text>
+            <xsl:value-of select="@width"/>
+            <xsl:text>) in column of HTML table</xsl:text>
+          </xsl:message>
+        </xsl:if>
         <!-- no width specified: equivalent to a '*' -->
         <xsl:attribute name="colwidth">
           <xsl:text>\newtblstarfactor</xsl:text>
@@ -1058,7 +1065,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="pi.dblatex_bgcolor">
-          <xsl:with-param name="node" select=".."/>
+          <xsl:with-param name="node" select="parent::colgroup"/>
         </xsl:call-template>
       </xsl:otherwise>
       </xsl:choose>
