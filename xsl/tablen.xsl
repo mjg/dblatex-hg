@@ -21,6 +21,7 @@
 <xsl:param name="table.in.float" select="'1'"/>
 <xsl:param name="table.default.position" select="'[htbp]'"/>
 <xsl:param name="table.default.tabstyle"/>
+<xsl:param name="table.continue.caption" select="'(continued)'"/>
 <xsl:param name="default.table.width"/>
 
 
@@ -398,7 +399,9 @@
       <xsl:value-of select="$headrows"/>
       <xsl:text>\endfirsthead&#10;</xsl:text>
       <xsl:text>\caption[]</xsl:text>
-      <xsl:text>{(continued)}\tabularnewline&#10;</xsl:text>
+      <xsl:text>{</xsl:text>
+      <xsl:value-of select="$table.continue.caption"/>
+      <xsl:text>}\tabularnewline&#10;</xsl:text>
       <xsl:value-of select="$headrows"/>
       <xsl:text>\endhead&#10;</xsl:text>
     </xsl:when>
