@@ -7,7 +7,7 @@
 <refmiscinfo class="other" otherclass="list-type">open</refmiscinfo>
 </refmeta>
 <refnamediv>
-<refname>crop.paper.type</refname>
+<refname><parameter>crop.paper.type</parameter></refname>
 <refpurpose>Select the paper type for paper with crops</refpurpose>
 </refnamediv>
 

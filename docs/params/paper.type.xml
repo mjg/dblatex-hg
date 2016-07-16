@@ -45,7 +45,7 @@
 <refmiscinfo class="other" otherclass="value">C10<alt>40x28mm</alt></refmiscinfo>
 </refmeta>
 <refnamediv>
-<refname>paper.type</refname>
+<refname><parameter>paper.type</parameter></refname>
 <refpurpose>Select the paper type</refpurpose>
 </refnamediv>
 

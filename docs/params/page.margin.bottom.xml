@@ -6,7 +6,7 @@
 <refmiscinfo class="other" otherclass="datatype">length</refmiscinfo>
 </refmeta>
 <refnamediv>
-<refname>page.margin.bottom</refname>
+<refname><parameter>page.margin.bottom</parameter></refname>
 <refpurpose>The bottom margin of the page</refpurpose>
 </refnamediv>
 
