@@ -73,8 +73,8 @@
   <para>Processing instructions are written
   <literal>&lt;?</literal><replaceable>name</replaceable>
   <replaceable>content</replaceable> <literal>?&gt;</literal>.  Most
-  often <replaceable>content</replaceable> will have the form of an
-  XML attribute with a value, as follows:
+  often <replaceable>content</replaceable> will have the form of one or more
+  XML attributes with a value, as follows:
   <literal>&lt;?</literal><replaceable>name</replaceable>
   <replaceable>attribute</replaceable><literal>="</literal><replaceable>value</replaceable><literal>" ?&gt;</literal>.</para>
 
@@ -304,13 +304,265 @@ def main(latex_file, stdout):
   </section>
   </section>
   <section id="sec-specs">
-   <title>Dblatex Configuration File</title>
+  <title>Dblatex Configuration File</title>
   <para>
    A master configuration file, also called a specification file, can be used to list
    all the customizations and options to apply. Such a file is passed by using the
    option <option>-S <replaceable>config_file</replaceable></option>.
   </para>
-  <section><title>Configuration File Format</title>
+  <section id="sec-xml-config" xreflabel="config">
+  <title>XML Configuration File Format</title>
+  <para>
+   You should use the XML format to configure dblatex. It contains more
+   features than the text format used up to the 0.3.7 release that is now
+   deprecated. The principle remains the same, that is, most of the configuration
+   parameters correspond to a command line option.
+  </para>
+  <para>
+  Here is a full example of a configuration file. In the next sections the
+  meaning and use of the configuration tags are detailed.
+  <programlisting language="XML"><xi:include
+      xmlns:xi="http://www.w3.org/2001/XInclude" href="dblatex.xconf"
+      parse="text"/></programlisting>
+  </para>
+  <section id="sec-xconf-config"><title><sgmltag>config</sgmltag></title>
+  <para>It is the root element of a configuration file. A valid configuration
+  file must have a <sgmltag>config</sgmltag> root element.</para>
+  <para>Attributes:
+  <variablelist>
+    <varlistentry>
+      <term>xmlns</term>
+      <listitem><para>The namespace to use for a dblatex configuration file is: 
+      <literal>http://dblatex.sourceforge.net/config</literal>.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+  <para>
+  The following elements occur in <sgmltag>config</sgmltag>:
+  <xref linkend="sec-xconf-latex"/>, <xref linkend="sec-xconf-xslt"/>, 
+  <xref linkend="sec-xconf-imagedata"/>, <xref linkend="sec-xconf-options"/>.
+  </para>
+  </section>
+  <section id="sec-xconf-latex" xreflabel="latex">
+  <title><sgmltag>latex</sgmltag></title>
+  <para>The latex element contains the configuration data related to the latex
+  processing.</para>
+  <para>Attributes: none</para>
+  <para>
+  The following elements occur in <sgmltag>latex</sgmltag>:
+  <variablelist>
+    <varlistentry>
+      <term><sgmltag>backend</sgmltag></term>
+      <listitem><para>It defines the latex engine to use, like the option
+      <option>--backend</option> does. The backend name is specified through the 
+      <sgmltag>use</sgmltag> attribute.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>texstyle</sgmltag></term>
+      <listitem><para>It defines the docbook latex style to use, like the option
+      <option>--texstyle</option> does. The latex package is specified through the 
+      <sgmltag>use</sgmltag> attribute.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>texpost</sgmltag></term>
+      <listitem><para>It defines the latex post-processing script to use, like the
+      option <option>--texpost</option> does. The script name is specified through the 
+      <sgmltag>use</sgmltag> attribute or the <sgmltag>fileref</sgmltag>
+      attribute.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>indexstyle</sgmltag></term>
+      <listitem><para>It defines index style file (.ist) to use, like the
+      option <option>--indexstyle</option> does. The filename is
+      specified through the <sgmltag>fileref</sgmltag>
+      attribute.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>texinputs</sgmltag></term>
+      <listitem><para>The element text defines the extra paths to add to TEXINPUTS,
+      like the option <option>--texinputs</option> does.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>bibinputs</sgmltag></term>
+      <listitem><para>The element text defines the lookup paths of BIBINPUTS,
+      like you would do by successive use of the option <option>--bib-path</option>.
+      </para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>bstinputs</sgmltag></term>
+      <listitem><para>The element text defines the lookup paths of BSTINPUTS,
+      like you would do by successive use of the option <option>--bst-path</option>.
+      </para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+  </section>
+  <section id="sec-xconf-xslt" xreflabel="xslt"><title><sgmltag>xslt</sgmltag></title>
+  <para>The xslt element contains the configuration data related to the XSL
+  processing.</para>
+  <para>Attributes: none</para>
+  <para>
+  The following elements occur in <sgmltag>xslt</sgmltag>:
+  <variablelist>
+    <varlistentry>
+      <term><sgmltag>stylesheet</sgmltag></term>
+      <listitem><para>It defines a user stylesheet to use, like the option
+      <option>--xsl-user</option> does. The stylesheet name is specified through the 
+      <sgmltag>fileref</sgmltag> attribute. If several
+      <sgmltag>stylesheet</sgmltag> elements are set, the precedence is the same
+      like using the option <option>--xsl-user</option> several times.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>engine</sgmltag></term>
+      <listitem><para>It defines the XSLT processor to use, like the option
+      <option>--xslt</option> does. The engine name is specified through the 
+      <sgmltag>use</sgmltag> attribute.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+  </section>
+  <section id="sec-xconf-imagedata" xreflabel="imagedata">
+  <title><sgmltag>imagedata</sgmltag></title>
+  <para>The imagedata element contains the rules and commands to convert
+  on the fly the images included in the docbook document.</para>
+  <para>Attributes: none</para>
+  <para>
+  The following elements occur in <sgmltag>imagedata</sgmltag>:
+  <variablelist>
+    <varlistentry>
+      <term><sgmltag>figpath</sgmltag></term>
+      <listitem><para>It defines a path where to find the images, like the option
+      <option>--fig-path</option> does.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>converter</sgmltag></term>
+      <listitem><para>It defines an image transformation rule. See 
+      <xref linkend="sec-xconf-converter"/> for more
+      details.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+  </section>
+  <section id="sec-xconf-converter" xreflabel="converter">
+  <title><sgmltag>converter</sgmltag></title>
+  <para>The converter element defines a rule about how to convert on the fly an image
+  in a docbook document to the corresponding image used in the built latex file. The
+  goal is to have an image format compatible with the latex engine, whatever the
+  original format is. <command>Dblatex</command> has a default set of rules, but
+  one can overwrite or add some rules.</para>
+
+  <para>Attributes:
+  <variablelist>
+    <varlistentry>
+      <term>src</term>
+      <listitem><para>Format of the original image referenced in the XML
+      document. The converter only applies to the images matching this format.
+      </para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>dst</term>
+      <listitem><para>Target format once converted. The converter only applies to the
+      original images having the format <literal>src</literal> and that need to be 
+      converted to the format <literal>dst</literal>. <literal>dst</literal> can take
+      the special value "<literal>*</literal>" meaning that the rule applies for all
+      the possible target formats (e.g. eps, pdf, png).</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>docformat</term>
+      <listitem><para>Specify for which document output format the converter applies.
+      For example, if <literal>docformat</literal> is set to "pdf", it means that
+      the converter applies only if the document output format is PDF. The
+      converter will not apply if you want to build a PostScript or DVI
+      document.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>backend</term>
+      <listitem><para>The converter applies only if it is this latex engine that
+      is used. For example, it is usefull if you want to convert an image in a
+      specific way only when xetex is used.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+
+  <para>The following elements occur in <sgmltag>converter</sgmltag>:
+  <variablelist>
+    <varlistentry>
+      <term><sgmltag>commandchain</sgmltag></term>
+      <listitem><para>List of the commands to run. A
+      <sgmltag>commandchain</sgmltag> contains one or more
+      <sgmltag>command</sgmltag> elements.
+      </para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>command</sgmltag></term>
+      <listitem><para>command to execute to perform the conversion, or a part of
+      the conversion if several commands are chained. See
+      <xref linkend="sec-xconf-command"/>.
+      </para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+  </section>
+  <section id="sec-xconf-command" xreflabel="command">
+  <title><sgmltag>command</sgmltag></title>
+  <para>The command element contains the arguments of the command to run.
+  The arguments can contain some predefined keywords that are replaced by the
+  actual values when the command is executed. The known keywords are:</para>
+  <variablelist>
+    <varlistentry>
+      <term><literal>%(src)s</literal></term>
+      <listitem><para>Replaced by the <literal>src</literal> value (original
+      image format).</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>%(dst)s</literal></term>
+      <listitem><para>Replaced by the <literal>dst</literal> value (target
+      image format).</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>%(input)s</literal></term>
+      <listitem><para>Replaced by the input file required by the command. In the
+      case of an image conversion, it is the filename of the original image to
+      convert.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>%(output)s</literal></term>
+      <listitem><para>Replaced by the name of the ouput file required by the command.
+      In the case of an image conversion, it is the filename of the output image once
+      converted.</para></listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>Attributes:
+  <variablelist>
+    <varlistentry>
+      <term>input</term>
+      <listitem><para>Standard input of the command to run. It can specify a file
+      or it can specify to use the output of the preceding command if the
+      keyword "PIPE" is used.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>output</term>
+      <listitem><para>Standard output of the command to run. It can specify a file
+      or it can specify that the output shall be redirected to the next command if the
+      keyword "PIPE" is used.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>shell</term>
+      <listitem><para>When set to "1" or "true", the command is run in a shell 
+      environment.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+  </section>
+  <section id="sec-xconf-options" xreflabel="options">
+  <title><sgmltag>options</sgmltag></title>
+  <para>The options element lists the extra arguments to pass to
+  <command>dblatex</command>.</para>
+  </section>
+
+  </section>
+  <section><title>Deprecated Text Configuration File Format</title>
   <para>
    The format of the file is the following:
   </para>

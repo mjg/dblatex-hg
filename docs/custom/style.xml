@@ -62,11 +62,11 @@ These graphics are used by the default output formatting.
 </varlistentry>
 <varlistentry><term><filename>specs</filename></term>
 <listitem>
-<para>Contains all the specification files describing the available styles.
-A specification file must have the extension .specs to be detected as a style
-description, and its basename is the name of the style. For example the style
-db2latex is described by the specification file
-<filename>db2latex.specs</filename>.
+<para>Contains all the configuration files describing the available styles.
+A specification file must have the extension .specs, .conf, or .xml to be
+detected as a style description, and its basename is the name of the style.
+For example the style db2latex is described by the configuration file
+<filename>db2latex.xml</filename>.
 </para>
 <para>When <command>dblatex</command> is executed with no parameter, the usage
 is displayed. In particular, the list of the available styles is given, like
@@ -116,18 +116,25 @@ $ mv param.xsl $HOME/.dblatex/mystyle/xsl/.
 ]]></programlisting>
 </step>
 <step><para>Create a configuration file under the directory
-<filename>$HOME/.dblatex</filename>. The specification file must point to the new
-latex stylesheet, and give the specific parameters. Example:</para>
+<filename>$HOME/.dblatex</filename>. The configuration file must point to the
+new latex stylesheet, and give the specific parameters. Example:</para>
 <programlisting><![CDATA[
 $ cat $HOME/.dblatex/mystyle.conf
-#
-# Dblatex config file for my new style.
-# Note that the directories are relative to mystyle.conf
-#
-TexInputs: mystyle/latex//
-TexStyle:  mytexstyle
-XslParam:  mystyle/param.xsl
-Options:   -f fig
+<?xml version="1.0" encoding="utf-8"?>
+<!-- =======================================================
+     Dblatex config file for my new style.
+     Note that the directories are relative to mystyle.conf
+     ======================================================= -->
+<config xmlns="http://dblatex.sourceforge.net/config">
+  <latex>
+    <texinputs>mystyle/latex//</texinputs>
+    <texstyle use="mytexstyle"/>
+  </latex>
+  <xslt>
+    <stylesheet fileref="mystyle/xsl/param.xsl"/>
+  </xslt>
+  <options>-f fig</options>
+</config>
 ]]></programlisting>
 </step>
 <step><para>That's it. Try to compile your document with your style, and check the
