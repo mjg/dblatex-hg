@@ -6,7 +6,7 @@
 <refmiscinfo class="other" otherclass="datatype">length</refmiscinfo>
 </refmeta>
 <refnamediv>
-<refname>page.margin.outer</refname>
+<refname><parameter>page.margin.outer</parameter></refname>
 <refpurpose>The outer page margin</refpurpose>
 </refnamediv>
 
