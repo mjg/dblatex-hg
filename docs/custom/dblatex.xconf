@@ -2,7 +2,7 @@
 <!-- ======================================================= -->
 <!-- Dblatex Configuration example for building a book       -->
 <!-- ======================================================= -->
-<config xmlns="http://dblatex.sourceforge.net/config">
+<config xmlns="http://dblatex.sourceforge.net/config" version="1.0">
   <latex>
     <backend use="xetex"/>
     <texstyle use="dbsimple"/>

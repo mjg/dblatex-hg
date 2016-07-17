@@ -92,7 +92,7 @@ pagesetup2.pdf: pagesetup2.fig
 	            --param profile.attribute "'output'" \
                     --param profile.value "'manual;pdf'" $(XSLPROF) $< | \
 	../scripts/dblatex -P target.database.document=$(HERE)/olinkdb.xml \
-	                   -c manual.specs $(OPTS) -o $@ - 
+	                   -c manual.conf $(OPTS) -o $@ - 
 
 # Build the manpage
 %.1.gz: %.1
