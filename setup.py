@@ -507,7 +507,7 @@ if __name__ == "__main__":
         package_dir={'dbtexmf':'lib/dbtexmf'},
         package_data={'dbtexmf.core':['sgmlent.txt'],
                       'dbtexmf.dblatex.grubber':['xindylang.xml']},
-        data_files=[('share/dblatex', ['xsl', 'latex']),
+        data_files=[('share/dblatex', ['xsl', 'latex', 'etc/schema']),
                     ('share/doc/dblatex', pdfdocs),
                     ('share/doc/dblatex', htmldoc),
                     ('share/man/man1', ['docs/manpage/dblatex.1.gz'])],
