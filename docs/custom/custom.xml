@@ -315,8 +315,8 @@ def main(latex_file, stdout):
   <para>
    You should use the XML format to configure dblatex. It contains more
    features than the text format used up to the 0.3.7 release that is now
-   deprecated. The principle remains the same, that is, most of the configuration
-   parameters correspond to a command line option.
+   deprecated. The principle remains the same, that is, most of the
+   configuration parameters correspond to a command line option.
   </para>
   <para>
   Here is a full example of a configuration file. In the next sections the
@@ -325,6 +325,19 @@ def main(latex_file, stdout):
       xmlns:xi="http://www.w3.org/2001/XInclude" href="dblatex.xconf"
       parse="text"/></programlisting>
   </para>
+  <para>
+   Another example, much simpler, is the configuration file used for
+   this manual.
+  </para>
+<example><title>User Manual Configuration File</title>
+<programlisting language="XML"><xi:include
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    parse="text" href="../manual.conf"/></programlisting>
+</example>
+  <para>The following sections detail the meaning of each tag. Note that
+  dblatex provides some schema that you can use to validate your configuration
+  file.</para>
+
   <section id="sec-xconf-config"><title><sgmltag>config</sgmltag></title>
   <para>It is the root element of a configuration file. A valid configuration
   file must have a <sgmltag>config</sgmltag> root element.</para>
@@ -605,13 +618,6 @@ def main(latex_file, stdout):
    The following table lists the supported parameters and the corresponding command line option.
   </para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="specparam.xml"/>
-  <para>
-   Here is the specification file used for this manual.
-  </para>
-<example><title>User Manual Configuration File</title>
-<programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
-                 parse="text" href="../manual.specs"/></programlisting>
-</example>
   </section>
   <section id="sec-conf-path"><title>Configuration Paths</title>
   <para>By default <command>dblatex</command> tries to find the configuration files
