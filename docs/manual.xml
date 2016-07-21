@@ -11,15 +11,15 @@
 <surname>Guillon</surname>
 </author>
 
-<date>6 August 2015</date>
+<date>20 July 2016</date>
 
 <subtitle>User Manual</subtitle>
 
 <pubsnumber>Ref A1</pubsnumber>
 
-<address>Valence</address>
+<address>Bordeaux</address>
 
-<edition>08</edition>
+<edition>09</edition>
 
 <releaseinfo>v<xi:include href="version.xml"
 xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
@@ -132,6 +132,19 @@ python plugin, and new index capabilities.</para>
 
 <revdescription>
 <para>Update documentation for release 0.3.7: add section <xref linkend="sec-section-num"/>.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>09</revnumber>
+
+<date>2016/07/20</date>
+
+<authorinitials>B. Guillon / Karl O. Pinc</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.8: add appendix <xref linkend="sec-pis"/>, and sections <xref linkend="sec-xml-config"/>,
+<xref linkend="sec-music"/>.</para>
 </revdescription>
 </revision>
 

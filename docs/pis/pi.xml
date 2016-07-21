@@ -38,7 +38,7 @@ probably need to use the techniques found in <xref linkend="sec-debug"
 <xi:include href="dblatex_table-width.xml"/>
 
 </section>
-<section><title>Lists</title>
+<section id="sec-pi-lists"><title>Lists</title>
 
 <xi:include href="dblatex_autowidth.xml"/>
 <xi:include href="dblatex_colwidth.xml"/>

@@ -306,11 +306,12 @@ def main(latex_file, stdout):
   <section id="sec-specs">
   <title>Dblatex Configuration File</title>
   <para>
-   A master configuration file, also called a specification file, can be used to list
-   all the customizations and options to apply. Such a file is passed by using the
+   A master configuration file, also called a specification file, can be used
+   to list all the customizations and options to apply. Such a file is passed
+   by using the
    option <option>-S <replaceable>config_file</replaceable></option>.
   </para>
-  <section id="sec-xml-config" xreflabel="config">
+  <section id="sec-xml-config">
   <title>XML Configuration File Format</title>
   <para>
    You should use the XML format to configure dblatex. It contains more
@@ -338,7 +339,8 @@ def main(latex_file, stdout):
   dblatex provides some schema that you can use to validate your configuration
   file.</para>
 
-  <section id="sec-xconf-config"><title><sgmltag>config</sgmltag></title>
+  <section id="sec-xconf-config" label="" xreflabel="config">
+  <title><sgmltag>&lt;config&gt;</sgmltag></title>
   <para>It is the root element of a configuration file. A valid configuration
   file must have a <sgmltag>config</sgmltag> root element.</para>
   <para>Attributes:
@@ -356,8 +358,8 @@ def main(latex_file, stdout):
   <xref linkend="sec-xconf-imagedata"/>, <xref linkend="sec-xconf-options"/>.
   </para>
   </section>
-  <section id="sec-xconf-latex" xreflabel="latex">
-  <title><sgmltag>latex</sgmltag></title>
+  <section id="sec-xconf-latex" label="" xreflabel="latex">
+  <title><sgmltag>&lt;latex&gt;</sgmltag></title>
   <para>The latex element contains the configuration data related to the latex
   processing.</para>
   <para>Attributes: none</para>
@@ -410,7 +412,8 @@ def main(latex_file, stdout):
   </variablelist>
   </para>
   </section>
-  <section id="sec-xconf-xslt" xreflabel="xslt"><title><sgmltag>xslt</sgmltag></title>
+  <section id="sec-xconf-xslt" label="" xreflabel="xslt">
+  <title><sgmltag>&lt;xslt&gt;</sgmltag></title>
   <para>The xslt element contains the configuration data related to the XSL
   processing.</para>
   <para>Attributes: none</para>
@@ -434,8 +437,8 @@ def main(latex_file, stdout):
   </variablelist>
   </para>
   </section>
-  <section id="sec-xconf-imagedata" xreflabel="imagedata">
-  <title><sgmltag>imagedata</sgmltag></title>
+  <section id="sec-xconf-imagedata" label="" xreflabel="imagedata">
+  <title><sgmltag>&lt;imagedata&gt;</sgmltag></title>
   <para>The imagedata element contains the rules and commands to convert
   on the fly the images included in the docbook document.</para>
   <para>Attributes: none</para>
@@ -456,10 +459,11 @@ def main(latex_file, stdout):
   </variablelist>
   </para>
   </section>
-  <section id="sec-xconf-converter" xreflabel="converter">
-  <title><sgmltag>converter</sgmltag></title>
-  <para>The converter element defines a rule about how to convert on the fly an image
-  in a docbook document to the corresponding image used in the built latex file. The
+  <section id="sec-xconf-converter" label="" xreflabel="converter">
+  <title><sgmltag>&lt;converter&gt;</sgmltag></title>
+  <para>The converter element defines a rule about how to convert on the fly
+  an image in a docbook document to the corresponding image used in the built
+  latex file. The
   goal is to have an image format compatible with the latex engine, whatever the
   original format is. <command>Dblatex</command> has a default set of rules, but
   one can overwrite or add some rules.</para>
@@ -474,16 +478,18 @@ def main(latex_file, stdout):
     </varlistentry>
     <varlistentry>
       <term>dst</term>
-      <listitem><para>Target format once converted. The converter only applies to the
-      original images having the format <literal>src</literal> and that need to be 
-      converted to the format <literal>dst</literal>. <literal>dst</literal> can take
-      the special value "<literal>*</literal>" meaning that the rule applies for all
+      <listitem><para>Target format once converted. The converter only applies
+      to the original images having the format <literal>src</literal> and that
+      need to be converted to the format <literal>dst</literal>.
+      <literal>dst</literal> can take the special value "<literal>*</literal>"
+      meaning that the rule applies for all
       the possible target formats (e.g. eps, pdf, png).</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>docformat</term>
-      <listitem><para>Specify for which document output format the converter applies.
-      For example, if <literal>docformat</literal> is set to "pdf", it means that
+      <listitem><para>Specify for which document output format the converter
+      applies. For example, if <literal>docformat</literal> is set to "pdf",
+      it means that
       the converter applies only if the document output format is PDF. The
       converter will not apply if you want to build a PostScript or DVI
       document.</para></listitem>
@@ -516,8 +522,8 @@ def main(latex_file, stdout):
   </variablelist>
   </para>
   </section>
-  <section id="sec-xconf-command" xreflabel="command">
-  <title><sgmltag>command</sgmltag></title>
+  <section id="sec-xconf-command" label="" xreflabel="command">
+  <title><sgmltag>&lt;command&gt;</sgmltag></title>
   <para>The command element contains the arguments of the command to run.
   The arguments can contain some predefined keywords that are replaced by the
   actual values when the command is executed. The known keywords are:</para>
@@ -540,9 +546,9 @@ def main(latex_file, stdout):
     </varlistentry>
     <varlistentry>
       <term><literal>%(output)s</literal></term>
-      <listitem><para>Replaced by the name of the ouput file required by the command.
-      In the case of an image conversion, it is the filename of the output image once
-      converted.</para></listitem>
+      <listitem><para>Replaced by the name of the ouput file required by the
+      command. In the case of an image conversion, it is the filename of the
+      output image once converted.</para></listitem>
     </varlistentry>
   </variablelist>
 
@@ -550,15 +556,15 @@ def main(latex_file, stdout):
   <variablelist>
     <varlistentry>
       <term>input</term>
-      <listitem><para>Standard input of the command to run. It can specify a file
-      or it can specify to use the output of the preceding command if the
+      <listitem><para>Standard input of the command to run. It can specify a
+      file or it can specify to use the output of the preceding command if the
       keyword "PIPE" is used.</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>output</term>
-      <listitem><para>Standard output of the command to run. It can specify a file
-      or it can specify that the output shall be redirected to the next command if the
-      keyword "PIPE" is used.</para></listitem>
+      <listitem><para>Standard output of the command to run. It can specify a
+      file or it can specify that the output shall be redirected to the next
+      command if the keyword "PIPE" is used.</para></listitem>
     </varlistentry>
     <varlistentry>
       <term>shell</term>
@@ -568,8 +574,8 @@ def main(latex_file, stdout):
   </variablelist>
   </para>
   </section>
-  <section id="sec-xconf-options" xreflabel="options">
-  <title><sgmltag>options</sgmltag></title>
+  <section id="sec-xconf-options" label="" xreflabel="options">
+  <title><sgmltag>&lt;options&gt;</sgmltag></title>
   <para>The options element lists the extra arguments to pass to
   <command>dblatex</command>.</para>
   </section>
