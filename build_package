@@ -99,6 +99,11 @@ find $tmpbuild -name "test*.py" | xargs rm
 # Temporary manual cleanup
 rm -rf $tmpbuild/xsl/latex-0.5.1
 rm -rf $tmpbuild/latex/example
+rm -f  $tmpbuild/latex/specs/*.specs
+
+# Make the schemas
+gmake -C $tmpbuild/etc/schema
+rm -f $tmpbuild/etc/schema/Makefile
 
 # Make the package version file
 sed "s/devel/$version/" $tmpbuild/xsl/version.xsl > \
