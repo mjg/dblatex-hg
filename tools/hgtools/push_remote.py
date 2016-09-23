@@ -47,10 +47,16 @@ def hg_tag_command(repo_proxy, patch, user=""):
     if int(data) == 0:
         return []
 
-    tag1, tag2, tag_date = "", "", ""
+    action, tag1, tag2, tag_date = "", "", "", ""
     for line in open(patch).readlines():
         m = re.search("Added tag ([^\s]+) for changeset", line)
         if m:
+            action = "add"
+            tag1 = m.group(1)
+            continue
+        m = re.search("Removed tag ([^\s]+)", line)
+        if m:
+            action = "remove"
             tag1 = m.group(1)
             continue
         m = re.search("^\+\+\+ .*\s+(\w+ \w+ \d+ \d+:\d+:\d+ \d+)", line)
@@ -67,6 +73,8 @@ def hg_tag_command(repo_proxy, patch, user=""):
         return []
 
     cmd = ["hg", "-R", repo_proxy, "tag", "-d", '"'+tag_date+'"']
+    if action == "remove":
+        cmd += ["--remove"]
     if user: cmd += ["-u", user]
     cmd += [tag1]
     return cmd
@@ -166,7 +174,7 @@ def main():
     parser.add_option("-n", "--dry-run", action="store_true",
                       help="Print the command but do nothing")
     parser.add_option("-z", "--exclude-patch", action="append",
-                      help="Username of the destination commits")
+                      help="Comma separated patch numbers to exclude")
 
     (options, args) = parser.parse_args()
 
