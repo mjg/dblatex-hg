@@ -55,19 +55,12 @@ class RawLatex:
         self.image.set_encoding(output_encoding or "latin-1")
 
     def set_format(self, format, backend=None):
-        figformats = {"pdf":"pdf", "dvi":"eps", "ps":"eps"}
         # Adjust the actual format from backend
         if (format == "pdf" and backend == "dvips"):
             format = "ps"
-        if figformats.has_key(format):
-            self.image.output_format = figformats[format]
-            self.format = format
-        # There can be a mismatch between PDF-1.4 images and PDF-1.3
-        # document produced by XeTeX
-        if (format == "pdf" and backend == "xetex"):
-            self.image.output_format = "png"
-
+        self.format = format
         self.backend = backend
+        self.image.set_format(format, backend)
 
     def fig_format(self, format):
         # TODO: consistency check?

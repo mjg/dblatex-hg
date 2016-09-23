@@ -7,6 +7,42 @@ import urllib
 from dbtexmf.core.error import signal_error
 from commander import CommandRunner
 
+class ObjectFilter:
+    """
+    Its purpose is to select some objects from a list according to specified
+    criterions. It assumes that '*' applied to a criterion means 'any'.
+    """
+    def __init__(self):
+        pass
+
+    def _re_multi_or_star(self, searched):
+        if not(searched):
+            searched = r"\w*"
+        else:
+            s = searched.split()
+            #searched = "|".join(["(?<=[/ ])%s" % p for p in s])
+            searched = "|".join(["%s" % p for p in s])
+        searched += r"|\*"
+        return "("+searched+")"
+
+    def select(self, object_list, **filter_criterions):
+        for criterion, value in filter_criterions.items():
+            filter_criterions[criterion] = self._re_multi_or_star(value)
+
+        founds = []
+        for obj in object_list:
+            object_criterions = obj.criterions()
+            for criterion, re_expr in filter_criterions.items():
+                data = object_criterions.get(criterion, "")
+                m = re.search(re_expr, data)
+                #print "Lookup2:", criterion, re_expr, data, not(m is None)
+                if not(m): break
+
+            if m: founds.append(obj)
+            #print "Lookup2: found %d" % len(founds)
+        return founds
+
+
 class PoolManager:
     def __init__(self): 
         self._used_pool = None
@@ -24,15 +60,21 @@ class PoolManager:
         else:
             self._pending_pools.append(pool)
 
-_pool_manager = PoolManager()
-    
-def set_config(data):
-    global _pool_manager
-    _pool_manager.prepend_pool(data)
+class ImageSetup:
+    """
+    Central imagedata setup, filled by default object configurations and
+    by the XML configuration
+    """
+    def __init__(self):
+        self.converter_pool = PoolManager()
+        self.format_pool = PoolManager()
 
-def set_pool(pool):
-    global _pool_manager
-    _pool_manager.set_pool(pool)
+_image_setup = ImageSetup()
+    
+def image_setup():
+    global _image_setup
+    return _image_setup
+
 
 #
 # Objects to convert an image format to another. Actually use the underlying
@@ -48,6 +90,12 @@ class ImageConverter:
         self.backend = backend or "*"
         self.command = CommandRunner(log=self._log)
 
+    def criterions(self):
+        return { "imgsrc": self.imgsrc,
+                 "imgdst": self.imgdst,
+                 "docformat": self.docformat,
+                 "backend": self.backend }
+
     def add_command(self, *args, **kwargs):
         self.command.add_command(*args, **kwargs)
 
@@ -59,6 +107,7 @@ class ImageConverter:
 class ImageConverterPool:
     def __init__(self):
         self.converters = []
+        self._filter = ObjectFilter()
 
     def add_converter(self, converter):
         self.converters.append(converter)
@@ -69,33 +118,12 @@ class ImageConverterPool:
     def prepend(self, other):
         self.converters = other.converters + self.converters
 
-    def _re_multi_or_star(self, searched):
-        if not(searched):
-            searched = r"\w*"
-        else:
-            s = searched.split()
-            #searched = "|".join(["(?<=[/ ])%s" % p for p in s])
-            searched = "|".join(["%s" % p for p in s])
-        searched += r"|\*"
-        return "("+searched+")"
-
     def get_converters(self, imgsrc="", imgdst="", docformat="", backend=""):
-        converters = self.converters
-        imgsrc = self._re_multi_or_star(imgsrc)
-        imgdst = self._re_multi_or_star(imgdst)
-        docfmt = self._re_multi_or_star(docformat)
-        backend = self._re_multi_or_star(backend)
-        founds = []
-        for converter in converters:
-            lookup = {imgsrc: converter.imgsrc,
-                      imgdst: converter.imgdst,
-                      docfmt: converter.docformat,
-                      backend: converter.backend}
-
-            for re_expr, data in lookup.items():
-                m = re.search(re_expr, data)
-                if not(m): break
-            if m: founds.append(converter)
+        founds = self._filter.select(self.converters,
+                                     imgsrc=imgsrc,
+                                     imgdst=imgdst,
+                                     docformat=docformat,
+                                     backend=backend)
         return founds
 
 
@@ -111,7 +139,7 @@ class ImageConverters(ImageConverterPool):
         self.add_converter(SvgConverter("svg"))
 
         # Register as main pool
-        set_pool(self)
+        image_setup().converter_pool.set_pool(self)
 
 
 class GifConverter(ImageConverter):
@@ -154,6 +182,54 @@ class SvgConverter(ImageConverter):
                           "%(input)s"])
 
 
+class FormatRule:
+    def __init__(self, imgsrc="", imgdst="", docformat="", backend=""):
+        self.imgsrc = imgsrc or "*"
+        self.imgdst = imgdst or "*"
+        self.docformat = docformat or "*"
+        self.backend = backend or "*"
+
+    def criterions(self):
+        return { "imgsrc": self.imgsrc,
+                 "imgdst": self.imgdst,
+                 "docformat": self.docformat,
+                 "backend": self.backend }
+
+class ImageFormatPool:
+    def __init__(self):
+        self.rules = []
+        self._filter = ObjectFilter()
+
+    def add_rule(self, rule):
+        self.rules.append(rule)
+
+    def prepend(self, other):
+        self.rules = other.rules + self.rules
+
+    def output_format(self, imgsrc="", docformat="", backend=""):
+        founds = self._filter.select(self.rules,
+                                     imgsrc=imgsrc,
+                                     docformat=docformat,
+                                     backend=backend)
+        if founds:
+            return founds[0].imgdst
+        else:
+            return ""
+
+class ImageFormatRuleset(ImageFormatPool):
+    def __init__(self):
+        ImageFormatPool.__init__(self)
+        # There can be a mismatch between PDF-1.4 images and PDF-1.3
+        # document produced by XeTeX
+        self.add_rule(FormatRule(docformat="pdf", backend="xetex", 
+                                 imgdst="png"))
+        self.add_rule(FormatRule(docformat="pdf", imgdst="pdf"))
+        self.add_rule(FormatRule(docformat="dvi", imgdst="eps"))
+        self.add_rule(FormatRule(docformat="ps", imgdst="eps"))
+
+        # Register as main pool
+        image_setup().format_pool.set_pool(self)
+
 #
 # The Imagedata class handles all the image transformation
 # process, from the discovery of the actual image involved to
@@ -164,6 +240,9 @@ class Imagedata:
         self.paths = []
         self.input_format = "png"
         self.output_format = "pdf"
+        self.docformat = "pdf"
+        self.backend = ""
+        self.rules = ImageFormatRuleset()
         self.converters = ImageConverters()
         self.converted = {}
         self.log = logging.getLogger("dblatex")
@@ -171,6 +250,12 @@ class Imagedata:
 
     def set_encoding(self, output_encoding):
         self.output_encoding = output_encoding
+
+    def set_format(self, docformat, backend):
+        self.docformat = docformat
+        self.backend = backend
+        self.output_format = self.rules.output_format(docformat=docformat,
+                                                      backend=backend)
 
     def convert(self, fig):
         # Translate the URL to an actual local path
@@ -205,7 +290,9 @@ class Imagedata:
         count = len(self.converted)
         newfig = "fig%d.%s" % (count, self.output_format)
 
-        conv = self.converters.get_converters(ext, self.output_format)
+        conv = self.converters.get_converters(imgsrc=ext,
+                                              imgdst=self.output_format,
+                                              backend=self.backend)
         if not(conv):
             self.log.debug("Cannot convert '%s' to %s" % (fig,
                              self.output_format))
