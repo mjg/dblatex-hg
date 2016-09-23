@@ -29,6 +29,7 @@ class CommandRunner:
     def add_command(self, args, stdin=None, stdout=None, shell=False):
         command = Command(args, stdin, stdout, shell)
         self.commands.append(command)
+        return command
 
     def shcmd(self, args):
         nargs = []

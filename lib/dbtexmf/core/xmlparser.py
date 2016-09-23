@@ -7,11 +7,12 @@ class BaseOption:
     def __init__(self, config, optname):
         self.config = config
         self.optname = optname
+        self._value = None
 
     def optvalue(self):
-        return None
+        return self._value
 
-    def get(self, what):
+    def get(self, what, default=None):
         return None
 
     def options(self):
@@ -20,6 +21,9 @@ class BaseOption:
             return ["%s=%s" % (self.optname, value)]
         else:
             return []
+
+    def fromnode(self, xmlnode):
+        self._value = xmlnode.text
 
     def modules(self):
         return {}
@@ -51,8 +55,7 @@ class CommandConfig:
 
 class TexStyle(BaseOption):
     def __init__(self, config, optname):
-        self.config = config
-        self.optname = optname
+        BaseOption.__init__(self, config, optname)
         self.filepath = ""
 
     def optvalue(self):
@@ -63,8 +66,7 @@ class TexStyle(BaseOption):
 
 class TexPath(BaseOption):
     def __init__(self, config, optname):
-        self.config = config
-        self.optname = optname
+        BaseOption.__init__(self, config, optname)
         self.paths = []
 
     def optvalue(self):
@@ -76,8 +78,7 @@ class TexPath(BaseOption):
 
 class FilePath(BaseOption):
     def __init__(self, config, optname):
-        self.config = config
-        self.optname = optname
+        BaseOption.__init__(self, config, optname)
         self.filepath = ""
 
     def optvalue(self):
@@ -95,8 +96,7 @@ class FilePath(BaseOption):
 
 class ModuleConfig(BaseOption):
     def __init__(self, config, optname):
-        self.config = config
-        self.optname = optname
+        BaseOption.__init__(self, config, optname)
         self.commands = []
         self.extra_args = None
         self.module_name = ""
@@ -157,6 +157,33 @@ class ImageConverterConfig(ModuleConfig):
                                 self.docformat, self.backend)
         self.module_name = name
 
+class ImageFormatConfig(BaseOption):
+    def __init__(self, config, optname):
+        BaseOption.__init__(self, config, optname)
+        self.imgsrc = ""
+        self.imgdst = ""
+        self.docformat = ""
+        self.backend = ""
+
+    def fromnode(self, xmlnode):
+        self.imgsrc = xmlnode.get("src")
+        self.imgdst = xmlnode.get("dst")
+        self.docformat = xmlnode.get("docformat") or "*"
+        self.backend = xmlnode.get("backend") or "*"
+
+class XsltEngineConfig(ModuleConfig):
+    def __init__(self, config, optname):
+        ModuleConfig.__init__(self, config, optname)
+
+    def __repr__(self):
+        return self.module_name
+
+    def fromnode(self, xmlnode):
+        self.param_format = xmlnode.get("param-format")
+        ModuleConfig.fromnode(self, xmlnode)
+        if not(self.module_name or self.module_file):
+            self.module_name = "xsltconf"
+
 class XmlConfigGroup:
     node_parsers = {}
 
@@ -165,8 +192,9 @@ class XmlConfigGroup:
         self.tagname = ""
         self.infos = {}
 
-    def get(self, tag):
-        return self.infos.get(tag, BaseOption(self, ""))
+    def get(self, tag, default=""):
+        if default == "": default = BaseOption(self, "")
+        return self.infos.get(tag, default)
 
     def _register(self, xmlnode, info):
         tag = self.strip_ns(xmlnode.tag)
@@ -215,13 +243,15 @@ class LatexConfig(XmlConfigGroup):
 class XsltConfig(XmlConfigGroup):
     node_parsers = {
         "stylesheet": ("--xsl-user", FilePath),
-        "engine":     ("--xslt", ModuleConfig)
+        "engine":     ("--xslt", XsltEngineConfig)
     }
 
 class ImageConfig(XmlConfigGroup):
     node_parsers = {
         "figpath": ("--fig-path", FilePath),
+        "figformat": ("--fig-format", BaseOption),
         "converter": ("", ImageConverterConfig),
+        "formatrule": ("", ImageFormatConfig)
     }
 
 
@@ -246,8 +276,9 @@ class XmlConfig:
     def _register(self, xmlnode, info):
         self.infos[self.strip_ns(xmlnode.tag)] = info
 
-    def get(self, tag):
-        return self.infos.get(tag, BaseOption(self, ""))
+    def get(self, tag, default=""):
+        if default == "": default = BaseOption(self, "")
+        return self.infos.get(tag, default)
 
     def options(self):
         opts = []
