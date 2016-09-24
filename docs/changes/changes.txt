@@ -1,3 +1,10 @@
+Release 0.3.9:
+--------------
+
+Enhancements:
+- Extend the XML configuration feature: a user can define its own XSLT engine,
+  and the rules about how the images shall be converted can be overwritten.
+
 Release 0.3.8:
 --------------
 

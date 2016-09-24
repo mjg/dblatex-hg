@@ -430,11 +430,82 @@ def main(latex_file, stdout):
     </varlistentry>
     <varlistentry>
       <term><sgmltag>engine</sgmltag></term>
-      <listitem><para>It defines the XSLT processor to use, like the option
-      <option>--xslt</option> does. The engine name is specified through the 
-      <sgmltag>use</sgmltag> attribute.</para></listitem>
+      <listitem><para>See <xref linkend="sec-xconf-engine"/>.</para></listitem>
     </varlistentry>
   </variablelist>
+  </para>
+  </section>
+  <section id="sec-xconf-engine" label="" xreflabel="engine">
+  <title><sgmltag>&lt;engine&gt;</sgmltag></title>
+  <para>It defines the XSLT processor to use; it can be either a predefined
+  engine, or a user-defined command to run.</para>
+  <para>When the attribute
+  <sgmltag>use</sgmltag> is used, it works like the option
+  <option>--xslt</option>. The engine name is specified through the 
+  <sgmltag>use</sgmltag> attribute.</para>
+  <para>
+  When the element contains the <sgmltag>command</sgmltag> or 
+  <sgmltag>commandchain</sgmltag> child element it defines the command(s)
+  to run to perform the XSLT processing. The core keywords defined in
+  <xref linkend="sec-xconf-command"/> apply. The additional keywords of an XSLT
+  engine command are the following:
+  <variablelist>
+    <varlistentry>
+      <term><literal>%(xmlfile)s</literal></term>
+      <listitem><para>Replaced by the XML source file to
+      process.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>%(stylesheet)s</literal></term>
+      <listitem><para>Replaced by the stylesheet to use to process the
+      XML file <literal>xmlfile</literal>.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><literal>%(param_list)s</literal></term>
+      <listitem><para>Replaced by the list of the XSL parameters to set.
+      The parameter pair formatting (the parameter name and its value) is
+      specified through the <sgmltag>param-format</sgmltag> attribute
+      given to the <sgmltag>engine</sgmltag> element.</para></listitem>
+    </varlistentry>
+  </variablelist>
+  </para>
+
+  <para>Attributes:
+  <variablelist>
+    <varlistentry>
+      <term>param-format</term>
+      <listitem><para>This attribute is mandatory when the engine is specified
+      through a <sgmltag>command</sgmltag>. It tells how a parameter name and
+      value pair shall be formatted when added to the XSLT engine command.
+      The formatting is given by a string containing the keywords replaced by
+      the name or value of the parameter to set:
+
+      <variablelist>
+        <varlistentry>
+          <term><literal>%(param_name)s</literal></term>
+          <listitem><para>Replaced by the name of the
+          parameter to set.</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>%(param_value)s</literal></term>
+          <listitem><para>Replaced by the value to set to the 
+          parameter.</para></listitem>
+        </varlistentry>
+      </variablelist>
+      </para></listitem>
+    </varlistentry>
+  </variablelist></para>
+  <para>
+  The following example re-writes with a user-defined command the Saxon engine
+  with an additional <option>-T</option> option:
+  <programlisting language="XML">
+<![CDATA[<xslt>
+  <engine param-format="%(param_name)s=%(param_value)s">
+    <command>
+    saxon-xslt -T -o %(output)s %(xmlfile)s
+                                %(stylesheet)s %(param_list)s</command>
+  </engine>
+</xslt>]]></programlisting>
   </para>
   </section>
   <section id="sec-xconf-imagedata" label="" xreflabel="imagedata">
@@ -447,8 +518,43 @@ def main(latex_file, stdout):
   <variablelist>
     <varlistentry>
       <term><sgmltag>figpath</sgmltag></term>
-      <listitem><para>It defines a path where to find the images, like the option
-      <option>--fig-path</option> does.</para></listitem>
+      <listitem><para>It defines a path where to find the images, like the
+      option <option>--fig-path</option> does.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>figformat</sgmltag></term>
+      <listitem><para>It defines the default image format when no suffix is
+      available to deduce the actual format, like 
+      <option>--fig-format</option> does.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><sgmltag>formatrule</sgmltag></term>
+      <listitem><para>It specifies in which format an image must be 
+      converted, depending on the context, given by some attributes:
+      <variablelist>
+        <varlistentry>
+          <term><sgmltag>docformat</sgmltag></term>
+          <listitem><para>The output document for which the rule
+          applies. When not set the rule applies for any format</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><sgmltag>backend</sgmltag></term>
+          <listitem><para>The rule applies only when this backend is
+          used</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><sgmltag>dst</sgmltag></term>
+          <listitem><para>When the conditions are met the image shall be
+          converted to this format.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+      </para><para>The following example:
+      <programlisting><![CDATA[<formatrule docformat="pdf" backend="xetex" dst="pdf"/>]]></programlisting>
+      tells that when a PDF document is built with the xetex backend, the
+      graphics not natively supported shall be converted to PDF.
+      </para>
+      </listitem>
     </varlistentry>
     <varlistentry>
       <term><sgmltag>converter</sgmltag></term>
@@ -526,7 +632,8 @@ def main(latex_file, stdout):
   <title><sgmltag>&lt;command&gt;</sgmltag></title>
   <para>The command element contains the arguments of the command to run.
   The arguments can contain some predefined keywords that are replaced by the
-  actual values when the command is executed. The known keywords are:</para>
+  actual values when the command is executed. The known core keywords
+  are:</para>
   <variablelist>
     <varlistentry>
       <term><literal>%(src)s</literal></term>
@@ -672,11 +779,12 @@ def main(latex_file, stdout):
   <para>
    Let's consider the specification file containing the following parameters:
   </para>
-  <programlisting>
-<![CDATA[XslParam: file3.xsl
-]]><![CDATA[Options: -b pdftex 
-]]><![CDATA[TexStyle: mystyle1
-]]>  </programlisting>
+  <programlisting language="XML"><![CDATA[<?xml version="1.0" ?>
+<config xmlns="http://dblatex.sourceforge.net/config">
+  <xslt><stylesheet fileref="file3.xsl"/></xslt>
+  <options>-b pdftex</options>
+  <latex><texstyle use="mystyle1"/></latex>
+</config>]]></programlisting>
   <para>
    And now the command line:
   </para>

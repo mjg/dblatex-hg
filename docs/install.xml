@@ -5,7 +5,7 @@
 <section>
 <title>Content</title>
 
-<para>The package contains the following:</para>
+<para>The source package contains the following:</para>
 
 <variablelist>
 <varlistentry>
@@ -13,6 +13,15 @@
 
 <listitem>
 <para>Contains the files of this document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>etc/</term>
+
+<listitem>
+<para>Contains the XML configuration schemas, to use to validate your
+configuration files.</para>
 </listitem>
 </varlistentry>
 

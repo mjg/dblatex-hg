@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE itemizedlist PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<itemizedlist>
+<listitem>
+<para>Extend the XML configuration features: a user can define its own XSLT
+engine<phrase output="pdf"> (see <olink targetdoc="usermanual"
+targetptr="sec-xconf-engine"/>)</phrase>, and the rules about how the images
+shall be converted can be overwritten<phrase output="pdf"> (see
+<olink targetdoc="usermanual"
+targetptr="sec-xconf-imagedata"/>)</phrase>.</para>
+</listitem>
+</itemizedlist>
