@@ -5,6 +5,11 @@
   xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'
   version CDATA #IMPLIED>
 
+<!--
+<latex> element and children syntaxes 
+
+-->
+
 <!ELEMENT ns1:latex (ns1:texinputs|ns1:bibinputs|ns1:bstinputs
                      |ns1:backend|ns1:texstyle|ns1:texpost
                      |ns1:indexstyle)*>
@@ -53,6 +58,11 @@
 <!ATTLIST ns1:bstinputs
   xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'>
 
+<!--
+<xslt> element and children syntaxes 
+
+-->
+
 <!ELEMENT ns1:xslt (ns1:stylesheet|ns1:engine)*>
 <!ATTLIST ns1:xslt
   xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'>
@@ -62,12 +72,21 @@
   xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'
   %attlist.filepath;>
 
-<!ELEMENT ns1:engine EMPTY>
+<!ELEMENT ns1:engine (ns1:commandchain|ns1:command)?>
 <!ATTLIST ns1:engine
-  xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'
-  %attlist.modname;>
+  xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'>
 
-<!ELEMENT ns1:imagedata (ns1:figpath|ns1:converter)*>
+<!ATTLIST ns1:engine
+  use CDATA #IMPLIED
+  param-format CDATA #IMPLIED>
+
+<!--
+<imagedata> element and children syntaxes 
+
+-->
+
+<!ELEMENT ns1:imagedata (ns1:figpath|ns1:figformat|ns1:formatrule
+                         |ns1:converter)*>
 <!ATTLIST ns1:imagedata
   xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'>
 
@@ -75,6 +94,19 @@
 <!ATTLIST ns1:figpath
   xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'
   %attlist.filepath;>
+
+<!ELEMENT ns1:figformat (#PCDATA)>
+<!ATTLIST ns1:figformat
+  xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'>
+
+<!ELEMENT ns1:formatrule EMPTY>
+<!ATTLIST ns1:formatrule
+  xmlns:ns1 CDATA #FIXED 'http://dblatex.sourceforge.net/config'>
+
+<!ATTLIST ns1:formatrule
+  dst CDATA #IMPLIED
+  docformat CDATA #IMPLIED
+  backend CDATA #IMPLIED>
 
 <!ELEMENT ns1:converter (ns1:commandchain|ns1:command)>
 <!ATTLIST ns1:converter
@@ -85,6 +117,11 @@
   dst CDATA #IMPLIED
   docformat CDATA #IMPLIED
   backend CDATA #IMPLIED>
+
+<!--
+General <command> syntax
+
+-->
 
 <!ELEMENT ns1:commandchain (ns1:command)+>
 <!ATTLIST ns1:commandchain
@@ -98,6 +135,11 @@
   input CDATA #IMPLIED
   output CDATA #IMPLIED
   shell (0|1|false|true) #IMPLIED>
+
+<!--
+<options> syntax
+
+-->
 
 <!ELEMENT ns1:options (#PCDATA)>
 <!ATTLIST ns1:options

@@ -6,6 +6,8 @@ config =
     attribute version { text }?, (latex | xslt | imagedata | options)*
   }
 
+# <latex> element and children syntaxes 
+#
 latex =
   element latex {
     empty,
@@ -32,14 +34,30 @@ texinputs = element texinputs { text }
 bibinputs = element bibinputs { text }
 bstinputs = element bstinputs { text }
 
+# <xslt> element and children syntaxes 
+#
 xslt = element xslt { (stylesheet | engine)* }
 
 stylesheet = element stylesheet { attlist.filepath, empty }
-engine = element engine { attlist.modname, empty }
+engine =
+  element engine { attlist.engine, (commandchain | command)? }
+attlist.engine =
+  attlist.modname |
+  attribute param-format { text }
 
-imagedata = element imagedata { (figpath | converter)* }
+# <imagedata> element and children syntaxes 
+#
+imagedata =
+  element imagedata { (figpath | figformat | formatrule | converter)* }
 
 figpath = element figpath { attlist.filepath, empty }
+figformat = element figformat { text }
+formatrule = element formatrule { attlist.formatrule, empty }
+attlist.formatrule =
+  attribute dst { text }?,
+  attribute docformat { "dvi" | "ps" | "pdf" | "*" }?,
+  attribute backend { text }?
+
 converter =
   element converter { attlist.converter, (commandchain | command) }
 attlist.converter =
@@ -48,6 +66,8 @@ attlist.converter =
   attribute docformat { "dvi" | "ps" | "pdf" | "*" }?,
   attribute backend { text }?
 
+# General <command> syntax
+#
 commandchain = element commandchain { command+ }
 command = element command { attlist.command, text }
 attlist.command =
@@ -55,5 +75,7 @@ attlist.command =
   attribute output { text }?,
   attribute shell { "0" | "1" | "false" | "true" }?
 
+# <options> syntax
+#
 options = element options { text }
 

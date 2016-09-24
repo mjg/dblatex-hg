@@ -18,6 +18,10 @@
       </zeroOrMore>
     </element>
   </define>
+  <!--
+    <latex> element and children syntaxes 
+    
+  -->
   <define name="latex">
     <element name="latex">
       <empty/>
@@ -85,6 +89,10 @@
       <text/>
     </element>
   </define>
+  <!--
+    <xslt> element and children syntaxes 
+    
+  -->
   <define name="xslt">
     <element name="xslt">
       <zeroOrMore>
@@ -103,15 +111,32 @@
   </define>
   <define name="engine">
     <element name="engine">
-      <ref name="attlist.modname"/>
-      <empty/>
+      <ref name="attlist.engine"/>
+      <optional>
+        <choice>
+          <ref name="commandchain"/>
+          <ref name="command"/>
+        </choice>
+      </optional>
     </element>
   </define>
+  <define name="attlist.engine">
+    <choice>
+      <ref name="attlist.modname"/>
+      <attribute name="param-format"/>
+    </choice>
+  </define>
+  <!--
+    <imagedata> element and children syntaxes 
+    
+  -->
   <define name="imagedata">
     <element name="imagedata">
       <zeroOrMore>
         <choice>
           <ref name="figpath"/>
+          <ref name="figformat"/>
+          <ref name="formatrule"/>
           <ref name="converter"/>
         </choice>
       </zeroOrMore>
@@ -122,6 +147,35 @@
       <ref name="attlist.filepath"/>
       <empty/>
     </element>
+  </define>
+  <define name="figformat">
+    <element name="figformat">
+      <text/>
+    </element>
+  </define>
+  <define name="formatrule">
+    <element name="formatrule">
+      <ref name="attlist.formatrule"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist.formatrule">
+    <optional>
+      <attribute name="dst"/>
+    </optional>
+    <optional>
+      <attribute name="docformat">
+        <choice>
+          <value>dvi</value>
+          <value>ps</value>
+          <value>pdf</value>
+          <value>*</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="backend"/>
+    </optional>
   </define>
   <define name="converter">
     <element name="converter">
@@ -153,6 +207,10 @@
       <attribute name="backend"/>
     </optional>
   </define>
+  <!--
+    General <command> syntax
+    
+  -->
   <define name="commandchain">
     <element name="commandchain">
       <oneOrMore>
@@ -184,6 +242,10 @@
       </attribute>
     </optional>
   </define>
+  <!--
+    <options> syntax
+    
+  -->
   <define name="options">
     <element name="options">
       <text/>
