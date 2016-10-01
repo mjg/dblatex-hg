@@ -166,6 +166,13 @@ class DbTex:
             xsltmod = "xsltproc"
         self.xsltproc = xslt.load(xsltmod)
 
+    def set_backend(self):
+        # Set the backend to use or retrieve the default one
+        if self.backend:
+            self.runtex.set_backend(self.backend)
+        else:
+            self.backend = self.runtex.get_backend()
+
     def set_format(self, format):
         if not(format in ("rtex", "tex", "dvi", "ps", "pdf")):
             raise ValueError("unknown format '%s'" % format)
@@ -313,8 +320,6 @@ class DbTex:
             self.rawtex.parse(d.rawfile, d.texfile)
 
     def make_bin(self):
-        if self.backend:
-            self.runtex.set_backend(self.backend)
         self.runtex.texpost = self.texpost
         self.runtex.set_fig_paths([self.inputdir] + self.fig_paths)
         self.runtex.set_bib_paths([self.inputdir] + self.bib_paths,
@@ -331,6 +336,7 @@ class DbTex:
 
     def compile(self):
         self.set_xslt()
+        self.set_backend()
         self.cwdir = os.getcwd()
         self.tmpdir = self.tmpdir_user or tempfile.mkdtemp()
         if self.input:

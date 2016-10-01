@@ -58,6 +58,9 @@ class RunLatex:
             raise ValueError("'%s': invalid backend" % backend)
         self.backend = backend
 
+    def get_backend(self):
+        return self.backend
+
     def _clear_params(self):
         self._param_started = 0
         self._param_ended = 0
