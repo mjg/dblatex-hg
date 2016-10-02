@@ -2,8 +2,12 @@ Release 0.3.9:
 --------------
 
 Enhancements:
-- Extend the XML configuration feature: a user can define its own XSLT engine,
-  and the rules about how the images shall be converted can be overwritten.
+- Extend the XML configuration feature:
+  * a user can define its own XSLT engine with a user-defined command,
+  * the rules about how the images shall be converted can be overwritten
+    (Debian bug #837168).
+- Allow an xref to some informal elements like <para> or <simpara>. It behaves
+  like DocBook FO does.
 
 Release 0.3.8:
 --------------
