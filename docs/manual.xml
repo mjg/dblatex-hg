@@ -153,10 +153,10 @@ python plugin, and new index capabilities.</para>
 
 <date>2016/07/24</date>
 
-<authorinitials>B. Guillon</authorinitials>
+<authorinitials>B. Guillon / Karl O. Pinc</authorinitials>
 
 <revdescription>
-<para>Update documentation for release 0.3.9: add new features in <xref linkend="sec-xml-config"/>.</para>
+<para>Update documentation for release 0.3.9: add new features in <xref linkend="sec-xml-config"/> and complete some sections.</para>
 </revdescription>
 </revision>
 
@@ -190,6 +190,8 @@ python plugin, and new index capabilities.</para>
 <xi:include href="figure.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="tables/table.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+<xi:include href="formatting.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 <xi:include href="math/math.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
