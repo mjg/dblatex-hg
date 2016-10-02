@@ -192,7 +192,9 @@
                      or contains($xrefstyle, 'Page')))
                 and ( $insert.xref.page.number = 'yes' 
                    or $insert.xref.page.number = '1')
-                or local-name($target) = 'para'">
+                or (local-name($target) = 'para'
+                    and $xrefstyle = ''
+                    and $insert.xref.page.number.para = 'yes')">
     <xsl:apply-templates select="$target" mode="page.citation">
       <xsl:with-param name="id" select="@linkend"/>
     </xsl:apply-templates>
@@ -556,6 +558,67 @@
     <xsl:with-param name="linkend" select="(@id|@xml:id)[1]"/>
     <xsl:with-param name="text" select="$text"/>
   </xsl:call-template>
+</xsl:template>
+
+<!-- These are elements for which no link text exists, so an xref to one
+     uses the xrefstyle attribute if specified, or if not it falls back
+     to the container element's link text -->
+<xsl:template match="para|phrase|simpara|anchor|quote" mode="xref-to">
+  <xsl:param name="referrer"/>
+  <xsl:param name="xrefstyle"/>
+  <xsl:param name="verbose"/>
+
+  <xsl:variable name="context" select="(ancestor::simplesect
+                                       |ancestor::section
+                                       |ancestor::sect1
+                                       |ancestor::sect2
+                                       |ancestor::sect3
+                                       |ancestor::sect4
+                                       |ancestor::sect5
+                                       |ancestor::topic
+                                       |ancestor::refsection
+                                       |ancestor::refsect1
+                                       |ancestor::refsect2
+                                       |ancestor::refsect3
+                                       |ancestor::chapter
+                                       |ancestor::appendix
+                                       |ancestor::preface
+                                       |ancestor::partintro
+                                       |ancestor::dedication
+                                       |ancestor::acknowledgements
+                                       |ancestor::colophon
+                                       |ancestor::bibliography
+                                       |ancestor::index
+                                       |ancestor::glossary
+                                       |ancestor::glossentry
+                                       |ancestor::listitem
+                                       |ancestor::varlistentry)[last()]"/>
+
+  <xsl:choose>
+    <xsl:when test="$xrefstyle != ''">
+      <xsl:apply-templates select="." mode="object.xref.markup2">
+        <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
+        <xsl:with-param name="referrer" select="$referrer"/>
+        <xsl:with-param name="verbose" select="$verbose"/>
+      </xsl:apply-templates>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="$verbose != 0">
+        <xsl:message>
+          <xsl:text>WARNING: xref to &lt;</xsl:text>
+          <xsl:value-of select="local-name()"/>
+          <xsl:text> id="</xsl:text>
+          <xsl:value-of select="@id|@xml:id"/>
+          <xsl:text>"&gt; has no generated text. Trying its ancestor elements.</xsl:text>
+        </xsl:message>
+      </xsl:if>
+      <xsl:apply-templates select="$context" mode="xref-to">
+        <xsl:with-param name="xrefstyle" select="$xrefstyle"/>
+        <xsl:with-param name="referrer" select="$referrer"/>
+        <xsl:with-param name="verbose" select="$verbose"/>
+      </xsl:apply-templates>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="variablelist|orderedlist|orderedlist|itemizedlist"

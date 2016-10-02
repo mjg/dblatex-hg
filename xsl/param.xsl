@@ -58,6 +58,7 @@
 <xsl:param name="xref.title-page.separator"><xsl:text> </xsl:text></xsl:param>
 <xsl:param name="xref.with.number.and.title" select="0"/>
 <xsl:param name="insert.xref.page.number">maybe</xsl:param>
+<xsl:param name="insert.xref.page.number.para">yes</xsl:param>
 <xsl:param name="punct.honorific" select="'.'"/>
 <xsl:param name="use.id.as.filename" select="0"/>
 
