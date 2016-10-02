@@ -115,6 +115,7 @@ refentry.pagebreak — Start each refentry on a new page
 <section><title>Cross References</title>
 
 <xi:include href="insert.xref.page.number.xml"/>
+<xi:include href="insert.xref.page.number.para.xml"/>
 <xi:include href="xref.hypermarkup.xml"/>
 
 </section>
