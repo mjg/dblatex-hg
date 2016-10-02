@@ -14,5 +14,5 @@ shown by the Debian bug #837168.</para>
 <listitem><para>Add the (quite old) parameter
 <parameter>insert.xref.page.number.para</parameter> and allow to reference
 (xref) to a <sgmltag>para</sgmltag>, <sgmltag>simpara</sgmltag>,
-<sgmltag>phrase</sgmltag> like DocBook FO does.<para></listitem>
+<sgmltag>phrase</sgmltag> like DocBook FO does.</para></listitem>
 </itemizedlist>
