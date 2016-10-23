@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<section id="sec-covers">
+<title>Book Covers</title>
+
+<para>Since version 0.4 dblatex provides a basic support for page-size covers,
+when covers are defined as images to insert at the beginning of the document
+(front cover), or at the very end of the document (back cover).</para>
+
+<para>To specify a cover, set in the book information element, 
+<sgmltag>info</sgmltag> or <sgmltag>bookinfo</sgmltag>, the images to use in
+some <sgmltag>cover</sgmltag> elements (DocBook 5) or in
+<sgmltag>mediaobject</sgmltag> with role set to <literal>cover</literal>
+(DocBook 4).</para>
+
+<para>If two covers are specified, it is assumed that the first one in for the
+front cover, and the second one for the back cover. You can play with standard
+<sgmltag>imagedata</sgmltag> width or depth attributes to ensure that the image
+is sized to fit the page covers.</para>
+
+<para>Here are two examples:
+<example><title>DocBook 5 Front and Back Covers</title>
+<programlisting language="XML"><![CDATA[<book>
+ <info>
+   ...
+   <cover>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="cover-front-72dpi.png"
+                    format="PNG" depth="100%" width="100%" align="left"/>
+       </imageobject>
+     </mediaobject>
+   </cover>
+   <cover>
+     <mediaobject>
+       <imageobject>
+         <imagedata fileref="cover-back-72dpi.png"
+                    format="PNG" depth="100%" width="100%" />
+       </imageobject>
+     </mediaobject>
+   </cover>
+ </info>
+ ...
+</book>]]></programlisting>
+</example>
+<example><title>DocBook 4 Front Cover</title>
+<programlisting language="XML"><![CDATA[<book>
+ <bookinfo>
+   ...
+   <mediaobject role="cover">
+     <imageobject role="front-large">
+       <imagedata fileref="cover-front-72dpi.png" format="PNG" width="100%" />
+     </imageobject>
+     <imageobject role="front">
+       <imagedata fileref="cover-front-10dpi.png" format="PNG" width="444" />
+     </imageobject>
+     <imageobject role="front-small">
+       <imagedata fileref="cover-front-10dpi.png" format="PNG" width="444" />
+     </imageobject>
+     <imageobject role="thumbnail">
+       <imagedata fileref="cover-front-10dpi.png" format="PNG" width="444" />
+     </imageobject>
+   </mediaobject>
+   ...
+ </bookinfo>
+ ...
+</book>]]></programlisting>
+</example>
+</para>
+
+<para>Note that in DocBook 4, <command>dblatex</command> filters on the same
+roles for <sgmltag>mediaobject</sgmltag> (<literal>cover</literal>) or for
+<sgmltag>imageobject</sgmltag> (<literal>front-large</literal>) than
+the DocBook Project does when it implement covers in epub format.</para>
+
+<para><command>dblatex</command> defines default templates 
+<literal>front.cover</literal> and <literal>back.cover</literal> to implement
+covers through images, but you can overwrite them to create your own
+method to build covers.</para>
+
+</section>

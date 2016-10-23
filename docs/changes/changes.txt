@@ -1,3 +1,9 @@
+Release 0.4:
+------------
+
+- Add the ability to set images for front and back covers
+- Fix Debian bug #840189: drop dependency on the latex package 'multirow'
+
 Release 0.3.9:
 --------------
 
