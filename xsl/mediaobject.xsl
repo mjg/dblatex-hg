@@ -394,6 +394,9 @@
 <!-- Process an imagedata -->
 
 <xsl:template match="imagedata" name="imagedata">
+  <xsl:param name="layout.width" select="'\linewidth'"/>
+  <xsl:param name="layout.height" select="'\textheight'"/>
+
   <xsl:variable name="graphic.begin">
     <xsl:call-template name="graphic.begin.get"/>
   </xsl:variable>
@@ -412,13 +415,13 @@
   <xsl:variable name="width">
     <xsl:call-template name="unit.eval">
       <xsl:with-param name="length" select="@width"/>
-      <xsl:with-param name="prop" select="'\linewidth'"/>
+      <xsl:with-param name="prop" select="$layout.width"/>
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="depth">
     <xsl:call-template name="unit.eval">
       <xsl:with-param name="length" select="@depth"/>
-      <xsl:with-param name="prop" select="'\textheight'"/>
+      <xsl:with-param name="prop" select="$layout.height"/>
     </xsl:call-template>
   </xsl:variable>
   <!-- viewport is valid only if there's some viewport spec, and content or
@@ -486,12 +489,12 @@
       <xsl:value-of select="$width"/>
     </xsl:when>
     <xsl:when test="ancestor::mediaobject">
-      <xsl:text>\linewidth</xsl:text>
+      <xsl:value-of select="$layout.width"/>
     </xsl:when>
     <!-- TODO: inline viewport area should be as wide as the graphic -->
     <!--  <xsl:text>\figwidth</xsl:text> -->
     <xsl:otherwise>
-      <xsl:text>\linewidth</xsl:text>
+      <xsl:value-of select="$layout.width"/>
     </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}&#10;</xsl:text>
