@@ -469,6 +469,8 @@
     <xsl:with-param name="nodes" select="$info/legalnotice"/>
   </xsl:call-template>
 
+  <xsl:call-template name="front.cover"/>
+
   <xsl:if test="contains($layout, 'frontmatter ')">
     <xsl:value-of select="$frontmatter"/>
   </xsl:if>
@@ -513,6 +515,9 @@
   <xsl:call-template name="lang.document.end">
     <xsl:with-param name="lang" select="$lang"/>
   </xsl:call-template>
+
+  <xsl:call-template name="back.cover"/>
+
   <xsl:value-of select="$latex.enddocument"/>
 </xsl:template>
 

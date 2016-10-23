@@ -49,6 +49,7 @@
 <xsl:include href="param.xsl"/>
 <xsl:include href="citation.xsl"/>
 <xsl:include href="graphic.xsl"/>
+<xsl:include href="cover.xsl"/>
 <xsl:include href="equation.xsl"/>
 <xsl:include href="figure.xsl"/>
 <xsl:include href="mediaobject.xsl"/>

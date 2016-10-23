@@ -1,0 +1,30 @@
+%%
+%% To make a cover page, put an image covering the whole page
+%%
+\newdimen\cover@voff
+\newdimen\cover@hoff
+
+\def\putoncover#1{%
+  \newpage\thispagestyle{empty}%
+  \sbox{\z@}{#1}%
+  % Compute the top left position of the page from current location
+  \setlength{\cover@voff}{-\voffset-\headheight-\headsep-\topmargin-\topskip-1in}%
+  \setlength{\cover@hoff}{\hoffset+1in}%
+  \ifodd\c@page%
+    \advance\cover@hoff\oddsidemargin%
+  \else%
+    \advance\cover@hoff\evensidemargin%
+  \fi%
+  \setlength{\unitlength}{1pt}% In the case it has been changed
+  \noindent\begin{picture}(0,0)(\strip@pt\cover@hoff,\strip@pt\cover@voff)
+  \put(0,-\strip@pt\paperheight){%
+    \makebox(\strip@pt\paperwidth,\strip@pt\paperheight){\usebox{\z@}}}
+  \end{picture}%
+}
+
+\def\putcovergraphic#1{%
+  \putoncover{\includegraphics[width=\paperwidth,
+                               height=\paperheight,
+                               keepaspectratio=true]{#1}}%
+}
+
