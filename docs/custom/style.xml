@@ -34,10 +34,10 @@ dblatex -T db2latex file.xml
 </example>
 <section><title>How it works</title>
 <para>The rendering style stuff is under the <filename>latex/</filename>
-directory. You can see the XSL stylesheets under <filename>xsl/</filename> as the
-way to produce latex with as little as possible docbook specific things (even if a
-large amount of latex packages are used to do the work). Then, it's up to LaTeX
-stylesheets to format the document as you wish.</para>
+directory. You can see the XSL stylesheets under <filename>xsl/</filename>
+as the way to produce latex with as little as possible docbook specific things
+(even if a large amount of latex packages are used to do the work). Then, it's
+up to LaTeX stylesheets to format the document as you wish.</para>
 <para>The organization under <filename>latex/</filename> is as follow:</para>
 <variablelist>
 <varlistentry><term><filename>contrib</filename></term>
@@ -95,9 +95,9 @@ linkend="sec-specs"/>.
 <section><title>Adding a New Formatting Style</title>
 <para>To add a new formatting style, do the following steps:</para>
 <procedure>
-<step><para>Let's create the style directores that will contain all the specific
-data. We choose to put them under the default <command>dblatex</command>
-user configuration directory.</para>
+<step><para>Let's create the style directories that will contain all the
+specific data. We choose to put them under the default
+<command>dblatex</command> user configuration directory.</para>
 <programlisting><![CDATA[
 $ mkdir -p $HOME/.dblatex/mystyle/latex
 $ mkdir -p $HOME/.dblatex/mystyle/xsl
@@ -105,8 +105,8 @@ $ mkdir -p $HOME/.dblatex/mystyle/xsl
 <para>Note that you could choose another configuration directory (see <xref
 linkend="sec-conf-path"/> for more details).</para>
 </step>
-<step><para>Create the latex stylesheets you need. It must define the expected DocBook
-interface and include some core definitions from the default latex
+<step><para>Create the latex stylesheets you need. It must define the expected
+DocBook interface and include some core definitions from the default latex
 stylesheets (cf. <xref linkend="sec-custom-latex"/>). Create also your XSL
 stylesheet if necessary.</para></step>
 <step><para>Put these files under the appropriate directories:</para>
@@ -137,8 +137,9 @@ $ cat $HOME/.dblatex/mystyle.conf
 </config>
 ]]></programlisting>
 </step>
-<step><para>That's it. Try to compile your document with your style, and check the
-output.</para>
+<step><para>That's it. Try to compile your document with your style, and check
+the output. The configuration file basename is the name of the style to
+call.</para>
 <programlisting><![CDATA[
 $ dblatex -T mystyle file.xml
 ]]></programlisting>

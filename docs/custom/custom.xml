@@ -732,9 +732,10 @@ def main(latex_file, stdout):
   </para>
 <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="specparam.xml"/>
   </section>
-  <section id="sec-conf-path"><title>Configuration Paths</title>
-  <para>By default <command>dblatex</command> tries to find the configuration files
-  in the following paths, in respect of the order:</para>
+  <section id="sec-conf-path"><title>Style Paths</title>
+  <para>By default <command>dblatex</command> tries to find the configuration
+  files related to a style (specified with option <option>-T</option>) in the
+  following paths, in respect of the order:</para>
   <orderedlist>
   <listitem><para>The current directory</para></listitem>
   <listitem><para><filename>$HOME/.dblatex</filename></para></listitem>
@@ -743,8 +744,8 @@ def main(latex_file, stdout):
   </orderedlist>
   <para>You can add some extra paths where to look for by setting the
   <envar>DBLATEX_CONFIG_FILES</envar> environment variable. The paths are
-  separated by ":" in Unix like systems, and by ";" on Windows. These paths are used
-  only when nothing is found in the default paths.</para>
+  separated by ":" in Unix like systems, and by ";" on Windows. These paths
+  are used only when nothing is found in the default paths.</para>
   </section>
   </section>
   <section>
