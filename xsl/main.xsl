@@ -48,7 +48,7 @@
 
   <xsl:element name="{$root}">
     <!-- Get the node attributes -->
-    <xsl:for-each select="node()/@*[not(id)]">
+    <xsl:for-each select="node()/@*[name(.)!='id' and name(.)!='xml:id']">
       <xsl:copy-of select="."/>
     </xsl:for-each>
 
