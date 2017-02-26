@@ -194,13 +194,13 @@
    <l:gentext key="index symbols" text="Symbols"/>
    <l:gentext key="lowercase.alpha" text="abcdefghijklmnopqrstuvwxyz"/>
    <l:gentext key="uppercase.alpha" text="ABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
-   <l:dingbat key="startquote" text="&amp;#x201C;"/>
-   <l:dingbat key="endquote" text="&amp;#x201D;"/>
-   <l:dingbat key="nestedstartquote" text="&amp;#x2018;"/>
-   <l:dingbat key="nestedendquote" text="&amp;#x2019;"/>
+   <l:dingbat key="startquote" text="&#x201C;"/>
+   <l:dingbat key="endquote" text="&#x201D;"/>
+   <l:dingbat key="nestedstartquote" text="&#x2018;"/>
+   <l:dingbat key="nestedendquote" text="&#x2019;"/>
    <l:dingbat key="singlestartquote" text="&#8216;" lang="en"/>
    <l:dingbat key="singleendquote" text="&#8217;" lang="en"/>
-   <l:dingbat key="bullet" text="&amp;#x2022;"/>
+   <l:dingbat key="bullet" text="&#x2022;"/>
    <l:gentext key="hyphenation-character" text="-" lang="en"/>
    <l:gentext key="hyphenation-push-character-count" text="2" lang="en"/>
    <l:gentext key="hyphenation-remain-character-count" text="2" lang="en"/>
@@ -432,18 +432,18 @@
       <l:template name="docnamelong" text=" in the document titled %o" lang="en"/>
       <l:template name="pageabbrev" text="(p. %p)" lang="en"/>
       <l:template name="Page" text="Page %p" lang="en"/>
-      <l:template name="bridgehead" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsection" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsect1" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsect2" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsect3" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect1" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect2" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect3" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect4" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect5" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="section" text="&amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="simplesect" text="&amp;#x201C;%t&amp;#x201D;"/>
+      <l:template name="bridgehead" text="&#x201C;%t&#x201D;"/>
+      <l:template name="refsection" text="&#x201C;%t&#x201D;"/>
+      <l:template name="refsect1" text="&#x201C;%t&#x201D;"/>
+      <l:template name="refsect2" text="&#x201C;%t&#x201D;"/>
+      <l:template name="refsect3" text="&#x201C;%t&#x201D;"/>
+      <l:template name="sect1" text="&#x201C;%t&#x201D;"/>
+      <l:template name="sect2" text="&#x201C;%t&#x201D;"/>
+      <l:template name="sect3" text="&#x201C;%t&#x201D;"/>
+      <l:template name="sect4" text="&#x201C;%t&#x201D;"/>
+      <l:template name="sect5" text="&#x201C;%t&#x201D;"/>
+      <l:template name="section" text="&#x201C;%t&#x201D;"/>
+      <l:template name="simplesect" text="&#x201C;%t&#x201D;"/>
    </l:context>
 
    <l:context name="xref-number">
@@ -471,27 +471,27 @@
 
    <l:context name="xref-number-and-title">
       <l:template name="appendix" text="&#928;&#945;&#961;&#940;&#961;&#964;&#951;&#956;&#945;&#160;%n, %t"/>
-      <l:template name="bridgehead" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
+      <l:template name="bridgehead" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
       <l:template name="chapter" text="&#922;&#949;&#966;&#940;&#955;&#945;&#953;&#959;&#160;%n, %t"/>
-      <l:template name="equation" text="&#917;&#958;&#943;&#963;&#969;&#963;&#951;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="example" text="&#928;&#945;&#961;&#940;&#948;&#949;&#953;&#947;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="figure" text="&#931;&#967;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="part" text="&#924;&#941;&#961;&#959;&#962;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="procedure" text="&#916;&#953;&#945;&#948;&#953;&#954;&#945;&#963;&#943;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="productionset" text="Production&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="qandadiv" text="&#917; &#954;&#945;&#953; &#913;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsect1" text="the section called &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsect2" text="the section called &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsect3" text="the section called &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="refsection" text="the section called &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect1" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect2" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect3" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect4" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="sect5" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="section" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="simplesect" text="the section called &amp;#x201C;%t&amp;#x201D;"/>
-      <l:template name="table" text="&#928;&#943;&#957;&#945;&#954;&#945;&#962;&#160;%n, &amp;#x201C;%t&amp;#x201D;"/>
+      <l:template name="equation" text="&#917;&#958;&#943;&#963;&#969;&#963;&#951;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="example" text="&#928;&#945;&#961;&#940;&#948;&#949;&#953;&#947;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="figure" text="&#931;&#967;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="part" text="&#924;&#941;&#961;&#959;&#962;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="procedure" text="&#916;&#953;&#945;&#948;&#953;&#954;&#945;&#963;&#943;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="productionset" text="Production&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="qandadiv" text="&#917; &#954;&#945;&#953; &#913;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="refsect1" text="the section called &#x201C;%t&#x201D;"/>
+      <l:template name="refsect2" text="the section called &#x201C;%t&#x201D;"/>
+      <l:template name="refsect3" text="the section called &#x201C;%t&#x201D;"/>
+      <l:template name="refsection" text="the section called &#x201C;%t&#x201D;"/>
+      <l:template name="sect1" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="sect2" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="sect3" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="sect4" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="sect5" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="section" text="&#932;&#956;&#942;&#956;&#945;&#160;%n, &#x201C;%t&#x201D;"/>
+      <l:template name="simplesect" text="the section called &#x201C;%t&#x201D;"/>
+      <l:template name="table" text="&#928;&#943;&#957;&#945;&#954;&#945;&#962;&#160;%n, &#x201C;%t&#x201D;"/>
    </l:context>
  
    <l:context name="xref-without-title">
