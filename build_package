@@ -14,6 +14,8 @@ do
   case "$1" in
   --ssh) use_ssh=1 ;;
   --local) use_remote=0 ;;
+  --docbook-xsl) shift
+    DOCBOOK_XSL="XSLDBK=\"$1\"" ;;
   *) break ;;
   esac
   shift
@@ -112,7 +114,7 @@ mv $tmpbuild/xsl/version2.xsl $tmpbuild/xsl/version.xsl
 
 # Make the package doc
 rm -f $tmpbuild/docs/*.pdf
-gmake -C $tmpbuild/docs VERSION=$version
+gmake -C $tmpbuild/docs VERSION=$version $DOCBOOK_XSL
 rc=$?
 
 if [ $rc -ne 0 ]; then
