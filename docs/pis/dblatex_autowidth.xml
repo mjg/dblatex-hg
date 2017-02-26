@@ -20,7 +20,7 @@
     by latex. The allowed values are:</para>
     
     <xi:include href="../tables/table.xml"
-                xpointer="xpointer(id('autowidth-items'))"
+                xpointer="autowidth-items"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <para>In addition to these keywords,
@@ -34,7 +34,7 @@
     from available space.</para>
 
     <xi:include href="../params/newtbl.autowidth.xml"
-                xpointer="xpointer(id('newtbl-autowidth-and-seglists'))"
+                xpointer="newtbl-autowidth-and-seglists"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <para>The <sgmltag class="xmlpi">dblatex
@@ -44,7 +44,7 @@
     linkend="pi-dblatex_table-width"/> processing instruction.</para>
 
     <xi:include href="dblatex_colwidth.xml"
-                xpointer="xpointer(id('column-autowidth-defaults'))"
+                xpointer="column-autowidth-defaults"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
   </refsection>
 

@@ -84,8 +84,13 @@
   <para>Here is an example of a PI used in a table:</para>
   <example>
     <title>Table width specified with a Processing Instruction</title>
+    <!--
     <xi:include href="../tables/table.xml"
                 xpointer="xpointer(id('lst-table-autowidth'))"
+                xmlns:xi="http://www.w3.org/2001/XInclude" />
+                -->
+    <xi:include href="../tables/table.xml"
+                xpointer="lst-table-autowidth"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
   </example>
 

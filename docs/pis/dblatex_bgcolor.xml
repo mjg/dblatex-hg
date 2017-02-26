@@ -25,7 +25,7 @@
     processing instruction, does not matter.</para>
 
     <xi:include href="../tables/table.xml"
-                xpointer="xpointer(id('table-color-format'))"
+                xpointer="table-color-format"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <para>The default is the value of the table's

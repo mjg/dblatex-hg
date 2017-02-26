@@ -15,8 +15,11 @@
   <refsection>
     <title>Description</title>
     <para>The available print mode values are:
-    <xi:include href="../biblio.xml"
+    <!--
                 xpointer="xpointer(id('biblio-output-modes'))"
+    -->
+    <xi:include href="../biblio.xml"
+                xpointer="biblio-output-modes"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
     </para>
     <para>The default print mode is 'all'.</para>

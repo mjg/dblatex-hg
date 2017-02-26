@@ -15,8 +15,11 @@
   <refsection>
     <title>Description</title>
 
-    <xi:include href="../math/alttex.xml"
+    <!--
                 xpointer="xpointer(id('pi-texmath-user'))"
+    -->
+    <xi:include href="../math/alttex.xml"
+                xpointer="pi-texmath-user"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
   </refsection>

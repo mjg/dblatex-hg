@@ -17,8 +17,11 @@
     <title>Description</title>
     <para>Defines if the table column widths must be automatically sized by
     latex. The allowed values are:
-    <xi:include href="../tables/table.xml"
+    <!--
                 xpointer="xpointer(id('autowidth-items'))"
+    -->
+    <xi:include href="../tables/table.xml"
+                xpointer="autowidth-items"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
     </para>
     <para>The default value is empty. This is the

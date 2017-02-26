@@ -25,7 +25,7 @@
     /> are:</para>
 
     <xi:include href="../tables/table.xml"
-                xpointer="xpointer(id('table-width-format'))"
+                xpointer="table-width-format"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
   </refsection>
 
@@ -33,18 +33,18 @@
     <title>Automatic Column Width</title>
 
     <xi:include href="../tables/table.xml"
-                xpointer="xpointer(id('pi-autowidth'))"
+                xpointer="pi-autowidth"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <para>The <replaceable>scope</replaceable> can take the following values,
     like in the <parameter>newtbl.autowidth</parameter> parameter:</para>
 
     <xi:include href="../tables/table.xml"
-                xpointer="xpointer(id('autowidth-items'))"
+                xpointer="autowidth-items"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <xi:include href="../tables/table.xml"
-                xpointer="xpointer(id('pi-autowidth-column'))"
+                xpointer="pi-autowidth-column"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <para>There is no default.</para>

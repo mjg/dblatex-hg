@@ -21,8 +21,11 @@ alternate width (with the
 the <parameter>newtbl.autowidth</parameter> parameter).</para>
 
     <para>The parameter takes one of the following values:</para>
-    <xi:include href="../tables/table.xml"
+    <!--
                 xpointer="xpointer(id('table-width-format'))"
+    -->
+    <xi:include href="../tables/table.xml"
+                xpointer="table-width-format"
                 xmlns:xi="http://www.w3.org/2001/XInclude" />
 
   </refsection>
