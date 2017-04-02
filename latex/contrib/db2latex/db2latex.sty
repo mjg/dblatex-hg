@@ -172,6 +172,13 @@
 }
 
 \makeatletter
+
+% Redefine paragraph to put the title on a separate line
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+
 % redefine the listoffigures and listoftables so that the name of the chapter
 % is printed whenever there are figures or tables from that chapter. encourage
 % pagebreak prior to the name of the chapter (discourage orphans).
