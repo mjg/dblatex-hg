@@ -4,9 +4,9 @@
 <section id="sec-covers">
 <title>Book Covers</title>
 
-<para>Since version 0.4 dblatex provides a basic support for page-size covers,
-when covers are defined as images to insert at the beginning of the document
-(front cover), or at the very end of the document (back cover).</para>
+<para>Since version 0.3.10 dblatex provides a basic support for page-size
+covers, when covers are defined as images to insert at the beginning of the
+document (front cover), or at the very end of the document (back cover).</para>
 
 <para>To specify a cover, set in the book information element, 
 <sgmltag>info</sgmltag> or <sgmltag>bookinfo</sgmltag>, the images to use in
@@ -14,7 +14,7 @@ some <sgmltag>cover</sgmltag> elements (DocBook 5) or in
 <sgmltag>mediaobject</sgmltag> with role set to <literal>cover</literal>
 (DocBook 4).</para>
 
-<para>If two covers are specified, it is assumed that the first one in for the
+<para>If two covers are specified, it is assumed that the first one is for the
 front cover, and the second one for the back cover. You can play with standard
 <sgmltag>imagedata</sgmltag> width or depth attributes to ensure that the image
 is sized to fit the page covers.</para>

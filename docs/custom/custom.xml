@@ -311,10 +311,13 @@ def main(latex_file, stdout):
   <section id="sec-specs">
   <title>Dblatex Configuration File</title>
   <para>
-   A master configuration file, also called a specification file, can be used
+   A configuration file, also called a specification file, can be used
    to list all the customizations and options to apply. Such a file is passed
    by using the
-   option <option>-S <replaceable>config_file</replaceable></option>.
+   option <option>-S <replaceable>config_file</replaceable></option>. Several
+   configuration files can be specified if needed; it can be usefull to have a
+   default setup and additional setup for specific needs that override or
+   complete the default configuration.
   </para>
   <section id="sec-xml-config">
   <title>XML Configuration File Format</title>
@@ -768,6 +771,12 @@ def main(latex_file, stdout):
    <listitem>
    <para>
    If a specification file is used (<option>-S</option> option), the options are set to the specification file parameters.
+   </para>
+  </listitem>
+   <listitem>
+   <para>
+   If several specification files are used (<option>-S</option> option), the 
+   precedence is given to the last specified files.
    </para>
   </listitem>
    <listitem>

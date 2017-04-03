@@ -2,6 +2,7 @@ Release 0.3.10:
 ---------------
 
 - Add the ability to set images for front and back covers
+- Add the ability to pass several configuration files (-c option)
 - Fix Debian bug #840189: drop dependency on the latex package 'multirow'
 - Fix Debian bug #849679: wrong character entities in el.xml
 - Fix Debian bug #851145: put the paragraph title on a separate line

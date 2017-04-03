@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE itemizedlist PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<itemizedlist>
+<listitem>
+<para>Add the ability to set images for front and back
+covers<phrase output="pdf"> (see <olink targetdoc="usermanual"
+targetptr="sec-covers"/>)</phrase>.</para>
+</listitem>
+<listitem><para>Add the ability to pass several configuration files
+(<option>-c</option> or <option>-S</option> option).</para>
+</listitem>
+<listitem><para>Fix some bugs reported by Debian.</para>
+</listitem>
+</itemizedlist>

@@ -11,7 +11,7 @@
 <surname>Guillon</surname>
 </author>
 
-<date>24 September 2016</date>
+<date>3 April 2017</date>
 
 <subtitle>User Manual</subtitle>
 
@@ -19,7 +19,7 @@
 
 <address>Bordeaux</address>
 
-<edition>10</edition>
+<edition>11</edition>
 
 <releaseinfo>v<xi:include href="version.xml"
 xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
@@ -157,6 +157,20 @@ python plugin, and new index capabilities.</para>
 
 <revdescription>
 <para>Update documentation for release 0.3.9: add new features in <xref linkend="sec-xml-config"/> and complete some sections.</para>
+</revdescription>
+</revision>
+
+<revision>
+<revnumber>11</revnumber>
+
+<date>2017/04/03</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update documentation for release 0.3.10: add the features of 
+<xref linkend="sec-covers"/>, and put some
+cosmetic changes in <xref linkend="sec-specs"/>.</para>
 </revdescription>
 </revision>
 
