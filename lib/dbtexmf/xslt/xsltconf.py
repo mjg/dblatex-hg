@@ -86,7 +86,7 @@ class XsltConfigRunner:
     the first engine from the pool, and run it.
     """
     def __init__(self):
-        pool = dbtexmf.xslt.get_pool()
+        pool = dbtexmf.xslt.xslt_setup().command_pool
         if pool:
             commands = pool.get_command_runs()
             if commands: self.command = commands[0]

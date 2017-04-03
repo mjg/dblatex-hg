@@ -7,7 +7,7 @@ from imagedata import ImageConverterPool, ImageConverter
 from imagedata import ImageFormatPool, FormatRule
 from imagedata import image_setup
 from dbtexmf.xslt.xsltconf import XsltCommandPool, XsltEngine
-from dbtexmf.xslt import set_pool
+from dbtexmf.xslt import xslt_setup
 
 
 class ConfigFactory:
@@ -24,7 +24,7 @@ class ConfigFactory:
         pool = self.imagedata_format_config()
         if pool: image_setup().format_pool.prepend_pool(pool)
         pool = self.xslt_config()
-        if pool: set_pool(pool)
+        if pool: xslt_setup().prepend_pool(pool)
 
     def imagedata_format_config(self):
         rules = self.xmlconfig.get("imagedata").get("formatrule", None)

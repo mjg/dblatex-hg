@@ -433,7 +433,7 @@ class DbTexCommand:
                                " are 'pdftex' (default), 'dvips' and 'xetex'.")
         parser.add_option("-B", "--no-batch", action="store_true",
                           help="All the tex output is printed")
-        parser.add_option("-c", "-S", "--config",
+        parser.add_option("-c", "-S", "--config", action="append",
                           help="Configuration file")
         parser.add_option("-C", "--changedir",
                           help="Standard input working directory")
@@ -687,7 +687,8 @@ class DbTexCommand:
             
         if options.config:
             try:
-                conf.fromfile(options.config)
+                for config in options.config:
+                    conf.fromfile(config)
             except Exception, e:
                 failed_exit("Error: %s" % e)
 
