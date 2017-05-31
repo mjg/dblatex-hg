@@ -49,7 +49,7 @@ class UrlHyphenator(Hyphenator):
     existing latex styles.
     """
     def __init__(self, codec=None,
-                 h_sep="\penalty0 ", h_char="\penalty5000 ",
+                 h_sep="\penalty0{}", h_char="\penalty5000{}",
                  h_start=3, h_stop=3):
         self.codec = codec
         self.seps = r":/\@=?#;-."
