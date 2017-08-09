@@ -146,7 +146,7 @@
   <xsl:text>\item[</xsl:text>
   <xsl:if test="../@id or ../@xml:id">
     <xsl:text>\hypertarget{</xsl:text>
-    <xsl:value-of select="(../@id|../@xml:id)[1]"/>
+    <xsl:apply-templates select=".." mode="id-encode"/>
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:text>{</xsl:text>

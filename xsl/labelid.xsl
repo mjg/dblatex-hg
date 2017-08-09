@@ -127,14 +127,20 @@
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="idx">
+    <xsl:call-template name="id-encode">
+      <xsl:with-param name="string" select="$id"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:value-of select="$string"/>
   <xsl:if test="$id!=''">
     <xsl:text>\label{</xsl:text>
-    <xsl:value-of select="normalize-space($id)"/>
+    <xsl:value-of select="normalize-space($idx)"/>
     <xsl:text>}</xsl:text>
     <!-- beware, hyperlabel is docbook specific -->
     <xsl:text>\hyperlabel{</xsl:text>
-    <xsl:value-of select="normalize-space($id)"/>
+    <xsl:value-of select="normalize-space($idx)"/>
     <xsl:text>}</xsl:text>
     <xsl:if test="$inline=0">
       <xsl:text>%&#10;</xsl:text>

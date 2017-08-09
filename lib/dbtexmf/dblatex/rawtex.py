@@ -10,6 +10,7 @@ import re
 
 from rawparse import RawLatexParser, RawUtfParser
 from rawverb import VerbParser
+from rawlabel import RawLabelParser
 from xetex.codec import XetexCodec
 from dbtexmf.core.imagedata import *
 
@@ -48,7 +49,11 @@ class RawLatex:
                 params[p[1]] = p[2]
             output_encoding = params.get("latex.encoding", "latin-1")
 
-        self.parsers = [VerbParser(output_encoding=output_encoding),
+        # The order is important: first, handle labels in any context
+        # to come back to ascii/latin1 chars for identifiers, then manage
+        # verbatim blocks, and finally the base codecs in normal text flow
+        self.parsers = [RawLabelParser(output_encoding=output_encoding),
+                        VerbParser(output_encoding=output_encoding),
                         RawLatexParser(codec=codec,
                                        output_encoding=output_encoding),
                         RawUtfParser(output_encoding=output_encoding)]

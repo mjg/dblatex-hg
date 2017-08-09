@@ -103,7 +103,7 @@
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>\hyperref[</xsl:text>
-    <xsl:value-of select="(@id|@xml:id)[1]"/>
+    <xsl:call-template name="id-encode"/>
     <xsl:text>]{</xsl:text>
     <xsl:value-of select="$markup"/>
     <xsl:text>}</xsl:text>
@@ -175,6 +175,11 @@
     <xsl:apply-templates select="." mode="conumber"/>
   </xsl:variable>
   <xsl:variable name="id" select="(@id|@xml:id)[1]"/>
+  <xsl:variable name="idx">
+    <xsl:call-template name="id-encode">
+      <xsl:with-param name="string" select="$id"/>
+    </xsl:call-template>
+  </xsl:variable>
 
   <xsl:if test="$co-tagin != ''">
     <xsl:value-of select="concat($co-tagin, 't>')"/>
@@ -183,7 +188,7 @@
   <xsl:when test="$co-hide != 0">
     <xsl:if test="$id">
       <xsl:text>\colabel{</xsl:text>
-      <xsl:value-of select="$id"/>
+      <xsl:value-of select="$idx"/>
       <xsl:text>}</xsl:text>
     </xsl:if>
   </xsl:when>
@@ -191,7 +196,7 @@
     <xsl:text>\coref{</xsl:text>
     <xsl:value-of select="$conum"/>
     <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$id"/>
+    <xsl:value-of select="$idx"/>
     <xsl:text>}</xsl:text>
   </xsl:when>
   <xsl:otherwise>
@@ -272,7 +277,7 @@
   <xsl:text>}]</xsl:text>
   <xsl:if test="(@id|@xml:id) and $co.linkends.show='1'">
     <xsl:text>\collabel{</xsl:text>
-    <xsl:value-of select="(@id|@xml:id)[1]"/>
+    <xsl:call-template name="id-encode"/>
     <xsl:text>}</xsl:text>
   </xsl:if>
   <xsl:apply-templates/>

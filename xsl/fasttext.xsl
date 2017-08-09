@@ -8,6 +8,8 @@
 <!ENTITY v2 "&#x371;u">
 <!ENTITY h1 "&#x370;h">
 <!ENTITY h2 "&#x371;h">
+<!ENTITY l1 "&#x370;l">
+<!ENTITY l2 "&#x371;l">
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
@@ -75,6 +77,14 @@
   <xsl:text>&u1;</xsl:text>
   <xsl:value-of select="$string"/>
   <xsl:text>&u2;</xsl:text>
+</xsl:template>
+
+<!-- Even ids (id|xml:id) need to be encoded to be valid latex labels -->
+<xsl:template match="*" mode="id-encode" name="id-encode" >
+  <xsl:param name="string" select="(@id|@xml:id)[1]"/>
+  <xsl:text>&l1;</xsl:text>
+  <xsl:value-of select="$string"/>
+  <xsl:text>&l2;</xsl:text>
 </xsl:template>
 
 <!-- ask for hyphenating -->

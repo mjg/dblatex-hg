@@ -35,16 +35,22 @@
     <xsl:apply-templates select="$targetbook" mode="booknumber"/>
   </xsl:variable>
 
+  <xsl:variable name="label">
+    <xsl:call-template name="id-encode">
+      <xsl:with-param name="string" select="$linkend"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <!-- The URL is local only if the target is in the referrer book -->
   <xsl:choose>
   <xsl:when test="$referrer_i != $target_i">
     <xsl:text>\href{</xsl:text>
     <xsl:apply-templates select="$targetbook" mode="bookname"/>
-    <xsl:value-of select="concat('\#',$linkend)" />
+    <xsl:value-of select="concat('\#',$label)" />
   </xsl:when>
   <xsl:otherwise>
     <xsl:text>\hyperlink{</xsl:text>
-    <xsl:value-of select="$linkend"/>
+    <xsl:value-of select="$label"/>
   </xsl:otherwise>
   </xsl:choose>
   <!-- The hot text -->
@@ -1121,26 +1127,26 @@
                      sect1|sect2|sect3|sect4|sect5|section" mode="label.markup"
                      priority="1">
   <xsl:text>\ref{</xsl:text>
-  <xsl:value-of select="(@id|@xml:id)[1]"/>
+  <xsl:call-template name="id-encode"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="figure|example|table|equation" mode="label.markup"
               priority="1">
   <xsl:text>\ref{</xsl:text>
-  <xsl:value-of select="(@id|@xml:id)[1]"/>
+  <xsl:call-template name="id-encode"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="step" mode="label.markup" priority="1">
   <xsl:text>\ref{</xsl:text>
-  <xsl:value-of select="(@id|@xml:id)[1]"/>
+  <xsl:call-template name="id-encode"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="pagenumber.markup">
   <xsl:text>\pageref{</xsl:text>
-  <xsl:value-of select="(@id|@xml:id)[1]"/>
+  <xsl:call-template name="id-encode"/>
   <xsl:text>}</xsl:text>
 </xsl:template>
 
