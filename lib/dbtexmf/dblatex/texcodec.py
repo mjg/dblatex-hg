@@ -51,6 +51,9 @@ class TexCodec:
 
     def __init__(self, input_encoding="utf8", output_encoding="latin-1",
                  errors="latexcharreplace", pre="", post=""):
+        self.pre = pre
+        self.post = post
+        self.output_encoding = output_encoding
         self._errors = errors
         self._decode = codecs.getdecoder(input_encoding)
         self._encode = codecs.getencoder(output_encoding)

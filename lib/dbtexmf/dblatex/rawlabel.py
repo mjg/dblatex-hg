@@ -12,7 +12,7 @@ def label_char_replace(exc, pre, post, errors):
     for c in exc.object[exc.start:exc.end]:
         if pre: l.append(pre)
         # in labels, just replace char by a supported string
-        l.append("_x%x_" % ord(c))
+        l.append("u%x" % ord(c))
         if post: l.append(post)
         n = n + 1
     tex_handler_counter[errors] = n
@@ -33,6 +33,24 @@ class LabelCodec(TexCodec):
 
     def build_error_func(self, pre="", post="", errors="charrep"):
         return lambda exc: label_char_replace(exc, pre, post, errors)
+
+    def decode(self, text):
+        global tex_handler_counter
+        ntext = TexCodec.decode(self, text)
+        if self.output_encoding == "utf8":
+            return ntext
+
+        # Enforce to pure ASCII identifier, because some latin1 char can give
+        # weird results too.
+        text = ""
+        n = tex_handler_counter[self._errors]
+        for c in ntext:
+            if ord(c) > 127:
+                c = self.pre + "u%x" % ord(c) + self.post
+                n += 1
+            text += c
+        tex_handler_counter[self._errors] = n
+        return text
 
 
 class RawLabelParser(RawLatexParser):

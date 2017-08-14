@@ -19,9 +19,6 @@ from rawparse import RawUtfParser
 class VerbCodec(TexCodec):
     def __init__(self, pre, post, errors="verbtex",
                  input_encoding="utf8", output_encoding="latin-1"):
-        self.pre = pre
-        self.post = post
-        self.output_encoding = output_encoding
         TexCodec.__init__(self, input_encoding, output_encoding,
                           errors=errors, pre=pre, post=post)
 
