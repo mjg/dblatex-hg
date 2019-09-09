@@ -1,3 +1,10 @@
+Release 0.3.11:
+---------------
+
+- Fix Debian bug #863527: remove active babel character.
+- Fix Debian bug #866716: make dblatex robust to non-ascii xml:id
+- Fix bug #114: don't skip usefull spaces in hyphenated strings
+
 Release 0.3.10:
 ---------------
 
