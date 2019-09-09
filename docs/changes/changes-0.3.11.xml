@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE itemizedlist PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<itemizedlist>
+<listitem>
+<para>Fix Debian bug #863527: remove active babel character.</para>
+</listitem>
+<listitem>
+<para>Fix Debian bug #866716: make dblatex robust to non-ascii <sgmltag>xml:id</sgmltag>.</para>
+</listitem>
+<listitem>
+<para>Fix bug #114: don't skip usefull spaces in hyphenated strings.</para>
+</listitem>
+</itemizedlist>

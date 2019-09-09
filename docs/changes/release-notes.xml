@@ -25,6 +25,13 @@ the dblatex manual. The full change history is now stored in this release
 note.</para>
 </section>
 
+<section id="sec-changes-0311">
+<title>Release 0.3.11</title>
+
+<para>This is a bug fix release.</para>
+
+<xi:include href="changes-0.3.11.xml" />
+</section>
 <section id="sec-changes-0310">
 <title>Release 0.3.10</title>
 
