@@ -7,9 +7,9 @@ PostScript to PDF conversion using GhostScript.
 import sys
 import os
 
-from msg import _, msg
-from maker import DependShell
-from plugins import TexModule
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.maker import DependShell
+from dbtexmf.dblatex.grubber.plugins import TexModule
 
 
 class Module (TexModule):

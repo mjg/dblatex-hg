@@ -13,9 +13,9 @@ import os
 from os.path import *
 import subprocess
 
-from msg import _ , msg
-from plugins import TexModule
-from maker import Depend
+from dbtexmf.dblatex.grubber.msg import _ , msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
+from dbtexmf.dblatex.grubber.maker import Depend
 
 class Dep (Depend):
     def __init__ (self, doc, target, source, node):

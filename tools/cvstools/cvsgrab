@@ -3,6 +3,8 @@
 # The script grabs all the CVS ditrectory from CVS checkouted project
 # and copy them in the current Mercurial repository.
 #
+from __future__ import print_function
+
 import os
 import sys
 from subprocess import Popen, PIPE
@@ -11,18 +13,18 @@ from subprocess import Popen, PIPE
 def main():
 
     if len(sys.argv) < 2:
-        print "cvsgrab basedir"
+        print("cvsgrab basedir")
         sys.exit(1)
 
     p = Popen("hg root", shell=True, stdout=PIPE)
     roothg = p.communicate()[0].strip("\n")
     if not(roothg):
-        print "Not in a Mercurial repository"
+        print("Not in a Mercurial repository")
         sys.exit(1)
 
     rootdir = sys.argv[1]
     if not(os.path.isdir(rootdir)):
-        print "%s: directory not found" % rootdir
+        print("%s: directory not found" % rootdir)
         sys.exit(1)
 
     cmd = "find %s -name 'CVS'" % rootdir
@@ -30,7 +32,7 @@ def main():
     data = p.communicate()[0].strip()
 
     cvsdirs = data.split("\n")
-    print cvsdirs
+    print(cvsdirs)
 
     rc = 0
     copied = []
@@ -40,7 +42,7 @@ def main():
         rdir = cvsdir.split(rootdir)[1][1:]
         todir = os.path.join(roothg, rdir)
         if os.path.isdir(todir):
-            print "%s: already exists. Skipped"
+            print("%s: already exists. Skipped")
             continue
         cmd = "cp -rp %s %s" % (cvsdir, todir)
         rc = os.system(cmd)

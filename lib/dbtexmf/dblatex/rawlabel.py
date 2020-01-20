@@ -1,6 +1,6 @@
-from texcodec import TexCodec
-from texcodec import tex_handler_counter
-from rawparse import RawLatexParser, utf8
+from .texcodec import TexCodec
+from .texcodec import tex_handler_counter
+from .rawparse import RawLatexParser, utf8
 
 
 def label_char_replace(exc, pre, post, errors):

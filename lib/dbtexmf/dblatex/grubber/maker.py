@@ -1,5 +1,7 @@
 # This file is part of Rubber and thus covered by the GPL
 # (c) Emmanuel Beffara, 2002--2006
+from __future__ import print_function
+
 """
 This module contains all the classes used to manage the building
 dependencies.
@@ -8,7 +10,7 @@ import os
 import time
 import subprocess
 
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 class Depend (object): #{{{2
     """
@@ -81,7 +83,7 @@ class Depend (object): #{{{2
           on this one have to be remade)
         """
         if self.making:
-            print "FIXME: cyclic make"
+            print("FIXME: cyclic make")
             return 1
         self.making = 1
 

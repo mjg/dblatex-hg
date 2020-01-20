@@ -3,6 +3,7 @@
 #
 import os
 import re
+from io import open
 
 #
 # Functions used by the config parsers and by the dbtex command parser
@@ -79,14 +80,14 @@ class TextConfig:
 
     def __init__(self):
         self._options = []
-        self.reparam = re.compile("^\s*([^:=\s]+)\s*:\s*(.*)")
+        self.reparam = re.compile(r"^\s*([^:=\s]+)\s*:\s*(.*)")
 
     def options(self):
         return self._options
 
     def fromfile(self, file):
         dir = os.path.dirname(os.path.realpath(file))
-        f = open(file)
+        f = open(file, "rt")
 
         for line in f:
             # Remove the comment
@@ -96,7 +97,7 @@ class TextConfig:
                 continue
             key = m.group(1)
             value = m.group(2).strip()
-            if not self.conf_mapping.has_key(key):
+            if key not in self.conf_mapping:
                 continue
             o = self.conf_mapping[key]
 

@@ -1,5 +1,6 @@
 import os
 from subprocess import Popen, PIPE
+from io import open
 
 class Command:
     """Contains the needed data to run a command"""
@@ -59,7 +60,7 @@ class CommandRunner:
             if cmd.stdout == "PIPE":
                 stdout = PIPE
             elif cmd.stdout:
-                stdout = open(cmd.stdout % kw, "w")
+                stdout = open(cmd.stdout % kw, "wb")
 
             if kw: args = [a % kw for a in cmd.arguments]
             else: args = cmd.arguments

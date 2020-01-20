@@ -2,6 +2,8 @@
 # dblatex - Hyphenation classes to provide smart hyphenation of path like
 # strings
 #
+from __future__ import print_function
+
 import re
 
 class Hyphenator:
@@ -18,14 +20,14 @@ class BasicHyphenator(Hyphenator):
     """
     def __init__(self, codec=None):
         self.codec = codec
-        self.hyphenchar = "\-"
+        self.hyphenchar = b"\-"
 
     def hyphenate(self, text):
         if self.codec: text = self.codec.decode(text)
         ntext = "\1".join(list(text))
         if self.codec: ntext = self.codec.encode(ntext)
-        ntext = re.sub("\1? \1?", " ", ntext)
-        ntext = ntext.replace("\1", self.hyphenchar)
+        ntext = re.sub(b"\1? \1?", b" ", ntext)
+        ntext = ntext.replace(b"\1", self.hyphenchar)
         return ntext
 
 
@@ -49,7 +51,7 @@ class UrlHyphenator(Hyphenator):
     existing latex styles.
     """
     def __init__(self, codec=None,
-                 h_sep="\penalty0{}", h_char="\penalty5000{}",
+                 h_sep=b"\penalty0{}", h_char=b"\penalty5000{}",
                  h_start=3, h_stop=3):
         self.codec = codec
         self.seps = r":/\@=?#;-."
@@ -84,17 +86,17 @@ class UrlHyphenator(Hyphenator):
                     nw += "\1".join(list(hword))
                     nw += w[-self.h_stop:]
                     nw = self._translate(nw)
-                    nw = re.sub("\1? \1?", " ", nw)
-                    nw = nw.replace("\1", self.h_char)
+                    nw = re.sub(b"\1? \1?", b" ", nw)
+                    nw = nw.replace(b"\1", self.h_char)
                     vtext.append(nw)
 
-        ntext = "".join(vtext)
+        ntext = b"".join(vtext)
         return ntext
 
 
 if __name__ == "__main__":
-    url = "http://www.fg/foobar fun#fght/fkkkf.tz?id=123"
+    url = b"http://www.fg/foobar fun#fght/fkkkf.tz?id=123"
     h1 = BasicHyphenator()
     h2 = UrlHyphenator()
-    print h1.hyphenate(url)
-    print h2.hyphenate(url)
+    print(h1.hyphenate(url))
+    print(h2.hyphenate(url))

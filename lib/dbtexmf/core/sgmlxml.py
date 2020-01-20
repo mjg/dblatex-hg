@@ -7,6 +7,7 @@ import sys
 import re
 import logging
 from subprocess import call
+from io import open
 
 class Osx:
     def __init__(self):
@@ -19,8 +20,8 @@ class Osx:
 
     def replace_entities(self, entfile, mapfile, outfile=None):
         # Find out the SDATA entities to replace
-        re_ent = re.compile('<!ENTITY +([^\s]+) +"?\[([^\s"]+) *\]"?>')
-        f = open(entfile)
+        re_ent = re.compile(r'<!ENTITY +([^\s]+) +"?\[([^\s"]+) *\]"?>')
+        f = open(entfile, "rt", encoding="latin-1")
         lines = f.readlines()
         f.close()
 
@@ -34,10 +35,10 @@ class Osx:
         self.log.debug("Entities to map: %s" % ents)
 
         # Now, get their Unicode mapping
-        entpat = "^(%s)\s+[^\s]+\s+0(x[^\s]+)" % "|".join([x for x, y in ents])
+        entpat = r"^(%s)\s+[^\s]+\s+0(x[^\s]+)" % "|".join([x for x, y in ents])
         re_map = re.compile(entpat)
         entmap = []
-        f = open(mapfile)
+        f = open(mapfile, "rt", encoding="latin-1")
         for line in f:
             entmap += re_map.findall(line.split("#")[0])
         f.close()
@@ -47,7 +48,7 @@ class Osx:
         entdict = {}
         for ent, uval in entmap:
             entdict[ent] = \
-                (re.compile('<!ENTITY\s+%s\s+"?\[[^\]]+\]"?\s*>' % ent),
+                (re.compile(r'<!ENTITY\s+%s\s+"?\[[^\]]+\]"?\s*>' % ent),
                             '<!ENTITY %s "&#%s;">' % (ent, uval))
 
         nlines = []
@@ -63,18 +64,18 @@ class Osx:
                 del entdict[ent]
 
         if not(outfile): outfile = entfile
-        f = open(outfile, "w")
+        f = open(outfile, "wt", encoding="latin-1")
         f.writelines(nlines)
         f.close()
 
     def run(self, sgmlfile, xmlfile):
         errfile = "errors.osx"
-        f = open(xmlfile, "w")
+        f = open(xmlfile, "wb")
         rc = call(["osx"] + self.opts + ["-f", errfile, sgmlfile], stdout=f)
         f.close()
         if rc != 0:
             i = 0
-            f = open(errfile)
+            f = open(errfile, "rt")
             for line in f:
                 sys.stderr.write(line)
                 i += 1

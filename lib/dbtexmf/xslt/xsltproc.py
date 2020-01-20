@@ -2,6 +2,7 @@
 # Basic wrapper for xsltproc. Maybe we should directly use the lixslt Python
 # API.
 #
+import sys
 import os
 import logging
 import re
@@ -43,6 +44,8 @@ class XsltProc:
         # check that with help output the option is there
         p = Popen(["xsltproc"], stdout=PIPE)
         data = p.communicate()[0]
+        if isinstance(data, bytes):
+            data = data.decode(sys.getdefaultencoding())
         m = re.search("--xincludestyle", data, re.M)
         if not(m):
             return False

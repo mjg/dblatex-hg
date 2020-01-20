@@ -12,8 +12,8 @@ import re
 import xml.dom.minidom
 import logging
 
-from fcfallback import FcFallbackFontSpec, DefaultFontSpec
-from fontspec import FontSpec, _indent
+from .fcfallback import FcFallbackFontSpec, DefaultFontSpec
+from .fontspec import FontSpec, _indent
 
 
 class FontSpecConfig:

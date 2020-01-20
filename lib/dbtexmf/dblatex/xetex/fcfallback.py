@@ -1,5 +1,7 @@
-from fontspec import FontSpec
-from fcmanager import FcManager
+from __future__ import print_function
+
+from .fontspec import FontSpec
+from .fcmanager import FcManager
 
 
 class DefaultFontSpec(FontSpec):
@@ -54,8 +56,8 @@ class FcFallbackFontSpec(DefaultFontSpec):
         for fontspec in self.fontspecs:
 
             if fontspec in self.fcmissed:
-                print "Specified font '%s' is missing in the system!" % \
-                      (fontspec.mainfont())
+                print("Specified font '%s' is missing in the system!" % \
+                      (fontspec.mainfont()))
                 continue
 
             fcfont = self.fccache.get(fontspec.mainfont()) or \

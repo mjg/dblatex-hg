@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 from push_remote import hg_export_patches
 
@@ -26,7 +28,7 @@ def main():
         patch_dir = options.patch_dir
 
     if (not(repo_incoming) or not(repo_dest) or not(patch_dir)):
-        print "Missing options"
+        print("Missing options")
         sys.exit(1)
 
     hg_export_patches(repo_incoming, repo_dest, patch_dir, add_source=True)

@@ -1,7 +1,7 @@
 import os
 import re
 import xml.etree.ElementTree as ET
-from txtparser import texinputs_parse
+from .txtparser import texinputs_parse
 
 class BaseOption:
     def __init__(self, config, optname):

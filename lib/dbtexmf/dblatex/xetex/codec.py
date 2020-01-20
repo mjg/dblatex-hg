@@ -3,7 +3,7 @@ import os
 import codecs
 
 from dbtexmf.dblatex.texcodec import LatexCodec
-from fsencoder import FontSpecEncoder
+from .fsencoder import FontSpecEncoder
 
 
 class XetexCodec(LatexCodec):

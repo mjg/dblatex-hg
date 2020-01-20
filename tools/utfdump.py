@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import codecs
 import sys
 
@@ -17,9 +19,9 @@ def main():
                 o = encode(uchar)[0]
             except:
                 o = "?"
-            print "U%04X: %s" % (ord(uchar), o)
+            print("U%04X: %s" % (ord(uchar), o))
             outline += o
-        print "Line %3d: %s" % (lineno, outline)
+        print("Line %3d: %s" % (lineno, outline))
 
 
 if __name__ == "__main__":

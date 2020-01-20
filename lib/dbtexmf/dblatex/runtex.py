@@ -4,8 +4,9 @@
 import os
 import re
 import shutil
+from io import open
 
-from grubber.texbuilder import LatexBuilder
+from .grubber.texbuilder import LatexBuilder
 
 
 class RunLatex:
@@ -86,16 +87,16 @@ class RunLatex:
         texout = root + "." + format
 
         # The temporary file contains the extra paths
-        f = file(tmptex, "w")
+        f = open(tmptex, "wt", encoding="latin-1")
         if self.fig_paths:
             paths = "{" + "//}{".join(self.fig_paths) + "//}"
-            f.write("\\makeatletter\n")
-            f.write("\\def\\input@path{%s}\n" % paths)
-            f.write("\\makeatother\n")
+            f.write(u"\\makeatletter\n")
+            f.write(u"\\def\\input@path{%s}\n" % paths)
+            f.write(u"\\makeatother\n")
 
         # Copy the original file and collect parameters embedded in the tex file
         self._clear_params()
-        input = file(texfile)
+        input = open(texfile, "rt", encoding="latin-1")
         for line in input:
             self._set_params(line)
             f.write(line)

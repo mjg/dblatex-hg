@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from __future__ import print_function
+
 import os
 import sys
 import glob
@@ -66,7 +68,7 @@ Les etapes pour mettre a jour le repository de dblatex sous Sourceforge
 def exec_command(cmd):
     if isinstance(cmd, list):
         cmd = " ".join(cmd)
-    print cmd
+    print(cmd)
     subprocess.call(cmd, shell=True)
 
 
@@ -196,7 +198,7 @@ def change_patch_user(patch_dir, user_new):
     patch_files = glob.glob(os.path.join(patch_dir, "*.diff"))
 
     for pfile in patch_files:
-        print "Change user of %s patch file to '%s'" % (pfile, user_new)
+        print("Change user of %s patch file to '%s'" % (pfile, user_new))
         change_patch_header(pfile, "User", user_new)
 
 
@@ -235,13 +237,13 @@ def reapply_patch_commands(patch_dir, hglog, user=""):
         if cset.normal_files() == 0:
             cmd = ["hg", "qdelete", diff_file]
             commands.append(cmd)
-            print " ".join(cmd)
+            print(" ".join(cmd))
             continue
         
         # On applique le patch
         cmd = ["hg", "qpush", diff_file]
         commands.append(cmd)
-        print " ".join(cmd)
+        print(" ".join(cmd))
 
         # S'il est lie a un(des) tag(s) on les applique
         tags = []
@@ -252,13 +254,13 @@ def reapply_patch_commands(patch_dir, hglog, user=""):
         if tags:
             cmd = ["hg", "qfinish", "-a"]
             commands.append(cmd)
-            print " ".join(cmd)
+            print(" ".join(cmd))
             cmd = ["hg", "tag"]
             if user:
                 cmd = cmd + ["-u", user]
             cmd = cmd + tags
             commands.append(cmd)
-            print " ".join(cmd)
+            print(" ".join(cmd))
             # On veut antidater le changeset apparu sur .hgtags 
             # lorsque que l'on a ajoute le tag. C'est un peu complexe, donc
             # on rappelle ce script pour cette action avec la date de ce dernier
@@ -266,7 +268,7 @@ def reapply_patch_commands(patch_dir, hglog, user=""):
             cmd = ["python", __file__,
                    "--hgtags-date", cset.date]
             commands.append(cmd)
-            print " ".join(cmd)
+            print(" ".join(cmd))
     
     # Si la derniere commande n'est pas un 'qfinish' on en ajoute une pour
     # terminer proprement
@@ -285,11 +287,11 @@ def change_hgtags_date(patch_dir, hglog, date_new):
     csets = hglog.get_changesets(ctype=".hgtags")
     pfile = "ht.diff"
     if not(csets):
-        print >>sys.stderr, "No .hgtags changeset found in log history"
+        print("No .hgtags changeset found in log history", file=sys.stderr)
         return
     cset = csets[-1]
     if not("tip" in cset.tags):
-        print >>sys.stderr, "Expect the .hgtags changeset is the last one"
+        print("Expect the .hgtags changeset is the last one", file=sys.stderr)
         return
     cmd = ["hg", "qimport", "-n", pfile, "-r", cset.rev]
     exec_command(cmd)
@@ -343,14 +345,13 @@ def main():
     elif options.hgtags_date:
         hglog.create()
     else:
-        print >>sys.stderr, "A changeset is needed: -c or -l required"
+        print("A changeset is needed: -c or -l required", file=sys.stderr)
         sys.exit(1)
 
     if options.change_user or options.apply_patch or options.hgtags_date:
         if len(args) == 0:
             patch_dir = ".hg/patches"
-            print >>sys.stderr, \
-              "The patches dir is required: use default (%s)" % (patch_dir)
+            print("The patches dir is required: use default (%s)" % (patch_dir), file=sys.stderr)
         else:
             patch_dir = args[0]
         user_new = "marsgui"

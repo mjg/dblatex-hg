@@ -3,11 +3,14 @@
 #
 # dblatex python setup script - See the COPYRIGHT
 #
+from __future__ import print_function
+
 import os
 import sys
 import re
 import glob
 import subprocess
+from io import open
 
 try:
     from setuptools import setup
@@ -83,7 +86,7 @@ os.environ["SGML_CATALOG_FILES"] = cat
         self._catalogs = install.catalogs
         self._style = install.style
         self._use_py_path = install.use_python_path
-        print self._package_base
+        print(self._package_base)
 
         # Build the command line script
         self.build_script()
@@ -162,8 +165,8 @@ os.environ["SGML_CATALOG_FILES"] = cat
         script = self.SHELL_SCRIPT % script_args
         script_name = os.path.basename(script_name)
         outfile = os.path.join(self.build_dir, script_name)
-        fd = os.open(outfile, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0755)
-        os.write(fd, script)
+        fd = os.open(outfile, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, 0o755)
+        os.write(fd, script.encode('ascii'))
         os.close(fd)
 
 
@@ -225,8 +228,10 @@ def kpsewhich(tex_file):
         close_fds = True
     p = Popen("kpsewhich %s" % tex_file, shell=True,
               stdin=PIPE, stdout=PIPE, close_fds=close_fds)
-    out = "".join(p.stdout.readlines()).strip()
-    return out
+    data = p.communicate()[0]
+    if isinstance(data, bytes):
+        data = data.decode(sys.getdefaultencoding())
+    return data.strip()
 
 
 class Sdist(sdist):
@@ -260,19 +265,19 @@ class Install(install):
         # First, check non critical graphic tools
         found, missed = find_programs(("epstopdf", "convert", "fig2dev"))
         for util in found:
-            print "+checking %s... yes" % util
+            print("+checking %s... yes" % util)
         for util in missed:
-            print "+checking %s... no" % util
+            print("+checking %s... no" % util)
         if missed:
-            print("warning: not found: %s" % ", ".join(missed))
+            print(("warning: not found: %s" % ", ".join(missed)))
 
         # Now, be serious
         found, missed = find_programs(("latex", "makeindex",
                                        "pdflatex", "kpsewhich"))
         for util in found:
-            print "+checking %s... yes" % util
+            print("+checking %s... yes" % util)
         for util in missed:
-            print "+checking %s... no" % util
+            print("+checking %s... no" % util)
         if missed:
             raise OSError("not found: %s" % ", ".join(missed))
 
@@ -292,21 +297,21 @@ class Install(install):
         for (mod, deplist) in deplists:
             if not(deplist):
                 xslt_found.append(mod)
-                print "+checking XSLT %s... yes" % mod
+                print("+checking XSLT %s... yes" % mod)
                 continue
             found, missed = find_programs(deplist)
             if missed:
                 xslt_missed.append(mod)
-                print "+checking XSLT %s... no (missing %s)" % \
-                      (mod, ", ".join(missed))
+                print("+checking XSLT %s... no (missing %s)" % \
+                      (mod, ", ".join(missed)))
             else:
                 xslt_found.append(mod)
-                print "+checking XSLT %s... yes" % mod
+                print("+checking XSLT %s... yes" % mod)
 
         if not(xslt_found):
             raise OSError("XSLT not installed: %s" % ", ".join(xslt_missed))
         elif xslt_missed:
-            print "warning: XSLT not found: %s" % ", ".join(xslt_missed)
+            print("warning: XSLT not found: %s" % ", ".join(xslt_missed))
 
     def check_latex_dependencies(self):
         # Find the Latex files from the package
@@ -322,7 +327,7 @@ class Install(install):
         used_stys = []
         re_sty = re.compile(r"\\usepackage\s*\[?.*\]?{(\w+)}")
         for sty in stys:
-            f = open(sty)
+            f = open(sty, "rt", encoding="latin-1")
             for line in f:
                 line = line.split("%")[0]
                 m = re_sty.search(line)
@@ -353,7 +358,7 @@ class Install(install):
             if sty in own_stys:
                 status += "found in package"
                 found_stys.append(sty)
-                print status
+                print(status)
                 continue
             stypath = kpsewhich("%s.sty" % sty)
             if stypath:
@@ -362,7 +367,7 @@ class Install(install):
             else:
                 status += "no"
                 mis_stys.append(sty)
-            print status
+            print(status)
             
         if mis_stys:
             raise OSError("not found: %s" % ", ".join(mis_stys))
@@ -378,8 +383,8 @@ class Install(install):
                 self.check_xslt_dependencies()
                 self.check_util_dependencies()
                 self.check_latex_dependencies()
-            except Exception, e:
-                print >>sys.stderr, "Error: %s" % e
+            except Exception as e:
+                print("Error: %s" % e, file=sys.stderr)
                 sys.exit(1)
 
         if db: db.adapt_paths()
@@ -450,17 +455,17 @@ class InstallData(install_data):
             return
 
         # Grab the value from package version
-        d = open(hyper_sty).read()
-        m = re.search("\\ProvidesPackage{hyperref}\s+\[(\d+)", d, re.M)
+        d = open(hyper_sty, "rt", encoding="latin-1").read()
+        m = re.search(r"\\ProvidesPackage{hyperref}\s+\[(\d+)", d, re.M)
         if not(m):
             return
         year = m.group(1)
 
         # Patch the parameter with the found value
-        p = open(param_file).read()
+        p = open(param_file, "rt", encoding="latin-1").read()
         p2 = re.sub('name="texlive.version">.*<',
                     'name="texlive.version">%s<' % year, p)
-        f = open(param_file, "w")
+        f = open(param_file, "wt", encoding="latin-1")
         f.write(p2)
         f.close()
 

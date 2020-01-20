@@ -2,7 +2,7 @@
 XeTeX support for Rubber.
 """
 
-from plugins import TexModule
+from dbtexmf.dblatex.grubber.plugins import TexModule
 
 class Module (TexModule):
     def __init__ (self, doc, dict):

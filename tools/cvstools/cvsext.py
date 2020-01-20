@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import fnmatch
 from subprocess import Popen, PIPE
@@ -40,7 +42,7 @@ class CVSSession:
         cmds = self._getcommands()
 
         # Add to the batch file
-        print "\n".join(cmds)
+        print("\n".join(cmds))
         f = open(dumpfile, "w")
         f.write("\n".join(cmds) + "\n")
         f.close()
@@ -72,7 +74,7 @@ class CVSSession:
             f2.close()
 
         if cmds:
-            print "probleme"
+            print("probleme")
             return -1
         else:
             return 0
@@ -86,7 +88,7 @@ class CVSSession:
             if e:
                 rc = self.execute(c)
                 if rc != 0:
-                    print "'%s' failed" % c
+                    print("'%s' failed" % c)
                     break
             i = i+1
             done.append("# %s" % c)
@@ -173,7 +175,7 @@ class CVSSession:
                 continue
 
             if self._file_match(path, exclude_files):
-                print "Skip '%s'" % (path)
+                print("Skip '%s'" % (path))
                 continue
 
             if mode == "add":

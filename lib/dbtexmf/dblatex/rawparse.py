@@ -1,7 +1,7 @@
 import re
 
-from texcodec import LatexCodec, TexCodec
-from texhyphen import BasicHyphenator, UrlHyphenator
+from .texcodec import LatexCodec, TexCodec
+from .texhyphen import BasicHyphenator, UrlHyphenator
 
 
 def utf8(u):
@@ -31,7 +31,7 @@ class RawLatexParser:
         self.hypof = re.compile(utf8(u"\u0371h"))
 
     def parse(self, line):
-        lout = ""
+        lout = b""
         while (line):
             self.key_in.pos = line.find(self.key_in.key)
             self.key_out.pos = line.find(self.key_out.key)
@@ -48,14 +48,14 @@ class RawLatexParser:
                 line = line[key.pos + key.len:]
             else:
                 text = line
-                line = ""
+                line = b""
 
             if (text):
                 if self.depth > 0:
                     lout += self.translate(text)
                 else:
-                    text, hon = self.hypon.subn("", text)
-                    text, hof = self.hypof.subn("", text)
+                    text, hon = self.hypon.subn(b"", text)
+                    text, hof = self.hypof.subn(b"", text)
                     self.hyphenate += (hon - hof)
                     lout += text
 

@@ -24,7 +24,7 @@ The following directives are provided to specify options for makeindex:
 """
 import sys
 
-from index import Index
+from dbtexmf.dblatex.grubber.index import Index
 
 class Module (Index):
     def __init__ (self, doc, dict):

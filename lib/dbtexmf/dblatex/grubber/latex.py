@@ -10,13 +10,14 @@ import os
 import sys
 import time
 import subprocess
+from io import open
 
-from msg import _, msg
-from util import Watcher
-from logparser import LogParser
-from texparser import TexParser
-from plugins import Modules
-from maker import Depend
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.util import Watcher
+from dbtexmf.dblatex.grubber.logparser import LogParser
+from dbtexmf.dblatex.grubber.texparser import TexParser
+from dbtexmf.dblatex.grubber.plugins import Modules
+from dbtexmf.dblatex.grubber.maker import Depend
 
 
 class Latex(Depend):
@@ -122,7 +123,7 @@ class Latex(Depend):
         Prepare the compilation by parsing the source file. The parsing
         loads all the necessary modules required by the packages used, etc.
         """
-        f = open(self.srcfile)
+        f = open(self.srcfile, "rt", encoding="latin-1")
         self.parser.parse(f, exclude_mods=exclude_mods)
         f.close()
 

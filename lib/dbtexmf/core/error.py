@@ -4,6 +4,8 @@
 #   error handler.
 # - A general API.
 #
+from __future__ import print_function
+
 import sys
 import traceback
 
@@ -49,7 +51,7 @@ def signal_error(*args, **kwargs):
 
 def failure_track(msg):
     global _dump_stack
-    print >>sys.stderr, (msg)
+    print((msg), file=sys.stderr)
     if _dump_stack:
         traceback.print_exc()
 

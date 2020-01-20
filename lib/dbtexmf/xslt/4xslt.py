@@ -3,6 +3,7 @@
 #
 import sys
 import os
+from io import open
 
 from Ft.Xml.Xslt import Processor
 from Ft.Lib.Uri import OsPathToUri
@@ -49,7 +50,7 @@ class FourXslt:
         uri =  OsPathToUri(xslfile)
         xslt = factory.fromUri(uri,  processIncludes=False)
 
-        o = open(outfile, "w")
+        o = open(outfile, "wb")
         proc.appendStylesheet(xslt)
         if params:
             rc = proc.run(xml, outputStream=o, topLevelParams=params)

@@ -2,9 +2,11 @@
 # The Latex Codec handles the encoding from UFT-8 text to latin1
 # latex compatible text.
 #
+from __future__ import print_function
+
 import re
 import codecs
-import unient
+from . import unient
 
 # Dictionnary of the handlers installed
 tex_handler_installed = {}
@@ -21,7 +23,7 @@ def latex_char_replace(exc, pre, post, name):
         try:
             l.append(unient.unicode_map[ord(c)])
         except KeyError:
-            print "Missing character &#x%x;" % ord(c)
+            print("Missing character &#x%x;" % ord(c))
             l.append(u"\&\#x%x;" % ord(c))
         if post: l.append(post)
         n = n + 1
@@ -32,21 +34,21 @@ def latex_char_replace(exc, pre, post, name):
 class TexCodec:
     # This mapping for characters < 256 seems enough for latin1 output
     charmap = {
-              "\xa0": r"~",
-              # "\xa2": r"\textcent{}",
-              # "\xa4": r"\textcurrency{}",
-              "\xa5": r"$\yen$",
-              # "\xa6": r"\textbrokenbar{}",
-              "\xac": r"\ensuremath{\lnot}",
-              # "\xad": r"", # FIXME: bug around soft hyphen...
-              "\xb0": r"\textdegree{}",
-              "\xb1": r"\ensuremath{\pm}",
-              "\xb2": r"$^2$",
-              "\xb3": r"$^3$",
-              "\xb5": r"$\mathrm{\mu}$",
-              "\xb9": r"$^1$",
-              "\xd7": r"$\times$",
-              "\xf7": r"$\div$"
+              b"\xa0": br"~",
+              # b"\xa2": br"\textcent{}",
+              # b"\xa4": br"\textcurrency{}",
+              b"\xa5": br"$\yen$",
+              # b"\xa6": br"\textbrokenbar{}",
+              b"\xac": br"\ensuremath{\lnot}",
+              # "\xad": br"", # FIXME: bug around soft hyphen...
+              b"\xb0": br"\textdegree{}",
+              b"\xb1": br"\ensuremath{\pm}",
+              b"\xb2": br"$^2$",
+              b"\xb3": br"$^3$",
+              b"\xb5": br"$\mathrm{\mu}$",
+              b"\xb9": br"$^1$",
+              b"\xd7": br"$\times$",
+              b"\xf7": br"$\div$"
               }
 
     def __init__(self, input_encoding="utf8", output_encoding="latin-1",
@@ -63,7 +65,7 @@ class TexCodec:
             self.charmap = {}
             return
 
-        if not(tex_handler_installed.has_key(self._errors)):
+        if not(self._errors in tex_handler_installed):
             f = self.build_error_func(pre, post, errors)
             codecs.register_error(self._errors, f)
             tex_handler_installed[self._errors] = f
@@ -94,7 +96,7 @@ class LatexCodec(TexCodec):
 
         self.texres = (
             # Kind of normalize
-            (re.compile("^[\s\n]*$"), r" "),
+            (re.compile(r"^[\s\n]*$"), r" "),
             # TeX escapes (the order is important)
             (re.compile(r"([{}%_^$&#])"), r"\\\1"),
             # '<' and '>' in the list to avoid french quotation mark symptoms
@@ -124,19 +126,20 @@ class LatexCodec(TexCodec):
             text = text.replace(c, v)
 
         # Things are done, complete with {}
-        text = text.replace(r"\textbackslash", r"\textbackslash{}")
+        text = text.replace(br"\textbackslash", br"\textbackslash{}")
         return text
 
 
 def main():
     import sys
     c = LatexCodec()
-    f = open(sys.argv[1])
-    text = ""
+    buf = getattr(sys.stdout, "buffer", sys.stdout)
+    f = open(sys.argv[1], "rb")
+    text = "" if buf == sys.stdout else b""
     for line in f:
         text += c.encode(c.decode(line))
         if text:
-            sys.stdout.write(text)
+            buf.write(text)
 
 
 if __name__ == "__main__":

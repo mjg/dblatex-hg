@@ -7,8 +7,8 @@ import os
 from dbtexmf.core.sgmlxml import Osx
 from dbtexmf.core.dbtex import DbTex, DbTexCommand
 
-from rawtex import RawLatex
-from runtex import RunLatex
+from .rawtex import RawLatex
+from .runtex import RunLatex
 
 
 class DbLatex(DbTex):

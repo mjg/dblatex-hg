@@ -49,7 +49,7 @@ class UnicodeInterval:
         if m:
             return int(m.group(1), 16)
         else:
-            raise RuntimeError, 'Not a unicode codepoint: ' + codepoint
+            raise RuntimeError('Not a unicode codepoint: ' + codepoint)
 
     def from_char(self, char):
         """Interval for a single character"""
@@ -167,7 +167,7 @@ class FontSpec:
                     intervals.append(
                         UnicodeInterval().from_codepoint(m.group(1)))
                 else:
-                    raise RuntimeError, 'Unable to parse range: "' + range + '"'
+                    raise RuntimeError('Unable to parse range: "' + range + '"')
         return intervals
 
     def _parse_transitions(self, node, transition_type):

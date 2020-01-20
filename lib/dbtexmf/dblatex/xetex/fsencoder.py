@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Time-stamp: <2008-06-23 22:21:26 ah>
+from __future__ import print_function
+
 
 """
 Provide an encoder for a font specification configuration: the encoder is fed
@@ -11,8 +13,8 @@ import sys
 import re
 import xml.dom.minidom
 
-from fontspec import UnicodeInterval
-from fsconfig import FontSpecConfig
+from .fontspec import UnicodeInterval
+from .fsconfig import FontSpecConfig
 
 
 class FontSpecEncoder:
@@ -68,7 +70,7 @@ class FontSpecEncoder:
         """
         fontspec = self._cur_fontspec or self._conf.default_fontspec
 
-        print >>sys.stderr, "Current:", fontspec.id
+        print("Current:", fontspec.id, file=sys.stderr)
         fontspec = fontspec.match(char)
         while not(fontspec):
             leaf = self._ref_stack.pop()

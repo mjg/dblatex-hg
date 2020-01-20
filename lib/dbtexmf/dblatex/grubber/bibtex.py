@@ -18,11 +18,12 @@ import os, sys
 from os.path import *
 import re, string
 import subprocess
+from io import open
 
 #from grubber import _
 #from grubber import *
-from msg import _, msg
-from plugins import TexModule
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
 
 re_bibdata = re.compile(r"\\bibdata{(?P<data>.*)}")
 re_citation = re.compile(r"\\citation{(?P<cite>.*)}")
@@ -111,7 +112,7 @@ class BibTex(TexModule):
         """
         if self.style:
             old_bst = self.style + ".bst"
-            if exists(old_bst) and self.doc.sources.has_key(old_bst):
+            if exists(old_bst) and old_bst in self.doc.sources:
                 del self.doc.sources[old_bst]
 
         self.style = style
@@ -174,7 +175,7 @@ class BibTex(TexModule):
                         pkg="bibtex")
                 return 1
 
-        blg = open(self.blgfile)
+        blg = open(self.blgfile, "rt", encoding="latin-1")
         for line in blg.readlines():
             if re_error.search(line):
                 blg.close()
@@ -202,12 +203,12 @@ class BibTex(TexModule):
             auxfiles.append(self.auxfile)
 
         for auxname in auxfiles:
-            aux = open(auxname)
+            aux = open(auxname, "rt", encoding="latin-1")
             for line in aux:
                 m = re_citation.match(line)
                 if m:
                     cite = m.group("cite")
-                    if not cites.has_key(cite):
+                    if cite not in cites:
                         last = last + 1
                         cites[cite] = last
                     continue
@@ -358,7 +359,7 @@ class BibTex(TexModule):
         """
         if not exists(self.blgfile):
             return 0
-        log = open(self.blgfile)
+        log = open(self.blgfile, "rt", encoding="latin-1")
         line = log.readline()
         while line != "":
             if line.startswith("The style file: "):
@@ -376,7 +377,7 @@ class BibTex(TexModule):
         """
         if not exists(self.blgfile):
             return
-        log = open(self.blgfile)
+        log = open(self.blgfile, "rt", encoding="latin-1")
         last_line = ""
         for line in log:
             m = re_error.search(line)
@@ -400,9 +401,9 @@ class BibTex(TexModule):
                 file = d["file"]
                 if file[-4:] == ".bib":
                     file = file[:-4]
-                if self.db.has_key(file):
+                if file in self.db:
                     d["file"] = self.db[file]
-                elif self.db.has_key(file + ".bib"):
+                elif file + ".bib" in self.db:
                     d["file"] = self.db[file + ".bib"]
                 yield d
             last_line = line

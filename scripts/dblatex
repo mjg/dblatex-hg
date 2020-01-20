@@ -3,7 +3,7 @@ import sys
 import os
 
 package_base = os.path.join(os.path.dirname(sys.argv[0]), "..")
-sys.path.append(os.path.realpath(os.path.join(package_base, "lib")))
+sys.path.insert(0, os.path.realpath(os.path.join(package_base, "lib")))
 
 from dbtexmf.dblatex import dblatex
 dblatex.main(base=package_base)

@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from __future__ import print_function
+
 import sys
 import subprocess
 
@@ -35,7 +37,7 @@ def main():
         last_line = int(options.line)
 
     if first_line == 0 and last_line == 0:
-        print "No line to run? use options to specify commands"
+        print("No line to run? use options to specify commands")
         sys.exit(0)
     
     if first_line == 0:
@@ -45,11 +47,11 @@ def main():
 
     for n in range(first_line-1, last_line):
         command = commands[n].strip()
-        print command
+        print(command)
         if not(options.dry_run):
             rc = subprocess.call(command, shell=True)
             if rc != 0:
-                print >>sys.stderr, "Stop on error: %d" % rc
+                print("Stop on error: %d" % rc, file=sys.stderr)
                 break
 
 

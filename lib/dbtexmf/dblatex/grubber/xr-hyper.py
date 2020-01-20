@@ -9,9 +9,9 @@ file, so this support package registers these files as dependencies.
 """
 import os
 
-from msg import _, msg
-from plugins import TexModule
-from latex import Latex
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
+from dbtexmf.dblatex.grubber.latex import Latex
 
 class Module(TexModule):
     def __init__ (self, doc, dict):
@@ -23,7 +23,7 @@ class Module(TexModule):
         # remember the engine used to build the main latex document
         self.texmodules = []
         for m in ("pdftex", "xetex"):
-            if doc.modules.has_key(m):
+            if m in doc.modules:
                 self.texmodules.append(m)
 
         # want to track each external document whose .aux is required

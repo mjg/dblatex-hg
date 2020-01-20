@@ -1,6 +1,6 @@
 
-from plugins import TexModule
-from bibtex import BibTex
+from dbtexmf.dblatex.grubber.plugins import TexModule
+from dbtexmf.dblatex.grubber.bibtex import BibTex
 
 
 class BibSect(BibTex):

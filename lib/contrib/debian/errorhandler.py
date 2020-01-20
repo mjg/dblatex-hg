@@ -3,6 +3,8 @@
 #
 # Author: Andreas Hoenen
 #
+from __future__ import print_function
+
 import subprocess
 import sys
 import apt
@@ -88,7 +90,7 @@ class DebianHandler(ErrorHandler):
             warn_msgs.append('For image conversion Debian package inkscape is'
                              + ' needed')
         if warn_msgs:
-            print >> sys.stderr, "\n" + "\n".join(warn_msgs) + "\n"
+            print("\n" + "\n".join(warn_msgs) + "\n", file=sys.stderr)
             return True
         else:
             return False
@@ -119,11 +121,11 @@ class DebianHandler(ErrorHandler):
         nulldev1.close()
 
         if rc == 3 or rc == 4:
-            print >> sys.stderr
-            print >> sys.stderr, 'A possible reason for transformation',
-            print >> sys.stderr, 'failure is invalid DocBook'
-            print >> sys.stderr, '(as reported by xmllint)'
-            print >> sys.stderr
+            print(file=sys.stderr)
+            print('A possible reason for transformation', end=' ', file=sys.stderr)
+            print('failure is invalid DocBook', file=sys.stderr)
+            print('(as reported by xmllint)', file=sys.stderr)
+            print(file=sys.stderr)
             return True
         else:
             return False
@@ -157,7 +159,7 @@ class DebianHandler(ErrorHandler):
                 warn_msgs.append('For utf8 encoding Debian package '
                                  + debian_pkg + ' is needed')
         if warn_msgs:
-            print >> sys.stderr, "\n" + "\n".join(warn_msgs) + "\n"
+            print("\n" + "\n".join(warn_msgs) + "\n", file=sys.stderr)
             return True
         else:
             return False
@@ -182,12 +184,12 @@ class DebianHandler(ErrorHandler):
             for log_entry in obj.runtex.texer.tex.log.get_errors():
                 if (log_entry['text']
                     == r'Undefined control sequence \cyrchar.'):
-                    print >> sys.stderr
-                    print >> sys.stderr, 'Transformation failure',
-                    print >> sys.stderr, 'might be caused by handling a',
-                    print >> sys.stderr, 'cyrillic document'
-                    print >> sys.stderr, 'without the XeTeX backend'
-                    print >> sys.stderr
+                    print(file=sys.stderr)
+                    print('Transformation failure', end=' ', file=sys.stderr)
+                    print('might be caused by handling a', end=' ', file=sys.stderr)
+                    print('cyrillic document', file=sys.stderr)
+                    print('without the XeTeX backend', file=sys.stderr)
+                    print(file=sys.stderr)
                     return True
         except:
             pass

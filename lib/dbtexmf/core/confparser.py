@@ -1,11 +1,13 @@
+from __future__ import print_function
+
 import os
 import sys
 from xml.etree.ElementTree import ParseError
-from xmlparser import XmlConfig
-from txtparser import TextConfig
-from imagedata import ImageConverterPool, ImageConverter
-from imagedata import ImageFormatPool, FormatRule
-from imagedata import image_setup
+from .xmlparser import XmlConfig
+from .txtparser import TextConfig
+from .imagedata import ImageConverterPool, ImageConverter
+from .imagedata import ImageFormatPool, FormatRule
+from .imagedata import image_setup
 from dbtexmf.xslt.xsltconf import XsltCommandPool, XsltEngine
 from dbtexmf.xslt import xslt_setup
 
@@ -76,16 +78,16 @@ class DbtexConfig:
         self.style_exts = ["", ".xml", ".specs", ".conf"]
 
     def warn(self, text):
-        print >>sys.stderr, text
+        print(text, file=sys.stderr)
 
     def fromfile(self, filename):
         try:
             self.fromxmlfile(filename)
-        except ParseError, e:
+        except ParseError as e:
             self.warn("Text configuration files are deprecated. "\
                       "Use the XML format instead")
             self.fromtxtfile(filename)
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def fromxmlfile(self, filename):

@@ -10,10 +10,11 @@
 #   if necessary.
 #
 import re
+from io import open
 
-from texcodec import TexCodec
-from texcodec import tex_handler_counter
-from rawparse import RawUtfParser
+from .texcodec import TexCodec
+from .texcodec import tex_handler_counter
+from .rawparse import RawUtfParser
 
 
 class VerbCodec(TexCodec):
@@ -46,13 +47,13 @@ class VerbParser:
     def __init__(self, output_encoding="latin-1"):
         # The listing environment can be different from 'lstlisting'
         # but the rule is that it must begin with 'lst'
-        self.start_re = re.compile(r"\\begin{lst[^}]*}")
-        self.stop_re = re.compile(r"\\end{lst[^}]*}")
-        self.esc_re = re.compile(r"escapeinside={([^}]*)}{([^}]*)}")
-        self.block = ""
+        self.start_re = re.compile(br"\\begin{lst[^}]*}")
+        self.stop_re = re.compile(br"\\end{lst[^}]*}")
+        self.esc_re = re.compile(br"escapeinside={([^}]*)}{([^}]*)}")
+        self.block = b""
         self.encoding = output_encoding
-        self.default_esc_start = "<:"
-        self.default_esc_stop = ":>"
+        self.default_esc_start = b"<:"
+        self.default_esc_stop = b":>"
         self.default_codec = VerbCodec(self.default_esc_start,
                                        self.default_esc_stop,
                                        output_encoding=output_encoding)
@@ -76,13 +77,13 @@ class VerbParser:
         self.command = line[m.start():m.end()]
         line = line[m.end():]
         # By default, no escape sequence defined yet
-        self.esc_start = ""
-        self.esc_stop = ""
-        self.options = ""
+        self.esc_start = b""
+        self.esc_stop = b""
+        self.options = b""
 
         # If there are some options, look for escape specs
-        if line[0] == "[":
-            e = line.find("]")+1
+        if line[0] == b"[":
+            e = line.find(b"]")+1
             self.options = line[:e]
             line = line[e:]
             m = self.esc_re.search(self.options)
@@ -106,28 +107,28 @@ class VerbParser:
 
         # Add the escape option if necessary
         if not(self.esc_start) and c.get_errors() != 0:
-            escopt = "escapeinside={%s}{%s}" % (c.pre, c.post)
+            escopt = b"escapeinside={%s}{%s}" % (c.pre, c.post)
             if self.options:
                 if self.options[-2] != ",":
-                    escopt = "," + escopt
+                    escopt = b"," + escopt
                 self.options = self.options[:-1] + escopt + "]"
             else:
-                self.options = "[" + escopt + "]"
+                self.options = b"[" + escopt + b"]"
 
         block = self.command + self.options + text + line[m.start():]
-        self.block = ""
+        self.block = b""
         return block
 
     def block_grow(self, line):
         self.block += line
-        return ""
+        return b""
 
     def get_codec(self):
         # Something already specified
         if (self.esc_start):
             if self.esc_start != self.default_esc_start:
                 return VerbCodec(self.esc_start, self.esc_stop,
-                                 "verbtex" + self.esc_start,
+                                 b"verbtex" + self.esc_start,
                                  output_encoding=self.encoding)
             else:
                 return self.default_codec
@@ -137,7 +138,7 @@ class VerbParser:
         iter = 0
         i = self.block.find(s)
         while (i != -1):
-            s = "<" + str(iter) + ":"
+            s = b"<" + bytes(iter) + b":"
             i = self.block.find(s)
             iter += 1
 
@@ -145,16 +146,17 @@ class VerbParser:
         if (s == self.default_esc_start):
             return self.default_codec
 
-        return VerbCodec(s, self.default_esc_stop, "verbtex" + s,
+        return VerbCodec(s, self.default_esc_stop, b"verbtex" + s,
                          output_encoding=self.encoding)
 
 
 if __name__ == "__main__":
     import sys
     v = VerbParser()
-    f = open(sys.argv[1])
+    buf = getattr(sys.stdout, "buffer", sys.stdout)
+    f = open(sys.argv[1], "rb")
     for line in f:
         text = v.parse(line)
         if text:
-            sys.stdout.write(text)
+            buf.write(text)
 

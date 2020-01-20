@@ -1,6 +1,8 @@
 #
 # Simple converter from text configuration to XML configuration
 #
+from __future__ import print_function
+
 import sys
 import os
 import xml.etree.ElementTree as ET
@@ -104,7 +106,7 @@ if __name__ == "__main__":
     (options, args) = parser.parse_args()
 
     if len(args) != 2:
-        print >> sys.stderr, "Invalid argument count: expected 2"
+        print("Invalid argument count: expected 2", file=sys.stderr)
         parser.parse_args(["-h"])
 
     txt_file = args[0]

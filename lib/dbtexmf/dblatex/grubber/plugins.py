@@ -7,7 +7,7 @@ All the modules must be derived from the TexModule class.
 import imp
 
 from os.path import *
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 import sys
 
@@ -106,7 +106,7 @@ class Plugins (object):
         dictionary. Return 0 if no module was found, 1 if a module was found
         and loaded, and 2 if the module was found but already loaded.
         """
-        if self.modules.has_key(name):
+        if name in self.modules:
             return 2
         try:
             file, path, descr = imp.find_module(name, [""])
@@ -151,11 +151,11 @@ class Modules (Plugins):
         """
         return self.objects[name]
 
-    def has_key (self, name):
+    def __contains__(self, name):
         """
         Check if a given module is loaded.
         """
-        return self.objects.has_key(name)
+        return name in self.objects
 
     def register (self, name, dict={}):
         """
@@ -165,7 +165,7 @@ class Modules (Plugins):
         delayed commands for this module. The dictionary describes the
         command that caused the registration.
         """
-        if self.has_key(name):
+        if name in self:
             msg.debug(_("module %s already registered") % name)
             return 2
 
@@ -191,7 +191,7 @@ class Modules (Plugins):
 
         # Run any delayed commands.
 
-        if self.commands.has_key(name):
+        if name in self.commands:
             for (cmd, args, vars) in self.commands[name]:
                 msg.push_pos(vars)
                 try:
@@ -219,10 +219,10 @@ class Modules (Plugins):
         Send a command to a particular module. If this module is not loaded,
         store the command so that it will be sent when the module is register.
         """
-        if self.objects.has_key(mod):
+        if mod in self.objects:
             self.objects[mod].command(cmd, args)
         else:
-            if not self.commands.has_key(mod):
+            if mod not in self.commands:
                 self.commands[mod] = []
             self.commands[mod].append((cmd, args, self.env.vars.copy()))
 

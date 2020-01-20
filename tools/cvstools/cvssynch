@@ -1,4 +1,6 @@
 #!/usr/bin/python
+from __future__ import print_function
+
 import os
 import sys
 from subprocess import Popen, PIPE
@@ -88,9 +90,9 @@ def recover_from(batchfile):
         rfiles = get_cvs_usync_files()
         if not(rfiles):
             return
-        print "Still manual CVS synch to do:"
+        print("Still manual CVS synch to do:")
     else:
-        print "No pending CVS commands found. Manual CVS synch to do:"
+        print("No pending CVS commands found. Manual CVS synch to do:")
 
     cvspendings(cvs, rfiles)
     cvs.run(dry_run=True)
@@ -125,7 +127,7 @@ def main():
     root = p.communicate()[0].strip("\n")
     cvsdir = os.path.join(root, "CVS")
     if not(os.path.isdir(cvsdir)) and not(options.dry_run):
-        print "%s: Not a CVS working directory" % cvsdir
+        print("%s: Not a CVS working directory" % cvsdir)
         sys.exit(0)
 
     # First, pull the changesets
@@ -154,14 +156,14 @@ def main():
     # Now run each set in the order
     for cvs in cvsset:
         try:
-            print "Sync CVS to changeset %s:%s" % (cvs.rev, cvs.cset)
+            print("Sync CVS to changeset %s:%s" % (cvs.rev, cvs.cset))
             if not(options.dry_run): update_to(cvs.cset)
             cvs.run(batch=cvsqueue, dry_run=options.dry_run)
             os.unlink(cvsqueue)
         except:
             rev, node = get_current_revision()
-            print "Changeset '%s' commit to CVS failed" % cvs.rev
-            print "The current Hg changeset is '%s'" % rev
+            print("Changeset '%s' commit to CVS failed" % cvs.rev)
+            print("The current Hg changeset is '%s'" % rev)
             break
 
 if __name__ == "__main__":

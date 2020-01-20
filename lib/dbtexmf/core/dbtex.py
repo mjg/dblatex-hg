@@ -2,16 +2,22 @@
 # DbTex base class handling the compilation of a DocBook file via
 # XSL Transformation and some TeX engine compilation.
 #
+from __future__ import print_function
+
 import sys
 import os
 import re
 import shlex
 import tempfile
 import shutil
-import urllib
+try:
+    from urllib import pathname2url
+except ImportError:
+    from urllib.request import pathname2url
 import glob
 import imp
 from optparse import OptionParser
+from io import open
 
 from dbtexmf.core.txtparser import texinputs_parse, texstyle_parse
 from dbtexmf.core.confparser import DbtexConfig
@@ -29,9 +35,9 @@ def suffix_replace(path, oldext, newext=""):
 
 def path_to_uri(path):
     if os.name == 'nt':
-        return 'file:' + urllib.pathname2url(path).replace('|', ':', 1)
+        return 'file:' + pathname2url(path).replace('|', ':', 1)
     else:
-        return urllib.pathname2url(path)
+        return pathname2url(path)
 
 
 class Document:
@@ -48,24 +54,36 @@ class Document:
     def has_subext(self, ext):
         return (os.path.splitext(self.basename)[1] == ext)
 
-    def __cmp__(self, other):
-        """
-        Comparaison method mainly to check if the document is in a list
-        """
-        if cmp(self.rawfile, other) == 0:
-            return 0
-        if cmp(self.texfile, other) == 0:
-            return 0
-        if cmp(self.binfile, other) == 0:
-            return 0
-        return -1
+    def __eq__(self, other):
+        if self.rawfile == other:
+            return True
+        if self.texfile == other:
+            return True
+        if self.binfile == other:
+            return True
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        return self.__ne__(other)
+
+    def __le__(self, other):
+        return False
+
+    def __gt__(self, other):
+        return False
+
+    def __ge__(self, other):
+        return False
 
 
 class DbTex:
     USE_MKLISTINGS = 1
 
     xsl_header = \
-"""<?xml version="1.0"?>
+u"""<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
                 version="1.0">
@@ -183,7 +201,7 @@ class DbTex:
         self.flags &= ~what
 
     def get_version(self):
-        f = file(os.path.join(self.topdir, "xsl", "version.xsl"))
+        f = open(os.path.join(self.topdir, "xsl", "version.xsl"), "rt", encoding="latin-1")
         versions = re.findall("<xsl:variable[^>]*>([^<]*)<", f.read())
         f.close()
         if versions:
@@ -196,22 +214,22 @@ class DbTex:
             self.xslbuild = self.xslmain
             return
 
-        f = file(wrapper, "w")
+        f = open(wrapper, "wt", encoding="latin-1")
         f.write(self.xsl_header)
-        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
+        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
         for xsluser in self.xslusers:
-            f.write('<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
+            f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
 
         # Reverse to set the latest parameter first (case of overriding)
         self.xslparams.reverse()
         for param in self.xslparams:
             v = param.split("=", 1)
-            f.write('<xsl:param name="%s">' % v[0])
+            f.write(u'<xsl:param name="%s">' % v[0])
             if len(v) == 2:
-                f.write('%s' % v[1])
-            f.write('</xsl:param>\n')
+                f.write(u'%s' % v[1])
+            f.write(u'</xsl:param>\n')
 
-        f.write('</xsl:stylesheet>\n')
+        f.write(u'</xsl:stylesheet>\n')
         f.close()
         self.xslbuild = os.path.realpath(wrapper)
 
@@ -231,8 +249,8 @@ class DbTex:
                               self.listings, opts=self.xslopts, params=param)
         else:
             self.log.info("No external file support")
-            f = file(self.listings, "w")
-            f.write("<listings/>\n")
+            f = open(self.listings, "wt", encoding="latin-1")
+            f.write(u"<listings/>\n")
             f.close()
 
     def _single_setup(self):
@@ -254,7 +272,7 @@ class DbTex:
                           "Use the working directory")
             self.outputdir = self.cwdir
 
-        f = open(doclist)
+        f = open(doclist, "rt", encoding="latin-1")
         books = f.readlines()
         f.close()
 
@@ -268,11 +286,11 @@ class DbTex:
         # set list
         self.log.info("Build the book set list...")
         xslset = "doclist.xsl"
-        f = file(xslset, "w")
+        f = open(xslset, "wt", encoding="latin-1")
         f.write(self.xsl_header)
-        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
-        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
-        f.write('</xsl:stylesheet>\n')
+        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
+        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
+        f.write(u'</xsl:stylesheet>\n')
         f.close()
 
         doclist = os.path.join(self.tmpdir, "doclist.txt")
@@ -369,7 +387,10 @@ class DbTex:
 
         # Need to dump the stdin input, because of the two passes
         self.input = os.path.join(self.tmpdir, "stdin.xml")
-        f = open(self.input, "w")
+        if sys.stdin.encoding is None:
+            f = open(self.input, "wb")
+        else:
+            f = open(self.input, "wt", encoding=sys.stdin.encoding)
         for line in sys.stdin:
             f.write(line)
         f.close()
@@ -395,15 +416,15 @@ class DbTex:
         self.update_texinputs()
 
         # For easy debug
-        if self.debug and os.environ.has_key("TEXINPUTS"):
+        if self.debug and "TEXINPUTS" in os.environ:
             if os.name != "nt":
-                f = file("env_tex", "w")
-                f.write("TEXINPUTS=%s\nexport TEXINPUTS\n" % \
+                f = open("env_tex", "wt")
+                f.write(u"TEXINPUTS=%s\nexport TEXINPUTS\n" % \
                         os.environ["TEXINPUTS"])
                 f.close()
             else:
-                f = file("env_tex.bat", "w")
-                f.write("set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
+                f = open("env_tex.bat", "wt")
+                f.write(u"set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
                 f.close()
 
         # Build the tex file(s), and compile it(them)
@@ -544,13 +565,13 @@ class DbTexCommand:
         if options.format:
             try:
                 run.set_format(options.format)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
 
         # Always set the XSLT (default or not)
         try:
             run.set_xslt(options.xslt)
-        except Exception, e:
+        except Exception as e:
             failed_exit("Error: %s" % e)
 
         if options.xslopts:
@@ -575,7 +596,7 @@ class DbTexCommand:
         if options.texstyle:
             try:
                 xslparam, texpath = texstyle_parse(options.texstyle)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
             run.xslparams.append(xslparam)
             if texpath: run.texinputs.append(texpath)
@@ -630,7 +651,7 @@ class DbTexCommand:
             if not(os.path.exists(options.tmpdir)):
                 try:
                     os.mkdir(options.tmpdir)
-                except Exception, e:
+                except Exception as e:
                     failed_exit("Error: %s" % e)
             run.tmpdir_user = os.path.abspath(options.tmpdir)
 
@@ -665,7 +686,7 @@ class DbTexCommand:
 
         if options.version:
             version = run.get_version()
-            print "%s version %s" % (self.prog, version)
+            print("%s version %s" % (self.prog, version))
             if not(args):
                 sys.exit(0)
 
@@ -682,14 +703,14 @@ class DbTexCommand:
             try:
                 conf.paths = self.get_config_paths()
                 conf.fromstyle(options.style)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
             
         if options.config:
             try:
                 for config in options.config:
                     conf.fromfile(config)
-            except Exception, e:
+            except Exception as e:
                 failed_exit("Error: %s" % e)
 
         if conf.options:
@@ -735,7 +756,7 @@ class DbTexCommand:
         # Try to buid the file
         try:
             run.compile()
-        except Exception, e:
+        except Exception as e:
             signal_error(self, e)
             failed_exit("Error: %s" % e)
 

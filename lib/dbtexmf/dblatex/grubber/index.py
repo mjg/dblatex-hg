@@ -38,6 +38,7 @@ this argument, they apply to all indices declared at the point where they
 occur.
 """
 
+import sys
 import os
 from os.path import *
 import re, string
@@ -45,9 +46,11 @@ import subprocess
 import xml.dom.minidom
 
 from subprocess import Popen, PIPE
-from msg import _, msg
-from plugins import TexModule
-from util import md5_file
+from io import open
+
+from dbtexmf.dblatex.grubber.msg import _, msg
+from dbtexmf.dblatex.grubber.plugins import TexModule
+from dbtexmf.dblatex.grubber.util import md5_file
 
 
 class Xindy:
@@ -133,7 +136,7 @@ class Xindy:
         # Texindy produces latin-* indexes. Try to find out which one from
         # the modules loaded by the script (language dependent)
         re_lang = re.compile("loading module \"lang/.*/(latin[^.-]*)")
-        logfile = open(logname)
+        logfile = open(logname, "rt", encoding="latin-1")
         encoding = ""
         for line in logfile:
             m = re_lang.search(line)
@@ -145,7 +148,7 @@ class Xindy:
         return encoding
 
     def _index_is_unicode(self):
-        f = file(self.target, "r")
+        f = open(self.target, "rb")
         is_unicode = True 
         for line in f:
             try:
@@ -162,20 +165,20 @@ class Xindy:
         # with Xindy. If not, the following error is raised by Xindy:
         # "WARNING: unknown cross-reference-class `hyperindexformat'! (ignored)"
         #
-        f = file(self.idxfile, "r")
+        f = open(self.idxfile, "rt", encoding="latin-1")
         data = f.read()
         f.close()
         data, nsub = self._re_hyperindex.subn(r"\1}{", data)
         if not(nsub):
             return
         msg.debug("Remove %d unsupported 'hyperindexformat' calls" % nsub)
-        f = file(self.idxfile, "w")
+        f = open(self.idxfile, "wt", encoding="latin-1")
         f.write(data)
         f.close()
 
     def _fix_invalid_ranges(self):
         if not(self.invalid_index_ranges): return
-        f = open(self.idxfile)
+        f = open(self.idxfile, "rt", encoding="latin-1")
         lines = f.readlines()
         f.close()
 
@@ -199,7 +202,7 @@ class Xindy:
         skip_lines.reverse()
         for line_num in skip_lines:
             del lines[line_num]
-        f = open(self.idxfile, "w")
+        f = open(self.idxfile, "wt", encoding="latin-1")
         f.writelines(lines)
         f.close()
 
@@ -218,8 +221,8 @@ class Xindy:
             if "WARNING" in block:
                 check_next_block = True
             elif check_next_block:
-                m = re.search("Found.*?-range .*"\
-                              "Location-reference is \d+ in keyword \((.*)\)",
+                m = re.search(r"Found.*?-range .*"\
+                              r"Location-reference is \d+ in keyword \((.*)\)",
                               block, re.M|re.DOTALL)
                 if m: self.invalid_index_ranges.append(Indexentry(m.group(1)))
                 check_next_block = False
@@ -232,9 +235,11 @@ class Xindy:
 
         # Collect the script output, and errors
         logname = join(dirname(self.target), "xindy.log")
-        logfile = open(logname, "w")
+        logfile = open(logname, "wb")
         p = Popen(cmd, stdout=logfile, stderr=PIPE)
         errdata = p.communicate()[1]
+        if isinstance(errdata, bytes):
+            errdata = errdata.decode(sys.getdefaultencoding())
         rc = p.wait()
         if msg.stdout:
             msg.stdout.write(errdata)
@@ -264,7 +269,7 @@ class Indexentry:
     """
     Index entry wrapper from idxfile. Its role is to detect range anomalies
     """
-    _re_entry = re.compile("\indexentry{(.*)\|([\(\)]?).*}{(\d+)}", re.DOTALL)
+    _re_entry = re.compile(r"\\indexentry{(.*)\|([\(\)]?).*}{(\d+)}", re.DOTALL)
 
     def __init__(self, index_key):
         self.index_key = index_key
@@ -330,7 +335,7 @@ class Makeindex:
         return cmd
 
     def _index_is_unicode(self):
-        f = file(self.target, "r")
+        f = open(self.target, "rb")
         is_unicode = True 
         for line in f:
             try:
@@ -493,7 +498,7 @@ class Index(TexModule):
                 os.unlink(file)
 
 re_newindex = re.compile(" *{(?P<idx>[^{}]*)} *{(?P<ind>[^{}]*)}")
-re_optarg = re.compile("\((?P<list>[^()]*)\) *")
+re_optarg = re.compile(r"\((?P<list>[^()]*)\) *")
 
 class Module (TexModule):
     def __init__ (self, doc, dict):
@@ -514,7 +519,7 @@ class Module (TexModule):
         index = self.indices[name] = Index(self.doc, idx, ind, ilg)
         for cmd in self.defaults:
             index.command(*cmd)
-        if self.commands.has_key(name):
+        if name in self.commands:
             for cmd in self.commands[name]:
                 index.command(*cmd)
 
@@ -548,9 +553,9 @@ class Module (TexModule):
             self.defaults.append([cmd, args])
             names = indices.keys()
         for index in names:
-            if indices.has_key(index):
+            if index in indices:
                 indices[index].command(cmd, args[1:])
-            elif self.commands.has_key(index):
+            elif index in self.commands:
                 self.commands[index].append([cmd, args])
             else:
                 self.commands[index] = [[cmd, args]]

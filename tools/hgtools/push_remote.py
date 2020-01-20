@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import os
 import re
@@ -12,7 +14,7 @@ dry_run = False
 def exec_command(cmd):
     global dry_run
     cmd = " ".join(cmd)
-    print cmd
+    print(cmd)
     if not(dry_run):
         rc = subprocess.call(cmd, shell=True)
         if rc != 0:
@@ -21,13 +23,13 @@ def exec_command(cmd):
 def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
     cmd = ["hg", "-R", repo_sas, "incoming"]
     if add_source: cmd.append(repo_src)
-    print " ".join(cmd)
+    print(" ".join(cmd))
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
 
     patch_revs = []
     for line in data.split("\n"):
-        m = re.search("changeset: *(\d+):", line)
+        m = re.search(r"changeset: *(\d+):", line)
         if m: patch_revs.append(m.group(1))
 
     if not(patch_revs):
@@ -39,8 +41,8 @@ def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
     exec_command(cmd)
 
 def hg_tag_command(repo_proxy, patch, user=""):
-    cmd = ["grep", "-c", "^diff.*\.hgtags", patch]
-    print " ".join(cmd)
+    cmd = ["grep", "-c", r"^diff.*\.hgtags", patch]
+    print(" ".join(cmd))
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
 
@@ -49,27 +51,27 @@ def hg_tag_command(repo_proxy, patch, user=""):
 
     action, tag1, tag2, tag_date = "", "", "", ""
     for line in open(patch).readlines():
-        m = re.search("Added tag ([^\s]+) for changeset", line)
+        m = re.search(r"Added tag ([^\s]+) for changeset", line)
         if m:
             action = "add"
             tag1 = m.group(1)
             continue
-        m = re.search("Removed tag ([^\s]+)", line)
+        m = re.search(r"Removed tag ([^\s]+)", line)
         if m:
             action = "remove"
             tag1 = m.group(1)
             continue
-        m = re.search("^\+\+\+ .*\s+(\w+ \w+ \d+ \d+:\d+:\d+ \d+)", line)
+        m = re.search(r"^\+\+\+ .*\s+(\w+ \w+ \d+ \d+:\d+:\d+ \d+)", line)
         if m:
             tag_date = m.group(1)
             continue
-        m = re.search("^\+.* (.*)", line)
+        m = re.search(r"^\+.* (.*)", line)
         if m:
             tag2 = m.group(1)
             continue
 
     if not(tag1 and tag1 == tag2):
-        print "Something wrong: '%s' vs '%s'" % (tag1, tag2)
+        print("Something wrong: '%s' vs '%s'" % (tag1, tag2))
         return []
 
     cmd = ["hg", "-R", repo_proxy, "tag", "-d", '"'+tag_date+'"']
@@ -144,15 +146,15 @@ def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
         if push_remote:
             hg_command(repo_proxy, "push")
         rc = 0
-    except Exception, e:
+    except Exception as e:
         rc = -1
-        print >>sys.stderr, e
+        print(e, file=sys.stderr)
 
     os.chdir(curdir)
     if not(debug):
         shutil.rmtree(tmpdir)
     else:
-        print "%s not removed" % (tmpdir)
+        print("%s not removed" % (tmpdir))
     return rc
 
 
@@ -203,15 +205,15 @@ def main():
             for p in patches:
                 try: d = int(p)
                 except:
-                    print "Invalid revision identifier: %s" % p
+                    print("Invalid revision identifier: %s" % p)
                     errors = errors + 1
             exclude_patches += patches
 
     if not(options.intermediate):
-        print >> sys.stderr, "Option -i required"
+        print("Option -i required", file=sys.stderr)
         errors = errors + 1
     if not(options.destination):
-        print >> sys.stderr, "Option -d required"
+        print("Option -d required", file=sys.stderr)
         errors = errors + 1
 
     if errors > 0:

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import glob
 import re
@@ -104,12 +106,12 @@ def main():
     sr = set(reffiles)
 
     torem_from_syn = ss - sp
-    print "==========="
-    print "In param list, missing in %s:\n" % (synopdir), sp - ss
-    print "\nIn param list, missing in refentries:\n", sp - sr
-    print "\nIn synopsis, not in param list:\n", torem_from_syn
-    print "\nIn synopsis, missing in refentries:\n", ss - sr - torem_from_syn
-    print "\nIn refentries, missing in %s:\n" % (synopdir), sr - ss
+    print("===========")
+    print("In param list, missing in %s:\n" % (synopdir), sp - ss)
+    print("\nIn param list, missing in refentries:\n", sp - sr)
+    print("\nIn synopsis, not in param list:\n", torem_from_syn)
+    print("\nIn synopsis, missing in refentries:\n", ss - sr - torem_from_syn)
+    print("\nIn refentries, missing in %s:\n" % (synopdir), sr - ss)
 
 
 if __name__ == "__main__":

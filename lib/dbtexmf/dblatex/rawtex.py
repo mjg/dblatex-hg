@@ -7,11 +7,12 @@
 import sys
 import os
 import re
+from io import open
 
-from rawparse import RawLatexParser, RawUtfParser
-from rawverb import VerbParser
-from rawlabel import RawLabelParser
-from xetex.codec import XetexCodec
+from .rawparse import RawLatexParser, RawUtfParser
+from .rawverb import VerbParser
+from .rawlabel import RawLabelParser
+from .xetex.codec import XetexCodec
 from dbtexmf.core.imagedata import *
 
 
@@ -19,9 +20,9 @@ class RawLatex:
     "Main latex file parser"
     def __init__(self):
         self.figre = \
-            re.compile(r"(\\includegraphics[\[]?|"\
-                       r"\\begin{overpic}|"\
-                       r"\\imgexits)[^{]*{([^}]*)}")
+            re.compile(br"(\\includegraphics[\[]?|"\
+                       br"\\begin{overpic}|"\
+                       br"\\imgexits)[^{]*{([^}]*)}")
         self.image = Imagedata()
         self.parsers = []
         self.format = None
@@ -36,7 +37,7 @@ class RawLatex:
             output_encoding = "utf8"
             codec = XetexCodec()
         elif not(output_encoding):
-            f = file(input)
+            f = open(input, "rt", encoding="latin-1")
             params = {}
             started = 0
             for line in f:
@@ -73,8 +74,8 @@ class RawLatex:
 
     def parse(self, input, output):
         self.set_parsers(input)
-        f = file(input)
-        o = file(output, "w")
+        f = open(input, "rb")
+        o = open(output, "wb")
         for line in f:
             if self.format:
                 line = self.figconvert(line)
@@ -100,7 +101,7 @@ class RawLatex:
 
             # If something done, replace the figure in the tex file
             if newfig != fig:
-                line = re.sub(r"{%s}" % fig, r"{%s}" % newfig, line)
+                line = re.sub(br"{%s}" % fig, br"{%s}" % newfig, line)
 
         return line
             

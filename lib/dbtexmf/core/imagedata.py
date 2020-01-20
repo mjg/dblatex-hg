@@ -3,9 +3,12 @@ import os
 import re
 import shutil
 import logging
-import urllib
+try:
+    from urllib import url2pathname
+except ImportError:
+    from urllib.request import url2pathname
 from dbtexmf.core.error import signal_error
-from commander import CommandRunner
+from .commander import CommandRunner
 
 class ObjectFilter:
     """
@@ -258,8 +261,10 @@ class Imagedata:
                                                       backend=backend)
 
     def convert(self, fig):
+        fig = fig.decode("utf-8")
+
         # Translate the URL to an actual local path
-        fig = urllib.url2pathname(fig)
+        fig = url2pathname(fig)
 
         # Always use '/' in path: work even on windows and is required by tex
         if os.path.sep != '/': fig = fig.replace(os.path.sep, '/')
@@ -270,10 +275,10 @@ class Imagedata:
         # No real file found, give up
         if not(realfig):
             self.log.warning("Image '%s' not found" % fig)
-            return fig
+            return fig.encode("ascii")
 
         # Check if this image has been already converted
-        if self.converted.has_key(realfig):
+        if realfig in self.converted:
             self.log.info("Image '%s' already converted as %s" % \
                   (fig, self.converted[realfig]))
             return self.converted[realfig]
@@ -306,7 +311,7 @@ class Imagedata:
         conv.log = self.log
         conv.convert(realfig, newfig, self.output_format)
         self.converted[realfig] = newfig
-        return newfig
+        return self._path_encode(newfig)
 
     def _safe_file(self, fig, realfig, ext):
         """
@@ -316,7 +321,7 @@ class Imagedata:
         # Encode to expected output format. If encoding is OK and 
         # supported by tex, just return the encoded path
         newfig = self._path_encode(fig)
-        if newfig and newfig.find(" ") == -1:
+        if newfig and newfig.find(b" ") == -1:
             return newfig
 
         # Added to the converted list
@@ -326,17 +331,17 @@ class Imagedata:
 
         # Do the copy
         shutil.copyfile(realfig, newfig)
-        return newfig
+        return self._path_encode(newfig)
 
     def _path_encode(self, fig):
         # Actually, only ASCII characters are sure to match filesystem encoding
         # so let's be conservative
-        if self.output_encoding == "utf8":
-            return fig
+        if self.output_encoding == "utf-8":
+            return fig.encode("utf-8")
         try:
-            newfig = fig.decode("utf8").encode("ascii")
+            newfig = fig.encode("ascii")
         except:
-            newfig = ""
+            newfig = b""
         return newfig
 
     def scanformat(self, fig):

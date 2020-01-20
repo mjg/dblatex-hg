@@ -8,8 +8,9 @@ This module defines the class that parses the LaTeX log files.
 from __future__ import generators
 
 import re
+from io import open
 
-from msg import _, msg
+from dbtexmf.dblatex.grubber.msg import _, msg
 
 class LogParser:
     """
@@ -21,12 +22,12 @@ class LogParser:
     re_loghead = re.compile("This is [0-9a-zA-Z-]*(TeX|Omega)")
     re_rerun = re.compile(
         "(LaTeX|Package longtable|Package bibtopic) Warning:.*Rerun")
-    re_rerun2 = re.compile("\(Changebar\).*Rerun")
+    re_rerun2 = re.compile(r"\(Changebar\).*Rerun")
     re_file = re.compile("(\\((?P<file>[^ \n\t(){}]*)|\\))")
     re_badbox = re.compile(r"(Ov|Und)erfull \\[hv]box ")
     re_line = re.compile(r"(l\.(?P<line>[0-9]+)( (?P<code>.*))?$|<\*>)")
     re_cseq = re.compile(r".*(?P<seq>\\[^ ]*) ?$")
-    re_page = re.compile("\[(?P<num>[0-9]+)\]")
+    re_page = re.compile(r"\[(?P<num>[0-9]+)\]")
     re_atline = re.compile(
     "( detected| in paragraph)? at lines? (?P<line>[0-9]*)(--(?P<last>[0-9]*))?")
     re_reference = re.compile("LaTeX Warning: Reference `(?P<ref>.*)' \
@@ -51,7 +52,7 @@ class LogParser:
         """
         self.lines = []
         try:
-            file = open(name)
+            file = open(name, "rt")
         except IOError:
             return 2
         line = file.readline()
@@ -188,7 +189,7 @@ class LogParser:
                         m = self.re_ignored.search(error)
                         if m:
                             d["file"] = last_file
-                            if d.has_key("code"):
+                            if "code" in d:
                                 del d["code"]
                             d.update( m.groupdict() )
                         elif pos[-1] is None:

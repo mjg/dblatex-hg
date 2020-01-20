@@ -5,12 +5,15 @@
 # An efficient solution should use some python bindings to directly call the
 # C fontconfig library.
 #
+import sys
 import logging
 from subprocess import Popen, PIPE
 
 def execute(cmd):
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
+    if isinstance(data, bytes):
+        data = data.decode(sys.getdefaultencoding())
     rc = p.wait()
     if rc != 0:
         raise OSError("'%s' failed (%d)" % (" ".join(cmd), rc))

@@ -18,6 +18,8 @@
 #                                                      PDF_Day_A_Look_Inside.pdf
 #
 #
+from __future__ import print_function
+
 import os
 import sys
 import traceback
@@ -40,7 +42,7 @@ class ErrorHandler:
 
     def failure_track(self, msg, rc=1):
         self.rc = rc
-        print >>sys.stderr, (msg)
+        print((msg), file=sys.stderr)
         if self._dump_stack:
             traceback.print_exc()
 
@@ -105,7 +107,7 @@ class PDFFile(PDFBaseObject):
         self.fontmgr = FontManager({})
 
         # Detect the beginning of a PDF Object
-        self.re_objstart = re.compile("(\d+) (\d+) obj(.*$)", re.DOTALL)
+        self.re_objstart = re.compile(r"(\d+) (\d+) obj(.*$)", re.DOTALL)
 
     def cleanup(self):
         self.stream_manager.cleanup()
@@ -124,7 +126,7 @@ class PDFFile(PDFBaseObject):
             self._file.seek(offset)
             data = self._file.read(offset_trailer) + data
 
-        m = re.search("\sstartxref\s+(\d+)\s+%%EOF", data, re.M)
+        m = re.search(r"\sstartxref\s+(\d+)\s+%%EOF", data, re.M)
         if not(m):
             self.error("Problem in PDF file: startxref not found")
             return 0
@@ -138,7 +140,7 @@ class PDFFile(PDFBaseObject):
         while startxref:
             self._file.seek(startxref)
             line = self._file.readline()
-            m = re.search("xref\s(.*)", line, re.M|re.DOTALL)
+            m = re.search(r"xref\s(.*)", line, re.M|re.DOTALL)
             if (m):
                 found_xref = PDFXrefSection(self._file)
                 found_xref.read_table(m.group(1))
@@ -700,7 +702,7 @@ class PDFObject:
     def compute(self):
         string = self.string
 
-        s = re.split("stream\s", string, re.MULTILINE)
+        s = re.split(r"stream\s", string, re.MULTILINE)
         if len(s) > 1:
             self.debug("Contains stream")
             self.stream = s[1].strip()
@@ -730,7 +732,7 @@ class PDFObject:
         else:
             self.descriptor = PDFDescriptor()
 
-        self.data = re.sub("{descriptor\(\d+\)}", "",
+        self.data = re.sub(r"{descriptor\(\d+\)}", "",
                            string, flags=re.MULTILINE).strip()
         self.debug("Data: '%s'" % self.data)
 
@@ -804,16 +806,16 @@ class PDFDescriptor:
     #  /MediaBox [0 0 595.276 841.89] : the value is an array
     #  /Parent 12 0 R
     # >>
-    _re_dict = re.compile("/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+")
+    _re_dict = re.compile(r"/\w+\s*/[^/\s]+|/\w+\s*\[[^\]]*\]|/\w+\s*[^/]+")
 
     # Extract a dictionnary keyword
-    _re_key = re.compile("(/[^ \({/\[<]*)")
+    _re_key = re.compile(r"(/[^ \({/\[<]*)")
 
     # Extract the substituted descriptors
-    _re_descobj = re.compile("{descriptor\((\d+)\)}")
+    _re_descobj = re.compile(r"{descriptor\((\d+)\)}")
 
     # Find the PDF object references
-    _re_objref = re.compile("(\d+ \d+ R)")
+    _re_objref = re.compile(r"(\d+ \d+ R)")
 
     def __init__(self, string=""):
         self._ident = self._get_ident()
@@ -960,7 +962,7 @@ class StreamManager(PDFBaseObject):
             shutil.rmtree(self.cache_dirname)
         else:
             for fname in self.cache_files:
-                print "shutil.remove(", fname
+                print("shutil.remove(", fname)
 
     def cache(self, **kwargs):
         if self.cache_method == "file":
@@ -1093,7 +1095,7 @@ class PDFContentStream(PDFStreamHandler):
         self.make_graph_tree()
 
     def extract_textobjects(self, data):
-        fields = re.split("((?<=\s)BT(?=\s)|(?<=\s)ET(?=\s))", data)
+        fields = re.split(r"((?<=\s)BT(?=\s)|(?<=\s)ET(?=\s))", data)
 
         start_text = False
         textdata = ""
@@ -1118,7 +1120,7 @@ class PDFContentStream(PDFStreamHandler):
         self.data = data
 
     def make_graph_tree(self):
-        graph_stacks = re.split("(q\s|\sQ)", self.data)
+        graph_stacks = re.split(r"(q\s|\sQ)", self.data)
 
         self.qnode_root = GraphState()
         qnode = self.qnode_root
@@ -1234,15 +1236,15 @@ class GraphState:
 
     def fill_textobjects(self, textobjects):
         #print self._data #***
-        tos = re.findall(" (textobj\(\d+\))", self._data)
+        tos = re.findall(r" (textobj\(\d+\))", self._data)
         for to in tos:
-            m = re.match("textobj\((\d+)\)", to)
+            m = re.match(r"textobj\((\d+)\)", to)
             if m:
                 textobject = textobjects[int(m.group(1))]
                 textobject.set_graphstate(self)
                 self.textobjects.append(textobject)
 
-        self._data = re.sub(" textobj\(\d+\)", "",
+        self._data = re.sub(r" textobj\(\d+\)", "",
                        self._data, flags=re.MULTILINE).strip()
 
     def extract_matrix(self):
@@ -1253,37 +1255,37 @@ class GraphState:
 
     def dump(self):
         s = self._level * "  " + "q '" + self._data + "'"
-        print s
+        print(s)
         for q in self._children:
             q.dump()
         s = self._level * "  " + "Q"
-        print s
+        print(s)
 
 
 class PDFTextObject:
     """
     Data between the 'BT' and 'ET' tokens found in content streams.
     """
-    _font_op_pattern = "/[^\s]+\s+[^\s]+\s+Tf"
+    _font_op_pattern = r"/[^\s]+\s+[^\s]+\s+Tf"
 
     # Detect a 'Tf', 'Tm', 'Tj', 'TJ', Td, TD operator sequence in a text object
     # To use only when strings are extracted and replaced by their reference
     _re_seq = re.compile("(" + _font_op_pattern + "|"+\
-                         6*"[^\s]+\s+"+"Tm"+"|"+\
-                         "\(textcontent\{\d+\}\)\s*Tj|"+\
-                         "\[[^\]]*\]\s*TJ|"+\
-                         "[^\s]+\s+[^\s]+\s+T[dD])", re.MULTILINE)
+                         6*r"[^\s]+\s+"+"Tm"+"|"+\
+                         r"\(textcontent\{\d+\}\)\s*Tj|"+\
+                         r"\[[^\]]*\]\s*TJ|"+\
+                         r"[^\s]+\s+[^\s]+\s+T[dD])", re.MULTILINE)
 
     # Find a font setup operator, like '/F10 9.47 Tf'
     _re_font = re.compile("("+_font_op_pattern+")", re.MULTILINE)
 
     # Find a sequence '(...\(...\)...) Tj'
-    _re_text_show1 = re.compile("(\((?:" + "[^()]" + "|" +\
+    _re_text_show1 = re.compile(r"(\((?:" + "[^()]" + "|" +\
                                       r"(?<=\\)\(" + "|" +\
                                       r"(?<=\\)\)" + ")*\)\s*Tj)", re.M)
                                 
     # Find a sequence '[...\[...\]...] TJ'
-    _re_text_show2 = re.compile("\[((?:" + "[^\[\]]" + "|" +\
+    _re_text_show2 = re.compile(r"\[((?:" + "[^\[\]]" + "|" +\
                                         r"(?<=\\)\[" + "|" +\
                                         r"(?<=\\)\]" + ")*)\]\s*TJ", re.M)
 
@@ -1319,7 +1321,7 @@ class PDFTextObject:
         return m
 
     def extract_matrix(self):
-        m = re.search("("+6*"[^\s]+\s+"+"Tm"+")", self.data)
+        m = re.search("("+6*r"[^\s]+\s+"+"Tm"+")", self.data)
         if m:
             vector = [ float(v) for v in m.group(1).split()[0:6] ]
             self.matrix = PDFMatrix(vector)
@@ -1380,7 +1382,7 @@ class PDFTextObject:
             # When text is shown, the current font/size setup applies and is
             # then recorded
             elif "Tj" in key or "TJ" in key:
-                m = re.search("textcontent\{(\d+)\}", tx)
+                m = re.search(r"textcontent\{(\d+)\}", tx)
                 text_string = self.strings[int(m.group(1))]
                 scale = self.matrix.scale()
                 #print font, size, scale #*****
@@ -1440,7 +1442,7 @@ class PDFTextShow:
 
     def text(self):
         textdata = self._re_textascii.findall(self.data)
-        textdata = "".join(textdata).replace("\(", "(").replace("\)", ")")
+        textdata = "".join(textdata).replace(r"\(", "(").replace(r"\)", ")")
         if textdata:
             return textdata
         if (self.font.tounicode):
@@ -1494,7 +1496,7 @@ class FontManager:
 
     def get_pdffont(self, fontobj, fontsize):
         key = fontobj.descriptor.get("/BaseFont")+"/"+"%6.2f" % fontsize
-        if self.fontused.has_key(key):
+        if key in self.fontused:
             return self.fontused.get(key)
         elif self.global_fontmgr:
             pdffont = self.global_fontmgr.get_pdffont(fontobj, fontsize)
@@ -1517,7 +1519,7 @@ class FontManager:
 
     def _get_tounicode(self, pdfobject):
         key = pdfobject.ident()
-        if self.tounicode.has_key(key):
+        if key in self.tounicode:
             tuc = self.tounicode.get(key)
         else:
             tuc = ToUnicode(pdfobject)
@@ -1540,7 +1542,7 @@ class ToUnicode(PDFStreamHandler):
     translate the text content to readable text
     """
     _re_token = re.compile("(" + \
-             "(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
+             r"(?:\d+\s+(?:begincodespacerange|beginbfchar|beginbfrange))" + "|"\
              "(?:endcodespacerange|endbfchar|endbfrange)" + \
              ")", re.M)
 
@@ -1576,14 +1578,14 @@ class ToUnicode(PDFStreamHandler):
                 self.add_bfrange(bfrange)
                 bfrange = None
             elif bfchar:
-                fld = re.sub("<\s+", "<", fld)
-                fld = re.sub("\s+>", ">", fld)
+                fld = re.sub(r"<\s+", "<", fld)
+                fld = re.sub(r"\s+>", ">", fld)
                 data = fld.split()
                 for i in range(0, len(data), 2):
                     bfchar.add_mapstr(data[i], data[i], data[i+1])
             elif bfrange:
-                fld = re.sub("<\s+", "<", fld)
-                fld = re.sub("\s+>", ">", fld)
+                fld = re.sub(r"<\s+", "<", fld)
+                fld = re.sub(r"\s+>", ">", fld)
                 data = fld.split()
                 for i in range(0, len(data), 3):
                     bfrange.add_mapstr(data[i], data[i+1], data[i+2])
@@ -1696,16 +1698,16 @@ class PageLayoutCmd(BasicCmd):
         for page in pdf_pages:
             fonts_used = page.find_fonts()
             fonts_used.sort()
-            print "\nPage %d fonts used:" % page.pagenum
+            print("\nPage %d fonts used:" % page.pagenum)
             for i, font in enumerate(fonts_used):
-                print "[%d] %-40s %6.2f pt" % (i, font.name(),
-                                               self.pt_factor*font.size())
+                print("[%d] %-40s %6.2f pt" % (i, font.name(),
+                                               self.pt_factor*font.size()))
 
-            print "\nPage %d layout:" % page.pagenum
+            print("\nPage %d layout:" % page.pagenum)
             content_stream = page.streams[0]
             xp, yp = 0., 0.
-            print self.header
-            print self.headline
+            print(self.header)
+            print(self.headline)
             for textobject in content_stream.textobjects:
                 xp, yp = self._print_textobject_layout(textobject, xp, yp,
                                                        fonts_used)
@@ -1728,7 +1730,7 @@ class PageLayoutCmd(BasicCmd):
                         font_line.append(idx)
 
             m2 = line[0].matrix * m2
-            if self.show_matrix: print "%s" % m2
+            if self.show_matrix: print("%s" % m2)
 
             x, y = m2.tx(), m2.ty()
             x, y = float(x/72), float(y/72)
@@ -1742,9 +1744,9 @@ class PageLayoutCmd(BasicCmd):
             textw = textwrap.wrap(text, wraplen)
 
             if textw:
-                print "%s%s" % (info, textw[0])
+                print("%s%s" % (info, textw[0]))
                 for txt in textw[1:]:
-                    print "%s%s" % (self.padding, txt)
+                    print("%s%s" % (self.padding, txt))
 
             xp, yp = x, y
             for l in line[1:]:
@@ -1765,9 +1767,9 @@ class PageObjectCmd(BasicCmd):
             page_num = i+page_first
             contents = page.descriptor.get("/Contents")
             resources = page.descriptor.get("/Resources")
-            print "Page %d %s: contents: %s, resources: %s" % \
-                                 (page_num, page, contents, resources)
-        print
+            print("Page %d %s: contents: %s, resources: %s" % \
+                                 (page_num, page, contents, resources))
+        print()
 
 class PdfObjectCmd(BasicCmd):
     """
@@ -1804,8 +1806,8 @@ class PdfObjectCmd(BasicCmd):
     def _sanitize_objref(self, ident):
         flds = ident.split()
         if len(flds) != 2:
-            print "Invalid object reference: must be in the form "\
-                  "'number generation'"
+            print("Invalid object reference: must be in the form "\
+                  "'number generation'")
             return ""
         else:
             return "%s %s" % (flds[0], flds[1])
@@ -1813,51 +1815,51 @@ class PdfObjectCmd(BasicCmd):
     def show_dictionnary(self, ident):
         pdfobject = self.scanner.pdf.get_object(ident)
         if not(pdfobject):
-            print "PDF Object '%s' not found" % ident
+            print("PDF Object '%s' not found" % ident)
             return
         if pdfobject.stream:
-            print "PDF Object '%s' has a stream. Its dictionnary:" % ident
+            print("PDF Object '%s' has a stream. Its dictionnary:" % ident)
         else:
-            print "PDF Object '%s' dictionnary:" % ident
+            print("PDF Object '%s' dictionnary:" % ident)
         self._print_dictionnary(pdfobject.descriptor)
 
     def _print_dictionnary(self, descriptor, level=1):
         indent = "  "*level
-        print "%s<<" % indent
+        print("%s<<" % indent)
         for p, v in descriptor.infos().items():
             if isinstance(v, PDFDescriptor):
-                print "%s%s:" % (indent, p)
+                print("%s%s:" % (indent, p))
                 self._print_dictionnary(v, level=level+1)
             else:
-                print "%s%s: %s" % (indent, p, v)
-        print "%s>>" % indent
+                print("%s%s: %s" % (indent, p, v))
+        print("%s>>" % indent)
 
     def list_pdfobjects(self):
         pdfobjects = self.scanner.pdf.pdfobjects
-        print "Found %s PDFObjects" % pdfobjects.count()
-        print "Found the following PDFObject types:"
+        print("Found %s PDFObjects" % pdfobjects.count())
+        print("Found the following PDFObject types:")
         types = pdfobjects.types()
         types.sort()
         total = 0
         for typ in types:
             n_type = len(pdfobjects.get_objects_by_type(typ))
-            print " %20s: %5d objects" % (typ, n_type)
+            print(" %20s: %5d objects" % (typ, n_type))
             total = total + n_type
-        print " %20s: %5d objects" % ("TOTAL", total)
+        print(" %20s: %5d objects" % ("TOTAL", total))
 
     def dump_stream(self, ident, outfile):
         pdfobject = self.scanner.pdf.get_object(ident)
         if not(pdfobject):
-            print "PDF Object '%s' not found" % ident
+            print("PDF Object '%s' not found" % ident)
             return
         if not(pdfobject.stream):
-            print "PDF Object '%s' has no stream. Give up." % ident
+            print("PDF Object '%s' has no stream. Give up." % ident)
             return
         pdfobject.stream_decode()
         f = open(outfile, "wb")
         f.write(pdfobject.stream_text())
         f.close()
-        print "PDF Object '%s' stream written to file %s" % (ident, outfile)
+        print("PDF Object '%s' stream written to file %s" % (ident, outfile))
 
 
 
@@ -1895,17 +1897,17 @@ class PageFontCmd(BasicCmd):
 
     def print_fonts_in_pages(self, pdf_pages, show=True):
         if show:
-            print self.header_fmt % ("PAGE", "FONT", "SIZE")
-            print self.header_fmt % (4*"-", 40*"-", 10*"-")
+            print(self.header_fmt % ("PAGE", "FONT", "SIZE"))
+            print(self.header_fmt % (4*"-", 40*"-", 10*"-"))
 
         for page in pdf_pages:
             fonts_used = page.find_fonts()
             fonts_used.sort()
             for font in fonts_used:
                 if show:
-                    print "%4d %-40s %6.2f %s" % (page.pagenum, font.name(),
-                              self.pt_factor * font.size(), self.font_unit)
-            if show: print self.header_fmt % (4*"-", 40*"-", 10*"-")
+                    print("%4d %-40s %6.2f %s" % (page.pagenum, font.name(),
+                              self.pt_factor * font.size(), self.font_unit))
+            if show: print(self.header_fmt % (4*"-", 40*"-", 10*"-"))
 
     def print_font_summary(self):
         pages = []
@@ -1917,12 +1919,12 @@ class PageFontCmd(BasicCmd):
                 s += "-%d" % (pg[-1].pagenum)
             pages.append(s)
 
-        print "\nFonts used in pages %s:" % (",".join(pages))
+        print("\nFonts used in pages %s:" % (",".join(pages)))
         fonts_used = self.scanner.pdf.fontmgr.get_used()
         fonts_used.sort()
         for font in fonts_used:
-            print "%-40s %6.2f %s" % \
-                  (font.name(), self.pt_factor*font.size(), self.font_unit)
+            print("%-40s %6.2f %s" % \
+                  (font.name(), self.pt_factor*font.size(), self.font_unit))
 
 
 class PDFScannerCommand:
@@ -2071,7 +2073,7 @@ class PDFScannerCommand:
         for verbose_opt in verbose:
             group, level = ("all:" + verbose_opt).split(":")[-2:]
             if not(level in log_levels):
-                print "Invalid verbose level: '%s'" % level
+                print("Invalid verbose level: '%s'" % level)
                 continue
             if group == "all":
                 for group in groups:
@@ -2079,7 +2081,7 @@ class PDFScannerCommand:
             elif group in groups:
                 log_groups[group] = level
             else:
-                print "Invalid verbose group: '%s'" % group
+                print("Invalid verbose group: '%s'" % group)
                 continue
         return log_groups
 
@@ -2108,8 +2110,8 @@ class PDFScannerCommand:
         elif cache_dirname:
             cache_dirname = os.path.realpath(cache_dirname)
             if not(os.path.exists(cache_dirname)):
-                print "Invalid cache dir: '%s'. Temporary dir used instead" % \
-                      cache_dirname
+                print("Invalid cache dir: '%s'. Temporary dir used instead" % \
+                      cache_dirname)
                 return None
             mgr = StreamManager(cache_method="file",
                                 cache_dirname=cache_dirname,
@@ -2154,7 +2156,7 @@ def main():
         argslist.append(args)
 
     if not(remain_args) or remain_args[0] in scanner.commands():
-        print "Missing the PDF File"
+        print("Missing the PDF File")
         parser.parse_args(["-h"])
 
     error = ErrorHandler()
@@ -2163,7 +2165,7 @@ def main():
     try:
         pdffile = remain_args[0]
         scanner.run(parser, options, argslist, pdffile)
-    except Exception, e:
+    except Exception as e:
         error.failure_track("Error: '%s'" % (e))
 
     scanner.cleanup()
