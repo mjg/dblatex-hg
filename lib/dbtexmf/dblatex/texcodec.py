@@ -18,17 +18,19 @@ def latex_char_replace(exc, pre, post, name):
         raise TypeError("don't know how to handle %r" % exc)
     l = []
     n = tex_handler_counter[name]
+    if pre: pre = pre.decode(encoding="latin1")
+    if post: post = post.decode(encoding="latin1")
     for c in exc.object[exc.start:exc.end]:
         if pre: l.append(pre)
         try:
             l.append(unient.unicode_map[ord(c)])
         except KeyError:
             print("Missing character &#x%x;" % ord(c))
-            l.append(u"\&\#x%x;" % ord(c))
+            l.append("\&\#x%x;" % ord(c))
         if post: l.append(post)
         n = n + 1
     tex_handler_counter[name] = n
-    return (u"".join(l), exc.end)
+    return ("".join(l), exc.end)
 
 
 class TexCodec:
@@ -118,7 +120,7 @@ class LatexCodec(TexCodec):
         # Basic TeX escape
         text = self._texescape(text)
 
-        # Encode UTF-8 -> Latin-1 + latex specific
+        # Encode UTF-8 (string) -> Latin-1 + latex specific (as bytes)
         text = self._encode(text, self._errors)[0]
 
         # Special Character Mapping

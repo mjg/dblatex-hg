@@ -120,7 +120,7 @@ latex packages are available.</para>
 </listitem>
 
 <listitem>
-<para>Python &gt;= 2.4.</para>
+<para>Python &gt;= 3.2.</para>
 </listitem>
 </itemizedlist>
 </section>
@@ -269,7 +269,7 @@ can also use <ulink url="http://foursuite.sourceforge.net">4suite</ulink>.</para
 </listitem>
 
 <listitem>
-<para><ulink url="http://www.python.org">Python</ulink> &gt;= 2.4.</para>
+<para><ulink url="http://www.python.org">Python</ulink> &gt;= 3.2.3.</para>
 </listitem>
 </itemizedlist></para>
 </section>

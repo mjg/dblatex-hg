@@ -90,9 +90,9 @@ class RunLatex:
         f = open(tmptex, "wt", encoding="latin-1")
         if self.fig_paths:
             paths = "{" + "//}{".join(self.fig_paths) + "//}"
-            f.write(u"\\makeatletter\n")
-            f.write(u"\\def\\input@path{%s}\n" % paths)
-            f.write(u"\\makeatother\n")
+            f.write("\\makeatletter\n")
+            f.write("\\def\\input@path{%s}\n" % paths)
+            f.write("\\makeatother\n")
 
         # Copy the original file and collect parameters embedded in the tex file
         self._clear_params()

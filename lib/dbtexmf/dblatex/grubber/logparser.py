@@ -43,6 +43,7 @@ class LogParser:
 
     def __init__ (self):
         self.lines = []
+        self.encoding = "latin-1"
 
     def read (self, name):
         """
@@ -52,7 +53,7 @@ class LogParser:
         """
         self.lines = []
         try:
-            file = open(name, "rt")
+            file = open(name, "rt", encoding=self.encoding)
         except IOError:
             return 2
         line = file.readline()

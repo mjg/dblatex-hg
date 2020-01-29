@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE itemizedlist PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<itemizedlist>
+<listitem>
+<para>Fork dblatex to work with python > 3.2. Thanks much to Michael J. Gruber
+who did the work! This dblatex branch is no more compatible with python 2.x.</para>
+</listitem>
+</itemizedlist>

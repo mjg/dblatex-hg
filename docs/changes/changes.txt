@@ -1,3 +1,9 @@
+Release 0.3.11-py3:
+-------------------
+
+- Just fork dblatex to work with python > 3.2. Thanks much to Michael J. Gruber
+  who actually did the work! This fork is no more compatible with python 2.x.
+
 Release 0.3.11:
 ---------------
 

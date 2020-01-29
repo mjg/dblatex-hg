@@ -101,7 +101,7 @@ class RawLatex:
 
             # If something done, replace the figure in the tex file
             if newfig != fig:
-                line = re.sub(br"{%s}" % fig, br"{%s}" % newfig, line)
+                line = re.sub(br"{"+fig+br"}", br"{"+newfig+br"}", line)
 
         return line
             

@@ -16,7 +16,7 @@ def label_char_replace(exc, pre, post, errors):
         if post: l.append(post)
         n = n + 1
     tex_handler_counter[errors] = n
-    return (u"".join(l), exc.end)
+    return ("".join(l), exc.end)
 
 
 class LabelCodec(TexCodec):
@@ -60,7 +60,7 @@ class RawLabelParser(RawLatexParser):
     """
     def __init__(self, codec=None, output_encoding="latin-1"):
         texcodec = codec or LabelCodec(output_encoding=output_encoding)
-        RawLatexParser.__init__(self, utf8(u"\u0370l"), utf8(u"\u0371l"),
+        RawLatexParser.__init__(self, utf8("\u0370l"), utf8("\u0371l"),
                                 texcodec)
 
     def translate(self, text):

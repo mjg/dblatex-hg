@@ -25,6 +25,11 @@ the dblatex manual. The full change history is now stored in this release
 note.</para>
 </section>
 
+<section id="sec-changes-0311py3">
+<title>Release 0.3.11-py3</title>
+
+<xi:include href="changes-0.3.11-py3.xml" />
+</section>
 <section id="sec-changes-0311">
 <title>Release 0.3.11</title>
 

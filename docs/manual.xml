@@ -11,7 +11,7 @@
 <surname>Guillon</surname>
 </author>
 
-<date>3 April 2017</date>
+<date>10 January 2020</date>
 
 <subtitle>User Manual</subtitle>
 
@@ -19,7 +19,7 @@
 
 <address>Bordeaux</address>
 
-<edition>12</edition>
+<edition>13</edition>
 
 <releaseinfo>v<xi:include href="version.xml"
 xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
@@ -183,6 +183,17 @@ cosmetic changes in <xref linkend="sec-specs"/>.</para>
 
 <revdescription>
 <para>Update release note for version 0.3.11 that is a bugfix release.</para>
+</revdescription>
+</revision>
+<revision>
+<revnumber>13</revnumber>
+
+<date>2020/01/10</date>
+
+<authorinitials>B. Guillon</authorinitials>
+
+<revdescription>
+<para>Update release note for version 0.3.11-py3: dblatex fork for python3.</para>
 </revdescription>
 </revision>
 </revhistory>

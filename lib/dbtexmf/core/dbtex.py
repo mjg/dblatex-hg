@@ -83,7 +83,7 @@ class DbTex:
     USE_MKLISTINGS = 1
 
     xsl_header = \
-u"""<?xml version="1.0"?>
+"""<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
                 version="1.0">
@@ -216,20 +216,20 @@ u"""<?xml version="1.0"?>
 
         f = open(wrapper, "wt", encoding="latin-1")
         f.write(self.xsl_header)
-        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
+        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslmain))
         for xsluser in self.xslusers:
-            f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
+            f.write('<xsl:import href="%s"/>\n' % path_to_uri(xsluser))
 
         # Reverse to set the latest parameter first (case of overriding)
         self.xslparams.reverse()
         for param in self.xslparams:
             v = param.split("=", 1)
-            f.write(u'<xsl:param name="%s">' % v[0])
+            f.write('<xsl:param name="%s">' % v[0])
             if len(v) == 2:
-                f.write(u'%s' % v[1])
-            f.write(u'</xsl:param>\n')
+                f.write('%s' % v[1])
+            f.write('</xsl:param>\n')
 
-        f.write(u'</xsl:stylesheet>\n')
+        f.write('</xsl:stylesheet>\n')
         f.close()
         self.xslbuild = os.path.realpath(wrapper)
 
@@ -250,7 +250,7 @@ u"""<?xml version="1.0"?>
         else:
             self.log.info("No external file support")
             f = open(self.listings, "wt", encoding="latin-1")
-            f.write(u"<listings/>\n")
+            f.write("<listings/>\n")
             f.close()
 
     def _single_setup(self):
@@ -288,9 +288,9 @@ u"""<?xml version="1.0"?>
         xslset = "doclist.xsl"
         f = open(xslset, "wt", encoding="latin-1")
         f.write(self.xsl_header)
-        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
-        f.write(u'<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
-        f.write(u'</xsl:stylesheet>\n')
+        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslbuild))
+        f.write('<xsl:import href="%s"/>\n' % path_to_uri(self.xslset))
+        f.write('</xsl:stylesheet>\n')
         f.close()
 
         doclist = os.path.join(self.tmpdir, "doclist.txt")
@@ -419,12 +419,12 @@ u"""<?xml version="1.0"?>
         if self.debug and "TEXINPUTS" in os.environ:
             if os.name != "nt":
                 f = open("env_tex", "wt")
-                f.write(u"TEXINPUTS=%s\nexport TEXINPUTS\n" % \
+                f.write("TEXINPUTS=%s\nexport TEXINPUTS\n" % \
                         os.environ["TEXINPUTS"])
                 f.close()
             else:
                 f = open("env_tex.bat", "wt")
-                f.write(u"set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
+                f.write("set TEXINPUTS=%s\n" % os.environ["TEXINPUTS"])
                 f.close()
 
         # Build the tex file(s), and compile it(them)

@@ -62,6 +62,10 @@ class Latex(Depend):
         self.outfile = self.srcbase + "." + format
         self.prods = [self.outfile]
 
+    def set_encoding(self, encoding):
+        self.encoding = encoding
+        # FIXME: log not in valid utf8 format: self.log.encoding = encoding
+
     def compile_needed (self):
         """
         Returns true if a first compilation is needed. This method supposes
@@ -267,10 +271,7 @@ class Latex(Depend):
         missed_chars.sort()
         for m in missed_chars:
             # The log file is encoded in UTF8 (xetex) or in latin1 (pdftex)
-            try:
-                uchar = m[0].decode("utf8")
-            except:
-                uchar = m[0].decode("latin1")
+            uchar = m[0]
             # Check we have a real char (e.g. not something like '^^a3')
             if len(uchar) == 1:
                 msg.warn("Character U+%X (%s) not in font '%s'" % \

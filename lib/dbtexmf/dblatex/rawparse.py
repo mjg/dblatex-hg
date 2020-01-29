@@ -16,7 +16,7 @@ class RawKey:
 
 class RawLatexParser:
     def __init__(self,
-                 key_in=utf8(u"\u0370t"), key_out=utf8(u"\u0371t"),
+                 key_in=utf8("\u0370t"), key_out=utf8("\u0371t"),
                  codec=None, output_encoding="latin-1"):
         self.key_in = RawKey(key_in, 1)
         self.key_out = RawKey(key_out, -1)
@@ -27,8 +27,8 @@ class RawLatexParser:
         self.hyphenator = UrlHyphenator(codec=self.codec)
         
         # hyphenation patterns
-        self.hypon = re.compile(utf8(u"\u0370h"))
-        self.hypof = re.compile(utf8(u"\u0371h"))
+        self.hypon = re.compile(utf8("\u0370h"))
+        self.hypof = re.compile(utf8("\u0371h"))
 
     def parse(self, line):
         lout = b""
@@ -79,7 +79,7 @@ class RawUtfParser(RawLatexParser):
 
     def __init__(self, codec=None, output_encoding="latin-1"):
         texcodec = codec or TexCodec(output_encoding=output_encoding)
-        RawLatexParser.__init__(self, utf8(u"\u0370u"), utf8(u"\u0371u"),
+        RawLatexParser.__init__(self, utf8("\u0370u"), utf8("\u0371u"),
                                 texcodec)
 
     def translate(self, text):

@@ -36,7 +36,7 @@ class VerbCodec(TexCodec):
         n = tex_handler_counter[self._errors]
         for c in ntext:
             if ord(c) > 255:
-                c = self.pre + c + self.post
+                c = str(self.pre) + c + str(self.post)
                 n += 1
             text += c
         tex_handler_counter[self._errors] = n
@@ -107,11 +107,11 @@ class VerbParser:
 
         # Add the escape option if necessary
         if not(self.esc_start) and c.get_errors() != 0:
-            escopt = b"escapeinside={%s}{%s}" % (c.pre, c.post)
+            escopt = b"escapeinside={" + c.pre + b"}{" + c.post + b"}"
             if self.options:
                 if self.options[-2] != ",":
                     escopt = b"," + escopt
-                self.options = self.options[:-1] + escopt + "]"
+                self.options = self.options[:-1] + escopt + b"]"
             else:
                 self.options = b"[" + escopt + b"]"
 
@@ -146,7 +146,7 @@ class VerbParser:
         if (s == self.default_esc_start):
             return self.default_codec
 
-        return VerbCodec(s, self.default_esc_stop, b"verbtex" + s,
+        return VerbCodec(s, self.default_esc_stop, "verbtex" + str(s),
                          output_encoding=self.encoding)
 
 

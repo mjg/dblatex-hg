@@ -68,8 +68,8 @@ class LatexBuilder:
 
     def compile(self, source):
         self.tex.batch = self.batch
-        self.tex.encoding = self.encoding
         self.tex.lang = self.lang
+        self.tex.set_encoding(self.encoding)
         self.tex.set_source(source)
         if self.options:
             self.tex.opts += shlex.split(self.options)
