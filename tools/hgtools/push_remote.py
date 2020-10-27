@@ -20,17 +20,47 @@ def exec_command(cmd):
         if rc != 0:
             raise Exception("'%s' failed (%d)" % (cmd, rc))
 
-def hg_export_patches(repo_src, repo_sas, patch_dir, add_source=False):
+def get_changeset_revs(data):
+    patch_revs = []
+    for line in data.split("\n"):
+        m = re.search(r"changeset: *(\d+):", line)
+        if m: patch_revs.append(m.group(1))
+    return patch_revs
+
+def hg_incoming_revs(repo_src, repo_sas, patch_dir, add_source=False):
     cmd = ["hg", "-R", repo_sas, "incoming"]
     if add_source: cmd.append(repo_src)
     print(" ".join(cmd))
     p = Popen(cmd, stdout=PIPE)
     data = p.communicate()[0]
 
-    patch_revs = []
-    for line in data.split("\n"):
-        m = re.search(r"changeset: *(\d+):", line)
-        if m: patch_revs.append(m.group(1))
+    patch_revs = get_changeset_revs(data)
+    return patch_revs
+
+def hg_fromtag_revs(repo_src, repo_sas, patch_dir, tag_from):
+    cmd = ["hg", "-R", repo_sas, "log", "-r", "tip"]
+    print(" ".join(cmd))
+    p = Popen(cmd, stdout=PIPE)
+    data = p.communicate()[0]
+    patch_rev2 = get_changeset_revs(data)[0]
+
+    cmd = ["hg", "-R", repo_sas, "log", "-r", tag_from]
+    print(" ".join(cmd))
+    p = Popen(cmd, stdout=PIPE)
+    data = p.communicate()[0]
+    patch_rev1 = get_changeset_revs(data)[0]
+
+    # Assume that the tag is already set, so apply from the next rev
+    patch_revs = [str(r) for r in range(int(patch_rev1)+2, int(patch_rev2)+1)]
+    return patch_revs
+
+def hg_export_patches(repo_src, repo_sas, patch_dir,
+                      add_source=False, tag_from=""):
+    if (tag_from):
+        patch_revs = hg_fromtag_revs(repo_src, repo_sas, patch_dir, tag_from)
+    else:
+        patch_revs = hg_incoming_revs(repo_src, repo_sas, patch_dir,
+                                      add_source=add_source)
 
     if not(patch_revs):
         return
@@ -106,15 +136,15 @@ def hg_command(repo_sas, what):
     exec_command(cmd)
 
 
-def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
-                  push_remote=False, exclude_patches=None):
+def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", tag_from="", 
+                  debug=False, push_remote=False, exclude_patches=None):
     """
     The update principle is as follow:
 
     Source Repo |---------->| Intermediate/SAS Repo |
-        |         incoming? 
-        |            |
-        | export <---"
+        |         incoming?       tag_from?
+        |            |               |
+        | export <---+<---- log -----+
         v       
      Patches -------------->| Proxy/Dest Repo   |----------->| Remote Repo | 
              import -u user                          push 
@@ -139,7 +169,7 @@ def push_to_proxy(repo_src, repo_sas, repo_proxy, user="", debug=False,
     # We don't use the bundle mechanism, because the commit user maybe need to
     # be changed. So, use raw patch export/import method.
     try:
-        hg_export_patches(repo_src, repo_sas, patch_dir)
+        hg_export_patches(repo_src, repo_sas, patch_dir, tag_from=tag_from)
         hg_import_patches(repo_proxy, patch_dir, user=user,
                           exclude_patches=exclude_patches)
         hg_command(repo_sas, "pull")
@@ -167,6 +197,8 @@ def main():
                       help="Intermediate clone repository to update")
     parser.add_option("-x", "--destination",
                       help="Destination repository to update (proxy)")
+    parser.add_option("-t", "--tag-from",
+                      help="Update from the specified tag")
     parser.add_option("-R", "--push-remote", action="store_true", 
                       help="Push changes to the Remote repository")
     parser.add_option("-u", "--user",
@@ -185,6 +217,7 @@ def main():
     push_remote = False
     user = ""
     exclude_patches = None
+    tag_from = ""
     global dry_run
 
     errors = 0
@@ -198,6 +231,8 @@ def main():
         debug = options.debug
     if options.push_remote:
         push_remote = options.push_remote
+    if options.tag_from:
+        tag_from = options.tag_from
     if options.exclude_patch:
         exclude_patches = []
         for patch in options.exclude_patch:
@@ -219,13 +254,15 @@ def main():
     if errors > 0:
         sys.exit(errors)
 
+    print(tag_from)
     repo_sas = options.intermediate
     repo_proxy = options.destination
 
     # Local synchronization between repositories
     rc = push_to_proxy(repo_src, repo_sas, repo_proxy,
                        user=user, debug=debug, push_remote=push_remote,
-                       exclude_patches=exclude_patches)
+                       exclude_patches=exclude_patches,
+                       tag_from=tag_from)
 
     sys.exit(rc)
 
