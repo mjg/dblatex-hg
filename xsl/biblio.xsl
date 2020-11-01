@@ -493,13 +493,9 @@
   <xsl:variable name="relation" select="../@relation"/>
   <xsl:choose>
     <xsl:when test="$relation='article' or @pubwork='article'">
-      <xsl:call-template name="dingbat">
-        <xsl:with-param name="dingbat">ldquo</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="gentext.startquote"/>
       <xsl:apply-templates/>
-      <xsl:call-template name="dingbat">
-        <xsl:with-param name="dingbat">rdquo</xsl:with-param>
-      </xsl:call-template>
+      <xsl:call-template name="gentext.endquote"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates/>
