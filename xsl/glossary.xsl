@@ -189,7 +189,7 @@
     <xsl:call-template name="gentext.element.name"/>
     <xsl:call-template name="gentext.space"/>
   </xsl:if>
-  <xsl:text>"</xsl:text>
+  <xsl:call-template name="gentext.startquote"/>
   <xsl:choose>
     <xsl:when test="@otherterm">
       <xsl:call-template name="hyperlink.markup">
@@ -210,7 +210,7 @@
       <xsl:value-of select="$text"/>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:text>"</xsl:text>
+  <xsl:call-template name="gentext.endquote"/>
 
   <xsl:choose>
     <xsl:when test="position()=last()">
