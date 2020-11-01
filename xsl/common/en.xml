@@ -74,6 +74,7 @@
    <l:gentext key="pubdate" text="Publication date"/>
    <l:gentext key="Published" text="Published"/>
    <l:gentext key="published" text="Published"/>
+   <l:gentext key="QandASet" text="Frequently Asked Questions"/>
    <l:gentext key="Qandadiv" text="Q &amp; A"/>
    <l:gentext key="qandadiv" text="Q &amp; A"/>
    <l:gentext key="Question" text="Q:"/>
