@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE itemizedlist PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<para>All the fixes have been provided by Petter Reinholdtsen. Thanks much to Petter:
+<itemizedlist>
+<listitem>
+<para>Fix SF bug #118: fix 'nb' and 'nn' locales.</para>
+</listitem>
+<listitem>
+<para>Fix SF bug #119: use locale quotes in glossary.</para>
+</listitem>
+<listitem>
+<para>Fix SF bug #120: use locale quotes in bibliography.</para>
+</listitem>
+<listitem>
+<para>Fix SF bug #123: add 'se' locale.</para>
+</listitem>
+<listitem>
+<para>Fix SF bug #124: set default qandaset title markup in english.</para>
+</listitem>
+</itemizedlist>
+</para>
