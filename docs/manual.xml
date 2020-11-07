@@ -196,6 +196,17 @@ cosmetic changes in <xref linkend="sec-specs"/>.</para>
 <para>Update release note for version 0.3.11-py3: dblatex fork for python3.</para>
 </revdescription>
 </revision>
+<revision>
+<revnumber>14</revnumber>
+
+<date>2020/11/07</date>
+
+<authorinitials>B. Guillon / P. Reinholdtsen</authorinitials>
+
+<revdescription>
+<para>Update release note for version 0.3.12 that is a bugfix release.</para>
+</revdescription>
+</revision>
 </revhistory>
 </bookinfo>
 
