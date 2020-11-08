@@ -48,8 +48,8 @@ $(HTMLDIRUM)/index.html: manual.xml
 	@$(XSLTPROC) --xinclude --param base.dir "'$(HTMLDIRUM)'" \
 			  $(HTML_PARAMS) \
 			  $(XSLPROFH) $<
-	convert -trim -rotate 90 processus.fig $(HTMLDIRUM)/processus.png
-	convert -trim pagesetup2.fig $(HTMLDIRUM)/pagesetup2.png
+	fig2dev -L svg processus.fig $(HTMLDIRUM)/processus.svg
+	fig2dev -L svg pagesetup2.fig $(HTMLDIRUM)/pagesetup2.svg
 	$(CP) *.png tables/*.png $(HTMLDIRUM)/.
 	$(CP) -r math/figures $(HTMLDIRUM)/.
 	$(CP) -r $(XSLDBK)/images $(HTMLDIRUM)/.

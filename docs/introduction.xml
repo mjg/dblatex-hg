@@ -139,7 +139,8 @@ package.</para>
 
 <mediaobject>
 <imageobject>
-<imagedata align="center" fileref="processus" width="60%" />
+<imagedata output="pdf" align="center" fileref="processus" width="60%" />
+<imagedata output="html" align="center" fileref="processus.svg" width="60%" />
 </imageobject>
 </mediaobject>
 </figure>

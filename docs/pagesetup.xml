@@ -21,7 +21,7 @@ crop lengths with the other lengths.</para>
 <imageobject>
 <!-- Use the PDF version to have a vector graphic. PNG from xfig is ugly -->
 <imagedata output="pdf" align="center" fileref="pagesetup2.pdf" width="70%" />
-<imagedata output="html" align="center" fileref="pagesetup2" width="70%" />
+<imagedata output="html" align="center" fileref="pagesetup2.svg" width="70%" />
 </imageobject>
 </mediaobject>
 </figure>
