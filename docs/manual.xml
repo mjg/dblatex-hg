@@ -11,7 +11,7 @@
 <surname>Guillon</surname>
 </author>
 
-<date>10 January 2020</date>
+<date>7 November 2020</date>
 
 <subtitle>User Manual</subtitle>
 
@@ -19,7 +19,7 @@
 
 <address>Bordeaux</address>
 
-<edition>13</edition>
+<edition>14</edition>
 
 <releaseinfo>v<xi:include href="version.xml"
 xmlns:xi="http://www.w3.org/2001/XInclude"/></releaseinfo>
