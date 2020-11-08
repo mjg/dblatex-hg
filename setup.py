@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: ISO-8859-1 -*-
 #
 # dblatex python setup script - See the COPYRIGHT
@@ -109,6 +108,7 @@ os.environ["SGML_CATALOG_FILES"] = cat
         # prepare args for the bang path at the top of the script
         ENV_BIN = '/usr/bin/env'
         env_args = ''
+        py_exec_bname = os.path.basename(sys.executable)
         if self._use_py_path:
             env_exec = ''
             py_exec = sys.executable
@@ -118,11 +118,11 @@ os.environ["SGML_CATALOG_FILES"] = cat
             # otherwise, use '#!' + sys.executable
             env_exec = os.path.isfile(ENV_BIN) and \
                 os.access(ENV_BIN, os.X_OK) and ENV_BIN or ''
-            py_exec = env_exec and 'python' or sys.executable
+            py_exec = env_exec and py_exec_bname or sys.executable
         else:
             # shouldn't matter on non-POSIX; we'll just use defaults
             env_exec = ENV_BIN
-            py_exec = 'python'
+            py_exec = py_exec_bname
 
         # Retrieve actual installation paths
         lib_path, package_base = self._strip_root(self._install_lib,
