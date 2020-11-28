@@ -117,7 +117,7 @@
     <xsl:when test="starts-with($lang,'it')">italian</xsl:when>
     <xsl:when test="starts-with($lang,'nb')">norsk</xsl:when>
     <xsl:when test="starts-with($lang,'nl')">dutch</xsl:when>
-    <xsl:when test="starts-with($lang,'nn')">norsk</xsl:when>
+    <xsl:when test="starts-with($lang,'nn')">nynorsk</xsl:when>
     <xsl:when test="starts-with($lang,'pl')">polish</xsl:when>
     <xsl:when test="starts-with($lang,'pt')">
       <xsl:choose>
