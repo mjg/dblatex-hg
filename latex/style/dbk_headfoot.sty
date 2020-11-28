@@ -16,7 +16,7 @@
 
 % Define front/main/back matter if not available
 \@ifundefined{frontmatter}{
-  \def\frontmatter{\cleardoublepage\pagenumbering{roman}
+  \def\frontmatter{\thispagestyle{empty}\cleardoublepage\pagenumbering{roman}
                    \lhead[]{\DBKtitle}
                    \chead[]{\releasebox}
                    \rhead[]{\textsf{\thepage{}}}}

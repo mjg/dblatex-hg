@@ -20,14 +20,20 @@
     \ \\ %
     \huge{\textbf{\DBKsubtitle}}\\ %
   \fi
+  \ifx\DBKauthor\relax\else%
+    \ \\ %
+    \Large{\DBKauthor}\\ %
+  \fi
 \end{center}
 \vfill
 \setlength{\baselineskip}{\oldbaselineskip}
 \hspace{1cm}
 \vspace{1cm}
 \begin{center}
+\Large{\@ifundefined{DBKpublishername}{\ }{\DBKpublishername}\\ %
+\@ifundefined{DBKpublisheraddress}{\ }{\DBKpublisheraddress}}\\ %
 \begin{tabular}{p{7cm} p{7cm}}
-\Large{\DBKreference{} \edhead} & \\
+% \Large{\DBKreference{} \edhead} & \\
 \end{tabular}
 \end{center}
 }
