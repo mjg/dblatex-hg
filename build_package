@@ -1,5 +1,6 @@
 #!/bin/sh
 
+py_ver=3
 use_hg=`hg root | wc -l`
 if [ $use_hg -eq 0 ]; then
   use_ssh=0
@@ -50,7 +51,7 @@ tag=$1
 #
 version=`echo $tag|tr "_" "."|sed 's/^v//'`
 
-release=$package-$version
+release=$package$py_ver-$version
 
 echo "building version $version"
 
