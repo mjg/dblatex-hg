@@ -242,7 +242,7 @@ class Xindy:
             errdata = errdata.decode(sys.getdefaultencoding())
         rc = p.wait()
         if msg.stdout:
-            msg.stdout.write(errdata)
+            msg.stdout.write(errdata.encode(sys.getdefaultencoding()))
         else:
             msg.warn(_(errdata.strip()))
         logfile.close()
